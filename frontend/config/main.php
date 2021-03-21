@@ -12,9 +12,11 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'homeUrl' => '/rn500',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'baseUrl' => '/rn500',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
