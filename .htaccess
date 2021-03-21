@@ -5,5 +5,5 @@ IndexIgnore */*
 # follow symbolic links
 Options FollowSymlinks
 RewriteEngine on
-RewriteRule ^backend(.+/backend)?$ backend/$1 [L,PT]
+RewriteRule ^backend(/.+)?$ backend/$1 [L,PT]
 RewriteRule ^(.+)?$ frontend/$1
