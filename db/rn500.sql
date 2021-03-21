@@ -299,4 +299,53 @@ CREATE TABLE `lead_speciality` (
   `speciality_id` int(11) NOT NULL,
   FOREIGN KEY (`speciality_id`) REFERENCES `speciality` (`id`)
 );
+
+CREATE TABLE `jobseeker_lead` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `lead_id` int NOT NULL,
+  `jobseeker_id` int NOT NULL,
+  `recruiter_id` int NOT NULL
+);
+
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` int NOT NULL,
+  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+);
+
+ALTER TABLE `auth_assignment`
+ADD PRIMARY KEY `item_name_user_id` (`item_name`, `user_id`);
+
+CREATE TABLE `auth_item` (
+  `name` int NOT NULL,
+  `type` int NOT NULL,
+  `description` int NOT NULL,
+  `rule_name` int NULL,
+  `created_at` int NOT NULL,
+  `updated_at` int NOT NULL
+);
+
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(500) NOT NULL,
+  `child` varchar(500) NOT NULL
+);
+
+ALTER TABLE `auth_item_child`
+ADD PRIMARY KEY `parent_child` (`parent`, `child`);
+
+ALTER TABLE `auth_item`
+CHANGE `name` `name` varchar(250) NOT NULL FIRST,
+CHANGE `description` `description` varchar(250) NOT NULL AFTER `type`,
+CHANGE `rule_name` `rule_name` varchar(250) NULL AFTER `description`;
+
+ALTER TABLE `auth_item`
+CHANGE `type` `type` tinyint NOT NULL AFTER `name`;
+
+CREATE TABLE `role_master` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `role_name` varchar(250) NOT NULL,
+  `created_at` int NOT NULL,
+  `updated_at` int NOT NULL
+);
 -- 2021-03-21 06:43:23
