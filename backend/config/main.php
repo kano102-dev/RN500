@@ -1,4 +1,5 @@
 <?php
+
 $params = array_merge(
         require __DIR__ . '/../../common/config/params.php',
         require __DIR__ . '/../../common/config/params-local.php',
@@ -10,11 +11,13 @@ return [
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
+    'homeUrl' => '/rn500/admin',
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-backend',
+            'baseUrl' => '/rn500/admin',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
