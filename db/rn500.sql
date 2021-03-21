@@ -20,6 +20,61 @@ CREATE TABLE `address` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `auth_assignment`;
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  PRIMARY KEY (`item_name`,`user_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `auth_item`;
+CREATE TABLE `auth_item` (
+  `name` varchar(250) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `description` varchar(250) NOT NULL,
+  `rule_name` varchar(250) DEFAULT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `auth_item_child`;
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(500) NOT NULL,
+  `child` varchar(500) NOT NULL,
+  PRIMARY KEY (`parent`,`child`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `benefits`;
+CREATE TABLE `benefits` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `certifications`;
+CREATE TABLE `certifications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `issuing_state` int(11) NOT NULL,
+  `certificate_name` varchar(250) NOT NULL,
+  `expiry_date` varchar(250) NOT NULL,
+  `issue_by` varchar(500) NOT NULL,
+  `verified` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `certifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 DROP TABLE IF EXISTS `company subscription`;
 CREATE TABLE `company subscription` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -73,6 +128,80 @@ CREATE TABLE `company_subscription_payment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `discipline`;
+CREATE TABLE `discipline` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `documents`;
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL,
+  `path` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `documents_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `education`;
+CREATE TABLE `education` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `degree_name` varchar(250) NOT NULL,
+  `year_complete` varchar(50) NOT NULL,
+  `institution` varchar(500) NOT NULL,
+  `location` varchar(500) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `education_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `jobseeker_lead`;
+CREATE TABLE `jobseeker_lead` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `lead_id` int(11) NOT NULL,
+  `jobseeker_id` int(11) NOT NULL,
+  `recruiter_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `job_location_preference`;
+CREATE TABLE `job_location_preference` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `city` int(11) NOT NULL,
+  `priority` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `job_location_preference_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `lead_benefit`;
+CREATE TABLE `lead_benefit` (
+  `lead_id` int(11) NOT NULL,
+  `benefit_id` int(11) NOT NULL,
+  KEY `benefit_id` (`benefit_id`),
+  CONSTRAINT `lead_benefit_ibfk_1` FOREIGN KEY (`benefit_id`) REFERENCES `benefits` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `lead_discipline`;
+CREATE TABLE `lead_discipline` (
+  `lead_id` int(11) NOT NULL,
+  `discipline_id` int(11) NOT NULL,
+  KEY `discipline_id` (`discipline_id`),
+  CONSTRAINT `lead_discipline_ibfk_1` FOREIGN KEY (`discipline_id`) REFERENCES `discipline` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 DROP TABLE IF EXISTS `lead_master`;
 CREATE TABLE `lead_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -96,6 +225,30 @@ CREATE TABLE `lead_master` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `lead_speciality`;
+CREATE TABLE `lead_speciality` (
+  `lead_id` int(11) NOT NULL,
+  `speciality_id` int(11) NOT NULL,
+  KEY `speciality_id` (`speciality_id`),
+  CONSTRAINT `lead_speciality_ibfk_1` FOREIGN KEY (`speciality_id`) REFERENCES `speciality` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `licenses`;
+CREATE TABLE `licenses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `issuing_state` int(11) NOT NULL,
+  `license_name` varchar(250) NOT NULL,
+  `expiry_date` varchar(50) NOT NULL,
+  `issue_by` varchar(250) NOT NULL,
+  `verified` tinyint(4) NOT NULL COMMENT '1:yes 0:no',
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `licenses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 DROP TABLE IF EXISTS `otp_request`;
 CREATE TABLE `otp_request` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -115,6 +268,54 @@ CREATE TABLE `package_master` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(250) NOT NULL,
   `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `references`;
+CREATE TABLE `references` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(250) NOT NULL,
+  `last_name` varchar(250) NOT NULL,
+  `mobile_no` varchar(11) NOT NULL,
+  `email` varchar(250) NOT NULL,
+  `city` int(11) NOT NULL,
+  `state` int(11) NOT NULL,
+  `relation` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `references_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `role_master`;
+CREATE TABLE `role_master` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(250) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `skills`;
+CREATE TABLE `skills` (
+  `id` int(11) NOT NULL,
+  `name` varchar(500) NOT NULL,
+  `expiry_date` varchar(250) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `skills_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+DROP TABLE IF EXISTS `speciality`;
+CREATE TABLE `speciality` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(500) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -144,6 +345,18 @@ CREATE TABLE `user_details` (
   `last_name` varchar(50) NOT NULL,
   `mobile_no` varchar(11) NOT NULL,
   `address_id` int(11) NOT NULL,
+  `profile_pic` varchar(250) DEFAULT NULL,
+  `current_position` varchar(250) DEFAULT NULL,
+  `speciality` varchar(250) DEFAULT NULL,
+  `work experience` varchar(250) DEFAULT NULL,
+  `job_title` tinyint(4) DEFAULT NULL COMMENT '(1) Actively Looking, (2) Looking from Date: MM/DD/YYYY.',
+  `job_looking_from` date DEFAULT NULL COMMENT 'required when job_title 2',
+  `travel_preference` tinyint(4) DEFAULT NULL COMMENT '(1) 100%, (2) 50%, (3) 25% (3) 0% (4) Available anytime.',
+  `ssn` int(11) DEFAULT NULL COMMENT 'Last 4 Digit of SSN',
+  `work_authorization` tinyint(4) DEFAULT NULL COMMENT '1:US Citizen ( ),2: Green Card Holder ( ),3: Other',
+  `work_authorization_comment` text COMMENT 'required when work_authorization 3',
+  `license_suspended` text,
+  `professional_liability` text,
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -151,201 +364,19 @@ CREATE TABLE `user_details` (
   CONSTRAINT `user_details_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-ALTER TABLE `user_details`
-ADD `profile_pic` varchar(250) NOT NULL AFTER `address_id`;
 
-ALTER TABLE `user_details`
-CHANGE `profile_pic` `profile_pic` varchar(250) COLLATE 'latin1_swedish_ci' NULL AFTER `address_id`;
-
-ALTER TABLE `user_details`
-ADD `current_position` varchar(250) COLLATE 'latin1_swedish_ci' NULL AFTER `profile_pic`,
-ADD `speciality` varchar(250) COLLATE 'latin1_swedish_ci' NULL AFTER `current_position`,
-ADD `work experience` varchar(250) COLLATE 'latin1_swedish_ci' NULL AFTER `speciality`,
-ADD `job_title` tinyint NULL COMMENT '(1) Actively Looking, (2) Looking from Date: MM/DD/YYYY.' AFTER `work experience`,
-ADD `job_looking_from` date NULL COMMENT 'required when job_title 2' AFTER `job_title`,
-ADD `travel_preference` tinyint NULL COMMENT '(1) 100%, (2) 50%, (3) 25% (3) 0% (4) Available anytime.' AFTER `job_looking_from`,
-ADD `ssn` int NULL COMMENT 'Last 4 Digit of SSN' AFTER `travel_preference`,
-ADD `work_authorization` tinyint NULL COMMENT '1:US Citizen ( ),2: Green Card Holder ( ),3: Other' AFTER `ssn`,
-ADD `work_authorization_comment` text COLLATE 'latin1_swedish_ci' NULL COMMENT 'required when work_authorization 3' AFTER `work_authorization`,
-ADD `license_suspended` text COLLATE 'latin1_swedish_ci' NULL AFTER `work_authorization_comment`,
-ADD `professional_liability` text COLLATE 'latin1_swedish_ci' NULL AFTER `license_suspended`;
-
-CREATE TABLE `job_location_preference` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `city` int NOT NULL,
-  `priority` int NOT NULL,
-   `user_id` int NOT NULL
-);
-
+DROP TABLE IF EXISTS `work_experience`;
 CREATE TABLE `work_experience` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `organization_name` varchar(500) NOT NULL,
   `description` varchar(500) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-);
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `work_experience_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-CREATE TABLE `education` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `degree_name` varchar(250) NOT NULL,
-  `year_complete` varchar(50) NOT NULL,
-  `institution` varchar(500) NOT NULL,
-  `location` varchar(500) NOT NULL
-);
 
-ALTER TABLE `education`
-ADD `user_id` int(11) NOT NULL AFTER `id`,
-ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
-CREATE TABLE `certifications` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `certificate_name` varchar(250) NOT NULL,
-  `expiry_date` varchar(250) NOT NULL,
-  `issue_by` varchar(500) NOT NULL,
-  `verified` int NOT NULL,
-  `user_id` int(11) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-);
-
-ALTER TABLE `certifications`
-ADD `issuing_state` int(11) NOT NULL AFTER `id`;
-
-ALTER TABLE `licenses`
-ADD `issuing_state` int(11) NOT NULL AFTER `id`;
-
-CREATE TABLE `references` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `first_name` varchar(250) NOT NULL,
-  `last_name` varchar(250) NOT NULL,
-  `mobile_no` varchar(11) NOT NULL,
-  `email` varchar(250) NOT NULL,
-  `city` int NOT NULL,
-  `state` int NOT NULL,
-  `relation` varchar(250) NOT NULL
-);
-
-ALTER TABLE `references`
-ADD `user_id` int(11) NOT NULL,
-ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
-CREATE TABLE `skills` (
-  `id` int NOT NULL,
-  `name` varchar(500) NOT NULL,
-  `expiry_date` varchar(250) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-);
-
-CREATE TABLE `documents` (
-  `id` int NOT NULL,
-  `path` varchar(250) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-);
-
-CREATE TABLE `dicipline` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(250) NOT NULL
-);
-
-ALTER TABLE `dicipline`
-CHANGE `name` `name` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `id`;
-
-CREATE TABLE `benefits` (
-  `id` int NOT NULL,
-  `name` varchar(500) NOT NULL,
-  `lead_id` int NOT NULL,
-  `cre` int NOT NULL
-);
-
-ALTER TABLE `benefits`
-CHANGE `cre` `created_at` int(11) NOT NULL AFTER `lead_id`,
-ADD `updated_at` int(11) NOT NULL;
-
-ALTER TABLE `dicipline`
-ADD `created_at` int NOT NULL,
-ADD `updated_at` int NOT NULL AFTER `created_at`,
-RENAME TO `discipline`;
-
-ALTER TABLE `benefits`
-DROP `lead_id`;
-
-CREATE TABLE `speciality` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `name` varchar(500) NOT NULL,
-  `created_at` int NOT NULL,
-  `updated_at` int NOT NULL
-);
-
-ALTER TABLE `benefits`
-CHANGE `id` `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
-
-CREATE TABLE `lead_discipline` (
-  `lead_id` int NOT NULL,
-  `discipline_id` int(11) NOT NULL,
-  FOREIGN KEY (`discipline_id`) REFERENCES `discipline` (`id`)
-);  
-
-CREATE TABLE `lead_benefit` (
-  `lead_id` int NOT NULL,
-  `benefit_id` int(11) NOT NULL,
-  FOREIGN KEY (`benefit_id`) REFERENCES `benefits` (`id`)
-);
-
-CREATE TABLE `lead_speciality` (
-  `lead_id` int NOT NULL,
-  `speciality_id` int(11) NOT NULL,
-  FOREIGN KEY (`speciality_id`) REFERENCES `speciality` (`id`)
-);
-
-CREATE TABLE `jobseeker_lead` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `lead_id` int NOT NULL,
-  `jobseeker_id` int NOT NULL,
-  `recruiter_id` int NOT NULL
-);
-
-CREATE TABLE `auth_assignment` (
-  `item_name` varchar(250) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `created_at` int NOT NULL,
-  FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-);
-
-ALTER TABLE `auth_assignment`
-ADD PRIMARY KEY `item_name_user_id` (`item_name`, `user_id`);
-
-CREATE TABLE `auth_item` (
-  `name` int NOT NULL,
-  `type` int NOT NULL,
-  `description` int NOT NULL,
-  `rule_name` int NULL,
-  `created_at` int NOT NULL,
-  `updated_at` int NOT NULL
-);
-
-CREATE TABLE `auth_item_child` (
-  `parent` varchar(500) NOT NULL,
-  `child` varchar(500) NOT NULL
-);
-
-ALTER TABLE `auth_item_child`
-ADD PRIMARY KEY `parent_child` (`parent`, `child`);
-
-ALTER TABLE `auth_item`
-CHANGE `name` `name` varchar(250) NOT NULL FIRST,
-CHANGE `description` `description` varchar(250) NOT NULL AFTER `type`,
-CHANGE `rule_name` `rule_name` varchar(250) NULL AFTER `description`;
-
-ALTER TABLE `auth_item`
-CHANGE `type` `type` tinyint NOT NULL AFTER `name`;
-
-CREATE TABLE `role_master` (
-  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `role_name` varchar(250) NOT NULL,
-  `created_at` int NOT NULL,
-  `updated_at` int NOT NULL
-);
--- 2021-03-21 06:43:23
+-- 2021-03-21 11:10:12
