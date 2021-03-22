@@ -40,7 +40,7 @@ $is_otp_sent = $model->is_otp_sent;
 
         <?php
         if ($is_otp_sent) {
-            echo "<p> We have sent any OTP to your registered email. </p>";
+            echo "<p> We have sent an OTP to your registered email. </p>";
             echo $form->field($model, 'otp', [
                     'options' => ['class' => 'form-group has-feedback'],
                     'inputTemplate' => '{input}<div class="input-group-append"><div class="input-group-text"><span class="fas fa-lock"></span></div></div>',

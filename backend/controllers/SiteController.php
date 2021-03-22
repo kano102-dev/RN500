@@ -67,21 +67,19 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionLogin() {
+        $this->layout = 'main-login';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $this->layout = 'main-login';
-
         $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validatePassword('password', []) && $model->sendOTP()) {
-            echo "<pre/>";
-            $user = $model->getUser();
-            print_r($user);
-            exit;
-//            $user->
-
+        if (
+                $model->load(Yii::$app->request->post()) &&
+                $model->validatePassword('password', []) &&
+                $model->sendOTP() &&
+                $model->OTPVerified() &&
+                $model->login()
+        ) {
             return $this->goBack();
         } else {
 //            $model->password = '';
@@ -109,12 +107,9 @@ class SiteController extends Controller {
 //                    ->setTo("dxffn3@kjjit.eu")
 //                    ->setSubject('One Time Password (OTP) ')
 //                    ->send();
-//            echo "<pre/>";
-//            print_r(\Yii::$app->mailer);
-//            exit;
-            $sent = \Yii::$app->mailer->compose()
+            $sent = \Yii::$app->mailer->compose()->setTextBody("Hii <br/> Your OT is 11111")
 //                    ->setFrom(["info@RN500.com" => 'Test Mail'])
-                    ->setFrom(["info@RN500.com" => 'Test Mail'])
+                    ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                     ->setTo('ranamehul19@gmail.com')
                     ->setSubject('One Time Password (OTP) ')
                     ->send();
