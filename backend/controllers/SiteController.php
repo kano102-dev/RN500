@@ -22,7 +22,7 @@ class SiteController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                         [
-                        'actions' => ['login', 'error','check-mail'],
+                        'actions' => ['login', 'error', 'check-mail'],
                         'allow' => true,
                     ],
                         [
@@ -67,21 +67,19 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionLogin() {
+        $this->layout = 'main-login';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        $this->layout = 'main-login';
-
         $model = new LoginForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validatePassword('password', []) && $model->sendOTP()) {
-            echo "<pre/>";
-            $user = $model->getUser();
-            print_r($user);
-            exit;
-//            $user->
-
+        if (
+                $model->load(Yii::$app->request->post()) &&
+                $model->validatePassword('password', []) &&
+                $model->sendOTP() &&
+                $model->OTPVerified() &&
+                $model->login()
+        ) {
             return $this->goBack();
         } else {
 //            $model->password = '';
@@ -103,26 +101,25 @@ class SiteController extends Controller {
 
     public function actionCheckMail($email) {
         try {
-            
+
 //            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
 //                    ->setFrom([$to_email => 'Test Mail'])
 //                    ->setTo("dxffn3@kjjit.eu")
 //                    ->setSubject('One Time Password (OTP) ')
 //                    ->send();
-            
-            
+
+
             $sent = \Yii::$app->mailer->compose()->setTextBody("Hii <br/> Your OT is 11111")
 //                    ->setFrom(["info@RN500.com" => 'Test Mail'])
                     ->setFrom(["info@RN500.com" => 'Test Mail'])
                     ->setTo($email)
                     ->setSubject('One Time Password (OTP) ')
                     ->send();
-            echo "SENT : ". $sent;
+            echo "SENT : " . $sent;
         } catch (\Exception $ex) {
             echo "<pre/>";
             print_r($ex);
             exit;
-            
         }
     }
 

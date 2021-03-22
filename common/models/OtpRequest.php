@@ -16,33 +16,33 @@ use Yii;
  *
  * @property User $user
  */
-class OtpRequest extends \yii\db\ActiveRecord
-{
+class OtpRequest extends \yii\db\ActiveRecord {
+
+    const STATUS_VERIFIED = 1;
+    const STATUS_NOT_VERIFIED = 0;
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'otp_request';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['otp', 'is_verified', 'created_at', 'updated_at', 'user_id'], 'required'],
-            [['otp', 'is_verified', 'created_at', 'updated_at', 'user_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['otp', 'is_verified', 'created_at', 'updated_at', 'user_id'], 'required'],
+                [['otp', 'is_verified', 'created_at', 'updated_at', 'user_id'], 'integer'],
+                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'otp' => 'Otp',
@@ -58,8 +58,8 @@ class OtpRequest extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
 }
