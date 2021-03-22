@@ -25,16 +25,16 @@ class LoginForm extends Model {
     public function rules() {
         return [
             // username and password are both required
-                [['username', 'password'], 'required'],
-                ['username', 'email', 'message' => 'Please eneter valid email.'],
+            [['username', 'password'], 'required'],
+            ['username', 'email', 'message' => 'Please eneter valid email.'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
             // otp validation
             ['is_otp_sent', 'boolean'],
-                ['otp', 'number', 'message' => 'Please eneter numeric values only.'],
-                ['otp', 'required', 'when' => function ($model) {
+            ['otp', 'number', 'message' => 'Please eneter numeric values only.'],
+            ['otp', 'required', 'when' => function ($model) {
                     return $model->is_otp_sent;
                 }],
         ];
@@ -78,13 +78,12 @@ class LoginForm extends Model {
     }
 
     public function sendOTPMail($otp) {
-        return true;
         if ($this->_user) {
             $to_email = $this->_user->email;
             try {
                 return $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
-                        ->setFrom([$to_email => 'Test Mail'])
-                        ->setTo("dxffn3@kjjit.eu")
+                        ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
+                        ->setTo($to_email)
                         ->setSubject('One Time Password (OTP) ')
                         ->send();
             } catch (\Exception $ex) {
