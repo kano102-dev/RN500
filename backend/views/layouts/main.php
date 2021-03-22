@@ -5,8 +5,10 @@
 
 use yii\helpers\Html;
 
-backend\assets\FontAwesomeAsset::register($this);
-backend\assets\assets\AdminLteAsset::register($this);
+use backend\assets\FontAwesomeAsset;
+use backend\assets\AdminLteAsset;
+AdminLteAsset::register($this);
+FontAwesomeAsset::register($this);
 $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700');
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
