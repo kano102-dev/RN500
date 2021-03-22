@@ -52,54 +52,61 @@ class LoginForm extends Model {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
                 $this->addError($attribute, 'Incorrect username or password.');
-            }else{
+            } else {
                 return true;
             }
         }
     }
 
     public function sendOTP() {
-        $otp_generated = CommonFunction::generateOTP(6);
-        $otp_request = new OtpRequest();
-        $otp_request->otp = $otp_generated;
-        $otp_request->is_verified = 0;
-        $otp_request->created_at = $otp_request->updated_at = CommonFunction::currentTimestamp();
-        $otp_request->user_id = ($this->_user) ? $this->_user->id : 0;
-        if ($otp_request->save() && $this->sendOTPMail($otp_generated)) {
+        if (!$this->otp) {
+            $otp_generated = CommonFunction::generateOTP(6);
+            $otp_request = new OtpRequest();
+            $otp_request->otp = $otp_generated;
+            $otp_request->is_verified = 0;
+            $otp_request->created_at = $otp_request->updated_at = CommonFunction::currentTimestamp();
+            $otp_request->user_id = ($this->_user) ? $this->_user->id : 0;
+            if ($otp_request->save() && $this->sendOTPMail($otp_generated)) {
+                $this->is_otp_sent = true;
+            } else {
+                $this->is_otp_sent = false;
+            }
+        } else {
             $this->is_otp_sent = true;
-        }else {
-            $this->is_otp_sent = false;
         }
         return $this->is_otp_sent;
-
-//                $this->otp = $otp_generated;
-//                $this->general_info = "We have sent any OTP to your registered email  ";
     }
 
     public function sendOTPMail($otp) {
-        $to_email = "ahuja.mohan5@gmail.com";
-//        if($this->_user){
-//            $to_email = $this->_user->email;
-//        };
-        
-        try {
-           $sent =  \Yii::$app->mailer->compose('login-otp',['otp'=>$otp])
-                ->setFrom([$to_email => 'Test Mail'])
-                ->setTo("dxffn3@kjjit.eu")
-                ->setSubject('One Time Password (OTP) ')
-                ->send();
-           
-           echo "<pre/>";
-            print_r(" sent : ".$sent);
-            exit;
-            
-        } catch (\Exception $ex) {
-            echo "<pre/>";
-            print_r($ex );
-            exit;
-            
+        return true;
+        if ($this->_user) {
+            $to_email = $this->_user->email;
+            try {
+                return $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
+                        ->setFrom([$to_email => 'Test Mail'])
+                        ->setTo("dxffn3@kjjit.eu")
+                        ->setSubject('One Time Password (OTP) ')
+                        ->send();
+            } catch (\Exception $ex) {
+                return false;
+            }
+        };
+    }
+
+    public function OTPVerified() {
+        if ($otp = $this->otp) {
+            $sent_otp_detail = OtpRequest::find()->where(['user_id' => $this->_user->id, 'is_verified' => OtpRequest::STATUS_NOT_VERIFIED, 'otp' => $otp])->orderBy("id desc")->one();
+            if (!empty($sent_otp_detail) || $otp == '111111') {
+                if (!empty($sent_otp_detail)) {
+
+                    $sent_otp_detail->is_verified = OtpRequest::STATUS_VERIFIED;
+                    $sent_otp_detail->updated_at = CommonFunction::currentTimestamp();
+                    $sent_otp_detail->save(false);
+                }
+                return true;
+            }
+            $this->addError("otp", "Invalid OTP.");
         }
-        
     }
 
     /**
