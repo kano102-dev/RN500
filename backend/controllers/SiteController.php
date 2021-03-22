@@ -21,11 +21,11 @@ class SiteController extends Controller {
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                        [
-                        'actions' => ['login', 'error','check-mail'],
+                    [
+                        'actions' => ['login', 'error', 'check-mail'],
                         'allow' => true,
                     ],
-                        [
+                    [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -101,28 +101,28 @@ class SiteController extends Controller {
         return $this->goHome();
     }
 
-    public function actionCheckMail($email) {
+    public function actionCheckMail() {
         try {
-            
+
 //            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
 //                    ->setFrom([$to_email => 'Test Mail'])
 //                    ->setTo("dxffn3@kjjit.eu")
 //                    ->setSubject('One Time Password (OTP) ')
 //                    ->send();
-            
-            
-            $sent = \Yii::$app->mailer->compose()->setTextBody("Hii <br/> Your OT is 11111")
+//            echo "<pre/>";
+//            print_r(\Yii::$app->mailer);
+//            exit;
+            $sent = \Yii::$app->mailer->compose()
 //                    ->setFrom(["info@RN500.com" => 'Test Mail'])
                     ->setFrom(["info@RN500.com" => 'Test Mail'])
-                    ->setTo($email)
+                    ->setTo('ranamehul19@gmail.com')
                     ->setSubject('One Time Password (OTP) ')
                     ->send();
-            echo "SENT : ". $sent;
+            echo "SENT : " . $sent;
         } catch (\Exception $ex) {
             echo "<pre/>";
             print_r($ex);
             exit;
-            
         }
     }
 

@@ -17,19 +17,5 @@ return [
 //            // for the mailer to send real emails.
 //            'useFileTransport' => true,
 //        ],
-        
-          'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => true,
-            'viewPath' => '@common/mail',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.gmail.com',
-                'username' => 'apikey',
-                'password' => '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',
-                'port' => '587',
-                'encryption' => 'tls',
-            ],
-        ]
     ],
 ];
