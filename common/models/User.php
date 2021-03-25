@@ -203,5 +203,7 @@ class User extends ActiveRecord implements IdentityInterface {
         }
         return $name;
     }
-
+    // public function getBranch() {
+    //     return $this->hasOne(UserDetails::className(), ['user_id' => 'id']);
+    // }
 }
