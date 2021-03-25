@@ -46,3 +46,5 @@ CHANGE `is_master` `is_master` int(11) NOT NULL DEFAULT '0' AFTER `zip_code`;
 
 ALTER TABLE `user`
 CHANGE `status` `status` int(11) NOT NULL DEFAULT '0' COMMENT '1:active 0:in active' AFTER `original_password`;
+
+ALTER TABLE `company_branch` CHANGE `suit/apt` `apt` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL;

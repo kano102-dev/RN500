@@ -77,6 +77,11 @@
                         'url' => ['package/index'],
                         'icon' => 'tachometer-alt',
                     ],
+                    [
+                        'label' => 'Company Branch',
+                        'url' => ['company-branch/index'],
+                        'icon' => 'tachometer-alt',
+                    ],
 //                    [
 //                        'label' => 'Starter Pages',
 //                        'icon' => 'tachometer-alt',

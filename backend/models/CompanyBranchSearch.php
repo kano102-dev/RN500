@@ -18,7 +18,7 @@ class CompanyBranchSearch extends CompanyBranch
     {
         return [
             [['id', 'company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
-            [['branch_name', 'street_no', 'street_address', 'suit/apt', 'zip_code'], 'safe'],
+            [['branch_name', 'street_no', 'street_address', 'apt', 'zip_code'], 'safe'],
         ];
     }
 
@@ -69,7 +69,7 @@ class CompanyBranchSearch extends CompanyBranch
         $query->andFilterWhere(['like', 'branch_name', $this->branch_name])
             ->andFilterWhere(['like', 'street_no', $this->street_no])
             ->andFilterWhere(['like', 'street_address', $this->street_address])
-            ->andFilterWhere(['like', 'suit/apt', $this->suit/apt])
+            ->andFilterWhere(['like', 'apt', $this->apt])
             ->andFilterWhere(['like', 'zip_code', $this->zip_code]);
 
         return $dataProvider;

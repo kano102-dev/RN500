@@ -38,7 +38,7 @@ class CompanyBranch extends \yii\db\ActiveRecord
             [['company_id', 'branch_name', 'street_no', 'street_address', 'is_default', 'created_at', 'updated_at'], 'required'],
             [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
             [['branch_name'], 'string', 'max' => 200],
-            [['street_no', 'street_address', 'suit/apt'], 'string', 'max' => 255],
+            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
         ];
     }
@@ -54,7 +54,7 @@ class CompanyBranch extends \yii\db\ActiveRecord
             'branch_name' => 'Branch Name',
             'street_no' => 'Street No',
             'street_address' => 'Street Address',
-            'suit/apt' => 'Suit/apt',
+            'apt' => 'Suit/apt',
             'city' => 'City',
             'zip_code' => 'Zip Code',
             'is_default' => 'Is Default',
