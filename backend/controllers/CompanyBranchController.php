@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\PackageMaster;
-use backend\models\PackageMasterSearch;
+use backend\models\CompanyBranch;
+use backend\models\CompanyBranchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PackageController implements the CRUD actions for PackageMaster model.
+ * CompanyBranchController implements the CRUD actions for CompanyBranch model.
  */
-class PackageController extends Controller
+class CompanyBranchController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -30,12 +30,12 @@ class PackageController extends Controller
     }
 
     /**
-     * Lists all PackageMaster models.
+     * Lists all CompanyBranch models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new PackageMasterSearch();
+        $searchModel = new CompanyBranchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class PackageController extends Controller
     }
 
     /**
-     * Displays a single PackageMaster model.
+     * Displays a single CompanyBranch model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -58,31 +58,25 @@ class PackageController extends Controller
     }
 
     /**
-     * Creates a new PackageMaster model.
+     * Creates a new CompanyBranch model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new PackageMaster();
+        $model = new CompanyBranch();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-            // 
-            Yii::$app->session->setFlash("success", "Role created successfully.");
-            }else {
-                Yii::$app->session->setFlash("warning", "Something went wrong.");
-            }
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('_form', [
+        return $this->render('create', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Updates an existing PackageMaster model.
+     * Updates an existing CompanyBranch model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -92,23 +86,17 @@ class PackageController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                // 
-                Yii::$app->session->setFlash("success", "Role created successfully.");
-                }else {
-                    Yii::$app->session->setFlash("warning", "Something went wrong.");
-                }
-                return $this->redirect(['index']);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        }
 
-        return $this->render('_form', [
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
 
     /**
-     * Deletes an existing PackageMaster model.
+     * Deletes an existing CompanyBranch model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -122,15 +110,15 @@ class PackageController extends Controller
     }
 
     /**
-     * Finds the PackageMaster model based on its primary key value.
+     * Finds the CompanyBranch model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return PackageMaster the loaded model
+     * @return CompanyBranch the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PackageMaster::findOne($id)) !== null) {
+        if (($model = CompanyBranch::findOne($id)) !== null) {
             return $model;
         }
 

@@ -7,7 +7,10 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\Models\PackageMaster */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<?php $form = ActiveForm::begin(); ?>
+
+<div class="package-master-form">
+
+    <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
@@ -17,3 +20,4 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end(); ?>
 
+</div>
