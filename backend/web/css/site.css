@@ -137,3 +137,18 @@ a.desc:after {
 .nav > li > form > button.logout:focus {
     outline: none;
 }
+
+/*modal footer Remove*/
+.modal-footer{
+    border-top: 0px solid #e5e5e5;
+}
+
+.modal-header.bg-primary{
+    background-color: #1181cc;
+    color: #fff;
+}
+.modal-header button.close{
+    color: #fff;
+    opacity:  1;
+}
+.reject .modal-header {border-bottom: 0px solid #e5e5e5;}

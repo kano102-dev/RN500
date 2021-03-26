@@ -5,8 +5,11 @@
 
 use yii\helpers\Html;
 
-backend\assets\FontAwesomeAsset::register($this);
-backend\assets\assets\AdminLteAsset::register($this);
+use backend\assets\FontAwesomeAsset;
+use backend\assets\AdminLteAsset;
+echo \common\components\FlashmessageWidget::widget();
+AdminLteAsset::register($this);
+FontAwesomeAsset::register($this);
 $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700');
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
@@ -40,6 +43,10 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/admi
     <!-- Control Sidebar -->
     <?= $this->render('control-sidebar') ?>
     <!-- /.control-sidebar -->
+    
+    <!-- common modal -->
+    <?= $this->render('common-modal') ?>
+    <!-- /.common modal -->
 
     <!-- Main Footer -->
     <?= $this->render('footer') ?>
