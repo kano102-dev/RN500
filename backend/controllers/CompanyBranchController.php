@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\CompanyBranch;
-use backend\models\CompanyBranchSearch;
+use common\models\CompanyBranch;
+use common\models\CompanyBranchSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

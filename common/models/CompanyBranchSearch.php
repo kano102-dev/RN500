@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\CompanyBranch;
+use common\models\CompanyBranch;
 
 /**
  * CompanyBranchSearch represents the model behind the search form of `backend\models\CompanyBranch`.
