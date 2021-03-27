@@ -1,5 +1,4 @@
 <?php
-
 namespace backend\controllers;
 
 use Yii;
@@ -11,18 +10,19 @@ use common\models\LoginForm;
 /**
  * Site controller
  */
-class SiteController extends Controller {
-
+class SiteController extends Controller
+{
     /**
      * {@inheritdoc}
      */
-    public function behaviors() {
+    public function behaviors()
+    {
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'check-mail'],
+                        'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
                     [
@@ -44,7 +44,8 @@ class SiteController extends Controller {
     /**
      * {@inheritdoc}
      */
-    public function actions() {
+    public function actions()
+    {
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
@@ -57,7 +58,8 @@ class SiteController extends Controller {
      *
      * @return string
      */
-    public function actionIndex() {
+    public function actionIndex()
+    {
         return $this->render('index');
     }
 
@@ -66,25 +68,22 @@ class SiteController extends Controller {
      *
      * @return string
      */
-    public function actionLogin() {
-        $this->layout = 'main-login';
+    public function actionLogin()
+    {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
+        $this->layout = 'main-login';
+
         $model = new LoginForm();
-        if (
-                $model->load(Yii::$app->request->post()) &&
-                $model->validatePassword('password', []) &&
-                $model->sendOTP() &&
-                $model->OTPVerified() &&
-                $model->login()
-        ) {
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
         } else {
-//            $model->password = '';
+            $model->password = '';
+
             return $this->render('login', [
-                        'model' => $model,
+                'model' => $model,
             ]);
         }
     }
@@ -94,31 +93,10 @@ class SiteController extends Controller {
      *
      * @return string
      */
-    public function actionLogout() {
+    public function actionLogout()
+    {
         Yii::$app->user->logout();
+
         return $this->goHome();
     }
-
-    public function actionCheckMail() {
-        try {
-
-//            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
-//                    ->setFrom([$to_email => 'Test Mail'])
-//                    ->setTo("dxffn3@kjjit.eu")
-//                    ->setSubject('One Time Password (OTP) ')
-//                    ->send();
-            $sent = \Yii::$app->mailer->compose()->setTextBody("Hii <br/> Your OT is 11111")
-//                    ->setFrom(["info@RN500.com" => 'Test Mail'])
-                    ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
-                    ->setTo('ranamehul19@gmail.com')
-                    ->setSubject('One Time Password (OTP) ')
-                    ->send();
-            echo "SENT : " . $sent;
-        } catch (\Exception $ex) {
-            echo "<pre/>";
-            print_r($ex);
-            exit;
-        }
-    }
-
 }
