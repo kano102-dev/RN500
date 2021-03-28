@@ -27,6 +27,11 @@ class User extends ActiveRecord implements IdentityInterface {
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+    // USER TYPES
+    const TYPE_RECRUITER = 1;
+    const TYPE_EMPLOYEE = 2;
+    const TYPE_JOB_SEEKER = 3;
+    const TYPE_STAFF = 4;
 
     /**
      * {@inheritdoc}
@@ -35,22 +40,16 @@ class User extends ActiveRecord implements IdentityInterface {
         return '{{%user}}';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors() {
-        return [
-            TimestampBehavior::className(),
-        ];
-    }
-
+   
     /**
      * {@inheritdoc}
      */
     public function rules() {
         return [
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+                [['email'], 'required'],
+                [['email'], 'email'],
+                ['status', 'default', 'value' => self::STATUS_INACTIVE],
+                ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
         ];
     }
 
@@ -195,6 +194,10 @@ class User extends ActiveRecord implements IdentityInterface {
     public function getDetails() {
         return $this->hasOne(UserDetails::className(), ['user_id' => 'id']);
     }
+    
+    public function getBranch() {
+        return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
+    }
 
     public function getFullName() {
         $name = '';
@@ -203,6 +206,7 @@ class User extends ActiveRecord implements IdentityInterface {
         }
         return $name;
     }
+
     // public function getBranch() {
     //     return $this->hasOne(UserDetails::className(), ['user_id' => 'id']);
     // }

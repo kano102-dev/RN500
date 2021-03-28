@@ -391,3 +391,25 @@ CREATE TABLE `cities` (
   `state_code` char(2) NOT NULL,
   KEY `idx_state_code` (`state_code`)
 ) 
+
+
+#  ***********************27-MARCH-2021***********************
+
+ALTER TABLE `user`
+CHANGE `password` `password` varchar(250)  NULL ,
+CHANGE `original_password` `original_password` varchar(250) NULL, 
+CHANGE `auth_key` `auth_key` varchar(250)  NULL ,
+CHANGE `password_reset_token` `password_reset_token` INT(11)  NULL ;
+
+
+ALTER TABLE `cities` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `states` DROP INDEX `PRIMARY`;
+
+ALTER TABLE `states` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `cities` ADD `state_id` int(11) NOT NULL;
+
+UPDATE cities c,states s  SET  c.state_id= s.id WHERE c.state_code= s.state_code
+
+# ***********************27-MARCH-2021********END***************

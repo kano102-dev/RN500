@@ -62,24 +62,29 @@
                     // ['label' => 'Important', 'iconStyle' => 'far', 'iconClassAdded' => 'text-danger'],
                     // ['label' => 'Warning', 'iconClass' => 'nav-icon far fa-circle text-warning'],
                     // ['label' => 'Informational', 'iconStyle' => 'far', 'iconClassAdded' => 'text-info'],
-                    [
+                        [
                         'label' => 'Home',
                         'url' => ['site/index'],
                         'icon' => 'tachometer-alt',
                     ],
-                    [
+                        [
                         'label' => 'Role',
                         'url' => ['role/index'],
                         'icon' => 'tachometer-alt',
                     ],
-                    [
+                        [
                         'label' => 'Package',
                         'url' => ['package/index'],
                         'icon' => 'tachometer-alt',
                     ],
-                    [
+                        [
                         'label' => 'Company Branch',
                         'url' => ['company-branch/index'],
+                        'icon' => 'tachometer-alt',
+                    ],
+                        [
+                        'label' => 'Recruiter Management',
+                        'url' => ['recruiter/index'],
                         'icon' => 'tachometer-alt',
                     ],
 //                    [

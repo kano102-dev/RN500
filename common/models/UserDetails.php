@@ -12,7 +12,6 @@ use Yii;
  * @property string $first_name
  * @property string $last_name
  * @property string $mobile_no
- * @property int $address_id
  * @property string|null $profile_pic
  * @property string|null $current_position
  * @property string|null $speciality
@@ -27,48 +26,54 @@ use Yii;
  * @property string|null $professional_liability
  * @property int $created_at
  * @property int $updated_at
+ * @property string $street_no
+ * @property string $street_address
+ * @property string|null $apt
+ * @property int|null $city
+ * @property string|null $zip_code
  *
  * @property User $user
  */
-class UserDetails extends \yii\db\ActiveRecord
-{
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
+class UserDetails extends \yii\db\ActiveRecord {
+
+    public $email;
+    public $type;
+    public $companyName;
+
+    public static function tableName() {
         return 'user_details';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['user_id', 'first_name', 'last_name', 'mobile_no', 'address_id', 'created_at', 'updated_at'], 'required'],
-            [['user_id', 'address_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
-            [['job_looking_from'], 'safe'],
-            [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
-            [['first_name', 'last_name'], 'string', 'max' => 50],
-            [['mobile_no'], 'string', 'max' => 11],
-            [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['email'], 'email'],
+                [['email', 'street_no', 'street_address',], 'required'],
+                [['user_id', 'first_name', 'last_name', 'mobile_no', 'created_at', 'updated_at'], 'required'],
+                [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
+                [['job_looking_from'], 'safe'],
+                [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
+                [['first_name', 'last_name'], 'string', 'max' => 50],
+                [['mobile_no'], 'string', 'max' => 11],
+                [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
+                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+                [['zip_code'], 'string', 'max' => 20],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
             'mobile_no' => 'Mobile No',
-            'address_id' => 'Address ID',
             'profile_pic' => 'Profile Pic',
             'current_position' => 'Current Position',
             'speciality' => 'Speciality',
@@ -83,6 +88,11 @@ class UserDetails extends \yii\db\ActiveRecord
             'professional_liability' => 'Professional Liability',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'street_no' => 'Street No',
+            'street_address' => 'Street Address',
+            'apt' => 'Suit/Apt',
+            'city' => 'City',
+            'zip_code' => 'Zip Code',
         ];
     }
 
@@ -91,8 +101,16 @@ class UserDetails extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getBranch() {
+        return $this->hasOne(CompanyBranch::className(), ['id' => "branch_id"])->via("user");
+    }
+
+    public function getBranchName() {
+        return isset($this->branch->branch_name) ? $this->branch->branch_name : "";
+    }
+
 }
