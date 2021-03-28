@@ -390,4 +390,4 @@ CREATE TABLE `cities` (
   `city` varchar(50) NOT NULL,
   `state_code` char(2) NOT NULL,
   KEY `idx_state_code` (`state_code`)
-) 
+);
