@@ -3,7 +3,6 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\models\PackageMaster;
 use backend\models\PackageMasterSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -21,7 +20,7 @@ use common\models\CompanySubscription;
 use common\models\PackageMaster;
 
 /**
- * PackageController implements the CRUD actions for PackageMaster model.
+ * RecruiterController implements the CRUD actions for RecruiterMaster model.
  */
 class RecruiterController extends Controller {
 
