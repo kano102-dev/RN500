@@ -7,17 +7,25 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\Models\PackageMaster */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
-<div class="package-master-form">
-
+<div class="card card-default color-palette-box">
+    
     <?php $form = ActiveForm::begin(); ?>
+    <div class="col-12">
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+<div class="card card-primary">
 
-    <div class="form-group">
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-12">
+            <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        </div>
+        </div>
+        <div class="form-group text text-center">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+        </div>
 
-    <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end(); ?>
 
 </div>
+
