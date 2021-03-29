@@ -22,7 +22,7 @@ use yii\widgets\ActiveForm;
         </div>
         </div>
         <div class="form-group text text-center">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
