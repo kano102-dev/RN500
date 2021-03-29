@@ -23,7 +23,7 @@ use Yii;
  */
 class CompanyMaster extends \yii\db\ActiveRecord {
 
-   
+    public $state;
 
     public static function tableName() {
         return 'company_master';
@@ -34,14 +34,15 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'created_at', 'updated_at'], 'required'],
-                [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
-                [['company_name'], 'string', 'max' => 250],
-                [['company_email'], 'email'],
-                [['company_email'], 'string', 'max' => 100],
-                [['company_mobile'], 'string', 'max' => 11],
-                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-                [['zip_code'], 'string', 'max' => 20],
+            [['company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'created_at', 'updated_at'], 'required'],
+            [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
+            [['company_name'], 'string', 'max' => 250],
+            [['company_email'], 'email'],
+            [['company_email'], 'string', 'max' => 100],
+            [['company_mobile'], 'string', 'max' => 11],
+            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+            [['zip_code'], 'string', 'max' => 20],
+            [['state'], 'safe'],
         ];
     }
 

@@ -39,7 +39,8 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $email;
     public $type;
     public $companyName;
-
+    public $state;
+    
     public static function tableName() {
         return 'user_details';
     }

@@ -1,6 +1,7 @@
 <?php
 return [
     'adminEmail' => 'admin@example.com',
+    'bsVersion' => '4.x', 
     'hail812/yii2-adminlte3' => [
         'pluginMap' => [
             'sweetalert2' => [

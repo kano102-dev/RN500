@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 ?>
 
 <div class="card card-default color-palette-box">
@@ -48,11 +49,31 @@ use yii\widgets\ActiveForm;
                         </div>
                     </div>
 
-
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyMasterModel, 'city')->dropDownList($cities, ['prompt' => 'Select', 'class'=>'form-control']) ?>
+                            <?=
+                            $form->field($companyMasterModel, 'state')->widget(Select2::classname(), [
+                                'data' => $states,
+                                'options' => ['placeholder' => 'Select a province'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
                         </div>
+                        <div class="col-6">
+                            <?=
+                            $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
+                                'data' => [],
+                                'options' => ['placeholder' => 'Select a city'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-6">
                             <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => true]) ?>
                         </div>
@@ -101,15 +122,32 @@ use yii\widgets\ActiveForm;
                             <?= $form->field($userDetailModel, 'apt')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'city')->dropDownList($cities, ['prompt' => 'Select', 'class'=>'form-control']) ?>
+                            <?=
+                            $form->field($userDetailModel, 'state')->widget(Select2::classname(), [
+                                'data' => $states,
+                                'options' => ['placeholder' => 'Select a province'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
                         </div>
                     </div>
-                    
                     <div class="row">
+
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                            <?=
+                            $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
+                                'data' => [],
+                                'options' => ['placeholder' => 'Select a city'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
                         </div>
                         <div class="col-6">
+                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
                 </div>
@@ -129,3 +167,30 @@ use yii\widgets\ActiveForm;
 
     </div>
 </div>
+<?php
+$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['recruiter/get-cities']);
+$script = <<< JS
+   $(document).on('change','#companymaster-state',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#companymaster-city').html(response);
+                }
+            });
+   });
+   $(document).on('change','#userdetails-state',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#userdetails-city').html(response);
+                }
+            });
+   });
+JS;
+$this->registerJs($script);

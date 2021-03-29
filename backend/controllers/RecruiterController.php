@@ -17,6 +17,8 @@ use common\CommonFunction;
 use common\models\Cities;
 use yii\helpers\ArrayHelper;
 use common\models\CompanyBranch;
+use common\models\CompanySubscription;
+use common\models\PackageMaster;
 
 /**
  * PackageController implements the CRUD actions for PackageMaster model.
@@ -32,7 +34,7 @@ class RecruiterController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['view', 'index', 'create', 'update', 'delete'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['view', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -85,7 +87,9 @@ class RecruiterController extends Controller {
     public function actionCreate() {
         $userDetailModel = new UserDetails();
         $companyMasterModel = new CompanyMaster;
-        $cities = ArrayHelper::map(Cities::find()->limit(5)->all(), 'id', 'city');
+
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+
 
         if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
             $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
@@ -94,24 +98,30 @@ class RecruiterController extends Controller {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($companyMasterModel->save()) {
-                        $company_branch = new CompanyBranch();
-                        $company_branch->branch_name = "HO";
-                        $company_branch->company_id = $companyMasterModel->id;
-                        $company_branch->setAttributes($companyMasterModel->getAttributes());
-                        $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
-                        if ($company_branch->save()) {
-                            $user = new User();
-                            $user->email = $userDetailModel->email;
-                            $user->type = User::TYPE_RECRUITER;
-                            $user->status = User::STATUS_INACTIVE;
-                            $user->branch_id = $company_branch->id;
-                            if ($user->save()) {
-                                $userDetailModel->user_id = $user->id;
-                                if ($userDetailModel->save()) {
-                                    $transaction->commit();
-                                    Yii::$app->session->setFlash("success", "Recruiter added successfully.");
-                                } else {
-                                    Yii::$app->session->setFlash("warning", "Something went wrong.");
+                        $companySubscription = new CompanySubscription;
+                        $companySubscription->company_id = $companyMasterModel->id;
+                        $companySubscription->package_id = PackageMaster::PAY_AS_A_GO;
+                        $companySubscription->created_at = $companySubscription->updated_at = CommonFunction::currentTimestamp();
+                        if ($companySubscription->save()) {
+                            $company_branch = new CompanyBranch();
+                            $company_branch->branch_name = "HO";
+                            $company_branch->company_id = $companyMasterModel->id;
+                            $company_branch->setAttributes($companyMasterModel->getAttributes());
+                            $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
+                            if ($company_branch->save()) {
+                                $user = new User();
+                                $user->email = $userDetailModel->email;
+                                $user->type = User::TYPE_RECRUITER;
+                                $user->status = User::STATUS_INACTIVE;
+                                $user->branch_id = $company_branch->id;
+                                if ($user->save()) {
+                                    $userDetailModel->user_id = $user->id;
+                                    if ($userDetailModel->save()) {
+                                        $transaction->commit();
+                                        Yii::$app->session->setFlash("success", "Recruiter added successfully.");
+                                    } else {
+                                        Yii::$app->session->setFlash("warning", "Something went wrong.");
+                                    }
                                 }
                             }
                         }
@@ -128,7 +138,7 @@ class RecruiterController extends Controller {
         return $this->render('_form', [
                     'userDetailModel' => $userDetailModel,
                     'companyMasterModel' => $companyMasterModel,
-                    'cities' => $cities
+                    'states' => $states
         ]);
     }
 
@@ -145,7 +155,7 @@ class RecruiterController extends Controller {
         $userDetailModel = isset($model->details) ? $model->details : [];
         $userDetailModel->email = $model->email;
         $companyMasterModel = isset($model->branch->company) ? $model->branch->company : [];
-        $cities = ArrayHelper::map(Cities::find()->limit(5)->all(), 'id', 'city');
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
         if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
             $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
@@ -184,7 +194,7 @@ class RecruiterController extends Controller {
                     'model' => $model,
                     'userDetailModel' => $userDetailModel,
                     'companyMasterModel' => $companyMasterModel,
-                    'cities' => $cities
+                    'states' => $states
         ]);
     }
 
@@ -199,6 +209,18 @@ class RecruiterController extends Controller {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionGetCities($id) {
+        $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $id])->all(), 'id', 'city');
+        $options = '';
+        if (!empty($cities)) {
+            foreach ($cities as $key => $city) {
+                $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
     }
 
     /**
