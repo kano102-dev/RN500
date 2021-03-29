@@ -391,3 +391,40 @@ CREATE TABLE `cities` (
   `state_code` char(2) NOT NULL,
   KEY `idx_state_code` (`state_code`)
 );
+
+
+#  ***********************27-MARCH-2021***********************
+
+ALTER TABLE `user`
+CHANGE `password` `password` varchar(250)  NULL ,
+CHANGE `original_password` `original_password` varchar(250) NULL, 
+CHANGE `auth_key` `auth_key` varchar(250)  NULL ,
+CHANGE `password_reset_token` `password_reset_token` INT(11)  NULL ;
+
+
+ALTER TABLE `cities` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `states` DROP INDEX `PRIMARY`;
+
+ALTER TABLE `states` ADD `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY FIRST;
+
+ALTER TABLE `cities` ADD `state_id` int(11) NOT NULL;
+
+UPDATE cities c,states s  SET  c.state_id= s.id WHERE c.state_code= s.state_code
+
+# ***********************27-MARCH-2021********END***************
+ALTER TABLE `package_master`
+ADD `is_default` tinyint NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `title`;
+
+INSERT INTO `package_master` (`title`, `is_default`, `status`)
+VALUES ('Pay As You Go', '1', '1');
+
+ALTER TABLE `company subscription`
+RENAME TO `company_subscription`;
+
+ALTER TABLE `company_subscription`
+CHANGE `start_date` `start_date` date NULL AFTER `package_id`,
+CHANGE `expiry_date` `expiry_date` date NULL AFTER `start_date`;
+
+ALTER TABLE `company_subscription`
+CHANGE `status` `status` int(11) NOT NULL DEFAULT '1' COMMENT '1:active 2:in active' AFTER `expiry_date`;

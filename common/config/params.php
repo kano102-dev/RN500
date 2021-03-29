@@ -7,4 +7,5 @@ return [
     'senderName' => 'RN500',
     'user.passwordResetTokenExpire' => 3600,
     'user.passwordMinLength' => 8,
+    'user.types' => ['1'=>'Recruiter','2'=>'Employeer', '3'=>'Jobseeker','4'=>'Staff'],
 ];

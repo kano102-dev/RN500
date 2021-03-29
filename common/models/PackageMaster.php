@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
@@ -9,26 +9,27 @@ use Yii;
  *
  * @property int $id
  * @property string $title
+ * @property int $is_default 1:yes 0:no
  * @property int $status
  */
-class PackageMaster extends \yii\db\ActiveRecord
-{
+class PackageMaster extends \yii\db\ActiveRecord {
+
+    const PAY_AS_A_GO = 1;
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'package_master';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['title', 'status'], 'required'],
-            [['status'], 'integer'],
+            [['is_default', 'status'], 'integer'],
             [['title'], 'string', 'max' => 250],
         ];
     }
@@ -36,12 +37,13 @@ class PackageMaster extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'title' => 'Title',
+            'is_default' => '1:yes 0:no',
             'status' => 'Status',
         ];
     }
+
 }
