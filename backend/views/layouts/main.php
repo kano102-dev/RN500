@@ -7,10 +7,12 @@ use yii\helpers\Html;
 
 use backend\assets\FontAwesomeAsset;
 use backend\assets\AdminLteAsset;
+use backend\assets\AppAsset;
+
 echo \common\components\FlashmessageWidget::widget();
 AdminLteAsset::register($this);
 FontAwesomeAsset::register($this);
-$this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700');
+AppAsset::register($this);
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 ?>

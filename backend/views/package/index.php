@@ -3,22 +3,18 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel backend\Models\PackageMasterSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Package Masters';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="package-master-index">
-    <p>
-        <?= Html::a('Create Package Master', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-    <?= GridView::widget([
+        <div class="col-12">
+           <?= Html::a('Create Package Master', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+
+            <div class="table table-responsive">
+
+                <?php Pjax::begin(); ?>
+         <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
@@ -30,6 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?php Pjax::end(); ?>
+                <?php Pjax::end(); ?>
+            </div>
 
+
+        </div>
+    </div>
+    <!-- /.card-body -->
 </div>
