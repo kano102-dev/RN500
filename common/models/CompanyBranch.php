@@ -48,7 +48,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
             'branch_name' => 'Branch Name',
             'street_no' => 'Street No',
             'street_address' => 'Street Address',
-            'apt' => 'Apt',
+            'apt' => 'Suit/apt',
             'city' => 'City',
             'zip_code' => 'Zip Code',
             'is_default' => 'Is Default',
@@ -56,7 +56,6 @@ class CompanyBranch extends \yii\db\ActiveRecord {
             'updated_at' => 'Updated At',
         ];
     }
-    
     
      public function getCompany() {
         return $this->hasOne(CompanyMaster::className(), ['id' => 'company_id']);
