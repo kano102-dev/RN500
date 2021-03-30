@@ -3,29 +3,23 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\CompanyBranchSearch */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Company Branches';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="company-branch-index">
 
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-    <p>
-        <?= Html::a('Create Company Branch', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        <div class="col-12">
+           <?= Html::a('Create Company Branch', ['create'], ['class' => 'btn btn-primary float-right']) ?>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+            <div class="table table-responsive">
 
-    <?= GridView::widget([
+                <?php Pjax::begin(); ?>
+         <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            
             'company_id',
             'branch_name',
             'street_no',
@@ -41,6 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
 
-    <?php Pjax::end(); ?>
+                <?php Pjax::end(); ?>
+            </div>
 
+
+        </div>
+    </div>
+    <!-- /.card-body -->
 </div>
