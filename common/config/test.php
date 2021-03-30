@@ -1,11 +1,9 @@
 <?php
 return [
-    'id' => 'app-common-tests',
-    'basePath' => dirname(__DIR__),
-    'components' => [
-        'user' => [
-            'class' => 'yii\web\User',
-            'identityClass' => 'common\models\User',
-        ],
-    ],
+    'class' => 'yii\db\Connection',
+    'dsn' => 'mysql:host=localhost;dbname=rn500',
+    'username' => 'root',
+    'password' => 'root',
+    'charset' => 'utf8',
 ];
+

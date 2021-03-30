@@ -9,46 +9,61 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Role Masters';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="role-master-index">
-    <p>
-        <?= Html::a('Create Role', 'javascript:void(0)', ['class' => 'btn btn-success', 'id' => 'create_role','modal-title'=>'Create Role','url'=> yii\helpers\Url::to(['role/create'])]) ?>
-    </p>
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
+        <div class="col-12">
+            <?= Html::a('Create Role', ['create'], ['class' => 'btn btn-primary float-right']) ?>  
+            
+            <div class="table table-responsive">
 
-    <?=
-    GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'role_name',
-            [
-                'attribute' => 'created_at',
-                'value' => function ($model) {
-                    return date($model->created_at);
-                }
-            ],
-//            'created_at',
-//            'updated_at',
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]);
-    ?>
+                <?php Pjax::begin(['id' => 'pjax_role', 'timeout' => false]); ?>
+                <?=
+                GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'role_name',
+                        [
+                            'attribute' => 'create_at',
+                            'value' => function($model) {
+                                return date('d-m-Y', $model->created_at);
+                            }
+                        ],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['style' => 'width:5%;'],
+                            'header' => 'Actions',
+                            'template' => '{view} {update}',
+                            'buttons' => [
+                                //view button
+                                'view' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                                'update' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                            ],
+                        ],
+                    ],
+                ]);
+                ?>
 
-    <?php Pjax::end(); ?>
+                <?php Pjax::end(); ?>
+            </div>
 
+
+        </div>
+    </div>
+    <!-- /.card-body -->
 </div>
-<?php
-$js = <<< JS
-$(document).on("click", "#create_role", function(e) {
-    $("#commonModal").modal("show");
-    $("#commonModal").find("#commonModalHeader").html($(this).attr('modal-title'));
-    $("#commonModal").find("#modalContent").load($(this).attr("url"));
-});
-JS;
-$this->registerJs($js);
-?>

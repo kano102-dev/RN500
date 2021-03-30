@@ -113,6 +113,7 @@ class RecruiterController extends Controller {
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_INACTIVE;
                                 $user->branch_id = $company_branch->id;
+                                $user->is_owner = User::OWNER_YES;
                                 if ($user->save()) {
                                     $userDetailModel->user_id = $user->id;
                                     if ($userDetailModel->save()) {
