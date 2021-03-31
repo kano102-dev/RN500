@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Role Masters';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">

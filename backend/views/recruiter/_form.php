@@ -3,12 +3,15 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+
+$this->title = 'Recruiter';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "Update";
 ?>
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-
-
+        
         <?php $form = ActiveForm::begin(['id' => 'form_recruiter_signup', 'options' => []]); ?>
 
 

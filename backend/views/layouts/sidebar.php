@@ -70,22 +70,22 @@
                         [
                         'label' => 'Role',
                         'url' => ['role/index'],
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'tasks',
                     ],
                         [
                         'label' => 'Package',
                         'url' => ['package/index'],
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'book',
                     ],
                         [
                         'label' => 'Company Branch',
                         'url' => ['company-branch/index'],
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'sitemap',
                     ],
                         [
                         'label' => 'Recruiter Management',
                         'url' => ['recruiter/index'],
-                        'icon' => 'tachometer-alt',
+                        'icon' => 'users',
                     ],
 //                    [
 //                        'label' => 'Starter Pages',

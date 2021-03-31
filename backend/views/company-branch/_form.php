@@ -2,40 +2,86 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\CompanyBranch */
 /* @var $form yii\widgets\ActiveForm */
+$this->title = 'Branch';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 ?>
+<div class="card card-default color-palette-box">
+    <div class="card-body">
+        <h2><?= $model->isNewRecord ? "Create " : "Update " ?> Package</h2>
+        <hr/>
+        <?php $form = ActiveForm::begin(); ?>
 
-<div class="company-branch-form">
+        <div class="row">
+            <div class="col-6">
+                <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-6">
+                <?= $form->field($model, 'street_no')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <?= $form->field($model, 'street_address')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-6">
+                <?= $form->field($model, 'apt')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <?=
+                $form->field($model, 'state')->widget(Select2::classname(), [
+                    'data' => $states,
+                    'options' => ['placeholder' => 'Select a province'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);
+                ?>
+            </div>
+            <div class="col-6">
+                <?=
+                $form->field($model, 'city')->widget(Select2::classname(), [
+                    'data' => [],
+                    'options' => ['placeholder' => 'Select a city'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ]);
+                ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="form-group">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+        </div>
 
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'company_id')->textInput() ?>
-
-    <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'street_no')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'street_address')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'suit/apt')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'city')->textInput() ?>
-
-    <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($model, 'is_default')->textInput() ?>
-
-    <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?php ActiveForm::end(); ?>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>
+<?php
+$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['company-branch/get-cities']);
+$script = <<< JS
+   $(document).on('change','#companybranch-state',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#companybranch-city').html(response);
+                }
+            });
+   });
+JS;
+$this->registerJs($script);

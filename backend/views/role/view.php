@@ -8,7 +8,9 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model common\models\RoleMaster */
 
-$this->title = "Role Management";
+$this->title = 'Role Masters';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = "View";
 ?>
 <style type="text/css">
     .fancytree-checkbox {

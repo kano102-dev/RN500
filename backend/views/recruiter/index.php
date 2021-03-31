@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
+$this->title = 'Recruiter';
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="card card-default color-palette-box">
@@ -19,12 +22,12 @@ use yii\widgets\Pjax;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+                        ['class' => 'yii\grid\SerialColumn'],
 //                      
                         'branchName',
                         'first_name',
                         'last_name',
-                            [
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => 'width:5%;'],
                             'header' => 'Actions',

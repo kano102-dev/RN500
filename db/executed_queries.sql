@@ -437,3 +437,6 @@ ADD `is_owner` tinyint NULL COMMENT '1:yes 0:no';
 
 ALTER TABLE `user`
 CHANGE `is_owner` `is_owner` tinyint(4) NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `password_reset_token`;
+
+ALTER TABLE `company_branch`
+CHANGE `is_default` `is_default` int(11) NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `zip_code`;

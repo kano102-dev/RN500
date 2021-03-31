@@ -9,6 +9,8 @@ use yii\helpers\Url;
 /* @var $model common\models\RoleMaster */
 /* @var $form yii\widgets\ActiveForm */
 $this->title = 'Role Masters';
+$this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
+$this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 ?>
 <style type="text/css">
     .fancytree-checkbox {
