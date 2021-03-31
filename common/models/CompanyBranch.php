@@ -24,17 +24,19 @@ class CompanyBranch extends \yii\db\ActiveRecord {
     const IS_DEFAULT_YES = '1';
     const IS_DEFAULT_NO = '0';
 
+    public $state;
+
     public static function tableName() {
         return 'company_branch';
     }
 
     public function rules() {
         return [
-                [['company_id', 'branch_name', 'street_no', 'street_address', 'is_default', 'created_at', 'updated_at'], 'required'],
-                [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
-                [['branch_name'], 'string', 'max' => 200],
-                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-                [['zip_code'], 'string', 'max' => 20],
+            [['company_id', 'branch_name', 'street_no', 'street_address', 'created_at', 'updated_at'], 'required'],
+            [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
+            [['branch_name'], 'string', 'max' => 200],
+            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+            [['zip_code'], 'string', 'max' => 20],
         ];
     }
 
@@ -44,7 +46,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'company_id' => 'Company ID',
+            'company_id' => 'Company',
             'branch_name' => 'Branch Name',
             'street_no' => 'Street No',
             'street_address' => 'Street Address',
@@ -56,8 +58,8 @@ class CompanyBranch extends \yii\db\ActiveRecord {
             'updated_at' => 'Updated At',
         ];
     }
-    
-     public function getCompany() {
+
+    public function getCompany() {
         return $this->hasOne(CompanyMaster::className(), ['id' => 'company_id']);
     }
 

@@ -428,3 +428,15 @@ CHANGE `expiry_date` `expiry_date` date NULL AFTER `start_date`;
 
 ALTER TABLE `company_subscription`
 CHANGE `status` `status` int(11) NOT NULL DEFAULT '1' COMMENT '1:active 2:in active' AFTER `expiry_date`;
+
+ALTER TABLE `auth_assignment`
+CHANGE `role_id` `role_id` varchar(250) NOT NULL AFTER `item_name`;
+
+ALTER TABLE `user`
+ADD `is_owner` tinyint NULL COMMENT '1:yes 0:no';
+
+ALTER TABLE `user`
+CHANGE `is_owner` `is_owner` tinyint(4) NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `password_reset_token`;
+
+ALTER TABLE `company_branch`
+CHANGE `is_default` `is_default` int(11) NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `zip_code`;

@@ -27,6 +27,9 @@ class User extends ActiveRecord implements IdentityInterface {
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
+    
+    const OWNER_NO = 0;
+    const OWNER_YES = 1;
     // USER TYPES
     const TYPE_RECRUITER = 1;
     const TYPE_EMPLOYEE = 2;
@@ -50,6 +53,8 @@ class User extends ActiveRecord implements IdentityInterface {
                 [['email'], 'email'],
                 ['status', 'default', 'value' => self::STATUS_INACTIVE],
                 ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+                ['is_owner', 'default', 'value' => self::OWNER_NO],
+                ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
         ];
     }
 
