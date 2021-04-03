@@ -6,7 +6,7 @@ use kartik\select2\Select2;
 
 $this->title = 'Staff';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
-$this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "Update";
+$this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Update";
 ?>
 
 <div class="card card-default color-palette-box">
@@ -104,17 +104,6 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
 <?php
 $getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['staff/get-cities']);
 $script = <<< JS
-   $(document).on('change','#companymaster-state',function(){
-        var state=$(this).val();
-       $.ajax({
-                method: 'GET',
-                url: '$getCitiesUrl',
-                data: {'id':state},
-                success: function (response) {
-                    $('#companymaster-city').html(response);
-                }
-            });
-   });
    $(document).on('change','#userdetails-state',function(){
         var state=$(this).val();
        $.ajax({

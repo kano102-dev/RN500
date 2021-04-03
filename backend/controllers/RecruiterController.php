@@ -170,7 +170,6 @@ class RecruiterController extends Controller {
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
         if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
-            $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
             $userDetailModel->updated_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
                 $transaction = Yii::$app->db->beginTransaction();

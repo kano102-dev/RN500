@@ -51,7 +51,7 @@ class StaffController extends Controller {
 
     public function actionIndex() {
         $searchModel = new UserDetailsSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchStaff(Yii::$app->request->queryParams);
 
         return $this->render('index', [
                     'searchModel' => $searchModel,
@@ -85,46 +85,39 @@ class StaffController extends Controller {
      */
     public function actionCreate() {
         $userDetailModel = new UserDetails();
-        $companyMasterModel = new CompanyMaster;
 
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
-
-
-        if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
-            $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
-            $userDetailModel->updated_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
-            if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
+        if ($userDetailModel->load(Yii::$app->request->post())) {
+            $is_error = 0;
+            $userDetailModel->created_at = CommonFunction::currentTimestamp();
+            $userDetailModel->updated_at = CommonFunction::currentTimestamp();
+            if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability'])) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    if ($companyMasterModel->save()) {
-                        $companySubscription = new CompanySubscription;
-                        $companySubscription->company_id = $companyMasterModel->id;
-                        $companySubscription->package_id = PackageMaster::PAY_AS_A_GO;
-                        $companySubscription->created_at = $companySubscription->updated_at = CommonFunction::currentTimestamp();
-                        if ($companySubscription->save()) {
-                            $company_branch = new CompanyBranch();
-                            $company_branch->branch_name = "HO";
-                            $company_branch->company_id = $companyMasterModel->id;
-                            $company_branch->setAttributes($companyMasterModel->getAttributes());
-                            $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
-                            if ($company_branch->save()) {
-                                $user = new User();
-                                $user->email = $userDetailModel->email;
-                                $user->type = User::TYPE_RECRUITER;
-                                $user->status = User::STATUS_INACTIVE;
-                                $user->branch_id = $company_branch->id;
-                                $user->is_owner = User::OWNER_YES;
-                                if ($user->save()) {
-                                    $userDetailModel->user_id = $user->id;
-                                    if ($userDetailModel->save()) {
-                                        $transaction->commit();
-                                        Yii::$app->session->setFlash("success", "Staff added successfully.");
-                                    } else {
-                                        Yii::$app->session->setFlash("warning", "Something went wrong.");
-                                    }
-                                }
+                    $user = new User();
+                    $user->email = $userDetailModel->email;
+                    $user->type = User::TYPE_RECRUITER;
+                    $user->status = User::STATUS_INACTIVE;
+                    $user->branch_id = \Yii::$app->user->identity->branch_id;
+                    $user->is_owner = User::OWNER_NO;
+                    if ($user->save()) {
+                        $userDetailModel->user_id = $user->id;
+                        if ($userDetailModel->save()) {
+                            $is_error = 1;
+                            $resetPasswordModel = new \common\models\PasswordResetRequestForm();
+                            $resetPasswordModel->email = $user->email;
+                            $is_welcome_mail = 1;
+                            if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                $is_error = 1;
                             }
                         }
+                    }
+                    if ($is_error) {
+                        $transaction->commit();
+                        Yii::$app->session->setFlash("success", "Staff added successfully.");
+                    } else {
+                        $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
@@ -137,7 +130,6 @@ class StaffController extends Controller {
 
         return $this->render('_form', [
                     'userDetailModel' => $userDetailModel,
-                    'companyMasterModel' => $companyMasterModel,
                     'states' => $states
         ]);
     }
@@ -154,38 +146,29 @@ class StaffController extends Controller {
 
         $userDetailModel = isset($model->details) ? $model->details : [];
         $userDetailModel->email = $model->email;
-        $companyMasterModel = isset($model->branch->company) ? $model->branch->company : [];
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
-        if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
-            $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
-            $userDetailModel->updated_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
+        if ($userDetailModel->load(Yii::$app->request->post())) {
+            $userDetailModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    if ($companyMasterModel->save()) {
-                        $company_branch = CompanyBranch::find()->where(['company_id' => $companyMasterModel->id, 'is_default' => CompanyBranch::IS_DEFAULT_YES])->one();
-                        $company_branch->setAttributes($companyMasterModel->getAttributes());
-                        if ($company_branch->save()) {
-                            $user = clone $model;
-                            $user->email = $userDetailModel->email;
-                            $user->type = User::TYPE_RECRUITER;
-                            $user->branch_id = $company_branch->id;
-                            if ($user->save()) {
-                                $userDetailModel->user_id = $user->id;
-                                if ($userDetailModel->save()) {
-                                    $transaction->commit();
-                                    Yii::$app->session->setFlash("success", "Staff updated successfully.");
-                                } else {
-                                    Yii::$app->session->setFlash("warning", "Something went wrong.");
-                                }
-                            }
+                    $user = clone $model;
+                    $user->email = $userDetailModel->email;
+                    $user->type = User::TYPE_RECRUITER;
+                    if ($user->save()) {
+                        $userDetailModel->user_id = $user->id;
+                        if ($userDetailModel->save()) {
+                            $transaction->commit();
+                            Yii::$app->session->setFlash("success", "Details updated successfully.");
+                        } else {
+                            Yii::$app->session->setFlash("warning", "Something went wrong.");
                         }
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
                 } finally {
-                    return $this->redirect(['view', 'id' => $id]);
+                    return $this->redirect(['index']);
                 }
             }
         }
@@ -193,7 +176,6 @@ class StaffController extends Controller {
         return $this->render('_form', [
                     'model' => $model,
                     'userDetailModel' => $userDetailModel,
-                    'companyMasterModel' => $companyMasterModel,
                     'states' => $states
         ]);
     }

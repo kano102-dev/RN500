@@ -50,7 +50,7 @@ class PasswordResetRequestForm extends Model {
      * @return bool whether the email was send
 
      */
-    public function sendEmail() {
+    public function sendEmail($is_welcome_mail = 0) {
 
         /* @var $user User */
 
@@ -86,15 +86,22 @@ class PasswordResetRequestForm extends Model {
         Yii::$app->mailer->htmlLayout = '@common/mail/layouts/html';
 
         Yii::$app->mailer->textLayout = '@common/mail/layouts/text';
-
+        $htmlLayout = '@common/mail/passwordResetToken-html';
+        $textLayout = '@common/mail/passwordResetToken-text';
+        $subject = 'Password reset for ' . \Yii::$app->params['senderName'];
+        if ($is_welcome_mail) {
+            $htmlLayout = '@common/mail/welcomeMail-html';
+            $textLayout = '@common/mail/welcomeMail-text';
+            $subject = 'Welcome To Rn500';
+        }
         return Yii::$app
                         ->mailer
                         ->compose(
-                                ['html' => '@common/mail/passwordResetToken-html', 'text' => '@common/mail/passwordResetToken-text'], ['user' => $user, 'resetLink' => $resetLink, 'name' => $name]
+                                ['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'resetLink' => $resetLink, 'name' => $name]
                         )
                         ->setFrom([Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                         ->setTo($this->email)
-                        ->setSubject('Password reset for ' . \Yii::$app->params['senderName'])
+                        ->setSubject($subject)
                         ->send();
     }
 
