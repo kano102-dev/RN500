@@ -123,7 +123,8 @@ class RecruiterController extends Controller {
                                         $is_error = 1;
                                         $resetPasswordModel = new \common\models\PasswordResetRequestForm();
                                         $resetPasswordModel->email = $user->email;
-                                        if ($resetPasswordModel->sendEmail()) {
+                                        $is_welcome_mail = 1;
+                                        if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
                                             $is_error = 1;
                                         }
                                     }
