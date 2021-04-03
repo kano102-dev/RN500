@@ -440,3 +440,6 @@ CHANGE `is_owner` `is_owner` tinyint(4) NULL DEFAULT '0' COMMENT '1:yes 0:no' AF
 
 ALTER TABLE `company_branch`
 CHANGE `is_default` `is_default` int(11) NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `zip_code`;
+
+ALTER TABLE `user`
+CHANGE `password_reset_token` `password_reset_token` varchar(250) NULL AFTER `auth_key`;

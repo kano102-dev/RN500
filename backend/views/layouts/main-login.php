@@ -4,6 +4,7 @@
 /* @var $content string */
 
 backend\assets\AdminLteAsset::register($this);
+backend\assets\AppAsset::register($this);
 $this->registerCssFile('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700');
 $this->registerCssFile('https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css');
 backend\assets\PluginAsset::register($this)->add(['fontawesome', 'icheck-bootstrap']);

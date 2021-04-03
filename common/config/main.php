@@ -23,6 +23,26 @@ return [
                 'encryption' => 'tls',
             ],
         ],
+        'user' => [
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => false,
+            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'authTimeout' => 120000,
+        ],
+        'session' => [
+            // this is the name of the session cookie used for login on the backend
+            'name' => 'rn500',
+        ],
+        'urlManagerAdmin' => [
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'class' => 'yii\web\UrlManager',
+            'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            ],
+        ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
             'defaultRoles' => ['guest'],

@@ -27,7 +27,6 @@ class User extends ActiveRecord implements IdentityInterface {
 
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 1;
-    
     const OWNER_NO = 0;
     const OWNER_YES = 1;
     // USER TYPES
@@ -43,18 +42,18 @@ class User extends ActiveRecord implements IdentityInterface {
         return '{{%user}}';
     }
 
-   
     /**
      * {@inheritdoc}
      */
     public function rules() {
         return [
-                [['email'], 'required'],
-                [['email'], 'email'],
-                ['status', 'default', 'value' => self::STATUS_INACTIVE],
-                ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
-                ['is_owner', 'default', 'value' => self::OWNER_NO],
-                ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
+            [['email'], 'required'],
+            [['password_reset_token', 'original_password', 'auth_key'], 'safe'],
+            [['email'], 'email'],
+            ['status', 'default', 'value' => self::STATUS_INACTIVE],
+            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['is_owner', 'default', 'value' => self::OWNER_NO],
+            ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
         ];
     }
 
@@ -94,8 +93,7 @@ class User extends ActiveRecord implements IdentityInterface {
         }
 
         return static::findOne([
-                    'password_reset_token' => $token,
-                    'status' => self::STATUS_ACTIVE,
+                    'password_reset_token' => $token
         ]);
     }
 
@@ -165,7 +163,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @param string $password
      */
     public function setPassword($password) {
-        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+        $this->password = Yii::$app->security->generatePasswordHash($password);
     }
 
     /**
@@ -199,7 +197,7 @@ class User extends ActiveRecord implements IdentityInterface {
     public function getDetails() {
         return $this->hasOne(UserDetails::className(), ['user_id' => 'id']);
     }
-    
+
     public function getBranch() {
         return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
     }

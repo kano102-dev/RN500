@@ -12,21 +12,21 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class RoleMaster extends \yii\db\ActiveRecord
-{
+class RoleMaster extends \yii\db\ActiveRecord {
+
+    const RECRUITER_OWNER = 1;
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'role_master';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['role_name', 'created_at', 'updated_at'], 'required'],
             [['created_at', 'updated_at'], 'integer'],
@@ -37,8 +37,7 @@ class RoleMaster extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'role_name' => 'Role Name',
@@ -46,4 +45,5 @@ class RoleMaster extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
 }
