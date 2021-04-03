@@ -87,6 +87,11 @@
                         'url' => ['recruiter/index'],
                         'icon' => 'users',
                     ],
+                    [
+                        'label' => 'Staff Management',
+                        'url' => ['staff/index'],
+                        'icon' => 'users',
+                    ],
 //                    [
 //                        'label' => 'Starter Pages',
 //                        'icon' => 'tachometer-alt',
