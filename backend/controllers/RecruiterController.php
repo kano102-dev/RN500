@@ -91,6 +91,7 @@ class RecruiterController extends Controller {
 
 
         if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+            $is_error = 0;
             $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
             $userDetailModel->updated_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
@@ -104,6 +105,7 @@ class RecruiterController extends Controller {
                         if ($companySubscription->save()) {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
+                            $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
                             $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
@@ -113,18 +115,29 @@ class RecruiterController extends Controller {
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_INACTIVE;
                                 $user->branch_id = $company_branch->id;
+                                $user->role_id = \common\models\RoleMaster::RECRUITER_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 if ($user->save()) {
                                     $userDetailModel->user_id = $user->id;
                                     if ($userDetailModel->save()) {
-                                        $transaction->commit();
-                                        Yii::$app->session->setFlash("success", "Recruiter added successfully.");
-                                    } else {
-                                        Yii::$app->session->setFlash("warning", "Something went wrong.");
+                                        $is_error = 1;
+                                        $resetPasswordModel = new \common\models\PasswordResetRequestForm();
+                                        $resetPasswordModel->email = $user->email;
+                                        $is_welcome_mail = 1;
+                                        if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                            $is_error = 1;
+                                        }
                                     }
                                 }
                             }
                         }
+                    }
+                    if ($is_error) {
+                        $transaction->commit();
+                        Yii::$app->session->setFlash("success", "Recruiter added successfully.");
+                    } else {
+                        $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
@@ -158,7 +171,6 @@ class RecruiterController extends Controller {
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
         if ($userDetailModel->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
-            $userDetailModel->created_at = $companyMasterModel->created_at = CommonFunction::currentTimestamp();
             $userDetailModel->updated_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
                 $transaction = Yii::$app->db->beginTransaction();

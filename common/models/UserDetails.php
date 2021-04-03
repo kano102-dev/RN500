@@ -40,7 +40,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $type;
     public $companyName;
     public $state;
-    
+
     public static function tableName() {
         return 'user_details';
     }
@@ -50,18 +50,18 @@ class UserDetails extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['email'], 'email'],
-                [['email', 'street_no', 'street_address',], 'required'],
-                [['user_id', 'first_name', 'last_name', 'mobile_no', 'created_at', 'updated_at'], 'required'],
-                [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
-                [['job_looking_from'], 'safe'],
-                [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
-                [['first_name', 'last_name'], 'string', 'max' => 50],
-                [['mobile_no'], 'string', 'max' => 11],
-                [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
-                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-                [['zip_code'], 'string', 'max' => 20],
+            [['email'], 'email'],
+            [['email', 'street_no', 'street_address',], 'required'],
+            [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
+            [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
+            [['job_looking_from'], 'safe'],
+            [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
+            [['first_name', 'last_name'], 'string', 'max' => 50],
+            [['mobile_no'], 'string', 'max' => 11],
+            [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
+            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+            [['zip_code'], 'string', 'max' => 20],
         ];
     }
 
@@ -94,6 +94,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'apt' => 'Suit/Apt',
             'city' => 'City',
             'zip_code' => 'Zip Code',
+            'companyNames' => 'Company Name',
         ];
     }
 
@@ -112,6 +113,10 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function getBranchName() {
         return isset($this->branch->branch_name) ? $this->branch->branch_name : "";
+    }
+
+    public function getCompanyNames() {
+        return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
     }
 
 }

@@ -16,23 +16,21 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class CompanySubscription extends \yii\db\ActiveRecord
-{
+class CompanySubscription extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'company_subscription';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['company_id', 'package_id', 'status', 'created_at', 'updated_at'], 'required'],
+            [['company_id', 'package_id'], 'required'],
             [['company_id', 'package_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['start_date', 'expiry_date'], 'safe'],
         ];
@@ -41,8 +39,7 @@ class CompanySubscription extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'company_id' => 'Company ID',
@@ -54,4 +51,5 @@ class CompanySubscription extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
 }

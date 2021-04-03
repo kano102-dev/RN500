@@ -32,7 +32,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public function rules() {
         return [
-            [['company_id', 'branch_name', 'street_no', 'street_address', 'created_at', 'updated_at'], 'required'],
+            [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
             [['branch_name'], 'string', 'max' => 200],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
