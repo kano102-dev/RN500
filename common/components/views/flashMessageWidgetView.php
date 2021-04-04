@@ -19,7 +19,7 @@ if (Yii::$app->session->has("success")) {
 }
 // DISPLAY FLAH MSG IN TOASTR AND DESTROY AFTER EXECUTION
 if (($type == "success" || $type == "warning" || $type == "error" || $type == "info") && $message != "") {
-    $script = <<< JS
+$script = <<< JS
 toastr.$type("","$message"); 
 JS;
     $this->registerJs($script);

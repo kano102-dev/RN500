@@ -10,6 +10,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\Cities;
 use yii\helpers\ArrayHelper;
+use common\models\UserDetails;
+use common\CommonFunction;
+use common\models\User;
+use common\models\RoleMaster;
+use common\models\PasswordResetRequestForm;
 
 /**
  * CompanyBranchController implements the CRUD actions for CompanyBranch model.
@@ -62,22 +67,61 @@ class CompanyBranchController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
-        $model = new CompanyBranch();
+        $companyBranchModel = new CompanyBranch();
+        $userDetailModel = new UserDetails();
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->company_id = Yii::$app->user->identity->branch->company_id;
-            $model->created_at = $model->updated_at = time();
-            if ($model->save()) {
-                Yii::$app->session->setFlash("success", "Branch added successfully.");
-            } else {
-                Yii::$app->session->setFlash("warning", "Something went wrong.");
+        if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
+            $is_success = false;
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                $companyBranchModel->company_id = Yii::$app->user->identity->branch->company_id;
+                $companyBranchModel->is_default = CompanyBranch::IS_DEFAULT_YES;
+                $companyBranchModel->created_at = $companyBranchModel->updated_at = CommonFunction::currentTimestamp();
+                $userDetailModel->created_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
+                if ($companyBranchModel->save()) {
+
+                    $user = new User();
+                    $user->email = $userDetailModel->email;
+                    $user->type = User::TYPE_RECRUITER;
+                    $user->status = User::STATUS_INACTIVE;
+                    $user->branch_id = $companyBranchModel->id;
+                    $user->role_id = RoleMaster::RECRUITER_OWNER;
+                    $user->is_owner = User::OWNER_YES;
+                    if ($user->save()) {
+                        $userDetailModel->user_id = $user->id;
+                        if ($userDetailModel->save()) {
+                            $is_success = true;
+                            $resetPasswordModel = new PasswordResetRequestForm();
+                            $resetPasswordModel->email = $user->email;
+                            if ($resetPasswordModel->sendEmail($is_welcome_mail = 1)) {
+                                $is_success = true;
+                            }
+                        }
+                    }
+                }
+
+                if ($is_success) {
+                    $transaction->commit();
+                    Yii::$app->session->setFlash("success", "Branch was added successfully.");
+                } else {
+                    $transaction->rollBack();
+                    Yii::$app->session->setFlash("warning", "Something went wrong.");
+                }
+            } catch (\Exception $ex) {
+                echo "<pre/>";
+                print_r($ex);
+                exit;
+                $transaction->rollBack();
+            } finally {
+                return $this->redirect(['index']);
             }
-            return $this->redirect(['index']);
         }
 
         return $this->render('_form', [
-                    'model' => $model, 'states' => $states
+                    'companyBranchModel' => $companyBranchModel,
+                    'states' => $states,
+                    'userDetailModel' => $userDetailModel
         ]);
     }
 
@@ -96,7 +140,7 @@ class CompanyBranchController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $model->updated_at = time();
             if ($model->save()) {
-                Yii::$app->session->setFlash("success", "Branch added successfully.");
+                Yii::$app->session->setFlash("success", "Branch was updated successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong.");
             }

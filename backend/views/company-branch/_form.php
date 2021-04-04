@@ -5,66 +5,148 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\CompanyBranch */
+/* @var companyBranchModel backend\models\CompanyBranch */
 /* @var $form yii\widgets\ActiveForm */
 $this->title = 'Branch';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
-$this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
+$this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "Update";
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <h2><?= $model->isNewRecord ? "Create " : "Update " ?> Package</h2>
-        <hr/>
         <?php $form = ActiveForm::begin(); ?>
 
-        <div class="row">
-            <div class="col-6">
-                <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
+        <div class="col-12">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Branch Detail</h3>
+                </div>
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($companyBranchModel, 'branch_name')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($companyBranchModel, 'street_no')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($companyBranchModel, 'street_address')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($companyBranchModel, 'apt')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <?=
+                            $form->field($companyBranchModel, 'state')->widget(Select2::classname(), [
+                                'data' => $states,
+                                'options' => ['placeholder' => 'Select a province'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-6">
+                            <?=
+                            $form->field($companyBranchModel, 'city')->widget(Select2::classname(), [
+                                'data' => [],
+                                'options' => ['placeholder' => 'Select a city'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($companyBranchModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="col-6">
-                <?= $form->field($model, 'street_no')->textInput(['maxlength' => true]) ?>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Branch Owner</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'first_name')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'last_name')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'mobile_no')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'street_no')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'street_address')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'apt')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?=
+                            $form->field($userDetailModel, 'state')->widget(Select2::classname(), [
+                                'data' => $states,
+                                'options' => ['placeholder' => 'Select a province'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <?=
+                            $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
+                                'data' => [],
+                                'options' => ['placeholder' => 'Select a city'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-group text text-center">
+                <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
             </div>
         </div>
-        <div class="row">
-            <div class="col-6">
-                <?= $form->field($model, 'street_address')->textInput(['maxlength' => true]) ?>
-            </div>
-            <div class="col-6">
-                <?= $form->field($model, 'apt')->textInput(['maxlength' => true]) ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <?=
-                $form->field($model, 'state')->widget(Select2::classname(), [
-                    'data' => $states,
-                    'options' => ['placeholder' => 'Select a province'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);
-                ?>
-            </div>
-            <div class="col-6">
-                <?=
-                $form->field($model, 'city')->widget(Select2::classname(), [
-                    'data' => [],
-                    'options' => ['placeholder' => 'Select a city'],
-                    'pluginOptions' => [
-                        'allowClear' => true
-                    ],
-                ]);
-                ?>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
-            </div>
-        </div>
-        <div class="form-group">
-            <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-        </div>
+
 
         <?php ActiveForm::end(); ?>
     </div>
@@ -72,9 +154,10 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 <?php
 $getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['company-branch/get-cities']);
 $script = <<< JS
-   $(document).on('change','#companybranch-state',function(){
+    $(document).on('change','#companybranch-state',function(){
         var state=$(this).val();
-       $.ajax({
+        if(state){
+            $.ajax({
                 method: 'GET',
                 url: '$getCitiesUrl',
                 data: {'id':state},
@@ -82,6 +165,27 @@ $script = <<< JS
                     $('#companybranch-city').html(response);
                 }
             });
-   });
+        }else{
+            $('#companybranch-city').html("");
+            $('#companybranch-city').val("");
+        }
+    });
+        
+    $(document).on('change','#userdetails-state',function(){
+        var state=$(this).val();
+        if(state){
+            $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#userdetails-city').html(response);
+                }
+            });
+        }else{
+            $('#userdetails-city').html("");
+            $('#userdetails-city').val("");
+        }
+    });
 JS;
 $this->registerJs($script);
