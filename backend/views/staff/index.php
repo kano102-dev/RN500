@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="table table-responsive">
 
-                <?php Pjax::begin(['id' => 'pjax_recruiter', 'timeout' => false]); ?>
+                <?php Pjax::begin(['id' => 'pjax_staff', 'timeout' => false]); ?>
                 <?=
                 GridView::widget([
                     'dataProvider' => $dataProvider,

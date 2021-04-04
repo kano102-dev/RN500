@@ -13,8 +13,6 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <h2><?= $model->isNewRecord ? "Create " : "Update " ?> Package</h2>
-        <hr/>
         <?php $form = ActiveForm::begin(); ?>
 
         <div class="row">
