@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-$this->title = 'Recruiter';
+$this->title = 'Staff';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = "View";
 ?>
@@ -18,26 +18,7 @@ $this->params['breadcrumbs'][] = "View";
         </p>
 
         <div class="row">
-            <div class="col-6">
-                <h4> Company Details </h4>
-                <?=
-                DetailView::widget([
-                    'model' => $companyMasterModel,
-                    'attributes' => [
-                        'company_name',
-                        'company_email',
-                        'company_mobile',
-                        'street_no',
-                        'street_address',
-                        'apt',
-                        'city',
-                        'zip_code',
-                    ],
-                ])
-                ?>
-            </div>
-            <div class="col-6">
-                <h4> User Details </h4>
+            <div class="col-12">
                 <?=
                 DetailView::widget([
                     'model' => $userDetailModel,

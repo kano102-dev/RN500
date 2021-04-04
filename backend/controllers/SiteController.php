@@ -133,7 +133,7 @@ class SiteController extends Controller {
             return $this->goHome();
         }
 
-        return $this->render('resetPassword', [
+        return $this->render('reset-password', [
                     'model' => $model,
         ]);
     }

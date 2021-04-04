@@ -7,17 +7,22 @@ use yii\web\AssetBundle;
 /**
  * Main frontend application asset bundle.
  */
-class AppAsset extends AssetBundle
-{
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
+class AppAsset extends AssetBundle {
+
+    public $sourcePath = '@frontend/theme/jobs-portal';
     public $css = [
-        'css/site.css',
+        'css/owl.carousel.css',
+        'css/font-awesome.css',
+        'css/main.css',
     ];
     public $js = [
+        'js/jquery-2.1.4.min.js',
+        'js/owl.carousel.js',
+        'js/script.js'
     ];
     public $depends = [
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];
+
 }
