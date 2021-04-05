@@ -745,7 +745,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@frontend/theme/jobs-porta
         <!--Copyright-->
         <div class="copyright">
             <div class="container">
-                <div class="bttxt">Copyright &copy; 2017 Your Company Name. All Rights Reserved. Design by: <a href="http://graphicriver.net/user/ecreativesol" target="_blank">eCreativeSolutions</a></div>
+                <div class="bttxt">Copyright &copy; 2017 RN500. All Rights Reserved. Design by: <a href="http://graphicriver.net/user/ecreativesol" target="_blank">eCreativeSolutions</a></div>
             </div>
         </div>
         <?php $this->endBody() ?>
