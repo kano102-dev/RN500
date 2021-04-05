@@ -18,6 +18,8 @@ use yii\helpers\ArrayHelper;
 use common\models\CompanyBranch;
 use common\models\CompanySubscription;
 use common\models\PackageMaster;
+use common\models\RoleMaster;
+use common\models\PasswordResetRequestForm;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
@@ -115,13 +117,13 @@ class RecruiterController extends Controller {
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_INACTIVE;
                                 $user->branch_id = $company_branch->id;
-                                $user->role_id = \common\models\RoleMaster::RECRUITER_OWNER;
+                                $user->role_id = RoleMaster::RECRUITER_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 if ($user->save()) {
                                     $userDetailModel->user_id = $user->id;
                                     if ($userDetailModel->save()) {
                                         $is_error = 1;
-                                        $resetPasswordModel = new \common\models\PasswordResetRequestForm();
+                                        $resetPasswordModel = new PasswordResetRequestForm();
                                         $resetPasswordModel->email = $user->email;
                                         $is_welcome_mail = 1;
                                         if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
@@ -134,7 +136,7 @@ class RecruiterController extends Controller {
                     }
                     if ($is_error) {
                         $transaction->commit();
-                        Yii::$app->session->setFlash("success", "Recruiter added successfully.");
+                        Yii::$app->session->setFlash("success", "Recruiter was added successfully.");
                     } else {
                         $transaction->rollBack();
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
@@ -187,7 +189,7 @@ class RecruiterController extends Controller {
                                 $userDetailModel->user_id = $user->id;
                                 if ($userDetailModel->save()) {
                                     $transaction->commit();
-                                    Yii::$app->session->setFlash("success", "Recruiter updated successfully.");
+                                    Yii::$app->session->setFlash("success", "Recruiter was updated successfully.");
                                 } else {
                                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                                 }
