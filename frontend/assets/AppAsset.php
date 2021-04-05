@@ -14,6 +14,7 @@ class AppAsset extends AssetBundle {
         'css/owl.carousel.css',
         'css/font-awesome.css',
         'css/main.css',
+        'css/site.css',
     ];
     public $js = [
         'js/jquery-2.1.4.min.js',

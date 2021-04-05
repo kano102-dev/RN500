@@ -25,9 +25,10 @@ return [
         ],
         'user' => [
             'identityClass' => 'common\models\User',
-            'enableAutoLogin' => false,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'enableAutoLogin' => true,
+            'identityCookie' => ['name' => '_identity-rn500', 'httpOnly' => true],
             'authTimeout' => 120000,
+            'loginUrl'=>'auth/login'
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
