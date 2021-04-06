@@ -64,3 +64,11 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
     </body>
 </html>
 <?php $this->endPage() ?>
+
+<style>
+    ol.breadcrumb{
+        background-color: white !important;
+        border: 1px solid #ececec !important;
+        padding: 10px !important;
+    }
+</style>

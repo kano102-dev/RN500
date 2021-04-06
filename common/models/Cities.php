@@ -47,4 +47,8 @@ class Cities extends \yii\db\ActiveRecord
             'state_id' => 'State ID',
         ];
     }
+    
+    public function getStateRef() {
+        return $this->hasOne(States::className(), ['id' => 'state_id']);
+    }
 }

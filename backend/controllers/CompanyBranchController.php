@@ -15,17 +15,32 @@ use common\CommonFunction;
 use common\models\User;
 use common\models\RoleMaster;
 use common\models\PasswordResetRequestForm;
+use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 /**
  * CompanyBranchController implements the CRUD actions for CompanyBranch model.
  */
 class CompanyBranchController extends Controller {
 
+    public $title = "Company Branch";
+    public $activeBreadcrumb, $breadcrumb;
+
     /**
      * {@inheritdoc}
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                        [
+                        'actions' => ['index', 'view', 'create', 'update', 'get-cities', 'delete'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -35,11 +50,20 @@ class CompanyBranchController extends Controller {
         ];
     }
 
+    public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['company-branch/index']),
+        ];
+    }
+
     /**
      * Lists all CompanyBranch models.
      * @return mixed
      */
     public function actionIndex() {
+
         $searchModel = new CompanyBranchSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -56,8 +80,16 @@ class CompanyBranchController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
+        $user = User::find()->where(['branch_id' => $id, 'is_owner' => User::OWNER_YES])->one();
+        if ($user == null) {
+            throw new NotFoundHttpException('Branch owner does not exists.');
+        }
+        $userDetailModel = $user->details;
+         $userDetailModel->email = $user->email;
         return $this->render('view', [
                     'model' => $this->findModel($id),
+                    'userDetailModel' => $userDetailModel,
         ]);
     }
 
@@ -67,8 +99,10 @@ class CompanyBranchController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $this->activeBreadcrumb = "Create";
         $companyBranchModel = new CompanyBranch();
         $userDetailModel = new UserDetails();
+        $branch_cities = $owner_cities = [];
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
 
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
@@ -80,7 +114,6 @@ class CompanyBranchController extends Controller {
                 $companyBranchModel->created_at = $companyBranchModel->updated_at = CommonFunction::currentTimestamp();
                 $userDetailModel->created_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
                 if ($companyBranchModel->save()) {
-
                     $user = new User();
                     $user->email = $userDetailModel->email;
                     $user->type = User::TYPE_RECRUITER;
@@ -100,7 +133,6 @@ class CompanyBranchController extends Controller {
                         }
                     }
                 }
-
                 if ($is_success) {
                     $transaction->commit();
                     Yii::$app->session->setFlash("success", "Branch was added successfully.");
@@ -109,9 +141,6 @@ class CompanyBranchController extends Controller {
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
             } catch (\Exception $ex) {
-                echo "<pre/>";
-                print_r($ex);
-                exit;
                 $transaction->rollBack();
             } finally {
                 return $this->redirect(['index']);
@@ -121,6 +150,8 @@ class CompanyBranchController extends Controller {
         return $this->render('_form', [
                     'companyBranchModel' => $companyBranchModel,
                     'states' => $states,
+                    'branch_cities' => $branch_cities,
+                    'owner_cities' => $owner_cities,
                     'userDetailModel' => $userDetailModel
         ]);
     }
@@ -133,22 +164,48 @@ class CompanyBranchController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
-        $model = $this->findModel($id);
-
+        $this->activeBreadcrumb = "Update";
+        $companyBranchModel = $this->findModel($id);
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $companyBranchModel->state = isset($companyBranchModel->cityRef->state_id) ? $companyBranchModel->cityRef->state_id : '';
+        $user = User::find()->where(['branch_id' => $id, 'is_owner' => User::OWNER_YES])->one();
+        if ($user == null) {
+            throw new NotFoundHttpException('Branch owner does not exists.');
+        }
+        $userDetailModel = $user->details;
+        $userDetailModel->email = $user->email;
+        $userDetailModel->state = isset($userDetailModel->cityRef->state_id) ? $userDetailModel->cityRef->state_id : '';
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->updated_at = time();
-            if ($model->save()) {
-                Yii::$app->session->setFlash("success", "Branch was updated successfully.");
-            } else {
-                Yii::$app->session->setFlash("warning", "Something went wrong.");
+        $branch_cities = ArrayHelper::map(Cities::findAll(['state_id' => $companyBranchModel->state]), 'id', 'city');
+        $owner_cities = ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->state]), 'id', 'city');
+
+
+        if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
+            $is_success = false;
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+
+                $companyBranchModel->updated_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
+                $user->email = $userDetailModel->email;
+                if ($companyBranchModel->save() && $userDetailModel->save() && $user->save()) {
+                    $transaction->commit();
+                    Yii::$app->session->setFlash("success", "Branch was updated successfully.");
+                } else {
+                    Yii::$app->session->setFlash("warning", "Something went wrong.");
+                }
+            } catch (\Exception $ex) {
+                $transaction->rollBack();
+            } finally {
+                 return $this->redirect(['view','id'=>$companyBranchModel->id]);
             }
-            return $this->redirect(['index']);
         }
 
         return $this->render('_form', [
-                    'model' => $model, 'states' => $states
+                    'companyBranchModel' => $companyBranchModel,
+                    'userDetailModel' => $userDetailModel,
+                    'states' => $states,
+                    'branch_cities' => $branch_cities,
+                    'owner_cities' => $owner_cities,
         ]);
     }
 
