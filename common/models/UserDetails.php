@@ -40,7 +40,9 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $type;
     public $companyName;
     public $state;
-
+    public $password;
+    public $confirm_password;
+    
     public static function tableName() {
         return 'user_details';
     }

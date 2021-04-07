@@ -21,25 +21,67 @@ use yii\bootstrap\ActiveForm;
                     </div>
                     <div class="tab-content">
                         <div id="candidate" class="formpanel tab-pane fade in active">
+                            <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'candidate-form']) ?>
                             <div class="formrow">
-                                <input type="text" name="name" class="form-control" placeholder="Full Name">
+                                <?php
+                                echo $form->field($model, 'first_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('first_name')])
+                                ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="username" class="form-control" placeholder="Username">
+                                <?php
+                                echo $form->field($model, 'last_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('last_name')])
+                                ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="email" class="form-control" placeholder="Email">
+                                <?php
+                                echo $form->field($model, 'email', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+                                ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="password" class="form-control" placeholder="Password">
+                                <?php
+                                echo $form->field($model, 'password', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('password')])
+                                ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="conpass" class="form-control" placeholder="Confirm Password">
+                                <?php
+                                echo $form->field($model, 'confirm_password', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
+                                ?>
                             </div>
                             <div class="formrow">
                                 <input type="checkbox" value="agree text" name="agree" />
                                 There are many variations of passages of Lorem Ipsum available</div>
-                            <input type="submit" class="btn" value="Register">
+                            <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
+                            <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
                         <div id="employer" class="formpanel tab-pane fade in">
                             <div class="formrow">

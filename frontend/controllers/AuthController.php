@@ -7,6 +7,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\User;
+use common\models\UserDetails;
 
 /**
  * Site controller
@@ -22,7 +24,7 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['register','login', 'error', 'check-mail', 'reset-password'],
+                        'actions' => ['register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
                     [
@@ -91,7 +93,7 @@ class AuthController extends Controller {
 
     public function actionRegister() {
         $this->layout = 'main-login';
-        $model = new \common\models\UserDetails();
+        $model = new UserDetails();
         return $this->render('register', [
                     'model' => $model,
         ]);
