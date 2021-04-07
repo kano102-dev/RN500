@@ -8,17 +8,20 @@ use common\models\PackageMasterSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Url;
 
 /**
  * PackageController implements the CRUD actions for PackageMaster model.
  */
-class PackageController extends Controller
-{
+class PackageController extends Controller {
+
+    public $title = "Package";
+    public $activeBreadcrumb, $breadcrumb;
+
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -29,18 +32,25 @@ class PackageController extends Controller
         ];
     }
 
+    public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['package/index']),
+        ];
+    }
+
     /**
      * Lists all PackageMaster models.
      * @return mixed
      */
-    public function actionIndex()
-    {
+    public function actionIndex() {
         $searchModel = new PackageMasterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -50,10 +60,10 @@ class PackageController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionView($id)
-    {
+    public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
         return $this->render('view', [
-            'model' => $this->findModel($id),
+                    'model' => $this->findModel($id),
         ]);
     }
 
@@ -62,22 +72,22 @@ class PackageController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
+        $this->activeBreadcrumb = "Create";
         $model = new PackageMaster();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-            // 
-            Yii::$app->session->setFlash("success", "Role created successfully.");
-            }else {
+                // 
+                Yii::$app->session->setFlash("success", "Role created successfully.");
+            } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong.");
             }
             return $this->redirect(['index']);
         }
 
         return $this->render('_form', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -88,22 +98,22 @@ class PackageController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
+        $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 // 
                 Yii::$app->session->setFlash("success", "Role created successfully.");
-                }else {
-                    Yii::$app->session->setFlash("warning", "Something went wrong.");
-                }
-                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash("warning", "Something went wrong.");
             }
+            return $this->redirect(['index']);
+        }
 
         return $this->render('_form', [
-            'model' => $model,
+                    'model' => $model,
         ]);
     }
 
@@ -114,8 +124,7 @@ class PackageController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -128,12 +137,12 @@ class PackageController extends Controller
      * @return PackageMaster the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = PackageMaster::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

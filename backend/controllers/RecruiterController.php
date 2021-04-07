@@ -20,11 +20,15 @@ use common\models\CompanySubscription;
 use common\models\PackageMaster;
 use common\models\RoleMaster;
 use common\models\PasswordResetRequestForm;
+use yii\helpers\Url;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
  */
 class RecruiterController extends Controller {
+
+    public $title = "Recruiter Management";
+    public $activeBreadcrumb, $breadcrumb;
 
     /**
      * {@inheritdoc}
@@ -35,7 +39,7 @@ class RecruiterController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['view', 'index', 'create', 'update', 'delete'],
                 'rules' => [
-                    [
+                        [
                         'actions' => ['view', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -48,6 +52,14 @@ class RecruiterController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
+        ];
+    }
+
+    public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['recruiter/index']),
         ];
     }
 
@@ -68,6 +80,7 @@ class RecruiterController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
         $model = $this->findModel($id);
 
         $userDetailModel = isset($model->details) ? $model->details : [];
@@ -86,6 +99,7 @@ class RecruiterController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $this->activeBreadcrumb = "Create";
         $userDetailModel = new UserDetails();
         $companyMasterModel = new CompanyMaster;
 
@@ -165,6 +179,7 @@ class RecruiterController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
 
         $userDetailModel = isset($model->details) ? $model->details : [];
