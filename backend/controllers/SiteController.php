@@ -20,10 +20,12 @@ class SiteController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['login', 'error', 'check-mail', 'reset-password', 'logout', 'index'],
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'check-mail','reset-password'],
+                        'actions' => ['login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
+                        'roles' => ['?'],
                     ],
                     [
                         'actions' => ['logout', 'index'],

@@ -8,7 +8,7 @@
 <div class="header">
     <div class="container">
         <div class="row">
-            <div class="col-md-2 col-sm-3 col-xs-12"> <a href="<?= Yii::$app->urlManager->createUrl("/"); ?>" class="logo"><img src="<?= $assetDir ?>/images/RN500_logo.png" alt="RN500" /></a>
+            <div class="col-md-2 col-sm-3 col-xs-12"> <a href="<?= Yii::$app->urlManager->createUrl("/"); ?>" class="logo"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></a>
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
                 </div>
@@ -25,7 +25,7 @@
                             <li><a href="<?= $assetDir ?>/contact-us.html">Contact</a></li>
 <!--                            <li class="postjob"><a href="<?= $assetDir ?>/post-job.html">Post a job</a></li>
                             <li class="jobseeker"><a href="<?= $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
-                            <?php if (isset(Yii::$app->user->identity) && empty(Yii::$app->user->identity)) { ?>                            
+                            <?php if (!empty(Yii::$app->user->identity)) { ?>                            
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="<?= $assetDir ?>/dashboard.html"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>

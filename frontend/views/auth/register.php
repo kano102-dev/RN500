@@ -7,6 +7,7 @@
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
+use kartik\select2\Select2;
 ?>
 <div class="listpgWraper">
     <div class="container">
@@ -22,6 +23,7 @@ use yii\bootstrap\ActiveForm;
                     <div class="tab-content">
                         <div id="candidate" class="formpanel tab-pane fade in active">
                             <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'candidate-form']) ?>
+                            <?= Html::hiddenInput('type', 'candidate') ?>
                             <div class="formrow">
                                 <?php
                                 echo $form->field($model, 'first_name', [
@@ -77,32 +79,113 @@ use yii\bootstrap\ActiveForm;
                                         ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
                                 ?>
                             </div>
-                            <div class="formrow">
-                                <input type="checkbox" value="agree text" name="agree" />
-                                There are many variations of passages of Lorem Ipsum available</div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
                         <div id="employer" class="formpanel tab-pane fade in">
+                            <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'employer-form']) ?>
+                            <div><h3>Company Details</h3></div>
+                            <hr/>
+                            <?= Html::hiddenInput('type', 'employer') ?>
                             <div class="formrow">
-                                <input type="text" name="cname" class="form-control" placeholder="Company Name">
+                                <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="cusername" class="form-control" placeholder="Username">
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="cemail" class="form-control" placeholder="Email">
+                                <?= $form->field($companyMasterModel, 'company_mobile')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_mobile')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="cpass" class="form-control" placeholder="Password">
+                                <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <input type="text" name="cpass" class="form-control" placeholder="Confirm Password">
+                                <?= $form->field($companyMasterModel, 'street_address')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_address')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <input type="checkbox" value="agree text c" name="cagree" />
-                                There are many variations of passages of Lorem Ipsum available</div>
-                            <input type="submit" class="btn" value="Register">
+                                <?= $form->field($companyMasterModel, 'apt')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('apt')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?=
+                                $form->field($companyMasterModel, 'state')->widget(Select2::classname(), [
+                                    'data' => $states,
+                                    'options' => ['placeholder' => 'Select a province'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label(false);
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?=
+                                $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
+                                    'data' => [],
+                                    'options' => ['placeholder' => 'Select a city'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label(false);
+                                ?>
+                            </div>
+                            <div><h3>User Details</h3></div>
+                            <hr/>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($model, 'first_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('first_name')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($model, 'last_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('last_name')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($model, 'email', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($model, 'password', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('password')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($model, 'confirm_password', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
+                                ?>
+                            </div>
+                            <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
+                            <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
                     </div>
                     <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManager->createUrl('auth/login'); ?>">Login Here</a></div>
@@ -111,4 +194,30 @@ use yii\bootstrap\ActiveForm;
         </div>
     </div>
 </div>
-
+<?php
+$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['auth/get-cities']);
+$script = <<< JS
+   $(document).on('change','#companymaster-state',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#companymaster-city').html(response);
+                }
+            });
+   });
+   $(document).on('change','#userdetails-state',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#userdetails-city').html(response);
+                }
+            });
+   });
+JS;
+$this->registerJs($script);

@@ -443,3 +443,6 @@ CHANGE `is_default` `is_default` int(11) NOT NULL DEFAULT '0' COMMENT '1:yes 0:n
 
 ALTER TABLE `user`
 CHANGE `password_reset_token` `password_reset_token` varchar(250) NULL AFTER `auth_key`;
+
+ALTER TABLE `company_master`
+ADD `type` tinyint NOT NULL DEFAULT '0' COMMENT '1: recruiter 0:employer' AFTER `is_master`;

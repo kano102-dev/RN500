@@ -9,6 +9,11 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use common\models\User;
 use common\models\UserDetails;
+use common\models\CompanyMaster;
+use common\models\CompanyBranch;
+use yii\helpers\ArrayHelper;
+use common\models\States;
+use common\models\Cities;
 
 /**
  * Site controller
@@ -18,13 +23,21 @@ class AuthController extends Controller {
     /**
      * {@inheritdoc}
      */
+    public function beforeAction($action) {
+        if ($action->id == 'logout') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
+    }
+
     public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['register', 'login', 'error', 'check-mail', 'reset-password'],
+                        'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
                     [
@@ -36,9 +49,7 @@ class AuthController extends Controller {
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-//                    'logout' => ['post'],
-                ],
+                'actions' => ['logout' => ['post']],
             ],
         ];
     }
@@ -82,7 +93,11 @@ class AuthController extends Controller {
                 $model->OTPVerified() &&
                 $model->login()
         ) {
-            return $this->goBack();
+            if (Yii::$app->user->identity->type == 1) {
+                return $this->redirect(['/admin']);
+            } else {
+                return $this->goHome();
+            }
         } else {
 //            $model->password = '';
             return $this->render('login', [
@@ -94,9 +109,94 @@ class AuthController extends Controller {
     public function actionRegister() {
         $this->layout = 'main-login';
         $model = new UserDetails();
+        $model->scenario = 'registration';
+        $companyMasterModel = new CompanyMaster;
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($companyMasterModel->save()) {
+                        $company_branch = new CompanyBranch();
+                        $company_branch->branch_name = "HO";
+                        $company_branch->city = $companyMasterModel->city;
+                        $company_branch->company_id = $companyMasterModel->id;
+                        $company_branch->setAttributes($companyMasterModel->getAttributes());
+                        $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
+                        if ($company_branch->save()) {
+                            $user = new User();
+                            $user->email = $model->email;
+                            $user->setPassword($model->password);
+                            $user->original_password = $model->password;
+                            $user->type = User::TYPE_RECRUITER;
+                            $user->status = User::STATUS_INACTIVE;
+                            $user->branch_id = $company_branch->id;
+                            $user->is_owner = User::OWNER_YES;
+                            if ($user->save()) {
+                                $model->user_id = $user->id;
+                                if ($model->save()) {
+                                    $is_error = 1;
+                                }
+                            }
+                        }
+                    }
+                    if ($is_error) {
+                        $transaction->commit();
+                        Yii::$app->session->setFlash("success", "You have registered successfully.");
+                        return $this->redirect(['login']);
+                    } else {
+                        $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
+                    }
+                } catch (\Exception $ex) {
+                    $transaction->rollBack();
+                }
+            } else {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $user = new User();
+                    $user->email = $model->email;
+                    $user->setPassword($model->password);
+                    $user->original_password = $model->password;
+                    $user->type = User::TYPE_JOB_SEEKER;
+                    $user->status = User::STATUS_ACTIVE;
+                    if ($user->save()) {
+                        $model->user_id = $user->id;
+                        if ($model->save(false)) {
+                            $transaction->commit();
+                            Yii::$app->session->setFlash("success", "You have registered successfully.");
+                            return $this->redirect(['login']);
+                        } else {
+                            $transaction->rollBack();
+                            Yii::$app->session->setFlash("warning", "Something went wrong.");
+                        }
+                    } else {
+                        $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
+                    }
+                } catch (\Exception $ex) {
+                    $transaction->rollBack();
+                }
+            }
+        }
         return $this->render('register', [
-                    'model' => $model,
+                    'model' => $model, 'companyMasterModel' => $companyMasterModel,
+                    'states' => $states
         ]);
+    }
+
+    public function actionGetCities($id) {
+        $options = '';
+        if (!empty($id)) {
+            $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $id])->all(), 'id', 'city');
+            if (!empty($cities)) {
+                foreach ($cities as $key => $city) {
+                    $options .= "<option value=$key>$city</option>";
+                }
+            }
+        }
+        echo $options;
+        exit;
     }
 
     /**
