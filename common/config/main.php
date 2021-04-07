@@ -28,29 +28,16 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-rn500', 'httpOnly' => true],
             'authTimeout' => 120000,
-            'loginUrl' => 'http://localhost/rn500/auth/login'
+            'loginUrl'=>'auth/login'
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'rn500',
         ],
-        'urlManager' => [
-            'class' => 'yii\web\urlManager',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            //'baseUrl' => '/frontend/web',
-            'baseUrl' => 'http://localhost/rn500/',
-            'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-            ],
-        ],
         'urlManagerAdmin' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'class' => 'yii\web\UrlManager',
-            'baseUrl' => 'http://localhost/rn500/admin',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
