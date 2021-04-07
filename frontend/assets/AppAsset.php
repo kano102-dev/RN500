@@ -9,7 +9,7 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle {
 
-    public $sourcePath = '@frontend/theme/jobs-portal';
+    public $sourcePath = '@themes/jobs-portal';
     public $css = [
         'css/owl.carousel.css',
         'css/font-awesome.css',

@@ -22,7 +22,7 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'check-mail','reset-password'],
+                        'actions' => ['register','login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
                     [
@@ -35,7 +35,7 @@ class AuthController extends Controller {
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+//                    'logout' => ['post'],
                 ],
             ],
         ];
@@ -87,6 +87,14 @@ class AuthController extends Controller {
                         'model' => $model,
             ]);
         }
+    }
+
+    public function actionRegister() {
+        $this->layout = 'main-login';
+        $model = new \common\models\UserDetails();
+        return $this->render('register', [
+                    'model' => $model,
+        ]);
     }
 
     /**

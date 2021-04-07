@@ -70,7 +70,7 @@ $is_otp_sent = $model->is_otp_sent;
                     </div>
                     <!-- login form  end--> 
                     <!-- sign up form -->
-                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> New User? <a href="#.">Register Here</a></div>
+                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> New User? <a href="<?= Yii::$app->urlManager->createUrl('/auth/register'); ?>">Register Here</a></div>
                     <!-- sign up form end--> 
 
                 </div>

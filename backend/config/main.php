@@ -18,7 +18,7 @@ return [
         ],
         'request' => [
             'csrfParam' => '_csrf-rn500',
-            'baseUrl' => '/rn500/admin',
+            'baseUrl' => 'http://localhost/rn500/admin',
             'csrfCookie' => [
                 'name' => '_csrf',
                 'path' => '/',

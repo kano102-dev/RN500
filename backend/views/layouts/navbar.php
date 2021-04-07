@@ -113,7 +113,7 @@ use yii\helpers\Html;
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
-                    <?= Html::a('Sign out', ['/site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
+                    <?= Html::a('Sign out', Yii::$app->urlManager->createUrl('auth/logout'), ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
                 </li>
             </ul>
         </li>
