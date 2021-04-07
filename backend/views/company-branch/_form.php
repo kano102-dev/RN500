@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($companyBranchModel, 'city')->widget(Select2::classname(), [
-                                'data' => [],
+                                'data' => $branch_cities,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -126,7 +126,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
-                                'data' => [],
+                                'data' => $owner_cities,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
