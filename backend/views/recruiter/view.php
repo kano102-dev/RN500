@@ -10,11 +10,9 @@ $this->params['breadcrumbs'][] = "View";
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-
-
+        
         <p class="text-right">
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-
         </p>
 
         <div class="row">
@@ -36,6 +34,7 @@ $this->params['breadcrumbs'][] = "View";
                 ])
                 ?>
             </div>
+            
             <div class="col-6">
                 <h4> User Details </h4>
                 <?=
@@ -55,11 +54,8 @@ $this->params['breadcrumbs'][] = "View";
                 ])
                 ?>
             </div>
-
-
         </div>
-
-
+        
     </div>
 </div>
 

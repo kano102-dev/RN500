@@ -22,11 +22,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
+                            ['class' => 'yii\grid\SerialColumn'],
                         'branch_name',
                         'street_no',
                         'street_address',
-                        [
+                            [
                             'attribute' => 'company_id',
                             'value' => function ($model) {
                                 return $model->company->company_name;
@@ -38,7 +38,29 @@ $this->params['breadcrumbs'][] = $this->title;
                         //'is_default',
                         //'created_at',
                         //'updated_at',
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['style' => 'width:5%;'],
+                            'header' => 'Actions',
+                            'template' => '{view} {update}',
+                            'buttons' => [
+                                //view button
+                                'view' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                                'update' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                            ],
+                        ],
                     ],
                 ]);
                 ?>

@@ -62,5 +62,8 @@ class CompanyBranch extends \yii\db\ActiveRecord {
     public function getCompany() {
         return $this->hasOne(CompanyMaster::className(), ['id' => 'company_id']);
     }
-
+    
+    public function getCityRef() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
 }

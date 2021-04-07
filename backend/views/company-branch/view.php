@@ -2,45 +2,68 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-
-/* @var $this yii\web\View */
-/* @var $model backend\models\CompanyBranch */
-
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Company Branches', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
-\yii\web\YiiAsset::register($this);
 ?>
-<div class="company-branch-view">
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+        <p class="text-right">
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        </p>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+        <div class="row">
+            <div class="col-6">
+                <h4> Branch Details </h4>
+                <?=
+                DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'branch_name',
+                        'street_no',
+                        'street_address',
+                        'apt',
+                            [
+                            'attribute' => 'state',
+                            'value' => isset($model->cityRef->stateRef->state) ? $model->cityRef->stateRef->state : '',
+                        ],
+                            [
+                            'attribute' => 'city',
+                            'value' => isset($model->cityRef->city) ? $model->cityRef->city : '',
+                        ],
+                        'zip_code'
+                    ],
+                ])
+                ?>
+            </div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'company_id',
-            'branch_name',
-            'street_no',
-            'street_address',
-            'suit/apt',
-            'city',
-            'zip_code',
-            'is_default',
-            'created_at',
-            'updated_at',
-        ],
-    ]) ?>
+            <div class="col-6">
+                <h4> Owner Details </h4>
+                <?=
+                DetailView::widget([
+                    'model' => $userDetailModel,
+                    'attributes' => [
+                        'first_name',
+                        'last_name',
+                        'email',
+                        'mobile_no',
+                        'street_no',
+                        'street_address',
+                        'apt',
+                            [
+                            'attribute' => 'state',
+                            'value' => isset($userDetailModel->cityRef->stateRef->state) ? $userDetailModel->cityRef->stateRef->state : '',
+                        ],
+                            [
+                            'attribute' => 'city',
+                            'value' => isset($userDetailModel->cityRef->city) ? $userDetailModel->cityRef->city : '',
+                        ],
+                        'zip_code',
+                    ],
+                ])
+                ?>
+            </div>
+        </div>
 
+
+
+    </div>
 </div>
