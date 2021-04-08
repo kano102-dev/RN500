@@ -10,11 +10,15 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\db\Query;
+use yii\helpers\Url;
 
 /**
  * RoleController implements the CRUD actions for RoleMaster model.
  */
 class RoleController extends Controller {
+
+    public $title = "Role";
+    public $activeBreadcrumb, $breadcrumb;
 
     /**
      * {@inheritdoc}
@@ -27,6 +31,14 @@ class RoleController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
+        ];
+    }
+
+    public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['role/index']),
         ];
     }
 
@@ -51,6 +63,7 @@ class RoleController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
         $auth = Yii::$app->authManager;
         $model = $this->findModel($id);
         $query = new Query();
@@ -71,6 +84,7 @@ class RoleController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $this->activeBreadcrumb = "Create";
         $auth = Yii::$app->authManager;
         $model = new RoleMaster();
         $query = new Query();
@@ -128,6 +142,7 @@ class RoleController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        $this->activeBreadcrumb = "Update";
         $auth = Yii::$app->authManager;
         $model = $this->findModel($id);
         $query = new Query();

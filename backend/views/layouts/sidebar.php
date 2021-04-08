@@ -1,3 +1,7 @@
+<?php
+$controller = Yii::$app->controller->id;
+$action = Yii::$app->controller->action->id;
+?>
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= \yii\helpers\Url::home() ?>" class="brand-link">
@@ -66,31 +70,37 @@
                         'label' => 'Home',
                         'url' => ['site/index'],
                         'icon' => 'tachometer-alt',
+                        'active' => ($controller == "site" && $action == "index")
                     ],
                         [
                         'label' => 'Role',
                         'url' => ['role/index'],
                         'icon' => 'tasks',
+                        'active' => ($controller == "role")
                     ],
                         [
                         'label' => 'Package',
                         'url' => ['package/index'],
                         'icon' => 'book',
+                        'active' => ($controller == "package")
                     ],
                         [
                         'label' => 'Company Branch',
                         'url' => ['company-branch/index'],
                         'icon' => 'sitemap',
+                        'active' => ($controller == "company-branch")
                     ],
                         [
                         'label' => 'Recruiter Management',
                         'url' => ['recruiter/index'],
                         'icon' => 'users',
+                        'active' => ($controller == "recruiter")
                     ],
-                    [
+                        [
                         'label' => 'Staff Management',
                         'url' => ['staff/index'],
                         'icon' => 'users',
+                        'active' => ($controller == "staff")
                     ],
 //                    [
 //                        'label' => 'Starter Pages',

@@ -18,11 +18,15 @@ use yii\helpers\ArrayHelper;
 use common\models\CompanyBranch;
 use common\models\CompanySubscription;
 use common\models\PackageMaster;
+use yii\helpers\Url;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
  */
 class StaffController extends Controller {
+
+    public $title = "Staff Management";
+    public $activeBreadcrumb, $breadcrumb;
 
     /**
      * {@inheritdoc}
@@ -33,7 +37,7 @@ class StaffController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['view', 'index', 'create', 'update', 'delete'],
                 'rules' => [
-                    [
+                        [
                         'actions' => ['view', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -46,6 +50,14 @@ class StaffController extends Controller {
                     'delete' => ['POST'],
                 ],
             ],
+        ];
+    }
+    
+        public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['staff/index']),
         ];
     }
 
@@ -66,6 +78,7 @@ class StaffController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
         $model = $this->findModel($id);
 
         $userDetailModel = isset($model->details) ? $model->details : [];
@@ -84,6 +97,7 @@ class StaffController extends Controller {
      * @return mixed
      */
     public function actionCreate() {
+        $this->activeBreadcrumb = "Create";
         $userDetailModel = new UserDetails();
 
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
@@ -142,6 +156,7 @@ class StaffController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
 
         $userDetailModel = isset($model->details) ? $model->details : [];
