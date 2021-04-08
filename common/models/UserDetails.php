@@ -40,6 +40,8 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $type;
     public $companyName;
     public $state;
+    public $password;
+    public $confirm_password;
 
     public static function tableName() {
         return 'user_details';
@@ -55,14 +57,30 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
-            [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
+            [['work_authorization_comment', 'license_suspended', 'professional_liability','unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string', 'max' => 11],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
+            ['confirm_password', 'compare', 'compareAttribute' => 'password', 'on' => 'registration'],
+            [['first_name', 'last_name', 'email', 'password', 'confirm_password'], 'required', 'on' => 'registration'],
+            [['email'], 'checkUniqueValidation', 'on' => 'registration'],
         ];
+    }
+
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['registration'] = ['unique_id','first_name', 'last_name', 'email', 'password', 'confirm_password'];
+        return $scenarios;
+    }
+
+    public function checkUniqueValidation($attribute, $param) {
+        $query = User::find()->where(['email' => $this->email])->one();
+        if (!empty($query)) {
+            return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
+        }
     }
 
     /**
@@ -118,7 +136,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function getCompanyNames() {
         return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
     }
-    
+
     public function getCityRef() {
         return $this->hasOne(Cities::className(), ['id' => 'city']);
     }

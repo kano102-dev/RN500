@@ -90,11 +90,53 @@
 .has-error .form-control-feedback {
     color: #a94442;
 }
+.is-invalid .help-block,
+.is-invalid .control-label,
+.is-invalid .radio,
+.is-invalid .checkbox,
+.is-invalid .radio-inline,
+.is-invalid .checkbox-inline,
+.is-invalid.radio label,
+.is-invalid.checkbox label,
+.is-invalid.radio-inline label,
+.is-invalid.checkbox-inline label {
+    color: #a94442;
+}
+.is-invalid .form-control {
+    border-color: #a94442;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+.is-invalid .form-control:focus {
+    border-color: #843534;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #ce8483;
+}
+.is-invalid .input-group-addon {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #a94442;
+}
+.is-invalid .form-control-feedback {
+    color: #a94442;
+}
+.invalid-feedback label ~ .form-control-feedback {
+    top: 25px;
+}
+.invalid-feedback label.sr-only ~ .form-control-feedback {
+    top: 0;
+}
 .has-feedback label ~ .form-control-feedback {
     top: 25px;
 }
 .has-feedback label.sr-only ~ .form-control-feedback {
     top: 0;
+}
+.invalid-feedback {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #a94442;
 }
 .help-block {
     display: block;

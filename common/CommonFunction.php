@@ -14,11 +14,21 @@ class CommonFunction {
         for ($i = 0; $i < $digits; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-        return  $randomString;
+        return $randomString;
     }
-    
-    public static function currentTimestamp(){
+
+    public static function currentTimestamp() {
         return time();
+    }
+
+    public static function generateRandomString($length = 6) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomNo = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomNo .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomNo;
     }
 
 }

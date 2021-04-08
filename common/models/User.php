@@ -48,7 +48,7 @@ class User extends ActiveRecord implements IdentityInterface {
     public function rules() {
         return [
             [['email'], 'required'],
-            [['password_reset_token', 'original_password', 'auth_key'], 'safe'],
+            [['password_reset_token', 'original_password', 'auth_key','is_suspend'], 'safe'],
             [['email'], 'email'],
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],

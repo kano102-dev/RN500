@@ -138,5 +138,54 @@ class UserDetailsSearch extends UserDetails {
 
         return $dataProvider;
     }
+    
+    public function searchPending($params) {
+        $query = UserDetails::find()->where(['status' => User::STATUS_INACTIVE]);
+        
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'user_id' => $this->user_id,
+            'city' => $this->city,
+            'job_title' => $this->job_title,
+            'job_looking_from' => $this->job_looking_from,
+            'travel_preference' => $this->travel_preference,
+            'ssn' => $this->ssn,
+            'work_authorization' => $this->work_authorization,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+        ]);
+
+        $query->andFilterWhere(['like', 'first_name', $this->first_name])
+                ->andFilterWhere(['like', 'last_name', $this->last_name])
+                ->andFilterWhere(['like', 'mobile_no', $this->mobile_no])
+                ->andFilterWhere(['like', 'street_no', $this->street_no])
+                ->andFilterWhere(['like', 'street_address', $this->street_address])
+                ->andFilterWhere(['like', 'apt', $this->apt])
+                ->andFilterWhere(['like', 'zip_code', $this->zip_code])
+                ->andFilterWhere(['like', 'profile_pic', $this->profile_pic])
+                ->andFilterWhere(['like', 'current_position', $this->current_position])
+                ->andFilterWhere(['like', 'speciality', $this->speciality])
+//            ->andFilterWhere(['like', 'work experience', $this->work experience])
+                ->andFilterWhere(['like', 'work_authorization_comment', $this->work_authorization_comment])
+                ->andFilterWhere(['like', 'license_suspended', $this->license_suspended])
+                ->andFilterWhere(['like', 'professional_liability', $this->professional_liability]);
+
+        return $dataProvider;
+    }
 
 }

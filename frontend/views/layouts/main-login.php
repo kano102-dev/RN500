@@ -10,7 +10,7 @@ use frontend\assets\AppAsset;
 use common\widgets\Alert;
 
 AppAsset::register($this);
-$assetDir = Yii::$app->assetManager->getPublishedUrl('@frontend/theme/jobs-portal');
+$assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -23,7 +23,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@frontend/theme/jobs-porta
         <title>RN500</title>
         <?php $this->head() ?>
         <!-- Fav Icon -->
-        <link rel="shortcut icon" href="favicon.ico">
+        <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
     </head>
     <body>
         <?php $this->beginBody() ?>

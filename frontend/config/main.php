@@ -19,7 +19,7 @@ return [
             'nullDisplay' => '',
         ],
         'request' => [
-            'csrfParam' => '_csrf-rn500',
+            'csrfParam' => '_csrf-frontend',
             'baseUrl' => '/rn500',
             'csrfCookie' => [
                 'name' => '_csrf',

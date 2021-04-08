@@ -39,7 +39,7 @@ class RecruiterController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['view', 'index', 'create', 'update', 'delete'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['view', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -113,6 +113,7 @@ class RecruiterController extends Controller {
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
+                    $companyMasterModel->type = 1;
                     if ($companyMasterModel->save()) {
                         $companySubscription = new CompanySubscription;
                         $companySubscription->company_id = $companyMasterModel->id;
@@ -135,6 +136,12 @@ class RecruiterController extends Controller {
                                 $user->is_owner = User::OWNER_YES;
                                 if ($user->save()) {
                                     $userDetailModel->user_id = $user->id;
+                                    $unique_id = CommonFunction::generateRandomString();
+                                    $details = UserDetails::findOne(['unique_id' => $unique_id]);
+                                    if (!empty($details)) {
+                                        $unique_id = CommonFunction::generateRandomString();
+                                    }
+                                    $userDetailModel->unique_id = $unique_id;
                                     if ($userDetailModel->save()) {
                                         $is_error = 1;
                                         $resetPasswordModel = new PasswordResetRequestForm();
