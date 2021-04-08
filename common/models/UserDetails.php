@@ -57,7 +57,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
-            [['work_authorization_comment', 'license_suspended', 'professional_liability'], 'string'],
+            [['work_authorization_comment', 'license_suspended', 'professional_liability','unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string', 'max' => 11],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
@@ -72,7 +72,7 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios['registration'] = ['first_name', 'last_name', 'email', 'password', 'confirm_password'];
+        $scenarios['registration'] = ['unique_id','first_name', 'last_name', 'email', 'password', 'confirm_password'];
         return $scenarios;
     }
 

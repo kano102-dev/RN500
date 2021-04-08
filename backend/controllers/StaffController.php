@@ -37,7 +37,7 @@ class StaffController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['view', 'index', 'create', 'update', 'delete'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['view', 'index', 'create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -52,8 +52,8 @@ class StaffController extends Controller {
             ],
         ];
     }
-    
-        public function __construct($id, $module, $config = array()) {
+
+    public function __construct($id, $module, $config = array()) {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
@@ -116,6 +116,12 @@ class StaffController extends Controller {
                     $user->is_owner = User::OWNER_NO;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
+                        $unique_id = CommonFunction::generateRandomString();
+                        $details = UserDetails::findOne(['unique_id' => $unique_id]);
+                        if (!empty($details)) {
+                            $unique_id = CommonFunction::generateRandomString();
+                        }
+                        $userDetailModel->unique_id = $unique_id;
                         if ($userDetailModel->save()) {
                             $is_error = 1;
                             $resetPasswordModel = new \common\models\PasswordResetRequestForm();

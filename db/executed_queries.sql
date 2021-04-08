@@ -446,3 +446,39 @@ CHANGE `password_reset_token` `password_reset_token` varchar(250) NULL AFTER `au
 
 ALTER TABLE `company_master`
 ADD `type` tinyint NOT NULL DEFAULT '0' COMMENT '1: recruiter 0:employer' AFTER `is_master`;
+
+ALTER TABLE `user_details`
+ADD `unique_id` varchar(20) NULL AFTER `user_id`;
+
+ALTER TABLE `lead_master`
+ADD `reference_no` varchar(50) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `title`,
+CHANGE `description` `description` text COLLATE 'latin1_swedish_ci' NOT NULL AFTER `reference_no`,
+ADD `recruiter_commision_type` tinyint NOT NULL COMMENT '1:percentage 0: amount' AFTER `recruiter_commission`,
+ADD `recruiter_commision_mode` tinyint NOT NULL COMMENT '0:one time 1:monthly 2 Yearly' AFTER `recruiter_commision_type`;
+
+ALTER TABLE `user`
+ADD `is_suspend` tinyint(4) NULL DEFAULT '0' COMMENT '1:yes 0:no';
+
+ALTER TABLE `lead_master`
+CHANGE `description` `description` text COLLATE 'latin1_swedish_ci' NULL AFTER `reference_no`,
+CHANGE `jobseeker_payment` `jobseeker_payment` int(11) NOT NULL COMMENT 'salary' AFTER `description`,
+DROP `street_no`,
+DROP `street_address`,
+DROP `apt`,
+DROP `city`,
+DROP `zip_code`,
+CHANGE `recruiter_commission` `recruiter_commission` int(11) NOT NULL COMMENT 'agancy commision' AFTER `end_date`,
+CHANGE `recruiter_commision_mode` `recruiter_commision_mode` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:one time 1:monthly 2 Yearly' AFTER `recruiter_commision_type`,
+CHANGE `price` `price` int(11) NULL COMMENT 'admin or master admin decide lead price' AFTER `recruiter_commision_mode`,
+CHANGE `status` `status` int(11) NULL DEFAULT '0' COMMENT '0:pending 1:approve 2:reject' AFTER `price`,
+ADD `created_by` int(11) NOT NULL,
+ADD `updated_by` int(11) NOT NULL AFTER `created_by`;
+
+ALTER TABLE `lead_master`
+ADD UNIQUE `reference_no` (`reference_no`);
+
+ALTER TABLE `company_master`
+ADD `reference_no` varchar(50) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `company_name`;
+
+ALTER TABLE `company_master`
+ADD UNIQUE `reference_no` (`reference_no`);

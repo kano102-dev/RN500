@@ -94,7 +94,7 @@ class AuthController extends Controller {
                 $model->login()
         ) {
             if (Yii::$app->user->identity->type == 1) {
-                return $this->redirect(['/admin']);
+                return $this->redirect(['/site/index']);
             } else {
                 return $this->goHome();
             }
@@ -134,6 +134,12 @@ class AuthController extends Controller {
                             $user->is_owner = User::OWNER_YES;
                             if ($user->save()) {
                                 $model->user_id = $user->id;
+                                $unique_id = CommonFunction::generateRandomString();
+                                $details = UserDetails::findOne(['unique_id' => $unique_id]);
+                                if (!empty($details)) {
+                                    $unique_id = CommonFunction::generateRandomString();
+                                }
+                                $model->unique_id = $unique_id;
                                 if ($model->save()) {
                                     $is_error = 1;
                                 }
@@ -162,6 +168,12 @@ class AuthController extends Controller {
                     $user->status = User::STATUS_ACTIVE;
                     if ($user->save()) {
                         $model->user_id = $user->id;
+                        $unique_id = CommonFunction::generateRandomString();
+                        $details = UserDetails::findOne(['unique_id' => $unique_id]);
+                        if (!empty($details)) {
+                            $unique_id = CommonFunction::generateRandomString();
+                        }
+                        $model->unique_id = $unique_id;
                         if ($model->save(false)) {
                             $transaction->commit();
                             Yii::$app->session->setFlash("success", "You have registered successfully.");

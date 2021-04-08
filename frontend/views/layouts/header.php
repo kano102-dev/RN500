@@ -35,7 +35,7 @@
                                         <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>
                                 </li>
-                            <?php } else { ?>
+                            <?php } else {?>
                                 <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/login"); ?>">Login</a></li>
                             <?php } ?>
                         </ul>
