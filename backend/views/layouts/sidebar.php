@@ -99,8 +99,14 @@ $action = Yii::$app->controller->action->id;
                         [
                         'label' => 'Staff Management',
                         'url' => ['staff/index'],
-                        'icon' => 'users',
+                        'icon' => 'user-friends',
                         'active' => ($controller == "staff")
+                    ],
+                    [
+                        'label' => 'User Approval',
+                        'url' => ['user/index'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "user")
                     ],
 //                    [
 //                        'label' => 'Starter Pages',

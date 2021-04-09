@@ -19,13 +19,14 @@ use common\models\CompanyBranch;
 use common\models\CompanySubscription;
 use common\models\PackageMaster;
 use yii\helpers\Url;
+use yii\helpers\Json;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
  */
 class UserController extends Controller {
 
-    public $title = "Staff Management";
+    public $title = "User Approval";
     public $activeBreadcrumb, $breadcrumb;
 
     public function behaviors() {
@@ -77,23 +78,24 @@ class UserController extends Controller {
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
         $orderby = "$column $dir";
 
-        $searchModel = new common\models\UserDetailsSearch();
+        $searchModel = new UserDetailsSearch();
         $dataProvider = $searchModel->searchPending(Yii::$app->request->queryParams);
         $dataProvider->query->joinWith(['user', 'branch']);
 //        echo $dataProvider->query->createCommand()->rawSql;exit;
         if (isset($search) && $search != "") {
-//            $dataProvider->query->andWhere(['OR', ['like', 'asset_master.asset_code', $search],
-//                ['like', 'transfer.reference_id', $search],
-//                ['like', 'asset_master.name', $search],
-//                ['like', 'transfer.reason', $search],
-//            ]);
+            $dataProvider->query->andWhere(['OR', ['like', 'unique_id', $search],
+                ['like', 'first_name', $search],
+                ['like', 'last_name', $search],
+                ['like', 'user.email', $search],
+//                ['like', 'user.comment', $search],
+            ]);
         }
 
         $dataProvider->query->orderBy($orderby);
         $filteredCount = count($dataProvider->query->all());
         $dataProvider->query->limit($length)->offset($start);
 
-        $count = (string) $searchModel->detailraisedSearch()->getTotalCount();
+        $count = (string) $searchModel->searchPending()->getTotalCount();
         $response = [
             'draw' => $draw,
             'recordsTotal' => $count,
@@ -104,13 +106,8 @@ class UserController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
-            $actionDiv = '<div class="dropdown profile-element dropdown-err">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-bars"></i></a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs" style="margin-left: -50px !important;"><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                            <li><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                                <a  href=""  data-pjax="0" >View</a>
-                            </li>';
-            $actionDiv .= '</ul> </div>';
+            $actionDiv = '<a class="change-status"  modal-title="Approve User" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_APPROVED]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
+            $actionDiv .= '<a class="change-status" modal-title="Reject User" href="javascript:void(0)" title="Reject" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_REJECTED]) . '" data-pjax="0"><span class="fa fa-times-circle"></span></a>';
 
             $response['data'][] = [
                 $i,
@@ -118,6 +115,7 @@ class UserController extends Controller {
                 $model->first_name . " " . $model->last_name,
                 $model->user->email,
                 $model->companyNames,
+                Yii::$app->params['user.types'][$model->user->type],
                 $actionDiv
             ];
             $i++;
@@ -136,23 +134,24 @@ class UserController extends Controller {
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
         $orderby = "$column $dir";
 
-        $searchModel = new common\models\UserDetailsSearch();
-        $dataProvider = $searchModel->searchPending(Yii::$app->request->queryParams);
+        $searchModel = new UserDetailsSearch();
+        $dataProvider = $searchModel->searchApproved(Yii::$app->request->queryParams);
         $dataProvider->query->joinWith(['user', 'branch']);
 //        echo $dataProvider->query->createCommand()->rawSql;exit;
         if (isset($search) && $search != "") {
-//            $dataProvider->query->andWhere(['OR', ['like', 'asset_master.asset_code', $search],
-//                ['like', 'transfer.reference_id', $search],
-//                ['like', 'asset_master.name', $search],
-//                ['like', 'transfer.reason', $search],
-//            ]);
+            $dataProvider->query->andWhere(['OR', ['like', 'unique_id', $search],
+                ['like', 'first_name', $search],
+                ['like', 'last_name', $search],
+                ['like', 'user.email', $search],
+                ['like', 'user.comment', $search],
+            ]);
         }
 
         $dataProvider->query->orderBy($orderby);
         $filteredCount = count($dataProvider->query->all());
         $dataProvider->query->limit($length)->offset($start);
 
-        $count = (string) $searchModel->detailraisedSearch()->getTotalCount();
+        $count = (string) $searchModel->searchApproved()->getTotalCount();
         $response = [
             'draw' => $draw,
             'recordsTotal' => $count,
@@ -163,13 +162,7 @@ class UserController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
-            $actionDiv = '<div class="dropdown profile-element dropdown-err">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-bars"></i></a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs" style="margin-left: -50px !important;"><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                            <li><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                                <a  href=""  data-pjax="0" >View</a>
-                            </li>';
-            $actionDiv .= '</ul> </div>';
+            $actionDiv = '';
 
             $response['data'][] = [
                 $i,
@@ -177,7 +170,8 @@ class UserController extends Controller {
                 $model->first_name . " " . $model->last_name,
                 $model->user->email,
                 $model->companyNames,
-                $actionDiv
+                Yii::$app->params['user.types'][$model->user->type],
+                $model->user->comment,
             ];
             $i++;
         }
@@ -195,23 +189,24 @@ class UserController extends Controller {
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
         $orderby = "$column $dir";
 
-        $searchModel = new common\models\UserDetailsSearch();
-        $dataProvider = $searchModel->searchPending(Yii::$app->request->queryParams);
+        $searchModel = new UserDetailsSearch();
+        $dataProvider = $searchModel->searchRejected(Yii::$app->request->queryParams);
         $dataProvider->query->joinWith(['user', 'branch']);
 //        echo $dataProvider->query->createCommand()->rawSql;exit;
         if (isset($search) && $search != "") {
-//            $dataProvider->query->andWhere(['OR', ['like', 'asset_master.asset_code', $search],
-//                ['like', 'transfer.reference_id', $search],
-//                ['like', 'asset_master.name', $search],
-//                ['like', 'transfer.reason', $search],
-//            ]);
+            $dataProvider->query->andWhere(['OR', ['like', 'unique_id', $search],
+                ['like', 'first_name', $search],
+                ['like', 'last_name', $search],
+                ['like', 'user.email', $search],
+                ['like', 'user.comment', $search],
+            ]);
         }
 
         $dataProvider->query->orderBy($orderby);
         $filteredCount = count($dataProvider->query->all());
         $dataProvider->query->limit($length)->offset($start);
 
-        $count = (string) $searchModel->detailraisedSearch()->getTotalCount();
+        $count = (string) $searchModel->searchRejected()->getTotalCount();
         $response = [
             'draw' => $draw,
             'recordsTotal' => $count,
@@ -222,13 +217,7 @@ class UserController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
-            $actionDiv = '<div class="dropdown profile-element dropdown-err">
-                        <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="fa fa-bars"></i></a>
-                        <ul class="dropdown-menu animated fadeInRight m-t-xs" style="margin-left: -50px !important;"><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                            <li><a href="#" data-toggle="dropdown" class="dropdown-toggle"></a>
-                                <a  href=""  data-pjax="0" >View</a>
-                            </li>';
-            $actionDiv .= '</ul> </div>';
+            $actionDiv = '';
 
             $response['data'][] = [
                 $i,
@@ -236,12 +225,28 @@ class UserController extends Controller {
                 $model->first_name . " " . $model->last_name,
                 $model->user->email,
                 $model->companyNames,
-                $actionDiv
+                Yii::$app->params['user.types'][$model->user->type],
+                $model->user->comment,
             ];
             $i++;
         }
         echo Json::encode($response);
         exit;
+    }
+
+    public function actionChangeStatus($id, $status) {
+        $model = User::findOne(['id' => $id]);
+        $model->scenario = $status == User::STATUS_APPROVED ? 'approve' : 'reject';
+        if ($model->load(Yii::$app->request->post())) {
+            $model->status = $status;
+            if ($model->save(false)) {
+                Yii::$app->session->setFlash("success", "User verified successfully.");
+            } else {
+                Yii::$app->session->setFlash("warning", "Something went wrong");
+            }
+            return $this->redirect('index');
+        }
+        return $this->renderAjax('change-status', ['model' => $model]);
     }
 
 }

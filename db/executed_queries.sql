@@ -482,3 +482,11 @@ ADD `reference_no` varchar(50) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `compa
 
 ALTER TABLE `company_master`
 ADD UNIQUE `reference_no` (`reference_no`);
+
+ALTER TABLE `user`
+CHANGE `status` `status` int(11) NOT NULL DEFAULT '0' COMMENT '1:approved 0:pending 2:rejected' AFTER `original_password`;
+
+ALTER TABLE `user`
+ADD `comment` varchar(500) NULL AFTER `status`;ALTER TABLE `user`
+CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COMMENT 'approved and rejection comment' AFTER `status`;
+

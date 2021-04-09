@@ -129,7 +129,7 @@ class AuthController extends Controller {
                             $user->setPassword($model->password);
                             $user->original_password = $model->password;
                             $user->type = User::TYPE_RECRUITER;
-                            $user->status = User::STATUS_INACTIVE;
+                            $user->status = User::STATUS_PENDING;
                             $user->branch_id = $company_branch->id;
                             $user->is_owner = User::OWNER_YES;
                             if ($user->save()) {
@@ -165,7 +165,7 @@ class AuthController extends Controller {
                     $user->setPassword($model->password);
                     $user->original_password = $model->password;
                     $user->type = User::TYPE_JOB_SEEKER;
-                    $user->status = User::STATUS_ACTIVE;
+                    $user->status = User::STATUS_APPROVED;
                     if ($user->save()) {
                         $model->user_id = $user->id;
                         $unique_id = CommonFunction::generateRandomString();

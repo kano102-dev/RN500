@@ -117,7 +117,7 @@ class CompanyBranchController extends Controller {
                     $user = new User();
                     $user->email = $userDetailModel->email;
                     $user->type = User::TYPE_RECRUITER;
-                    $user->status = User::STATUS_INACTIVE;
+                    $user->status = User::STATUS_PENDING;
                     $user->branch_id = $companyBranchModel->id;
                     $user->role_id = RoleMaster::RECRUITER_OWNER;
                     $user->is_owner = User::OWNER_YES;

@@ -111,7 +111,7 @@ class StaffController extends Controller {
                     $user = new User();
                     $user->email = $userDetailModel->email;
                     $user->type = User::TYPE_RECRUITER;
-                    $user->status = User::STATUS_INACTIVE;
+                    $user->status = User::STATUS_PENDING;
                     $user->branch_id = \Yii::$app->user->identity->branch_id;
                     $user->is_owner = User::OWNER_NO;
                     if ($user->save()) {

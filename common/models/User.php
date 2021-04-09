@@ -25,8 +25,9 @@ use yii\web\IdentityInterface;
  */
 class User extends ActiveRecord implements IdentityInterface {
 
-    const STATUS_INACTIVE = 0;
-    const STATUS_ACTIVE = 1;
+    const STATUS_PENDING = 0;
+    const STATUS_REJECTED = 2;
+    const STATUS_APPROVED = 1;
     const OWNER_NO = 0;
     const OWNER_YES = 1;
     // USER TYPES
@@ -48,20 +49,28 @@ class User extends ActiveRecord implements IdentityInterface {
     public function rules() {
         return [
             [['email'], 'required'],
-            [['password_reset_token', 'original_password', 'auth_key','is_suspend'], 'safe'],
+            [['comment'], 'required', 'on' => 'reject'],
+            [['password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'comment'], 'safe'],
             [['email'], 'email'],
-            ['status', 'default', 'value' => self::STATUS_INACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            ['status', 'default', 'value' => self::STATUS_PENDING],
+            ['status', 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
             ['is_owner', 'default', 'value' => self::OWNER_NO],
             ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
         ];
+    }
+
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['approve'] = ['comment', 'status'];
+        $scenarios['reject'] = ['comment', 'status'];
+        return $scenarios;
     }
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentity($id) {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['id' => $id, 'status' => self::STATUS_APPROVED]);
     }
 
     /**
@@ -78,7 +87,7 @@ class User extends ActiveRecord implements IdentityInterface {
      * @return static|null
      */
     public static function findByUsername($username) {
-        return static::findOne(['email' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['email' => $username, 'status' => self::STATUS_APPROVED]);
     }
 
     /**
@@ -105,8 +114,7 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public static function findByVerificationToken($token) {
         return static::findOne([
-                    'verification_token' => $token,
-                    'status' => self::STATUS_INACTIVE
+                    'verification_token' => $token
         ]);
     }
 
