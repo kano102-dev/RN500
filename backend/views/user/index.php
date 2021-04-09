@@ -11,108 +11,95 @@ use common\models\User;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 ?>
 <style>
-    table{
-        width: 100% !important;
+    .table-responsive{
+        margin-top: 12px;
+    }
+    .table{
+        width:100%;
     }
 </style>
-<div class="wrapper wrapper-content animated fadeInRight">
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="ibox float-e-margins">
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-                <div class="tabs-container my-team-leave-tabs">
-                    <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#pending" onclick="getPendingRecords()">Approval Pending </a></li>
-                        <li class=""><a data-toggle="tab" href="#approved" onclick="getApprovedRecords()">Approved </a></li>
-                        <li class=""><a data-toggle="tab" href="#rejected" onclick="getRejectedRecords();">Rejected </a></li>
-                    </ul>
+        <div class="col-12">
+            <section id="tabs" class="project-tab">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav>
+                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#pending" role="tab" onclick="getPendingRecords()" aria-controls="nav-home" aria-selected="true">Approval Pending</a>
+                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#approved" role="tab" onclick="getApprovedRecords()" aria-controls="nav-profile" aria-selected="false">Approved</a>
+                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#rejected" role="tab" onclick="getRejectedRecords()" aria-controls="nav-contact" aria-selected="false">Rejected</a>
+                                </div>
+                            </nav>
+                            <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="pending" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" cellspacing="0" id="table-pending">
+                                            <thead>
+                                                <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
+                                                    <th>Unique Id</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Company</th>
+                                                    <th>User Type</th>
+                                                    <th style="width:5%">Action</th>
+                                                </tr>
+                                            </thead>
 
-                    <div class="tab-content">
-                        <div class="tab-pane" id="pending">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive">
-                                            <div class="invite_tab_content">
-                                                <table class="table table-hover table-bordered" id="table-pending">
-                                                    <thead>
-                                                        <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
-                                                            <th>Unique Id</th>
-                                                            <th>Name</th>
-                                                            <th>Email</th>
-                                                            <th>Company</th>
-                                                            <th style="width:5%">Action</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="approved">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive">
-                                            <div class="invite_tab_content">
-                                                <table class="table table-hover table-bordered" id="table-approved">
-                                                    <thead>
-                                                        <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
-                                                            <th>Unique Id</th>
-                                                            <th>Name</th>
-                                                            <th>Email</th>
-                                                            <th>Company</th>
-                                                            <th style="width:5%">Action</th>
-                                                        </tr>
-                                                    </thead>
+                                <div class="tab-pane fade" id="approved" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" cellspacing="0" id="table-approved">
+                                            <thead>
+                                                <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
+                                                    <th>Unique Id</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Company</th>
+                                                    <th>User Type</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                            </thead>
 
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="rejected">
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="table-responsive">
-                                            <div class="invite_tab_content">
-                                                <table class="table table-hover table-bordered" id="table-rejected">
-                                                    <thead>
-                                                        <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
-                                                            <th>Unique Id</th>
-                                                            <th>Name</th>
-                                                            <th>Email</th>
-                                                            <th>Company</th>
-                                                            <th style="width:5%">Action</th>
-                                                        </tr>
-                                                    </thead>
+                                <div class="tab-pane fade" id="rejected" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered" cellspacing="0" id="table-rejected">
+                                            <thead>
+                                                <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
+                                                    <th>Unique Id</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Company</th>
+                                                    <th>User Type</th>
+                                                    <th>Comment</th>
+                                                </tr>
+                                            </thead>
 
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
-
-    </div>  
-</div>  
+    </div>
+    <!-- /.card-body -->
+</div>
 <?php
 
 $pending_url = Yii::$app->urlManager->createAbsoluteUrl(['user/get-pending']);
@@ -146,6 +133,7 @@ getPendingRecords();
                 {"name": "name"},
                 { "name": "email"},
                 { "name": "company_name"},
+                { "name": "type"},
                 {"name": "actions", "orderable": false},
             ],
             "bDestroy": true,
@@ -172,7 +160,8 @@ getPendingRecords();
                 {"name": "name"},
                 { "name": "email"},
                 { "name": "company_name"},
-                {"name": "actions", "orderable": false},
+                { "name": "type"},                
+                { "name": "comment"},                
             ],
             "bDestroy": true,
         });
@@ -198,16 +187,17 @@ getPendingRecords();
                 {"name": "name"},
                 { "name": "email"},
                 { "name": "company_name"},
-                {"name": "actions", "orderable": false},
+                { "name": "type"},
+                { "name": "comment"},
             ],
             "bDestroy": true,
         });
     }
-//    $(document).on("click", ".change-status", function(){
-//    $("#commonModal").modal("show");
-//    $("#commonModal").find("#commonModalHeader").html($(this).attr('modal-title'));
-//    $("#commonModal").find("#modalContent").load($(this).attr("url"));
-});
+    $(document).on("click", ".change-status", function(){
+        $("#commonModal").modal("show");
+        $("#commonModal").find("#commonModalHeader").html($(this).attr('modal-title'));
+        $("#commonModal").find("#modalContent").load($(this).attr("url"));
+    });
 JS;
 $this->registerJS($script_new, 3);
 ?>

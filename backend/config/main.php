@@ -17,7 +17,7 @@ return [
             'nullDisplay' => '',
         ],
         'request' => [
-            'csrfParam' => '_csrf-rn500',
+            'csrfParam' => '_csrf',
             'baseUrl' => '/rn500/admin',
             'csrfCookie' => [
                 'name' => '_csrf',
