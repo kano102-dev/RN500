@@ -108,6 +108,24 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "user")
                     ],
+                    [
+                        'label' => 'Benefits',
+                        'url' => ['/benefits'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "benefits")
+                    ],
+                    [
+                        'label' => 'Speciality',
+                        'url' => ['/speciality'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "speciality")
+                    ],
+                    [
+                        'label' => 'Discipline',
+                        'url' => ['/discipline'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "discipline")
+                    ],
 //                    [
 //                        'label' => 'Starter Pages',
 //                        'icon' => 'tachometer-alt',
