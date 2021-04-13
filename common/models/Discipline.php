@@ -31,7 +31,7 @@ class Discipline extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'created_at', 'updated_at'], 'required'],
-            [['created_at', 'updated_at'], 'integer'],
+            [['created_at', 'updated_at','created_by', 'updated_by'], 'integer'],
             [['name'], 'string', 'max' => 500],
         ];
     }

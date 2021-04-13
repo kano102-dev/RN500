@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\CommonFunction;
 
 $this->title = 'Package';
 $this->params['breadcrumbs'][] = $this->title;
@@ -12,7 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
 
         <div class="col-12">
-            <?= Html::a('Create Package Master', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('package-create', Yii::$app->user->identity->id)) { ?>
+                <?= Html::a('Create Package', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+            <?php } ?>
 
             <div class="table table-responsive">
 

@@ -492,6 +492,235 @@ CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COM
 
 ALTER TABLE `user` CHANGE `comment` `comment` VARCHAR(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'approved and rejection comment';
 
--------------------11-04-2021---------------------------------------------------------
+# ***********************11-April-2021***********************
 ALTER TABLE `role_master`
 ADD `company_id` int NOT NULL AFTER `role_name`;
+
+# ***********************11-April-2021************END***********
+
+# ***********************13-April-2021***********************
+
+ALTER TABLE `benefits` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `benefits` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+ALTER TABLE `discipline` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `discipline` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+ALTER TABLE `speciality` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `speciality` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+
+-- Adminer 4.8.0 MySQL 5.5.5-10.4.14-MariaDB dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `advertisement`;
+CREATE TABLE `advertisement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `vendor_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `link_url` varchar(100) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `is_active` enum('0','1') NOT NULL COMMENT '0- Inactive, 1- Active	',
+  `location_display` int(11) NOT NULL,
+  `active_from` datetime DEFAULT NULL,
+  `active_to` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `vendor`;
+CREATE TABLE `vendor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` int(11) NOT NULL,
+  `street_no` varchar(255) NOT NULL,
+  `street_address` varchar(255) NOT NULL,
+  `apt` varchar(255) DEFAULT NULL,
+  `city` varchar(255) NOT NULL,
+  `zip_code` int(11) NOT NULL,
+  `state` int(11) NOT NULL,
+  `country` int(11) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- 2021-04-13 05:24:47
+ALTER TABLE `role_master`
+ADD `company_id` int NOT NULL AFTER `role_name`;
+UPDATE `role_master` SET `company_id` = '1';
+
+UPDATE `auth_item` SET `description` = 'Staff' WHERE `name` = 'user' AND `name` = 'user' COLLATE utf8mb4_bin;
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter', '1', 'Recruiter', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-update', '', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch', '1', 'Branch', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package', '1', 'Package', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role', '1', 'Role', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-delete', '2', 'Delete', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-create');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-view');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-view');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-view');
+
+DELETE FROM `auth_item`
+WHERE ((`name` = 'update' AND `name` = 'update' COLLATE utf8mb4_bin));
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-view');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-delete');
+
+UPDATE `auth_item` SET
+`name` = 'approval',
+`type` = '1',
+`description` = 'Approval & Verification',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1617027889',
+`updated_at` = '1617027889'
+WHERE `name` = 'lead' AND `name` = 'lead' COLLATE utf8mb4_bin;
+
+UPDATE `auth_item` SET
+`name` = 'lead-verify',
+`type` = '2',
+`description` = 'Lead Verify',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1617027889',
+`updated_at` = '1617027889'
+WHERE `name` = 'verify' AND `name` = 'verify' COLLATE utf8mb4_bin;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('user-approval', '2', 'User Approval', NULL, NULL, '1618133004', '1618133004');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('approval', 'user-approval');
+
+UPDATE `auth_item` SET
+`name` = 'user-approve',
+`type` = '2',
+`description` = 'Approve User',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1618133004',
+`updated_at` = '1618133004'
+WHERE `name` = 'user-approval' AND `name` = 'user-approval' COLLATE utf8mb4_bin;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('user-request-view', '2', 'View User Approval Request', NULL, NULL, NULL, NULL);
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('approval', 'user-request-view');
+
+
+# ***********************13-April-2021************END***********
+

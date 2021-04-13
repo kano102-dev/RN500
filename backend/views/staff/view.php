@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\CommonFunction;
 
 $this->title = 'Staff';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
@@ -13,7 +14,9 @@ $this->params['breadcrumbs'][] = "View";
 
 
         <p class="text-right">
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('user-update', Yii::$app->user->identity->id)) { ?>
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php } ?>            
 
         </p>
 

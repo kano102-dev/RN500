@@ -94,6 +94,7 @@ class RoleController extends Controller {
         $this->activeBreadcrumb = "Detail View";
         $auth = Yii::$app->authManager;
         $model = $this->findModel($id);
+        $query = new Query();
         $features = [];
         if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
             $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])

@@ -43,7 +43,7 @@ $action = Yii::$app->controller->action->id;
                         'url' => ['role/index'],
                         'icon' => 'tasks',
                         'active' => ($controller == "role"),
-                        'visible' => isset(Yii::$app->user->identity) ? Yii::$app->user->identity->is_owner : false
+                        'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-view', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Package',
@@ -78,7 +78,7 @@ $action = Yii::$app->controller->action->id;
                         'url' => ['user/index'],
                         'icon' => 'user-check',
                         'active' => ($controller == "user"),
-                        'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-verify', Yii::$app->user->identity->id) : false
+                        'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-request-view', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Benefits',
@@ -100,6 +100,18 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "discipline"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || Yii::$app->user->identity->type == User::TYPE_EMPLOYER : false
+                    ],
+                    [
+                        'label' => 'Advertisement',
+                        'url' => ['/advertisement'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "advertisement")
+                    ],
+                    [
+                        'label' => 'Vendor',
+                        'url' => ['/vendor'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "vendor")
                     ],
 //                    [
 //                        'label' => 'Starter Pages',
