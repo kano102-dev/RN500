@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
+use common\CommonFunction;
 
 /**
  * PackageController implements the CRUD actions for PackageMaster model.
@@ -23,6 +25,32 @@ class PackageController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('package-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('package-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('package-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('package-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -78,8 +106,7 @@ class PackageController extends Controller {
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                // 
-                Yii::$app->session->setFlash("success", "Role created successfully.");
+                Yii::$app->session->setFlash("success", "Package created successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong.");
             }
@@ -105,7 +132,7 @@ class PackageController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 // 
-                Yii::$app->session->setFlash("success", "Role created successfully.");
+                Yii::$app->session->setFlash("success", "Package created successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong.");
             }

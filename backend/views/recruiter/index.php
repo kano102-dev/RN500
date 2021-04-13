@@ -29,6 +29,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         'first_name',
                         'last_name',
                         [
+                            'attribute' => 'email',
+                            'value' => function ($model) {
+                                return $model->user->email;
+                            }
+                        ],
+                        [
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => 'width:5%;'],
                             'header' => 'Actions',
@@ -36,22 +42,22 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buttons' => [
                                 //view button
                                 'view' => function ($url, $model) {
-                                return Html::a( '<span class="fa fa-eye"></span>', $url, [
-                                            'data-pjax' => 0,
-                                            'title' => Yii::t( 'app', 'View'),
-                                            'class' => 'btn btn-primary btn-xs',
-                                ]);
+                                    return Html::a('<span class="fa fa-eye"></span>', ['recruiter/view', 'id' => $model->user_id], [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
                                 },
                                 'update' => function ($url, $model) {
-                                return Html::a( '<span class="fa fa-edit"></span>', $url, [
-                                            'data-pjax' => 0,
-                                            'title' => Yii::t( 'app', 'View'),
-                                            'class' => 'btn btn-primary btn-xs',
-                                ]);
-                            },
+                                    return Html::a('<span class="fa fa-edit"></span>', ['recruiter/view', 'id' => $model->user_id], [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                            ],
                         ],
                     ],
-                        ],
                 ]);
                 ?>
 

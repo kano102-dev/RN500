@@ -131,57 +131,57 @@ use kartik\select2\Select2;
                             <hr/>
                             <div class="formrow">
                                 <?php
-                                echo $form->field($model, 'first_name', [
+                                echo $form->field($employer, 'first_name', [
                                             'options' => ['class' => 'form-group has-feedback'],
                                             'inputTemplate' => '{input}',
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $model->getAttributeLabel('first_name')])
+                                        ->textInput(['placeholder' => $employer->getAttributeLabel('first_name')])
                                 ?>
                             </div>
                             <div class="formrow">
                                 <?php
-                                echo $form->field($model, 'last_name', [
+                                echo $form->field($employer, 'last_name', [
                                             'options' => ['class' => 'form-group has-feedback'],
                                             'inputTemplate' => '{input}',
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $model->getAttributeLabel('last_name')])
+                                        ->textInput(['placeholder' => $employer->getAttributeLabel('last_name')])
                                 ?>
                             </div>
                             <div class="formrow">
                                 <?php
-                                echo $form->field($model, 'email', [
+                                echo $form->field($employer, 'email', [
                                             'options' => ['class' => 'form-group has-feedback'],
                                             'inputTemplate' => '{input}',
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => $employer->getAttributeLabel('email')])
                                 ?>
                             </div>
                             <div class="formrow">
                                 <?php
-                                echo $form->field($model, 'password', [
+                                echo $form->field($employer, 'password', [
                                             'options' => ['class' => 'form-group has-feedback'],
                                             'inputTemplate' => '{input}',
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('password')])
+                                        ->passwordInput(['placeholder' => $employer->getAttributeLabel('password')])
                                 ?>
                             </div>
                             <div class="formrow">
                                 <?php
-                                echo $form->field($model, 'confirm_password', [
+                                echo $form->field($employer, 'confirm_password', [
                                             'options' => ['class' => 'form-group has-feedback'],
                                             'inputTemplate' => '{input}',
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
+                                        ->passwordInput(['placeholder' => $employer->getAttributeLabel('confirm_password')])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>

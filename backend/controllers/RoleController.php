@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\db\Query;
 use yii\helpers\Url;
+use common\CommonFunction;
+use yii\filters\AccessControl;
 
 /**
  * RoleController implements the CRUD actions for RoleMaster model.
@@ -25,6 +27,32 @@ class RoleController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -66,12 +94,20 @@ class RoleController extends Controller {
         $this->activeBreadcrumb = "Detail View";
         $auth = Yii::$app->authManager;
         $model = $this->findModel($id);
-        $query = new Query();
-        $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])
-                ->from('auth_item')
-                ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
-                ->leftJoin('auth_assignment', 'auth_item.name=auth_assignment.item_name AND auth_assignment.user_id="' . $model->id . '"')
-                ->all();
+        $features = [];
+        if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+            $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])
+                    ->from('auth_item')
+                    ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
+                    ->leftJoin('auth_assignment', 'auth_item.name=auth_assignment.item_name AND auth_assignment.user_id="' . $model->id . '"')
+                    ->all();
+        } else {
+            $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent,aa.user_id FROM  auth_assignment
+INNER JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
+INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
+LEFT JOIN `auth_assignment` as aa ON auth_item.name=aa.item_name AND aa.user_id=' . $model->id . ' 
+where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group by auth_item.name')->queryAll();
+        }
         $tree = $this->parseTree($features, "", $model->id, 0, "1");
         return $this->render('view', [
                     'model' => $model, 'tree' => $tree
@@ -88,17 +124,29 @@ class RoleController extends Controller {
         $auth = Yii::$app->authManager;
         $model = new RoleMaster();
         $query = new Query();
-        $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent'])
-                ->from('auth_item')
-                ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
-                ->all();
+        $features = [];
+        if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+            $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent'])
+                    ->from('auth_item')
+                    ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
+                    ->all();
+        } else {
+            $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent FROM  auth_assignment
+inner JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
+INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
+where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group by auth_item.name')->queryAll();
+        }
         $tree = $this->parseTree($features, "", "");
+//        echo "<pre/>";
+//        print_r($tree);
+//        exit;
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $permissions = explode(',', $_POST['RoleMaster']['permissions']);
                 $model->created_at = time();
                 $model->updated_at = time();
+                $model->company_id = \Yii::$app->user->identity->branch->company_id;
                 if ($model->save()) {
                     $error = 1;
                     foreach ($permissions as $value) {
@@ -146,11 +194,20 @@ class RoleController extends Controller {
         $auth = Yii::$app->authManager;
         $model = $this->findModel($id);
         $query = new Query();
-        $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])
-                ->from('auth_item')
-                ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
-                ->leftJoin('auth_assignment', 'auth_item.name=auth_assignment.item_name AND auth_assignment.user_id="' . $model->id . '"')
-                ->all();
+        $features = [];
+        if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+            $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])
+                    ->from('auth_item')
+                    ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
+                    ->leftJoin('auth_assignment', 'auth_item.name=auth_assignment.item_name AND auth_assignment.user_id="' . $model->id . '"')
+                    ->all();
+        } else {
+            $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent,aa.user_id FROM  auth_assignment
+INNER JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
+INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
+LEFT JOIN `auth_assignment` as aa ON auth_item.name=aa.item_name AND aa.user_id=' . $model->id . ' 
+where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group by auth_item.name')->queryAll();
+        }
         $tree = $this->parseTree($features, "", $model->id);
         if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
@@ -197,6 +254,9 @@ class RoleController extends Controller {
     public function parseTree($tree, $root, $selected_user, $parent_selected = 0, $disabled = "0") {
         $return = [];
         $i = 0;
+//        echo "<pre/>";
+//        print_r($tree);
+//        exit;
         foreach ($tree as $branch) {
             extract($branch);
             if ($parent == $root) {

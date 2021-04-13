@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        
+
         <?php $form = ActiveForm::begin(['id' => 'form_recruiter_signup', 'options' => []]); ?>
 
 
@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
-                                'data' => [],
+                                'data' => $companyMasterModel->isNewRecord ? [] : $CompanyCity,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -141,7 +141,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
-                                'data' => [],
+                                'data' => $userDetailModel->isNewRecord ? [] : $city,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true

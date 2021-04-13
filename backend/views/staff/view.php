@@ -30,7 +30,12 @@ $this->params['breadcrumbs'][] = "View";
                         'street_no',
                         'street_address',
                         'apt',
-                        'city',
+                        [
+                            'attribute' => 'city',
+                            'value' => function ($model) {
+                                return $model->cityRef->city . "-" . $model->cityRef->stateRef->state;
+                            }
+                        ],
                         'zip_code',
                     ],
                 ])

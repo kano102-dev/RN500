@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
 
         <div class="col-12">
-            <?= Html::a('Create Company Branch', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+            <?= Html::a('Create Branch', ['create'], ['class' => 'btn btn-primary float-right']) ?>
 
             <div class="table table-responsive">
 

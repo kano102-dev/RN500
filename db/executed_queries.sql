@@ -487,6 +487,11 @@ ALTER TABLE `user`
 CHANGE `status` `status` int(11) NOT NULL DEFAULT '0' COMMENT '1:approved 0:pending 2:rejected' AFTER `original_password`;
 
 ALTER TABLE `user`
-ADD `comment` varchar(500) NULL AFTER `status`;ALTER TABLE `user`
+ADD `comment` varchar(500) NOT NULL AFTER `status`;ALTER TABLE `user`
 CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COMMENT 'approved and rejection comment' AFTER `status`;
 
+ALTER TABLE `user` CHANGE `comment` `comment` VARCHAR(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'approved and rejection comment';
+
+-------------------11-04-2021---------------------------------------------------------
+ALTER TABLE `role_master`
+ADD `company_id` int NOT NULL AFTER `role_name`;

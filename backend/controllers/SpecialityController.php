@@ -16,7 +16,7 @@ use yii\helpers\Url;
  */
 class SpecialityController extends Controller
 {
-    public $title = "Speciality";
+    public $title = "Specialty";
     public $activeBreadcrumb, $breadcrumb;
 
     /**

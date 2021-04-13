@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = "View";
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        
+
         <p class="text-right">
             <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         </p>
@@ -28,13 +28,18 @@ $this->params['breadcrumbs'][] = "View";
                         'street_no',
                         'street_address',
                         'apt',
-                        'city',
+                        [
+                            'attribute' => 'city',
+                            'value' => function ($model) {
+                                return isset($model->cityRef->city) ? $model->cityRef->city . "-" . $model->cityRef->stateRef->state : '';
+                            }
+                        ],
                         'zip_code',
                     ],
                 ])
                 ?>
             </div>
-            
+
             <div class="col-6">
                 <h4> User Details </h4>
                 <?=
@@ -48,14 +53,18 @@ $this->params['breadcrumbs'][] = "View";
                         'street_no',
                         'street_address',
                         'apt',
-                        'city',
+                        [
+                            'attribute' => 'city',
+                            'value' => function ($model) {
+                                return isset($model->cityRef->city) ? $model->cityRef->city . "-" . $model->cityRef->stateRef->state : '';
+                            }
+                        ],
                         'zip_code',
                     ],
                 ])
                 ?>
             </div>
         </div>
-        
     </div>
 </div>
 

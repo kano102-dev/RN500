@@ -50,10 +50,14 @@ class LoginForm extends Model {
     public function validatePassword($attribute, $params) {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Incorrect username or password.');
-            } else {
-                return true;
+            if (!empty($user->password)) {
+                if (!$user || !$user->validatePassword($this->password)) {
+                    $this->addError($attribute, 'Incorrect username or password.');
+                } else {
+                    return true;
+                }
+            }else{
+                $this->addError($attribute, 'Your account does not verify.');
             }
         }
     }

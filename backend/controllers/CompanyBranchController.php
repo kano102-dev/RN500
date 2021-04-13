@@ -23,7 +23,7 @@ use yii\filters\AccessControl;
  */
 class CompanyBranchController extends Controller {
 
-    public $title = "Company Branch";
+    public $title = "Branch";
     public $activeBreadcrumb, $breadcrumb;
 
     /**
@@ -33,11 +33,27 @@ class CompanyBranchController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'get-cities', 'delete'],
                 'rules' => [
-                        [
-                        'actions' => ['index', 'view', 'create', 'update', 'get-cities', 'delete'],
+                    [
+                        'actions' => ['index','create', 'get-cities'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index','update', 'get-cities'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index','view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index','delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ]
                 ]
             ],
@@ -86,7 +102,7 @@ class CompanyBranchController extends Controller {
             throw new NotFoundHttpException('Branch owner does not exists.');
         }
         $userDetailModel = $user->details;
-         $userDetailModel->email = $user->email;
+        $userDetailModel->email = $user->email;
         return $this->render('view', [
                     'model' => $this->findModel($id),
                     'userDetailModel' => $userDetailModel,
@@ -196,7 +212,7 @@ class CompanyBranchController extends Controller {
             } catch (\Exception $ex) {
                 $transaction->rollBack();
             } finally {
-                 return $this->redirect(['view','id'=>$companyBranchModel->id]);
+                return $this->redirect(['view', 'id' => $companyBranchModel->id]);
             }
         }
 
