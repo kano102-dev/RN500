@@ -78,12 +78,12 @@ class SpecialityController extends Controller
     public function actionCreate()
     {
         $this->activeBreadcrumb = "Create";
-
+        
         $model = new Speciality();
 
         $model->created_at = CommonFunction::currentTimestamp();
         $model->updated_at = CommonFunction::currentTimestamp();
-
+        $model->created_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
             if($model->save()){
@@ -112,7 +112,7 @@ class SpecialityController extends Controller
         $model = $this->findModel($id);
 
         $model->updated_at = CommonFunction::currentTimestamp();
-
+        $model->updated_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
             if($model->save()){

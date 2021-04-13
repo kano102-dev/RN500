@@ -490,3 +490,66 @@ ALTER TABLE `user`
 ADD `comment` varchar(500) NULL AFTER `status`;ALTER TABLE `user`
 CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COMMENT 'approved and rejection comment' AFTER `status`;
 
+# ***********************13-April-2021***********************
+
+ALTER TABLE `benefits` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `benefits` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+ALTER TABLE `discipline` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `discipline` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+ALTER TABLE `speciality` ADD `created_by` INT(11) NULL AFTER `updated_at`;
+ALTER TABLE `speciality` ADD `updated_by` INT(11) NULL AFTER `created_by`;
+
+-- Adminer 4.8.0 MySQL 5.5.5-10.4.14-MariaDB dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `advertisement`;
+CREATE TABLE `advertisement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `vendor_id` int(11) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `link_url` varchar(100) DEFAULT NULL,
+  `icon` varchar(255) DEFAULT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `is_active` enum('0','1') NOT NULL COMMENT '0- Inactive, 1- Active	',
+  `location_display` int(11) NOT NULL,
+  `active_from` datetime DEFAULT NULL,
+  `active_to` datetime DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+DROP TABLE IF EXISTS `vendor`;
+CREATE TABLE `vendor` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `company_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` int(11) NOT NULL,
+  `street_no` varchar(255) NOT NULL,
+  `street_address` varchar(255) NOT NULL,
+  `apt` varchar(255) DEFAULT NULL,
+  `city` varchar(255) NOT NULL,
+  `zip_code` int(11) NOT NULL,
+  `state` int(11) NOT NULL,
+  `country` int(11) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  `created_by` int(11) DEFAULT NULL,
+  `updated_by` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- 2021-04-13 05:24:47
+
+# ***********************13-April-2021************END***********

@@ -126,6 +126,18 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "discipline")
                     ],
+                    [
+                        'label' => 'Advertisement',
+                        'url' => ['/advertisement'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "advertisement")
+                    ],
+                    [
+                        'label' => 'Vendor',
+                        'url' => ['/vendor'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "vendor")
+                    ],
 //                    [
 //                        'label' => 'Starter Pages',
 //                        'icon' => 'tachometer-alt',
