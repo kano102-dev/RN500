@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\web\JsExpression;
 use yii\helpers\Url;
+use common\CommonFunction;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\RoleMaster */
@@ -88,9 +89,10 @@ $this->params['breadcrumbs'][] = "View";
 <div class="card card-default color-palette-box">
     <div class="card-body">
 
-
         <p class="text-right">
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('role-update', Yii::$app->user->identity->id)) { ?>
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php } ?>
 
         </p>
 

@@ -40,7 +40,7 @@ class CompanyBranchSearch extends CompanyBranch
      */
     public function search($params)
     {
-        $query = CompanyBranch::find();
+        $query = CompanyBranch::find()->where(['company_id'=> \Yii::$app->user->identity->branch->company_id]);
 
         // add conditions that should always apply here
 

@@ -67,4 +67,8 @@ class CompanyMaster extends \yii\db\ActiveRecord {
         ];
     }
 
+    public function getCityRef() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
+
 }

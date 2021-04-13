@@ -20,6 +20,7 @@ use common\models\CompanySubscription;
 use common\models\PackageMaster;
 use yii\helpers\Url;
 use yii\helpers\Json;
+use yii\filters\AccessControl;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
@@ -33,12 +34,17 @@ class UserController extends Controller {
         return [
             'access' => [
                 'class' => \yii\filters\AccessControl::className(),
-                'only' => ['index', 'get-pending', 'get-approved', 'get-rejected'],
+                'only' => ['index', 'change-status', 'get-pending', 'get-approved', 'get-rejected'],
                 'rules' => [
+                    [
+                        'actions' => ['index', 'change-status', 'get-pending', 'get-approved', 'get-rejected'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
                     [
                         'actions' => ['index', 'get-pending', 'get-approved', 'get-rejected'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-request-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                 ],
             ],
@@ -105,10 +111,11 @@ class UserController extends Controller {
         $i = $start + 1;
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
-
-            $actionDiv = '<a class="change-status"  modal-title="Approve User" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_APPROVED]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
-            $actionDiv .= '<a class="change-status" modal-title="Reject User" href="javascript:void(0)" title="Reject" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_REJECTED]) . '" data-pjax="0"><span class="fa fa-times-circle"></span></a>';
-
+            $actionDiv = '';
+            if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id)) {
+                $actionDiv = '<a class="change-status"  modal-title="Approve User" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_APPROVED]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
+                $actionDiv .= '<a class="change-status" modal-title="Reject User" href="javascript:void(0)" title="Reject" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_REJECTED]) . '" data-pjax="0"><span class="fa fa-times-circle"></span></a>';
+            }
             $response['data'][] = [
                 $i,
                 $model->unique_id,

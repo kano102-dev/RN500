@@ -42,6 +42,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $state;
     public $password;
     public $confirm_password;
+    public $role_id;
 
     public static function tableName() {
         return 'user_details';
@@ -53,11 +54,12 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['email'], 'email'],
-            [['email', 'street_no', 'street_address',], 'required'],
+            [['email', 'street_no', 'street_address', 'role_id'], 'required'],
+            [['role_id'], 'required', 'on' => 'staff'],
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
-            [['work_authorization_comment', 'license_suspended', 'professional_liability','unique_id'], 'string'],
+            [['work_authorization_comment', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string', 'max' => 11],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
@@ -66,13 +68,16 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['zip_code'], 'string', 'max' => 20],
             ['confirm_password', 'compare', 'compareAttribute' => 'password', 'on' => 'registration'],
             [['first_name', 'last_name', 'email', 'password', 'confirm_password'], 'required', 'on' => 'registration'],
+            [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
             [['email'], 'checkUniqueValidation', 'on' => 'registration'],
         ];
     }
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios['registration'] = ['unique_id','first_name', 'last_name', 'email', 'password', 'confirm_password'];
+        $scenarios['registration'] = ['created_at', 'updated_at', 'user_id', 'unique_id', 'first_name', 'last_name', 'email', 'password', 'confirm_password'];
+        $scenarios['staff'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
+        $scenarios['recruiter'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         return $scenarios;
     }
 
@@ -90,6 +95,7 @@ class UserDetails extends \yii\db\ActiveRecord {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
+            'role_id' => 'Role',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
             'mobile_no' => 'Mobile No',
@@ -114,6 +120,15 @@ class UserDetails extends \yii\db\ActiveRecord {
             'zip_code' => 'Zip Code',
             'companyNames' => 'Company Name',
         ];
+    }
+
+    public function getUniqueId() {
+        $unique_id = CommonFunction::generateRandomString();
+        $details = UserDetails::findOne(['unique_id' => $unique_id]);
+        if (!empty($details)) {
+            $this->getUniqueId();
+        }
+        return $unique_id;
     }
 
     /**

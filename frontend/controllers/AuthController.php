@@ -14,6 +14,8 @@ use common\models\CompanyBranch;
 use yii\helpers\ArrayHelper;
 use common\models\States;
 use common\models\Cities;
+use frontend\models\EmployerForm;
+use frontend\models\JobseekerForm;
 
 /**
  * Site controller
@@ -35,6 +37,7 @@ class AuthController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
+                'only' => ['logout', 'index', 'get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                 'rules' => [
                     [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
@@ -47,10 +50,10 @@ class AuthController extends Controller {
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => ['logout' => ['post']],
-            ],
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => ['logout' => ['post']],
+//            ],
         ];
     }
 
@@ -108,73 +111,51 @@ class AuthController extends Controller {
 
     public function actionRegister() {
         $this->layout = 'main-login';
-        $model = new UserDetails();
-        $model->scenario = 'registration';
+        $model = new JobseekerForm();
+        $employer = new EmployerForm();
         $companyMasterModel = new CompanyMaster;
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if (\Yii::$app->request->isPost) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($companyMasterModel->save()) {
-                        $company_branch = new CompanyBranch();
-                        $company_branch->branch_name = "HO";
-                        $company_branch->city = $companyMasterModel->city;
-                        $company_branch->company_id = $companyMasterModel->id;
-                        $company_branch->setAttributes($companyMasterModel->getAttributes());
-                        $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
-                        if ($company_branch->save()) {
-                            $user = new User();
-                            $user->email = $model->email;
-                            $user->setPassword($model->password);
-                            $user->original_password = $model->password;
-                            $user->type = User::TYPE_RECRUITER;
-                            $user->status = User::STATUS_PENDING;
-                            $user->branch_id = $company_branch->id;
-                            $user->is_owner = User::OWNER_YES;
-                            if ($user->save()) {
-                                $model->user_id = $user->id;
-                                $unique_id = CommonFunction::generateRandomString();
-                                $details = UserDetails::findOne(['unique_id' => $unique_id]);
-                                if (!empty($details)) {
-                                    $unique_id = CommonFunction::generateRandomString();
-                                }
-                                $model->unique_id = $unique_id;
-                                if ($model->save()) {
-                                    $is_error = 1;
+                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+                    $transaction = Yii::$app->db->beginTransaction();
+                    try {
+                        $companyMasterModel->created_at = $companyMasterModel->updated_at = \common\CommonFunction::currentTimestamp();
+                        if ($companyMasterModel->save()) {
+                            $company_branch = new CompanyBranch();
+                            $company_branch->branch_name = "HO";
+                            $company_branch->city = $companyMasterModel->city;
+                            $company_branch->company_id = $companyMasterModel->id;
+                            $company_branch->setAttributes($companyMasterModel->getAttributes());
+                            $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
+                            $company_branch->created_at = $company_branch->updated_at = \common\CommonFunction::currentTimestamp();
+                            if ($company_branch->save()) {
+                                $user = new User();
+                                $user->email = $employer->email;
+                                $user->setPassword($employer->password);
+                                $user->original_password = $employer->password;
+                                $user->type = User::TYPE_EMPLOYER;
+                                $user->status = User::STATUS_PENDING;
+                                $user->is_owner = User::OWNER_YES;
+                                $user->branch_id = $company_branch->id;
+                                if ($user->save()) {
+                                    $userDetails = New UserDetails();
+                                    $userDetails->scenario = 'registration';
+                                    $userDetails->email = $employer->email;
+                                    $userDetails->password = $employer->password;
+                                    $userDetails->confirm_password = $employer->password;
+                                    $userDetails->first_name = $employer->first_name;
+                                    $userDetails->last_name = $employer->last_name;
+                                    $userDetails->user_id = $user->id;
+                                    $userDetails->unique_id = $employer->getUniqueId();
+                                    $userDetails->created_at = $userDetails->updated_at = \common\CommonFunction::currentTimestamp();
+                                    if ($userDetails->save(false)) {
+                                        $is_error = 1;
+                                    }
                                 }
                             }
                         }
-                    }
-                    if ($is_error) {
-                        $transaction->commit();
-                        Yii::$app->session->setFlash("success", "You have registered successfully.");
-                        return $this->redirect(['login']);
-                    } else {
-                        $transaction->rollBack();
-                        Yii::$app->session->setFlash("warning", "Something went wrong.");
-                    }
-                } catch (\Exception $ex) {
-                    $transaction->rollBack();
-                }
-            } else {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    $user = new User();
-                    $user->email = $model->email;
-                    $user->setPassword($model->password);
-                    $user->original_password = $model->password;
-                    $user->type = User::TYPE_JOB_SEEKER;
-                    $user->status = User::STATUS_APPROVED;
-                    if ($user->save()) {
-                        $model->user_id = $user->id;
-                        $unique_id = CommonFunction::generateRandomString();
-                        $details = UserDetails::findOne(['unique_id' => $unique_id]);
-                        if (!empty($details)) {
-                            $unique_id = CommonFunction::generateRandomString();
-                        }
-                        $model->unique_id = $unique_id;
-                        if ($model->save(false)) {
+                        if ($is_error) {
                             $transaction->commit();
                             Yii::$app->session->setFlash("success", "You have registered successfully.");
                             return $this->redirect(['login']);
@@ -182,18 +163,52 @@ class AuthController extends Controller {
                             $transaction->rollBack();
                             Yii::$app->session->setFlash("warning", "Something went wrong.");
                         }
-                    } else {
+                    } catch (\Exception $ex) {
                         $transaction->rollBack();
-                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
-                } catch (\Exception $ex) {
-                    $transaction->rollBack();
+                }
+            } else {
+                if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+                    $transaction = Yii::$app->db->beginTransaction();
+                    try {
+                        $user = new User();
+                        $user->email = $model->email;
+                        $user->setPassword($model->password);
+                        $user->original_password = $model->password;
+                        $user->type = User::TYPE_JOB_SEEKER;
+                        $user->status = User::STATUS_APPROVED;
+                        if ($user->save()) {
+                            $userDetails = New UserDetails();
+                            $userDetails->scenario = 'registration';
+                            $userDetails->email = $model->email;
+                            $userDetails->password = $model->password;
+                            $userDetails->confirm_password = $model->password;
+                            $userDetails->first_name = $model->first_name;
+                            $userDetails->last_name = $model->last_name;
+                            $userDetails->user_id = $user->id;
+                            $userDetails->unique_id = $model->getUniqueId();
+                            $userDetails->created_at = $userDetails->updated_at = \common\CommonFunction::currentTimestamp();
+                            if ($model->save(false)) {
+                                $transaction->commit();
+                                Yii::$app->session->setFlash("success", "You have registered successfully.");
+                                return $this->redirect(['login']);
+                            } else {
+                                $transaction->rollBack();
+                                Yii::$app->session->setFlash("warning", "Something went wrong.");
+                            }
+                        } else {
+                            $transaction->rollBack();
+                            Yii::$app->session->setFlash("warning", "Something went wrong.");
+                        }
+                    } catch (\Exception $ex) {
+                        $transaction->rollBack();
+                    }
                 }
             }
         }
         return $this->render('register', [
                     'model' => $model, 'companyMasterModel' => $companyMasterModel,
-                    'states' => $states
+                    'states' => $states, 'employer' => $employer
         ]);
     }
 

@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        
+
         <?php $form = ActiveForm::begin(['id' => 'form_staff_signup', 'options' => []]); ?>
 
 
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                         <div class="col-6">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
-                                'data' => [],
+                                'data' => $city,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -82,6 +82,20 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                         </div>
                         <div class="col-6">
                             <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-6">
+                            <?=
+                            $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                'data' => $roles,
+                                'options' => ['placeholder' => 'Select a Role'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,7 @@ return [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-rn500', 'httpOnly' => true],
             'authTimeout' => 120000,
-            'loginUrl'=>'auth/login'
+            'loginUrl' => 'http://localhost/rn500/auth/login'
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend

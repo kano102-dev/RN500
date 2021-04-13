@@ -32,7 +32,7 @@ class User extends ActiveRecord implements IdentityInterface {
     const OWNER_YES = 1;
     // USER TYPES
     const TYPE_RECRUITER = 1;
-    const TYPE_EMPLOYEE = 2;
+    const TYPE_EMPLOYER = 2;
     const TYPE_JOB_SEEKER = 3;
     const TYPE_STAFF = 4;
 
@@ -216,6 +216,10 @@ class User extends ActiveRecord implements IdentityInterface {
             $name = $this->details->first_name . " " . $this->details->last_name;
         }
         return $name;
+    }
+
+    public function getRole() {
+        return $this->hasOne(RoleMaster::className(), ['id' => 'role_id']);
     }
 
     // public function getBranch() {
