@@ -13,6 +13,8 @@ class UserDetailsSearch extends UserDetails {
 
     public $branchName;
     public $companyName;
+    public $email;
+    public $role_id;
 
     /**
      * {@inheritdoc}
@@ -20,7 +22,7 @@ class UserDetailsSearch extends UserDetails {
     public function rules() {
         return [
 //            [['id', 'user_id', 'city', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
-            [['first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability', 'branchName', 'companyName'], 'safe'],
+            [['role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability', 'branchName', 'companyName'], 'safe'],
         ];
     }
 
@@ -40,7 +42,7 @@ class UserDetailsSearch extends UserDetails {
      * @return ActiveDataProvider
      */
     public function search($params) {
-        $query = UserDetails::find()->joinWith(['user', 'branch']);
+        $query = UserDetails::find()->joinWith(['user', 'branch'])->where(['user.status' => User::STATUS_APPROVED]);
 
 
         // add conditions that should always apply here
@@ -123,6 +125,7 @@ class UserDetailsSearch extends UserDetails {
 
         $query->andFilterWhere(['like', 'first_name', $this->first_name])
                 ->andFilterWhere(['like', 'last_name', $this->last_name])
+                ->andFilterWhere(['like', 'user.email', $this->email])
                 ->andFilterWhere(['like', 'mobile_no', $this->mobile_no])
                 ->andFilterWhere(['like', 'street_no', $this->street_no])
                 ->andFilterWhere(['like', 'street_address', $this->street_address])

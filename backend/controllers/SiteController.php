@@ -20,7 +20,7 @@ class SiteController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['login', 'error', 'check-mail', 'reset-password', 'logout', 'index'],
+                'only' => ['error','login', 'error', 'check-mail', 'reset-password', 'logout', 'index'],
                 'rules' => [
                     [
                         'actions' => ['login', 'error', 'check-mail', 'reset-password'],
@@ -28,7 +28,7 @@ class SiteController extends Controller {
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['error','logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -168,6 +168,15 @@ class SiteController extends Controller {
     public function actionLogout() {
         Yii::$app->user->logout();
         return $this->goHome();
+    }
+
+    //This will call on error
+    public function actionError() {
+        $this->layout = "error";
+        $exception = Yii::$app->errorHandler->exception;
+        if ($exception !== null) {
+            return $this->render('error', ['exception' => $exception]);
+        }
     }
 
     public function actionCheckMail() {

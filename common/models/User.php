@@ -218,6 +218,10 @@ class User extends ActiveRecord implements IdentityInterface {
         return $name;
     }
 
+    public function getRole() {
+        return $this->hasOne(RoleMaster::className(), ['id' => 'role_id']);
+    }
+
     // public function getBranch() {
     //     return $this->hasOne(UserDetails::className(), ['user_id' => 'id']);
     // }

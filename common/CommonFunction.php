@@ -78,4 +78,27 @@ class CommonFunction {
         return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_EMPLOYER) ? true : false;
     }
 
+    public static function checkAccess($permission, $user_id) {
+        $flag = false;
+        $auth = Yii::$app->authManager;
+        $user = User::findOne(['id' => $user_id]);
+        $isAdmin = $user->is_master_admin;
+        $permissions = [];
+        if (!$isAdmin) {
+            if (!empty($user->role_id)) {
+                $permissions = array_keys($auth->getAssignments($user->role_id));
+            }
+            $flag = in_array($permission, $permissions);
+        } else {
+            $flag = true;
+        }
+        return $flag;
+    }
+
+    public static function isMasterAdmin($user_id) {
+        $user = User::findOne(['id' => $user_id]);
+        $isAdmin = $user->is_master_admin;
+        return $isAdmin;
+    }
+
 }

@@ -9,13 +9,12 @@ use common\models\RoleMaster;
 /**
  * RoleMasterSearch represents the model behind the search form of `common\models\RoleMaster`.
  */
-class RoleMasterSearch extends RoleMaster
-{
+class RoleMasterSearch extends RoleMaster {
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
             [['role_name'], 'safe'],
@@ -25,8 +24,7 @@ class RoleMasterSearch extends RoleMaster
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,9 +36,8 @@ class RoleMasterSearch extends RoleMaster
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
-        $query = RoleMaster::find();
+    public function search($params) {
+        $query = RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id]);
 
         // add conditions that should always apply here
 
@@ -67,4 +64,5 @@ class RoleMasterSearch extends RoleMaster
 
         return $dataProvider;
     }
+
 }

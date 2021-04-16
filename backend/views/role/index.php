@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use common\CommonFunction;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\RoleMasterSearch */
@@ -15,8 +16,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="card-body">
 
         <div class="col-12">
-            <?= Html::a('Create Role', ['create'], ['class' => 'btn btn-primary float-right']) ?>  
-            
+            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('role-create', Yii::$app->user->identity->id)) { ?>
+                <?= Html::a('Create Role', ['create'], ['class' => 'btn btn-primary float-right']) ?>  
+            <?php } ?>
+
             <div class="table table-responsive">
 
                 <?php Pjax::begin(['id' => 'pjax_role', 'timeout' => false]); ?>
@@ -41,18 +44,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buttons' => [
                                 //view button
                                 'view' => function ($url, $model) {
-                                    return Html::a('<span class="fa fa-eye"></span>', $url, [
-                                                'data-pjax' => 0,
-                                                'title' => Yii::t('app', 'View'),
-                                                'class' => 'btn btn-primary btn-xs',
-                                    ]);
+                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('role-view', Yii::$app->user->identity->id)) {
+                                        return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                                    'data-pjax' => 0,
+                                                    'title' => Yii::t('app', 'View'),
+                                                    'class' => 'btn btn-primary btn-xs',
+                                        ]);
+                                    } else {
+                                        return '';
+                                    }
                                 },
                                 'update' => function ($url, $model) {
-                                    return Html::a('<span class="fa fa-edit"></span>', $url, [
-                                                'data-pjax' => 0,
-                                                'title' => Yii::t('app', 'View'),
-                                                'class' => 'btn btn-primary btn-xs',
-                                    ]);
+                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('role-update', Yii::$app->user->identity->id)) {
+                                        return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                                    'data-pjax' => 0,
+                                                    'title' => Yii::t('app', 'Update'),
+                                                    'class' => 'btn btn-primary btn-xs',
+                                        ]);
+                                    } else {
+                                        return '';
+                                    }
                                 },
                             ],
                         ],

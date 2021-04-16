@@ -4,7 +4,7 @@ namespace common\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\Models\PackageMaster;
+use common\models\PackageMaster;
 
 /**
  * PackageMasterSearch represents the model behind the search form of `backend\Models\PackageMaster`.

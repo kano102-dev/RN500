@@ -83,6 +83,7 @@ class DisciplineController extends Controller
 
         $model->created_at = CommonFunction::currentTimestamp();
         $model->updated_at = CommonFunction::currentTimestamp();
+        $model->created_by = \Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post())) {
 
@@ -113,7 +114,7 @@ class DisciplineController extends Controller
         $model = $this->findModel($id);
 
         $model->updated_at = CommonFunction::currentTimestamp();
-
+        $model->updated_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
             if($model->save()){

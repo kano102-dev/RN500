@@ -19,6 +19,8 @@ use common\models\CompanyBranch;
 use common\models\CompanySubscription;
 use common\models\PackageMaster;
 use yii\helpers\Url;
+use common\models\States;
+use yii\filters\AccessControl;
 
 /**
  * RecruiterController implements the CRUD actions for RecruiterMaster model.
@@ -34,15 +36,30 @@ class StaffController extends Controller {
     public function behaviors() {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'only' => ['view', 'index', 'create', 'update', 'delete'],
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete','get-cities'],
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create', 'update', 'delete'],
+                        'actions' => ['index', 'create','get-cities'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
-                ],
+                    [
+                        'actions' => ['index', 'update','get-cities'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -98,9 +115,13 @@ class StaffController extends Controller {
      */
     public function actionCreate() {
         $this->activeBreadcrumb = "Create";
+        $model = new User();
         $userDetailModel = new UserDetails();
+        $userDetailModel->scenario = 'staff';
 
-        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $city = [];
         if ($userDetailModel->load(Yii::$app->request->post())) {
             $is_error = 0;
             $userDetailModel->created_at = CommonFunction::currentTimestamp();
@@ -150,7 +171,7 @@ class StaffController extends Controller {
 
         return $this->render('_form', [
                     'userDetailModel' => $userDetailModel,
-                    'states' => $states
+                    'states' => $states, 'city' => $city, 'roles' => $roles
         ]);
     }
 
@@ -164,18 +185,22 @@ class StaffController extends Controller {
     public function actionUpdate($id) {
         $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
-
         $userDetailModel = isset($model->details) ? $model->details : [];
-        $userDetailModel->email = $model->email;
-        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $userDetailModel->scenario = 'staff';
 
+        $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        $userDetailModel->email = $model->email;
+        $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $city = !empty($userDetailModel->cityRef->state_id) ? ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->cityRef->state_id]), 'id', 'city') : [];
+        $userDetailModel->state = !empty($userDetailModel->cityRef->state_id) ? $userDetailModel->cityRef->state_id : '';
         if ($userDetailModel->load(Yii::$app->request->post())) {
             $userDetailModel->updated_at = CommonFunction::currentTimestamp();
-            if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability']) && $companyMasterModel->validate()) {
+            if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability'])) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     $user = clone $model;
                     $user->email = $userDetailModel->email;
+                    $user->role_id = $userDetailModel->role_id;
                     $user->type = User::TYPE_RECRUITER;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
@@ -195,9 +220,9 @@ class StaffController extends Controller {
         }
 
         return $this->render('_form', [
-                    'model' => $model,
+                    'model' => $model, 'roles' => $roles,
                     'userDetailModel' => $userDetailModel,
-                    'states' => $states
+                    'states' => $states, 'city' => $city
         ]);
     }
 

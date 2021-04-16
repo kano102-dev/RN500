@@ -99,7 +99,7 @@ use yii\helpers\Html;
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                 <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
-                <span class="d-none d-md-inline"><?= Yii::$app->user->identity->getFullName(); ?></span>
+                <span class="d-none d-md-inline"><?= isset(Yii::$app->user->identity) ? Yii::$app->user->identity->getFullName() : '' ?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
@@ -107,13 +107,13 @@ use yii\helpers\Html;
                     <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
 
                     <p>
-                        <?= Yii::$app->user->identity->getFullName(); ?>
+                        <?= isset(Yii::$app->user->identity) ? Yii::$app->user->identity->getFullName() : '' ?>
                     </p>
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
-                    <?php echo  Html::a('Sign out', ['site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
+                    <?php echo Html::a('Sign out', ['site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
                 </li>
             </ul>
         </li>

@@ -2,12 +2,16 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use common\CommonFunction;
+
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
 
         <p class="text-right">
-            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id)) { ?>
+                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+            <?php } ?>
         </p>
 
         <div class="row">
@@ -21,11 +25,11 @@ use yii\widgets\DetailView;
                         'street_no',
                         'street_address',
                         'apt',
-                            [
+                        [
                             'attribute' => 'state',
                             'value' => isset($model->cityRef->stateRef->state) ? $model->cityRef->stateRef->state : '',
                         ],
-                            [
+                        [
                             'attribute' => 'city',
                             'value' => isset($model->cityRef->city) ? $model->cityRef->city : '',
                         ],
@@ -48,11 +52,11 @@ use yii\widgets\DetailView;
                         'street_no',
                         'street_address',
                         'apt',
-                            [
+                        [
                             'attribute' => 'state',
                             'value' => isset($userDetailModel->cityRef->stateRef->state) ? $userDetailModel->cityRef->stateRef->state : '',
                         ],
-                            [
+                        [
                             'attribute' => 'city',
                             'value' => isset($userDetailModel->cityRef->city) ? $userDetailModel->cityRef->city : '',
                         ],

@@ -15,6 +15,7 @@ class AppAsset extends AssetBundle {
         'css/site.css',
         'css/nav.css',
         'datatable/css/dataTables.bootstrap4.min.css',
+        'css/animate.css',
     ];
     public $js = [
         'js/jquery.nestable.js',
