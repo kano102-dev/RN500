@@ -14,33 +14,30 @@ use Yii;
  *
  * @property LeadSpeciality[] $leadSpecialities
  */
-class Speciality extends \yii\db\ActiveRecord
-{
+class Speciality extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'speciality';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'created_at', 'updated_at'], 'required'],
-            [['created_at', 'updated_at'], 'integer'],
-            [['name'], 'string', 'max' => 500],
+                [['name', 'created_at', 'updated_at'], 'required'],
+                [['created_at', 'updated_at'], 'integer'],
+                [['name'], 'string', 'max' => 500],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Name',
@@ -49,13 +46,17 @@ class Speciality extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAllSpecialities() {
+         return self::find()->all();
+    }
+
     /**
      * Gets query for [[LeadSpecialities]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getLeadSpecialities()
-    {
+    public function getLeadSpecialities() {
         return $this->hasMany(LeadSpeciality::className(), ['speciality_id' => 'id']);
     }
+
 }

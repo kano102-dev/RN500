@@ -108,6 +108,12 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "user")
                     ],
+                     [
+                        'label' => 'Lead Approval',
+                        'url' => ['lead/index'],
+                        'icon' => 'clipboard-check',
+                        'active' => ($controller == "lead")
+                    ],
                     [
                         'label' => 'Benefits',
                         'url' => ['/benefits'],

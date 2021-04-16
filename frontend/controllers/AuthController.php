@@ -14,6 +14,7 @@ use common\models\CompanyBranch;
 use yii\helpers\ArrayHelper;
 use common\models\States;
 use common\models\Cities;
+use common\CommonFunction;
 
 /**
  * Site controller
@@ -36,11 +37,11 @@ class AuthController extends Controller {
             'access' => [
                 'class' => AccessControl::className(),
                 'rules' => [
-                    [
+                        [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
-                    [
+                        [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -49,7 +50,7 @@ class AuthController extends Controller {
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => ['logout' => ['post']],
+//                'actions' => ['logout' => ['post']],
             ],
         ];
     }
@@ -99,7 +100,6 @@ class AuthController extends Controller {
                 return $this->goHome();
             }
         } else {
-//            $model->password = '';
             return $this->render('login', [
                         'model' => $model,
             ]);
@@ -114,6 +114,7 @@ class AuthController extends Controller {
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
+                $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($companyMasterModel->save()) {
@@ -128,7 +129,7 @@ class AuthController extends Controller {
                             $user->email = $model->email;
                             $user->setPassword($model->password);
                             $user->original_password = $model->password;
-                            $user->type = User::TYPE_RECRUITER;
+                            $user->type = User::TYPE_EMPLOYER;
                             $user->status = User::STATUS_PENDING;
                             $user->branch_id = $company_branch->id;
                             $user->is_owner = User::OWNER_YES;
@@ -287,7 +288,8 @@ class AuthController extends Controller {
      */
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->goHome();
+//        return $this->goHome();
+        return $this->redirect(['login']);
     }
 
     public function actionCheckMail() {

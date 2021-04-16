@@ -14,33 +14,30 @@ use Yii;
  *
  * @property LeadBenefit[] $leadBenefits
  */
-class Benefits extends \yii\db\ActiveRecord
-{
+class Benefits extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'benefits';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'created_at', 'updated_at'], 'required'],
-            [['created_at', 'updated_at'], 'integer'],
-            [['name'], 'string', 'max' => 500],
+                [['name', 'created_at', 'updated_at'], 'required'],
+                [['created_at', 'updated_at'], 'integer'],
+                [['name'], 'string', 'max' => 500],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Name',
@@ -49,13 +46,17 @@ class Benefits extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAllBenefits() {
+        return self::find()->all();
+    }
+
     /**
      * Gets query for [[LeadBenefits]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getLeadBenefits()
-    {
+    public function getLeadBenefits() {
         return $this->hasMany(LeadBenefit::className(), ['benefit_id' => 'id']);
     }
+
 }

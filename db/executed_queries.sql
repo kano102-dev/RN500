@@ -490,3 +490,27 @@ ALTER TABLE `user`
 ADD `comment` varchar(500) NULL AFTER `status`;ALTER TABLE `user`
 CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COMMENT 'approved and rejection comment' AFTER `status`;
 
+# **************10-04-21***********
+
+ALTER TABLE `lead_master`
+ADD `branch_id` int(11) NOT NULL AFTER `id`;
+
+ALTER TABLE `lead_master`
+ADD `comment` varchar(500) NULL COMMENT 'for approval / rejection' AFTER `status`;
+
+ALTER TABLE `lead_master`
+CHANGE `jobseeker_payment` `jobseeker_payment` double NOT NULL COMMENT 'salary' AFTER `description`;
+
+ALTER TABLE `lead_master`
+CHANGE `start_date` `start_date` date NOT NULL AFTER `shift`,
+CHANGE `end_date` `end_date` date NULL AFTER `start_date`;
+
+ALTER TABLE `lead_master`
+CHANGE `recruiter_commission` `recruiter_commission` int(11) NULL COMMENT 'agancy commision' AFTER `end_date`,
+CHANGE `recruiter_commision_type` `recruiter_commision_type` tinyint(4) NULL COMMENT '1:percentage 0: amount' AFTER `recruiter_commission`;
+
+ALTER TABLE `lead_master`
+CHANGE `recruiter_commision_type` `recruiter_commission_type` tinyint(4) NULL COMMENT '1:percentage 0: amount' AFTER `recruiter_commission`,
+CHANGE `recruiter_commision_mode` `recruiter_commission_mode` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:one time 1:monthly 2 Yearly' AFTER `recruiter_commission_type`;
+(0.080 s)
+# *********************************
