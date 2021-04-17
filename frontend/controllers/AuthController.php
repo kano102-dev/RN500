@@ -14,6 +14,7 @@ use common\models\CompanyBranch;
 use yii\helpers\ArrayHelper;
 use common\models\States;
 use common\models\Cities;
+use common\CommonFunction;
 use frontend\models\EmployerForm;
 use frontend\models\JobseekerForm;
 
@@ -39,21 +40,21 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'index', 'get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                 'rules' => [
-                    [
+                        [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
-                    [
+                        [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
-//            'verbs' => [
-//                'class' => VerbFilter::className(),
+            'verbs' => [
+                'class' => VerbFilter::className(),
 //                'actions' => ['logout' => ['post']],
-//            ],
+            ],
         ];
     }
 
@@ -102,7 +103,6 @@ class AuthController extends Controller {
                 return $this->goHome();
             }
         } else {
-//            $model->password = '';
             return $this->render('login', [
                         'model' => $model,
             ]);
@@ -117,10 +117,11 @@ class AuthController extends Controller {
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         if (\Yii::$app->request->isPost) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
+                $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
                 if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
-                        $companyMasterModel->created_at = $companyMasterModel->updated_at = \common\CommonFunction::currentTimestamp();
+                        $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
@@ -128,7 +129,7 @@ class AuthController extends Controller {
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
                             $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
-                            $company_branch->created_at = $company_branch->updated_at = \common\CommonFunction::currentTimestamp();
+                            $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
                             if ($company_branch->save()) {
                                 $user = new User();
                                 $user->email = $employer->email;
@@ -148,7 +149,7 @@ class AuthController extends Controller {
                                     $userDetails->last_name = $employer->last_name;
                                     $userDetails->user_id = $user->id;
                                     $userDetails->unique_id = $employer->getUniqueId();
-                                    $userDetails->created_at = $userDetails->updated_at = \common\CommonFunction::currentTimestamp();
+                                    $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
                                     if ($userDetails->save(false)) {
                                         $is_error = 1;
                                     }
@@ -187,7 +188,7 @@ class AuthController extends Controller {
                             $userDetails->last_name = $model->last_name;
                             $userDetails->user_id = $user->id;
                             $userDetails->unique_id = $model->getUniqueId();
-                            $userDetails->created_at = $userDetails->updated_at = \common\CommonFunction::currentTimestamp();
+                            $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
                             if ($model->save(false)) {
                                 $transaction->commit();
                                 Yii::$app->session->setFlash("success", "You have registered successfully.");
@@ -302,7 +303,8 @@ class AuthController extends Controller {
      */
     public function actionLogout() {
         Yii::$app->user->logout();
-        return $this->goHome();
+//        return $this->goHome();
+        return $this->redirect(['login']);
     }
 
     public function actionCheckMail() {
