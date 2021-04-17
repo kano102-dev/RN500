@@ -152,7 +152,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                             <li>
                                 <article class="post post-list">
                                     <div class="entry-content media">
-                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-1.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="<?= $assetDir ?>/images/news-1.jpg" alt="Your alt text here"> </a> </div>
                                         <div class="media-body">
                                             <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
                                             <div class="entry-content-inner">
@@ -168,7 +168,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                             <li>
                                 <article class="post post-list">
                                     <div class="entry-content media">
-                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-2.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="<?= $assetDir ?>/images/news-2.jpg" alt="Your alt text here"> </a> </div>
                                         <div class="media-body">
                                             <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
                                             <div class="entry-content-inner">
@@ -184,7 +184,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                             <li>
                                 <article class="post post-list">
                                     <div class="entry-content media">
-                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-3.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="<?= $assetDir ?>/images/news-3.jpg" alt="Your alt text here"> </a> </div>
                                         <div class="media-body">
                                             <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
                                             <div class="entry-content-inner">
