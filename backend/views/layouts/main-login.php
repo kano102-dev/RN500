@@ -26,7 +26,7 @@ backend\assets\PluginAsset::register($this)->add(['fontawesome', 'icheck-bootstr
 <?php  $this->beginBody() ?>
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?=Yii::$app->homeUrl?>"><<img src="<?= Yii::$app->urlManager->getBaseUrl() ?>/images/RN500_logo.png" alt="RN500"></a>
+        <a href="<?=Yii::$app->homeUrl?>"><img src="<?= Yii::$app->urlManager->getBaseUrl() ?>/images/RN500_logo.png" alt="RN500"></a>
     </div>
     <!-- /.login-logo -->
 

@@ -14,33 +14,30 @@ use Yii;
  *
  * @property LeadDiscipline[] $leadDisciplines
  */
-class Discipline extends \yii\db\ActiveRecord
-{
+class Discipline extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'discipline';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['name', 'created_at', 'updated_at'], 'required'],
-            [['created_at', 'updated_at','created_by', 'updated_by'], 'integer'],
-            [['name'], 'string', 'max' => 500],
+                [['name', 'created_at', 'updated_at'], 'required'],
+                [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+                [['name'], 'string', 'max' => 500],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Name',
@@ -49,13 +46,17 @@ class Discipline extends \yii\db\ActiveRecord
         ];
     }
 
+    public static function getAllDiscipline() {
+        return self::find()->all();
+    }
+
     /**
      * Gets query for [[LeadDisciplines]].
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getLeadDisciplines()
-    {
+    public function getLeadDisciplines() {
         return $this->hasMany(LeadDiscipline::className(), ['discipline_id' => 'id']);
     }
+
 }

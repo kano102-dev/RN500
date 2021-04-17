@@ -7,7 +7,7 @@ use yii\web\AssetBundle;
 /**
  * Main backend application asset bundle.
  */
-class AppAsset extends AssetBundle {
+class ErrorAsset extends AssetBundle {
 
     public $basePath = '@webroot';
     public $baseUrl = '@web';
@@ -15,7 +15,6 @@ class AppAsset extends AssetBundle {
         'css/site.css',
         'css/nav.css',
         'datatable/css/dataTables.bootstrap4.min.css',
-        'css/animate.css',
     ];
     public $js = [
         'js/jquery.nestable.js',

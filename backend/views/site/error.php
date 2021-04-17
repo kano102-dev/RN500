@@ -1,40 +1,20 @@
 <?php
 
-/* @var $this yii\web\View */
-/* @var $name string */
-/* @var $message string */
-/* @var $exception Exception */
-
 use yii\helpers\Html;
-
-$this->title = $name;
-$this->params['breadcrumbs'] = [['label' => $this->title]];
 ?>
-<div class="error-page">
-    <div class="error-content" style="margin-left: auto;">
-        <h3><i class="fas fa-exclamation-triangle text-danger"></i> <?= Html::encode($name) ?></h3>
 
-        <p>
-            <?= nl2br(Html::encode($message)) ?>
-        </p>
+<div class="middle-box text-center animated fadeInDown">
+<?php if (isset($exception->statusCode) && !empty($exception->statusCode)) { ?>
+        <h1><?php echo $exception->statusCode ?></h1>
+        <h3 class="font-bold">
 
-        <p>
-            The above error occurred while the Web server was processing your request.
-            Please contact us if you think this is a server error. Thank you.
-            Meanwhile, you may <?= Html::a('return to dashboard', Yii::$app->homeUrl); ?>
-            or try using the search form.
-        </p>
+        <?php echo nl2br(Html::encode($exception->getmessage())) ?>
+        </h3>
+<?php } else { ?>
+        <h1>500</h1>
+        <h3 class="font-bold"><?php echo "Something Went Wrong."; ?></h3>
+<?php } ?>
 
-        <form class="search-form" style="margin-right: 190px;">
-            <div class="input-group">
-                <input type="text" name="search" class="form-control" placeholder="Search">
-
-                <div class="input-group-append">
-                    <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-        </form>
+    <div class="error-desc">
     </div>
 </div>
-

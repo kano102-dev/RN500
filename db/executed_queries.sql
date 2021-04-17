@@ -487,8 +487,21 @@ ALTER TABLE `user`
 CHANGE `status` `status` int(11) NOT NULL DEFAULT '0' COMMENT '1:approved 0:pending 2:rejected' AFTER `original_password`;
 
 ALTER TABLE `user`
-ADD `comment` varchar(500) NULL AFTER `status`;ALTER TABLE `user`
+ADD `comment` varchar(500) NOT NULL AFTER `status`;ALTER TABLE `user`
 CHANGE `comment` `comment` varchar(500) COLLATE 'latin1_swedish_ci' NOT NULL COMMENT 'approved and rejection comment' AFTER `status`;
+
+
+
+
+# *********************************
+
+ALTER TABLE `user` CHANGE `comment` `comment` VARCHAR(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL COMMENT 'approved and rejection comment';
+
+# ***********************11-April-2021***********************
+ALTER TABLE `role_master`
+ADD `company_id` int NOT NULL AFTER `role_name`;
+
+# ***********************11-April-2021************END***********
 
 # ***********************13-April-2021***********************
 
@@ -551,5 +564,192 @@ CREATE TABLE `vendor` (
 
 
 -- 2021-04-13 05:24:47
+ALTER TABLE `role_master`
+ADD `company_id` int NOT NULL AFTER `role_name`;
+UPDATE `role_master` SET `company_id` = '1';
+
+UPDATE `auth_item` SET `description` = 'Staff' WHERE `name` = 'user' AND `name` = 'user' COLLATE utf8mb4_bin;
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter', '1', 'Recruiter', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-update', '', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('recruiter-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch', '1', 'Branch', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package', '1', 'Package', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role', '1', 'Role', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-create', '2', 'Create', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('role-delete', '2', 'Delete', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-create');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('branch-update', '2', 'Update', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('branch', 'branch-view');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('package-view', '2', 'View', NULL, NULL, '1618133004', '1618133004');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('package', 'package-view');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('recruiter', 'recruiter-view');
+
+DELETE FROM `auth_item`
+WHERE ((`name` = 'update' AND `name` = 'update' COLLATE utf8mb4_bin));
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-create');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-update');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-view');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('role', 'role-delete');
+
+UPDATE `auth_item` SET
+`name` = 'approval',
+`type` = '1',
+`description` = 'Approval & Verification',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1617027889',
+`updated_at` = '1617027889'
+WHERE `name` = 'lead' AND `name` = 'lead' COLLATE utf8mb4_bin;
+
+UPDATE `auth_item` SET
+`name` = 'lead-verify',
+`type` = '2',
+`description` = 'Lead Verify',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1617027889',
+`updated_at` = '1617027889'
+WHERE `name` = 'verify' AND `name` = 'verify' COLLATE utf8mb4_bin;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('user-approval', '2', 'User Approval', NULL, NULL, '1618133004', '1618133004');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('approval', 'user-approval');
+
+UPDATE `auth_item` SET
+`name` = 'user-approve',
+`type` = '2',
+`description` = 'Approve User',
+`rule_name` = NULL,
+`data` = NULL,
+`created_at` = '1618133004',
+`updated_at` = '1618133004'
+WHERE `name` = 'user-approval' AND `name` = 'user-approval' COLLATE utf8mb4_bin;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('user-request-view', '2', 'View User Approval Request', NULL, NULL, NULL, NULL);
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('approval', 'user-request-view');
+
 
 # ***********************13-April-2021************END***********
+
+
+# **************PENDING OF 10-04-21***********
+ALTER TABLE `lead_master`
+ADD `branch_id` int(11) NOT NULL AFTER `id`;
+
+ALTER TABLE `lead_master`
+ADD `comment` varchar(500) NULL COMMENT 'for approval / rejection' AFTER `status`;
+
+ALTER TABLE `lead_master`
+CHANGE `jobseeker_payment` `jobseeker_payment` double NOT NULL COMMENT 'salary' AFTER `description`;
+
+ALTER TABLE `lead_master`
+CHANGE `start_date` `start_date` date NOT NULL AFTER `shift`,
+CHANGE `end_date` `end_date` date NULL AFTER `start_date`;
+
+ALTER TABLE `lead_master`
+CHANGE `recruiter_commission` `recruiter_commission` int(11) NULL COMMENT 'agancy commision' AFTER `end_date`,
+CHANGE `recruiter_commision_type` `recruiter_commision_type` tinyint(4) NULL COMMENT '1:percentage 0: amount' AFTER `recruiter_commission`;
+
+ALTER TABLE `lead_master`
+CHANGE `recruiter_commision_type` `recruiter_commission_type` tinyint(4) NULL COMMENT '1:percentage 0: amount' AFTER `recruiter_commission`,
+CHANGE `recruiter_commision_mode` `recruiter_commission_mode` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:one time 1:monthly 2 Yearly' AFTER `recruiter_commission_type`;
+
+# **************PENDING OF 10-04-21 END***********

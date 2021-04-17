@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\CommonFunction;
 
 /**
  * This is the model class for table "company_master".
@@ -20,6 +21,7 @@ use Yii;
  * @property int $is_master
  * @property int $created_at
  * @property int $updated_at
+ * @property string $reference_no
  */
 class CompanyMaster extends \yii\db\ActiveRecord {
 
@@ -34,15 +36,15 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
-            [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
-            [['company_name'], 'string', 'max' => 250],
-            [['company_email'], 'email'],
-            [['company_email'], 'string', 'max' => 100],
-            [['company_mobile'], 'string', 'max' => 11],
-            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-            [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type'], 'safe'],
+                [['company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+                [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
+                [['company_name'], 'string', 'max' => 250],
+                [['company_email'], 'email'],
+                [['company_email'], 'string', 'max' => 100],
+                [['company_mobile'], 'string', 'max' => 11],
+                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+                [['zip_code'], 'string', 'max' => 20],
+                [['state', 'type', 'reference_no'], 'safe'],
         ];
     }
 
@@ -65,6 +67,20 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getUniqueReferenceNumber() {
+        $code = CommonFunction::generateRandomString(15);
+        $exits = self::find()->where(['reference_no' => $code])->one();
+        if ($exits) {
+            $this->getUniqueReferenceNumber();
+        } else {
+            return $code;
+        }
+    }
+
+    public function getCityRef() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
     }
 
 }
