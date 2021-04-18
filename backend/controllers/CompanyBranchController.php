@@ -129,6 +129,12 @@ class CompanyBranchController extends Controller {
             }
         }
 
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
 
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
             $is_success = false;
@@ -143,10 +149,10 @@ class CompanyBranchController extends Controller {
                 if ($companyBranchModel->save()) {
                     $user = new User();
                     $user->email = $userDetailModel->email;
-                    $user->type = User::TYPE_RECRUITER;
+                    $user->type = $companyBranchModel->company->type == 1 ? User::TYPE_RECRUITER : User::TYPE_EMPLOYER;
                     $user->status = User::STATUS_PENDING;
                     $user->branch_id = $companyBranchModel->id;
-                    $user->role_id = RoleMaster::RECRUITER_OWNER;
+                    $user->role_id = $userDetailModel->role_id;
                     $user->is_owner = User::OWNER_YES;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
@@ -179,7 +185,7 @@ class CompanyBranchController extends Controller {
                     'states' => $states, 'companyList' => $companyList,
                     'branch_cities' => $branch_cities,
                     'owner_cities' => $owner_cities,
-                    'userDetailModel' => $userDetailModel
+                    'userDetailModel' => $userDetailModel, 'roles' => $roles
         ]);
     }
 
@@ -210,10 +216,15 @@ class CompanyBranchController extends Controller {
             if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
                 $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
             } else {
-                $companyList  = [];
+                $companyList = [];
             }
         }
-
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
             $is_success = false;
             $transaction = Yii::$app->db->beginTransaction();
@@ -237,9 +248,9 @@ class CompanyBranchController extends Controller {
         return $this->render('_form', [
                     'companyBranchModel' => $companyBranchModel,
                     'userDetailModel' => $userDetailModel,
-                    'states' => $states,'companyList'=>$companyList,
+                    'states' => $states, 'companyList' => $companyList,
                     'branch_cities' => $branch_cities,
-                    'owner_cities' => $owner_cities,
+                    'owner_cities' => $owner_cities, 'roles' => $roles
         ]);
     }
 

@@ -45,22 +45,12 @@ return [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-rn500', 'httpOnly' => true],
-            'authTimeout' => 120000,
+            'authTimeout' => 172800,
             'loginUrl' => 'http://localhost/rn500/auth/login'
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
             'name' => 'rn500',
-        ],
-        'urlManagerAdmin' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-            'class' => 'yii\web\UrlManager',
-            'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-            ],
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',

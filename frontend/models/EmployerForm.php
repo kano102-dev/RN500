@@ -17,8 +17,6 @@ class EmployerForm extends \common\models\UserDetails {
     public $type;
     public $companyName;
     public $state;
-    public $password;
-    public $confirm_password;
 
     /**
      * {@inheritdoc}
@@ -28,8 +26,7 @@ class EmployerForm extends \common\models\UserDetails {
             [['email'], 'email'],
             [['email'], 'required'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe'],
-            ['confirm_password', 'compare', 'compareAttribute' => 'password'],
-            [['first_name', 'last_name', 'email', 'password', 'confirm_password'], 'required'],
+            [['first_name', 'last_name', 'email'], 'required'],
             [['email'], 'checkUniqueValidation'],
         ];
     }

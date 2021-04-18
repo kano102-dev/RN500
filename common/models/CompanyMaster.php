@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\CommonFunction;
+use borales\extensions\phoneInput\PhoneInputValidator;
 
 /**
  * This is the model class for table "company_master".
@@ -41,7 +42,8 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
             [['company_email'], 'string', 'max' => 100],
-            [['company_mobile'], 'string', 'max' => 11],
+            [['company_mobile'], 'string'],
+            [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
             [['state', 'type', 'status', 'reference_no'], 'safe'],

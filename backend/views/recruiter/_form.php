@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use borales\extensions\phoneInput\PhoneInput;
 
 $this->title = 'Recruiter';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
@@ -35,7 +36,13 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
 
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyMasterModel, 'company_mobile')->textInput(['maxlength' => true]) ?>
+                            <?=
+                            $form->field($companyMasterModel, 'company_mobile')->widget(PhoneInput::className(), [
+                                'jsOptions' => [
+                                    'preferredCountries' => ['us', 'in'],
+                                ]
+                            ]);
+                            ?>
                         </div>
                         <div class="col-6">
                             <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true]) ?>
@@ -107,7 +114,13 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                             <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'mobile_no')->textInput(['maxlength' => true]) ?>
+                            <?=
+                            $form->field($userDetailModel, 'mobile_no')->widget(PhoneInput::className(), [
+                                'jsOptions' => [
+                                    'preferredCountries' => ['us', 'in'],
+                                ]
+                            ]);
+                            ?>
                         </div>
                     </div>
 

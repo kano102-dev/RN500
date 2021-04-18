@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\CommonFunction;
+use borales\extensions\phoneInput\PhoneInputValidator;
 
 /**
  * This is the model class for table "user_details".
@@ -41,8 +42,6 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $type;
     public $companyName;
     public $state;
-    public $password;
-    public $confirm_password;
     public $role_id;
     public $branch_id;
     public $company_id;
@@ -65,13 +64,13 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['job_looking_from'], 'safe'],
             [['work_authorization_comment', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
-            [['mobile_no'], 'string', 'max' => 11],
+            [['mobile_no'], 'string'],
+            [['mobile_no'], PhoneInputValidator::className()],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            ['confirm_password', 'compare', 'compareAttribute' => 'password', 'on' => 'registration'],
-            [['first_name', 'last_name', 'email', 'password', 'confirm_password'], 'required', 'on' => 'registration'],
+            [['first_name', 'last_name', 'email'], 'required', 'on' => 'registration'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
             [['email'], 'checkUniqueValidation', 'on' => 'registration'],
             [['company_id'], 'required', 'when' => function ($model) {
@@ -95,7 +94,7 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios['registration'] = ['created_at', 'updated_at', 'user_id', 'unique_id', 'first_name', 'last_name', 'email', 'password', 'confirm_password'];
+        $scenarios['registration'] = ['created_at', 'updated_at', 'user_id', 'unique_id', 'first_name', 'last_name', 'email'];
         $scenarios['staff'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['employer'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['recruiter'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];

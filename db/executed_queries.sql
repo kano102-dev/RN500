@@ -755,3 +755,12 @@ CHANGE `recruiter_commision_type` `recruiter_commission_type` tinyint(4) NULL CO
 CHANGE `recruiter_commision_mode` `recruiter_commission_mode` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:one time 1:monthly 2 Yearly' AFTER `recruiter_commission_type`;
 
 # **************PENDING OF 10-04-21 END***********
+
+ALTER TABLE `user_details`
+CHANGE `mobile_no` `mobile_no` varchar(20) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `last_name`;
+
+ALTER TABLE `company_master`
+CHANGE `company_mobile` `company_mobile` varchar(20) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `company_email`;
+
+ALTER TABLE `vendor`
+CHANGE `phone` `phone` varchar(20) NOT NULL AFTER `email`;

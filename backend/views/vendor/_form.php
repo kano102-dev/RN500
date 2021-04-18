@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\select2\Select2;
+use borales\extensions\phoneInput\PhoneInput;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Vendor */
@@ -12,8 +13,6 @@ use kartik\select2\Select2;
 $this->title = 'Vendor';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
-
-
 ?>
 
 
@@ -21,7 +20,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
     <div class="card-body">
         <?php $form = ActiveForm::begin(); ?>
         <div class="card ">
-            
+
             <div class="card-body">
 
                 <div class="row">
@@ -36,7 +35,13 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 
                 <div class="row">
                     <div class="col-6">
-                        <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+                        <?=
+                        $form->field($model, 'phone')->widget(PhoneInput::className(), [
+                            'jsOptions' => [
+                                'preferredCountries' => ['us', 'in'],
+                            ]
+                        ]);
+                        ?>
                     </div>
                     <div class="col-6">
                         <?= $form->field($model, 'street_no')->textInput(['maxlength' => true]) ?>

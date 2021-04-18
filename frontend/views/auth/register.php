@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
+use borales\extensions\phoneInput\PhoneInput;
 ?>
 <div class="listpgWraper">
     <div class="container">
@@ -57,28 +58,6 @@ use kartik\select2\Select2;
                                         ->textInput(['placeholder' => $model->getAttributeLabel('email')])
                                 ?>
                             </div>
-                            <div class="formrow">
-                                <?php
-                                echo $form->field($model, 'password', [
-                                            'options' => ['class' => 'form-group has-feedback'],
-                                            'inputTemplate' => '{input}',
-                                            'template' => '{input}{error}',
-                                        ])
-                                        ->label(false)
-                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('password')])
-                                ?>
-                            </div>
-                            <div class="formrow">
-                                <?php
-                                echo $form->field($model, 'confirm_password', [
-                                            'options' => ['class' => 'form-group has-feedback'],
-                                            'inputTemplate' => '{input}',
-                                            'template' => '{input}{error}',
-                                        ])
-                                        ->label(false)
-                                        ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
-                                ?>
-                            </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
@@ -94,7 +73,13 @@ use kartik\select2\Select2;
                                 <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'company_mobile')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_mobile')])->label(false); ?>
+                                <?=
+                                $form->field($companyMasterModel, 'company_mobile')->widget(PhoneInput::className(), [
+                                    'jsOptions' => [
+                                        'preferredCountries' => ['us', 'in'],
+                                    ]
+                                ])->label(false);
+                                ?>
                             </div>
                             <div class="formrow">
                                 <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
@@ -160,28 +145,6 @@ use kartik\select2\Select2;
                                         ])
                                         ->label(false)
                                         ->textInput(['placeholder' => $employer->getAttributeLabel('email')])
-                                ?>
-                            </div>
-                            <div class="formrow">
-                                <?php
-                                echo $form->field($employer, 'password', [
-                                            'options' => ['class' => 'form-group has-feedback'],
-                                            'inputTemplate' => '{input}',
-                                            'template' => '{input}{error}',
-                                        ])
-                                        ->label(false)
-                                        ->passwordInput(['placeholder' => $employer->getAttributeLabel('password')])
-                                ?>
-                            </div>
-                            <div class="formrow">
-                                <?php
-                                echo $form->field($employer, 'confirm_password', [
-                                            'options' => ['class' => 'form-group has-feedback'],
-                                            'inputTemplate' => '{input}',
-                                            'template' => '{input}{error}',
-                                        ])
-                                        ->label(false)
-                                        ->passwordInput(['placeholder' => $employer->getAttributeLabel('confirm_password')])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>

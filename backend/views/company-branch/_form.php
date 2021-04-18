@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use borales\extensions\phoneInput\PhoneInput;
 
 /* @var $this yii\web\View */
 /* @var companyBranchModel backend\models\CompanyBranch */
@@ -106,7 +107,13 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                             <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'mobile_no')->textInput(['maxlength' => true]) ?>
+                            <?=
+                            $form->field($userDetailModel, 'mobile_no')->widget(PhoneInput::className(), [
+                                'jsOptions' => [
+                                    'preferredCountries' => ['us', 'in'],
+                                ]
+                            ]);
+                            ?>
                         </div>
                     </div>
 
@@ -150,6 +157,19 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         </div>
                         <div class="col-6">
                             <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <?=
+                            $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                'data' => $roles,
+                                'options' => ['placeholder' => 'Select a Role'],
+                                'pluginOptions' => [
+                                    'allowClear' => true
+                                ],
+                            ]);
+                            ?>
                         </div>
                     </div>
 
