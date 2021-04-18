@@ -9,7 +9,7 @@ use kartik\select2\Select2;
 /* @var $this yii\web\View */
 /* @var $model common\models\Advertisement */
 /* @var $form yii\widgets\ActiveForm */
-$location = [0 => 'Ahemdabad', 1 => 'Mumbai'];
+$location = [1 => 'Home Page'];
 $status = [0 => 'No', 1 => 'Yes'];
 ?>
 

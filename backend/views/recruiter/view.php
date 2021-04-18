@@ -38,6 +38,12 @@ $this->params['breadcrumbs'][] = "View";
                             }
                         ],
                         'zip_code',
+                        [
+                            'attribute' => 'priority',
+                            'value' => function ($model) {
+                                return isset($model->priority) ? Yii::$app->params['company.priority'][$model->priority] : '';
+                            }
+                        ],
                     ],
                 ])
                 ?>
