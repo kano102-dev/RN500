@@ -29,6 +29,7 @@ class RoleMaster extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['role_name', 'created_at', 'updated_at'], 'required'],
+            [['company_id'], 'safe'],
             [['created_at', 'updated_at'], 'integer'],
             [['role_name'], 'string', 'max' => 250],
         ];
@@ -41,9 +42,14 @@ class RoleMaster extends \yii\db\ActiveRecord {
         return [
             'id' => 'ID',
             'role_name' => 'Role Name',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'company_id' => 'Company',
+            'created_at' => 'Date Created',
+            'updated_at' => 'Date Updated',
         ];
+    }
+
+    public function getCompany() {
+        return $this->hasOne(CompanyMaster::className(), ['id' => 'company_id']);
     }
 
 }

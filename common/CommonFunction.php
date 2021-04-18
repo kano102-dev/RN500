@@ -55,4 +55,10 @@ class CommonFunction {
         return $isAdmin;
     }
 
+    public static function isHoAdmin($user_id) {
+        $user = User::findOne(['id' => $user_id]);
+        $isHoAdmin = $user->branch->is_default == 1 && $user->is_owner == 1 ? true : false;
+        return $isHoAdmin;
+    }
+
 }

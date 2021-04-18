@@ -23,6 +23,32 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                 </div>
 
                 <div class="card-body">
+                    <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || \common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) { ?>
+                        <div class="row">
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'company_id')->widget(Select2::classname(), [
+                                    'data' => $companyList,
+                                    'options' => ['placeholder' => 'Select a Company'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'branch_id')->widget(Select2::classname(), [
+                                    'data' => $userDetailModel->isNewRecord ? [] : $branchList,
+                                    'options' => ['placeholder' => 'Select a Branch'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
 
                     <div class="row">
                         <div class="col-6">
@@ -117,6 +143,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
 </div>
 <?php
 $getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['staff/get-cities']);
+$getBranchUrl = Yii::$app->urlManager->createAbsoluteUrl(['staff/get-branches']);
 $script = <<< JS
    $(document).on('change','#userdetails-state',function(){
         var state=$(this).val();
@@ -128,6 +155,17 @@ $script = <<< JS
                     $('#userdetails-city').html(response);
                 }
             });
+   });
+   $(document).on('change','#userdetails-company_id',function(){
+        var company=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getBranchUrl',
+                data: {'id':company},
+                success: function (response) {
+                    $('#userdetails-branch_id').html(response);
+                }
+        });
    });
 JS;
 $this->registerJs($script);

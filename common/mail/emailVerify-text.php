@@ -1,12 +1,16 @@
 <?php
-
 /* @var $this yii\web\View */
+
 /* @var $user common\models\User */
-
-$verifyLink = Yii::$app->urlManager->createAbsoluteUrl(['site/verify-email', 'token' => $user->verification_token]);
 ?>
-Hello <?= $user->username ?>,
 
-Follow the link below to verify your email:
+Dear <?= Html::encode($name) ?>,
 
-<?= $verifyLink ?>
+
+You recently signed up at RN500.com. Please click to VERIFY EMAIL to activate your Account. 
+<?= $resetLink ?>
+
+Thank you, 
+Customer Service Team, 
+
+RN500.com 

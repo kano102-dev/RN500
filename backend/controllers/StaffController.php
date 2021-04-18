@@ -37,15 +37,15 @@ class StaffController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete','get-cities'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'get-cities', 'get-branches'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'create','get-cities'],
+                        'actions' => ['index', 'create', 'get-cities', 'get-branches'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                     [
-                        'actions' => ['index', 'update','get-cities'],
+                        'actions' => ['index', 'update', 'get-cities', 'get-branches'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
@@ -119,7 +119,20 @@ class StaffController extends Controller {
         $userDetailModel = new UserDetails();
         $userDetailModel->scenario = 'staff';
 
-        $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
+        }
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
         $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $city = [];
         if ($userDetailModel->load(Yii::$app->request->post())) {
@@ -131,9 +144,14 @@ class StaffController extends Controller {
                 try {
                     $user = new User();
                     $user->email = $userDetailModel->email;
+                    $user->role_id = $userDetailModel->role_id;
                     $user->type = User::TYPE_RECRUITER;
-                    $user->status = User::STATUS_PENDING;
-                    $user->branch_id = \Yii::$app->user->identity->branch_id;
+                    $user->status = User::STATUS_APPROVED;
+                    if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                        $user->branch_id = \Yii::$app->user->identity->branch_id;
+                    } else {
+                        $user->branch_id = $userDetailModel->branch_id;
+                    }
                     $user->is_owner = User::OWNER_NO;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
@@ -149,6 +167,15 @@ class StaffController extends Controller {
                             $resetPasswordModel->email = $user->email;
                             $is_welcome_mail = 1;
                             if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                $htmlLayout = '@common/mail/welcomeMail-html';
+                                $textLayout = '@common/mail/welcomeMail-text';
+                                $subject = 'Welcome To Rn500';
+                                $name = isset($user->fullName) ? $user->fullName : "";
+                                \Yii::$app->mailer->compose(['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'name' => $name])
+                                        ->setFrom([Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
+                                        ->setTo($this->email)
+                                        ->setSubject($subject)
+                                        ->send();
                                 $is_error = 1;
                             }
                         }
@@ -161,7 +188,11 @@ class StaffController extends Controller {
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } catch (\Exception $ex) {
+                    echo "<pre/>";
+                    print_r($ex);
+                    exit;
                     $transaction->rollBack();
+                    Yii::$app->session->setFlash("warning", "Something went wrong.");
                 } finally {
                     return $this->redirect(['index']);
                 }
@@ -170,7 +201,7 @@ class StaffController extends Controller {
 
 
         return $this->render('_form', [
-                    'userDetailModel' => $userDetailModel,
+                    'userDetailModel' => $userDetailModel, 'companyList' => $companyList,
                     'states' => $states, 'city' => $city, 'roles' => $roles
         ]);
     }
@@ -188,7 +219,25 @@ class StaffController extends Controller {
         $userDetailModel = isset($model->details) ? $model->details : [];
         $userDetailModel->scenario = 'staff';
 
-        $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        $userDetailModel->company_id = $model->branch->company_id;
+        $userDetailModel->branch_id = $model->branch_id;
+        $userDetailModel->role_id = $model->role_id;
+
+        $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
+        }
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
+        $branchList = ArrayHelper::map(CompanyBranch::find()->where(['company_id' => $model->branch->company_id])->all(), 'id', 'branch_name');
         $userDetailModel->email = $model->email;
         $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $city = !empty($userDetailModel->cityRef->state_id) ? ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->cityRef->state_id]), 'id', 'city') : [];
@@ -202,6 +251,11 @@ class StaffController extends Controller {
                     $user->email = $userDetailModel->email;
                     $user->role_id = $userDetailModel->role_id;
                     $user->type = User::TYPE_RECRUITER;
+                    if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                        $user->branch_id = \Yii::$app->user->identity->branch_id;
+                    } else {
+                        $user->branch_id = $userDetailModel->branch_id;
+                    }
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
                         if ($userDetailModel->save()) {
@@ -222,7 +276,8 @@ class StaffController extends Controller {
         return $this->render('_form', [
                     'model' => $model, 'roles' => $roles,
                     'userDetailModel' => $userDetailModel,
-                    'states' => $states, 'city' => $city
+                    'states' => $states, 'city' => $city,
+                    'companyList' => $companyList, 'branchList' => $branchList
         ]);
     }
 
@@ -245,6 +300,18 @@ class StaffController extends Controller {
         if (!empty($cities)) {
             foreach ($cities as $key => $city) {
                 $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
+    }
+
+    public function actionGetBranches($id) {
+        $branches = ArrayHelper::map(CompanyBranch::find()->where(['company_id' => $id])->all(), 'id', 'branch_name');
+        $options = '';
+        if (!empty($branches)) {
+            foreach ($branches as $key => $branch) {
+                $options .= "<option value=$key>$branch</option>";
             }
         }
         echo $options;

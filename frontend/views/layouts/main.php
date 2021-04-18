@@ -745,7 +745,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <!--Copyright-->
         <div class="copyright">
             <div class="container">
-                <div class="bttxt">Copyright &copy; 2017 RN500. All Rights Reserved. Design by: <a href="http://graphicriver.net/user/ecreativesol" target="_blank">eCreativeSolutions</a></div>
+                <div class="bttxt">Copyright &copy; <?= date('Y', strtotime('now')) ?> RN500. All Rights Reserved. Design by: <a href="http://graphicriver.net/user/ecreativesol" target="_blank">eCreativeSolutions</a> <strong>Powered By :<a href="https://icognicode.com">ICOGNICODE</a></strong></div>
             </div>
         </div>
         <?php $this->endBody() ?>

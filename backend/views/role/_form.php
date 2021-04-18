@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
 use yii\helpers\Url;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\RoleMaster */
@@ -92,6 +93,19 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                     'enableAjaxValidation' => false]);
         ?>
         <div class="row">
+            <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
+                <div class="col-6">
+                    <?=
+                    $form->field($model, 'company_id')->widget(Select2::classname(), [
+                        'data' => $companyList,
+                        'options' => ['placeholder' => 'Select a Company'],
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ],
+                    ]);
+                    ?>
+                </div>
+            <?php } ?>
             <div class="col-6">
                 <?= $form->field($model, 'role_name')->textInput(['maxlength' => true]) ?>
             </div>

@@ -21,16 +21,16 @@
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="<?= Yii::$app->urlManager->createUrl("/"); ?>">Home</a> 
                             </li>
-                            <li><a href="<?= $assetDir ?>/about-us.html">About us</a></li>
-                            <li><a href="<?= $assetDir ?>/contact-us.html">Contact</a></li>
-<!--                            <li class="postjob"><a href="<?= $assetDir ?>/post-job.html">Post a job</a></li>
-                            <li class="jobseeker"><a href="<?= $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
+<!--                            <li><a href="<?= $assetDir ?>/about-us.html">About us</a></li>
+                            <li><a href="<?= $assetDir ?>/contact-us.html">Contact</a></li>-->
+                            <!--<li class="postjob"><a href="<?= $assetDir ?>/post-job.html">Post a job</a></li>-->
+                            <!--<li class="jobseeker"><a href="<?= $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="<?= $assetDir ?>/dashboard.html"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-                                        <li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>
-                                        <li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>
+                                        <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+<!--                                        <li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>
+                                        <li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>-->
                                         <li role="separator" class="divider"></li>
                                         <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>

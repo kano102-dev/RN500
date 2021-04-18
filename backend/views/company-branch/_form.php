@@ -21,7 +21,21 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                     <h3 class="card-title">Branch Detail</h3>
                 </div>
                 <div class="card-body">
-
+                    <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
+                        <div class="row">
+                            <div class="col-12">
+                                <?=
+                                $form->field($companyBranchModel, 'company_id')->widget(Select2::classname(), [
+                                    'data' => $companyList,
+                                    'options' => ['placeholder' => 'Select a Company'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        </div>
+                    <?php } ?>
                     <div class="row">
                         <div class="col-6">
                             <?= $form->field($companyBranchModel, 'branch_name')->textInput(['maxlength' => true]) ?>
@@ -73,7 +87,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
 
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Branch Owner</h3>
+                    <h3 class="card-title">Branch Owner Details</h3>
                 </div>
 
                 <div class="card-body">

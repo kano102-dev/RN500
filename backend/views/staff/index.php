@@ -24,15 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 $cols = [];
                 array_push($cols, ['class' => 'yii\grid\SerialColumn']);
                 array_push($cols, [
-                    'attribute' => 'company',
-                    'label' => 'Company Name',
+                    'attribute' => 'companyNames',
                     'value' => function ($model) {
                         return !empty($model->companyNames) ? $model->companyNames : '';
                     }
                 ]);
                 array_push($cols, [
-                    'attribute' => 'branch',
-                    'label' => 'Branch Name',
+                    'attribute' => 'branchName',
                     'value' => function ($model) {
                         return !empty($model->branchName) ? $model->branchName : '';
                     }
@@ -46,12 +44,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 ]);
                 array_push($cols, [
-                    'attribute' => 'role',
+                    'attribute' => 'role_id',
                     'label' => 'Role',
                     'value' => function ($model) {
                         return !empty($model->user->role) ? $model->user->role->role_name : '';
                     }
                 ]);
+                if (CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+                    array_push($cols, [
+                        'attribute' => 'user_type',
+                        'label' => 'User Type',
+                        'value' => function ($model) {
+                            return !empty($model->user->type) ? Yii::$app->params['user.types'][$model->user->type] : '';
+                        },
+                        'format' => 'raw',
+                        'options' => ['width' => '200'],
+                        'filter' => \yii\bootstrap\Html::activeDropDownList($searchModel, 'user_type', ['' => 'All', '1' => 'Recruiter', '2' => 'Employeer'], ['class' => 'form-control'])
+                    ]);
+                }
                 array_push($cols, [
                     'class' => 'yii\grid\ActionColumn',
                     'contentOptions' => ['style' => 'width:5%;'],

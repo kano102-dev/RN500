@@ -724,3 +724,5 @@ VALUES ('approval', 'user-request-view');
 
 # ***********************13-April-2021************END***********
 
+ALTER TABLE `company_master`
+ADD `status` tinyint NOT NULL DEFAULT '0' COMMENT '1:approved 0:pending 2:rejected' AFTER `type`;

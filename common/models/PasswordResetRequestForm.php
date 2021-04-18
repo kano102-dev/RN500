@@ -51,34 +51,25 @@ class PasswordResetRequestForm extends Model {
 
      */
     public function sendEmail($is_welcome_mail = 0) {
-
         /* @var $user User */
-
         $user = User::findOne([
                     'email' => $this->email,
         ]);
-
-
-
         if (!$user) {
 
             return false;
         }
-
-
-
         if (!User::isPasswordResetTokenValid($user->password_reset_token)) {
 
             $user->generatePasswordResetToken();
 
             if (!$user->save()) {
-
+                echo "<pre/>";
+                print_r($user->getErrors());
+                exit;
                 return false;
             }
         }
-
-
-
         $resetLink = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['site/reset-password', 'token' => $user->password_reset_token]);
 
         $name = isset($user->fullName) ? $user->fullName : "";
@@ -90,15 +81,11 @@ class PasswordResetRequestForm extends Model {
         $textLayout = '@common/mail/passwordResetToken-text';
         $subject = 'Password reset for ' . \Yii::$app->params['senderName'];
         if ($is_welcome_mail) {
-            $htmlLayout = '@common/mail/welcomeMail-html';
-            $textLayout = '@common/mail/welcomeMail-text';
-            $subject = 'Welcome To Rn500';
+            $htmlLayout = '@common/mail/emailVerify-html';
+            $textLayout = '@common/mail/emailVerify-text';
+            $subject = 'Verify your Email ID';
         }
-        return Yii::$app
-                        ->mailer
-                        ->compose(
-                                ['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'resetLink' => $resetLink, 'name' => $name]
-                        )
+        return Yii::$app->mailer->compose(['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'resetLink' => $resetLink, 'name' => $name])
                         ->setFrom([Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                         ->setTo($this->email)
                         ->setSubject($subject)

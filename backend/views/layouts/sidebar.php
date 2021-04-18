@@ -67,6 +67,13 @@ $action = Yii::$app->controller->action->id;
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-view', Yii::$app->user->identity->id) : false
                     ],
                     [
+                        'label' => 'Employer',
+                        'url' => ['employer/index'],
+                        'icon' => 'hospital-alt',
+                        'active' => ($controller == "employer"),
+                        'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('employer-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('employer-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('employer-view', Yii::$app->user->identity->id) : false
+                    ],
+                    [
                         'label' => 'Staff Management',
                         'url' => ['staff/index'],
                         'icon' => 'user-friends',

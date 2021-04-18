@@ -1,24 +1,18 @@
 <?php
-
-
-
 /* @var $this yii\web\View */
 
 /* @var $user common\models\User */
 ?>
 
-Hello <?= $name ?>,
+Dear <?= Html::encode($name) ?>,
 
 
 
-Follow the link below to reset your password:
+Welcome to RN500.com. We create the opportunity for everyone to earn money with us. Please go through step by step tip-points to complete your profile and find new opportunities. 
 
+Once again, thank you for joining RN500.com. 
 
+Regards, 
 
-<?= $resetLink ?>
-
-
-
-Thanks,
-
-RN500
+RN500, LLC. 
+www.RN500.com

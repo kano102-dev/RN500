@@ -42,7 +42,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['company_mobile'], 'string', 'max' => 11],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type'], 'safe'],
+            [['state', 'type','status'], 'safe'],
         ];
     }
 
