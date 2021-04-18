@@ -34,14 +34,14 @@ use common\CommonFunction;
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-    <!--                                        <li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>
-                                        <li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>-->
+                                            <!--<li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>-->
+                                        <!--<li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>-->
                                         <li role="separator" class="divider"></li>
                                         <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>
                                 </li>
                             <?php } else { ?>
-                                <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/login"); ?>">Login</a></li>
+                                <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/login"); ?>">Sign In / Sign Up</a></li>
                             <?php } ?>
                         </ul>
                         <!-- Nav collapes end --> 

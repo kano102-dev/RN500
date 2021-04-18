@@ -764,3 +764,6 @@ CHANGE `company_mobile` `company_mobile` varchar(20) COLLATE 'latin1_swedish_ci'
 
 ALTER TABLE `vendor`
 CHANGE `phone` `phone` varchar(20) NOT NULL AFTER `email`;
+
+ALTER TABLE `advertisement`
+CHANGE `location_display` `location_display` tinyint NOT NULL COMMENT '1:Home Page' AFTER `is_active`;
