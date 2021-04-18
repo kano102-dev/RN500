@@ -13,6 +13,7 @@ use yii\db\Query;
 use yii\helpers\Url;
 use common\CommonFunction;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 /**
  * RoleController implements the CRUD actions for RoleMaster model.
@@ -127,11 +128,17 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         $query = new Query();
         $features = [];
         if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+            $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
             $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent'])
                     ->from('auth_item')
                     ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
                     ->all();
         } else {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
             $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent FROM  auth_assignment
 inner JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
 INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
@@ -147,7 +154,9 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
                 $permissions = explode(',', $_POST['RoleMaster']['permissions']);
                 $model->created_at = time();
                 $model->updated_at = time();
-                $model->company_id = \Yii::$app->user->identity->branch->company_id;
+                if (!empty($model->company_id)) {
+                    $model->company_id = \Yii::$app->user->identity->branch->company_id;
+                }
                 if ($model->save()) {
                     $error = 1;
                     foreach ($permissions as $value) {
@@ -179,7 +188,8 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         }
 
         return $this->render('_form', [
-                    'model' => $model, 'tree' => $tree
+                    'model' => $model, 'tree' => $tree,
+                    'companyList' => $companyList
         ]);
     }
 
@@ -197,12 +207,18 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         $query = new Query();
         $features = [];
         if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+            $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
             $features = $query->select(['auth_item.description AS desc', 'auth_item.name', 'auth_item.name AS child', 'auth_item_child.parent', 'auth_assignment.user_id'])
                     ->from('auth_item')
                     ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
                     ->leftJoin('auth_assignment', 'auth_item.name=auth_assignment.item_name AND auth_assignment.user_id="' . $model->id . '"')
                     ->all();
         } else {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
             $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent,aa.user_id FROM  auth_assignment
 INNER JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
 INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
@@ -248,7 +264,8 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         }
 
         return $this->render('_form', [
-                    'model' => $model, 'tree' => $tree
+                    'model' => $model, 'tree' => $tree,
+                    'companyList' => $companyList
         ]);
     }
 

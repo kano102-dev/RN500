@@ -36,22 +36,22 @@ class CompanyBranchController extends Controller {
                 'only' => ['index', 'view', 'create', 'update', 'get-cities', 'delete'],
                 'rules' => [
                     [
-                        'actions' => ['index','create', 'get-cities'],
+                        'actions' => ['index', 'create', 'get-cities'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                     [
-                        'actions' => ['index','update', 'get-cities'],
+                        'actions' => ['index', 'update', 'get-cities'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index', 'view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                     [
-                        'actions' => ['index','delete'],
+                        'actions' => ['index', 'delete'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ]
@@ -120,22 +120,39 @@ class CompanyBranchController extends Controller {
         $userDetailModel = new UserDetails();
         $branch_cities = $owner_cities = [];
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
+        }
+
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
 
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
             $is_success = false;
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                $companyBranchModel->company_id = Yii::$app->user->identity->branch->company_id;
+                if (empty($companyBranchModel->company_id)) {
+                    $companyBranchModel->company_id = Yii::$app->user->identity->branch->company_id;
+                }
                 $companyBranchModel->is_default = CompanyBranch::IS_DEFAULT_YES;
                 $companyBranchModel->created_at = $companyBranchModel->updated_at = CommonFunction::currentTimestamp();
                 $userDetailModel->created_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
                 if ($companyBranchModel->save()) {
                     $user = new User();
                     $user->email = $userDetailModel->email;
-                    $user->type = User::TYPE_RECRUITER;
+                    $user->type = $companyBranchModel->company->type == 1 ? User::TYPE_RECRUITER : User::TYPE_EMPLOYER;
                     $user->status = User::STATUS_PENDING;
                     $user->branch_id = $companyBranchModel->id;
-                    $user->role_id = RoleMaster::RECRUITER_OWNER;
+                    $user->role_id = $userDetailModel->role_id;
                     $user->is_owner = User::OWNER_YES;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;
@@ -165,10 +182,10 @@ class CompanyBranchController extends Controller {
 
         return $this->render('_form', [
                     'companyBranchModel' => $companyBranchModel,
-                    'states' => $states,
+                    'states' => $states, 'companyList' => $companyList,
                     'branch_cities' => $branch_cities,
                     'owner_cities' => $owner_cities,
-                    'userDetailModel' => $userDetailModel
+                    'userDetailModel' => $userDetailModel, 'roles' => $roles
         ]);
     }
 
@@ -194,8 +211,20 @@ class CompanyBranchController extends Controller {
 
         $branch_cities = ArrayHelper::map(Cities::findAll(['state_id' => $companyBranchModel->state]), 'id', 'city');
         $owner_cities = ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->state]), 'id', 'city');
-
-
+        $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
+            } else {
+                $companyList = [];
+            }
+        }
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+                    return $data->role_name . "-" . $data->company->company_name;
+                });
+        if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
+            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+        }
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
             $is_success = false;
             $transaction = Yii::$app->db->beginTransaction();
@@ -219,9 +248,9 @@ class CompanyBranchController extends Controller {
         return $this->render('_form', [
                     'companyBranchModel' => $companyBranchModel,
                     'userDetailModel' => $userDetailModel,
-                    'states' => $states,
+                    'states' => $states, 'companyList' => $companyList,
                     'branch_cities' => $branch_cities,
-                    'owner_cities' => $owner_cities,
+                    'owner_cities' => $owner_cities, 'roles' => $roles
         ]);
     }
 

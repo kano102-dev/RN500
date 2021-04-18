@@ -3,9 +3,9 @@
 return [
     'adminEmail' => 'admin@example.com',
     'supportEmail' => 'support@example.com',
-    'senderEmail' => 'info@icognicode.com',
+    'senderEmail' => 'info@rn500.com',
     'senderName' => 'RN500',
-    'user.passwordResetTokenExpire' => 3600,
+    'user.passwordResetTokenExpire' => 86400,
     'user.passwordMinLength' => 8,
     'user.types' => ['1' => 'Recruiter', '2' => 'Employeer', '3' => 'Jobseeker', '4' => 'Staff'],
     'job.payment_type' => ['1' => 'Hourly', '2' => 'Weekly', '3' => 'Monthly'],

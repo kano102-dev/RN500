@@ -3,60 +3,59 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
-use borales\extensions\phoneInput\PhoneInput;
 
-/* @var $this yii\web\View */
-/* @var companyBranchModel backend\models\CompanyBranch */
-/* @var $form yii\widgets\ActiveForm */
-$this->title = 'Branch';
+$this->title = 'Recruiter';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
-$this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "Update";
+$this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "Update";
 ?>
+
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <?php $form = ActiveForm::begin(); ?>
+
+        <?php $form = ActiveForm::begin(['id' => 'form_recruiter_signup', 'options' => []]); ?>
+
 
         <div class="col-12">
+
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Branch Detail</h3>
+                    <h3 class="card-title">Company</h3>
                 </div>
                 <div class="card-body">
-                    <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
-                        <div class="row">
-                            <div class="col-12">
-                                <?=
-                                $form->field($companyBranchModel, 'company_id')->widget(Select2::classname(), [
-                                    'data' => $companyList,
-                                    'options' => ['placeholder' => 'Select a Company'],
-                                    'pluginOptions' => [
-                                        'allowClear' => true
-                                    ],
-                                ]);
-                                ?>
-                            </div>
-                        </div>
-                    <?php } ?>
+
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'branch_name')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'street_no')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
+
+
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'street_address')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'company_mobile')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'apt')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
+
+
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($companyMasterModel, 'street_address')->textInput(['maxlength' => true]) ?>
+                        </div>
+                        <div class="col-6">
+                            <?= $form->field($companyMasterModel, 'apt')->textInput(['maxlength' => true]) ?>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-6">
                             <?=
-                            $form->field($companyBranchModel, 'state')->widget(Select2::classname(), [
+                            $form->field($companyMasterModel, 'state')->widget(Select2::classname(), [
                                 'data' => $states,
                                 'options' => ['placeholder' => 'Select a province'],
                                 'pluginOptions' => [
@@ -67,8 +66,8 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         </div>
                         <div class="col-6">
                             <?=
-                            $form->field($companyBranchModel, 'city')->widget(Select2::classname(), [
-                                'data' => $branch_cities,
+                            $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
+                                'data' => $companyMasterModel->isNewRecord ? [] : $CompanyCity,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -79,16 +78,17 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
-
                 </div>
             </div>
 
+
+
             <div class="card card-primary">
                 <div class="card-header">
-                    <h3 class="card-title">Branch Owner Details</h3>
+                    <h3 class="card-title">Company Owner Details</h3>
                 </div>
 
                 <div class="card-body">
@@ -107,13 +107,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                             <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?=
-                            $form->field($userDetailModel, 'mobile_no')->widget(PhoneInput::className(), [
-                                'jsOptions' => [
-                                    'preferredCountries' => ['us', 'in'],
-                                ]
-                            ]);
-                            ?>
+                            <?= $form->field($userDetailModel, 'mobile_no')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
 
@@ -147,7 +141,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
-                                'data' => $owner_cities,
+                                'data' => $userDetailModel->isNewRecord ? [] : $city,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -159,56 +153,40 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                             <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <?=
-                            $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
-                                'data' => $roles,
-                                'options' => ['placeholder' => 'Select a Role'],
-                                'pluginOptions' => [
-                                    'allowClear' => true
-                                ],
-                            ]);
-                            ?>
-                        </div>
-                    </div>
-
-
                 </div>
             </div>
-            <div class="form-group text text-center">
-                <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-            </div>
+
+
+
         </div>
 
+        <div class="form-group text text-center">
+            <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
+        </div>
 
         <?php ActiveForm::end(); ?>
+
+
+
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['company-branch/get-cities']);
+$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['recruiter/get-cities']);
 $script = <<< JS
-    $(document).on('change','#companybranch-state',function(){
+   $(document).on('change','#companymaster-state',function(){
         var state=$(this).val();
-        if(state){
-            $.ajax({
+       $.ajax({
                 method: 'GET',
                 url: '$getCitiesUrl',
                 data: {'id':state},
                 success: function (response) {
-                    $('#companybranch-city').html(response);
+                    $('#companymaster-city').html(response);
                 }
             });
-        }else{
-            $('#companybranch-city').html("");
-            $('#companybranch-city').val("");
-        }
-    });
-        
-    $(document).on('change','#userdetails-state',function(){
+   });
+   $(document).on('change','#userdetails-state',function(){
         var state=$(this).val();
-        if(state){
-            $.ajax({
+       $.ajax({
                 method: 'GET',
                 url: '$getCitiesUrl',
                 data: {'id':state},
@@ -216,10 +194,6 @@ $script = <<< JS
                     $('#userdetails-city').html(response);
                 }
             });
-        }else{
-            $('#userdetails-city').html("");
-            $('#userdetails-city').val("");
-        }
-    });
+   });
 JS;
 $this->registerJs($script);

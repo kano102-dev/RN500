@@ -247,6 +247,9 @@ class UserController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $model->status = $status;
             if ($model->save(false)) {
+                if ($model->status == User::STATUS_APPROVED) {
+                    CommonFunction::sendWelcomeMail($model);
+                }
                 Yii::$app->session->setFlash("success", "User verified successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong");

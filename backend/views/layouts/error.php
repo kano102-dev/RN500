@@ -25,7 +25,7 @@ $asset = ErrorAsset::register($this);
         <title><?php echo Yii::$app->params['TITLE']; ?></title>
 
         <title>Error</title>
-        <link rel="shortcut icon" href="<?= Yii::$app->urlManagerAdmin->createUrl('//'); ?>/images/favicon.ico">
+        <link rel="shortcut icon" href="<?= Yii::$app->urlManager->createUrl('//'); ?>/images/favicon.ico">
         <?php $this->head() ?>
     </head>
 

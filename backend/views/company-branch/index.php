@@ -24,17 +24,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-                        'branch_name',
-                        'street_no',
-                        'street_address',
                         [
                             'attribute' => 'company_id',
                             'value' => function ($model) {
                                 return $model->company->company_name;
                             }
                         ],
+                        'branch_name',
+                        'street_no',
+                        'street_address',
                         //'suit/apt',
-                        //'city',
+                        [
+                            'attribute' => 'city',
+                            'value' => function($model) {
+                                return !empty($model->cityRef->city) ? $model->cityRef->city : '';
+                            }
+                        ],
                         //'zip_code',
                         //'is_default',
                         //'created_at',

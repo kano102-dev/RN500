@@ -17,6 +17,7 @@ use common\models\Cities;
 use common\CommonFunction;
 use frontend\models\EmployerForm;
 use frontend\models\JobseekerForm;
+use common\models\PasswordResetRequestForm;
 
 /**
  * Site controller
@@ -40,11 +41,11 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'index', 'get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
-                        [
+                    [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -133,8 +134,6 @@ class AuthController extends Controller {
                             if ($company_branch->save()) {
                                 $user = new User();
                                 $user->email = $employer->email;
-                                $user->setPassword($employer->password);
-                                $user->original_password = $employer->password;
                                 $user->type = User::TYPE_EMPLOYER;
                                 $user->status = User::STATUS_PENDING;
                                 $user->is_owner = User::OWNER_YES;
@@ -143,8 +142,6 @@ class AuthController extends Controller {
                                     $userDetails = New UserDetails();
                                     $userDetails->scenario = 'registration';
                                     $userDetails->email = $employer->email;
-                                    $userDetails->password = $employer->password;
-                                    $userDetails->confirm_password = $employer->password;
                                     $userDetails->first_name = $employer->first_name;
                                     $userDetails->last_name = $employer->last_name;
                                     $userDetails->user_id = $user->id;
@@ -152,13 +149,20 @@ class AuthController extends Controller {
                                     $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
                                     if ($userDetails->save(false)) {
                                         $is_error = 1;
+                                        $resetPasswordModel = new PasswordResetRequestForm();
+                                        $resetPasswordModel->email = $user->email;
+                                        $is_welcome_mail = 1;
+                                        if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                            $is_error = 1;
+                                        }
+                                        CommonFunction::sendWelcomeMail($user);
                                     }
                                 }
                             }
                         }
                         if ($is_error) {
                             $transaction->commit();
-                            Yii::$app->session->setFlash("success", "You have registered successfully.");
+                            Yii::$app->session->setFlash("success", "You have registered successfully. Please check your email for verification.");
                             return $this->redirect(['login']);
                         } else {
                             $transaction->rollBack();
@@ -174,24 +178,25 @@ class AuthController extends Controller {
                     try {
                         $user = new User();
                         $user->email = $model->email;
-                        $user->setPassword($model->password);
-                        $user->original_password = $model->password;
                         $user->type = User::TYPE_JOB_SEEKER;
                         $user->status = User::STATUS_APPROVED;
                         if ($user->save()) {
                             $userDetails = New UserDetails();
                             $userDetails->scenario = 'registration';
                             $userDetails->email = $model->email;
-                            $userDetails->password = $model->password;
-                            $userDetails->confirm_password = $model->password;
                             $userDetails->first_name = $model->first_name;
                             $userDetails->last_name = $model->last_name;
                             $userDetails->user_id = $user->id;
                             $userDetails->unique_id = $model->getUniqueId();
                             $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
-                            if ($model->save(false)) {
+                            if ($userDetails->save(false)) {
                                 $transaction->commit();
-                                Yii::$app->session->setFlash("success", "You have registered successfully.");
+                                $resetPasswordModel = new PasswordResetRequestForm();
+                                $resetPasswordModel->email = $user->email;
+                                $is_welcome_mail = 1;
+                                $resetPasswordModel->sendEmail($is_welcome_mail);
+                                CommonFunction::sendWelcomeMail($user);
+                                Yii::$app->session->setFlash("success", "You have registered successfully. Please check your email for verification.");
                                 return $this->redirect(['login']);
                             } else {
                                 $transaction->rollBack();
@@ -225,75 +230,6 @@ class AuthController extends Controller {
         }
         echo $options;
         exit;
-    }
-
-    /**
-     * Requests password reset.
-     *
-     * @return mixed
-     */
-    public function actionRequestPasswordReset() {
-        $this->layout = 'main-login';
-        $model = new PasswordResetRequestForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', "Reset Password Link sent sucessfully. Ckeck your registered email id");
-
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', "something went wrong");
-            }
-        }
-
-        return $this->render('requestPasswordResetToken', [
-                    'model' => $model,
-        ]);
-    }
-
-    /**
-     * Resets password.
-     *
-     * @param string $token
-     * @return mixed
-     * @throws BadRequestHttpException
-     */
-    public function actionResetPassword($token) {
-        $this->layout = 'main-login';
-        try {
-            $model = new \common\models\ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
-        }
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'Password reset sucessfully');
-
-            return $this->goHome();
-        }
-
-        return $this->render('reset-password', [
-                    'model' => $model,
-        ]);
-    }
-
-    public function actionChangePassword() {
-        $model = new ChangePasswordForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $user = \app\models\User::findIdentity(Yii::$app->user->identity->id);
-            $user->password_hash = trim($model->new_password);
-            if ($user->save()) {
-                Yii::$app->session->setFlash('success', "Password changed successfully");
-                Yii::$app->user->logout();
-                return $this->goHome();
-            } else {
-                Yii::$app->session->setFlash('error', "Something went wrong");
-            }
-            return $this->redirect(['dashboard/index']);
-        }
-
-        return $this->render('change-password', [
-                    'model' => $model
-        ]);
     }
 
     /**

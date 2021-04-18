@@ -78,6 +78,7 @@ class CommonFunction {
         return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_EMPLOYER) ? true : false;
     }
 
+    // RETURN TRUE IF LOGGED_IN USER assign permission ELSE FALSE
     public static function checkAccess($permission, $user_id) {
         $flag = false;
         $auth = Yii::$app->authManager;
@@ -95,10 +96,31 @@ class CommonFunction {
         return $flag;
     }
 
+    // RETURN TRUE IF LOGGED_IN USER IS Super Admin ELSE FALSE
     public static function isMasterAdmin($user_id) {
         $user = User::findOne(['id' => $user_id]);
         $isAdmin = $user->is_master_admin;
         return $isAdmin;
+    }
+
+    // RETURN TRUE IF LOGGED_IN USER IS HO Admin ELSE FALSE
+    public static function isHoAdmin($user_id) {
+        $user = User::findOne(['id' => $user_id]);
+        $isHoAdmin = $user->branch->is_default == 1 && $user->is_owner == 1 ? true : false;
+        return $isHoAdmin;
+    }
+
+    // send Welcome mail
+    public static function sendWelcomeMail($user) {
+        $htmlLayout = '@common/mail/welcomeMail-html';
+        $textLayout = '@common/mail/welcomeMail-text';
+        $subject = 'Welcome To RN500';
+        $name = isset($user->fullName) ? $user->fullName : "";
+        return \Yii::$app->mailer->compose(['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'name' => $name])
+                        ->setFrom([Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
+                        ->setTo($user->email)
+                        ->setSubject($subject)
+                        ->send();
     }
 
 }
