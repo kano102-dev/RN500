@@ -20,7 +20,7 @@ class SiteController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['error','login', 'error', 'check-mail', 'reset-password', 'logout', 'index'],
+                'only' => ['error', 'login', 'error', 'check-mail', 'reset-password', 'logout', 'index'],
                 'rules' => [
                     [
                         'actions' => ['login', 'error', 'check-mail', 'reset-password'],
@@ -28,7 +28,7 @@ class SiteController extends Controller {
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['error','logout','check-mail', 'index'],
+                        'actions' => ['error', 'logout', 'check-mail', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -181,7 +181,11 @@ class SiteController extends Controller {
 
     public function actionCheckMail() {
         try {
-
+//            $resetPasswordModel = new \common\models\PasswordResetRequestForm();
+//            $resetPasswordModel->email = "ranamehulj@gmail.com";
+//            $is_welcome_mail=1;
+//            echo $resetPasswordModel->sendEmail($is_welcome_mail);exit;
+            
 //            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
 //                    ->setFrom([$to_email => 'Test Mail'])
 //                    ->setTo("dxffn3@kjjit.eu")

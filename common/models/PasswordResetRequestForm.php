@@ -64,9 +64,6 @@ class PasswordResetRequestForm extends Model {
             $user->generatePasswordResetToken();
 
             if (!$user->save()) {
-                echo "<pre/>";
-                print_r($user->getErrors());
-                exit;
                 return false;
             }
         }

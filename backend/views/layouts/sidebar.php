@@ -87,6 +87,12 @@ $action = Yii::$app->controller->action->id;
                         'active' => ($controller == "user"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-request-view', Yii::$app->user->identity->id) : false
                     ],
+                     [
+                        'label' => 'Lead Approval',
+                        'url' => ['lead/index'],
+                        'icon' => 'clipboard-check',
+                        'active' => ($controller == "lead")
+                    ],
                     [
                         'label' => 'Benefits',
                         'url' => ['/benefits'],

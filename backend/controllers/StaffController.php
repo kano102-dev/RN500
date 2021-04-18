@@ -167,15 +167,7 @@ class StaffController extends Controller {
                             $resetPasswordModel->email = $user->email;
                             $is_welcome_mail = 1;
                             if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
-                                $htmlLayout = '@common/mail/welcomeMail-html';
-                                $textLayout = '@common/mail/welcomeMail-text';
-                                $subject = 'Welcome To Rn500';
-                                $name = isset($user->fullName) ? $user->fullName : "";
-                                \Yii::$app->mailer->compose(['html' => $htmlLayout, 'text' => $textLayout], ['user' => $user, 'name' => $name])
-                                        ->setFrom([Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
-                                        ->setTo($this->email)
-                                        ->setSubject($subject)
-                                        ->send();
+                                CommonFunction::sendWelcomeMail($user);
                                 $is_error = 1;
                             }
                         }
@@ -188,9 +180,6 @@ class StaffController extends Controller {
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } catch (\Exception $ex) {
-                    echo "<pre/>";
-                    print_r($ex);
-                    exit;
                     $transaction->rollBack();
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 } finally {

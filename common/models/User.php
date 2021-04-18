@@ -48,14 +48,14 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-            [['email'], 'required'],
-            [['comment'], 'required', 'on' => 'reject'],
-            [['password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'comment'], 'safe'],
-            [['email'], 'email'],
-            ['status', 'default', 'value' => self::STATUS_PENDING],
-            ['status', 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
-            ['is_owner', 'default', 'value' => self::OWNER_NO],
-            ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
+                [['email'], 'required'],
+                [['comment'], 'required', 'on' => 'reject'],
+                [['password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'comment'], 'safe'],
+                [['email'], 'email'],
+                ['status', 'default', 'value' => self::STATUS_PENDING],
+                ['status', 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
+                ['is_owner', 'default', 'value' => self::OWNER_NO],
+                ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
         ];
     }
 

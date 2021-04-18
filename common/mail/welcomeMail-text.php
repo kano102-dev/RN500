@@ -4,7 +4,7 @@
 /* @var $user common\models\User */
 ?>
 
-Dear <?= Html::encode($name) ?>,
+Dear <?= $name ?>,
 
 
 

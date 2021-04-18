@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\CommonFunction;
 
 /**
  * This is the model class for table "company_master".
@@ -20,6 +21,7 @@ use Yii;
  * @property int $is_master
  * @property int $created_at
  * @property int $updated_at
+ * @property string $reference_no
  */
 class CompanyMaster extends \yii\db\ActiveRecord {
 
@@ -42,7 +44,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['company_mobile'], 'string', 'max' => 11],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type','status'], 'safe'],
+            [['state', 'type', 'status', 'reference_no'], 'safe'],
         ];
     }
 
@@ -65,6 +67,16 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function getUniqueReferenceNumber() {
+        $code = CommonFunction::generateRandomString(15);
+        $exits = self::find()->where(['reference_no' => $code])->one();
+        if ($exits) {
+            $this->getUniqueReferenceNumber();
+        } else {
+            return $code;
+        }
     }
 
     public function getCityRef() {
