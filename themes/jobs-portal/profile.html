@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Online Job Portal HTML</title>
+        <!-- Fav Icon -->
+        <link rel="shortcut icon" href="favicon.ico">
+
+        <!-- Owl carousel -->
+        <link href="css/owl.carousel.css" rel="stylesheet">
+
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Font Awesome -->
+        <link href="css/font-awesome.css" rel="stylesheet">
+
+        <!-- Custom Style -->
+        <link href="css/main.css" rel="stylesheet">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="js/html5shiv.min.js"></script>
+          <script src="js/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body>
+        <!-- Header start -->
+        <div class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-2 col-sm-3 col-xs-12"> <a href="index.html" class="logo"><img src="images/logo.png" alt="" /></a>
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="col-md-10 col-sm-12 col-xs-12"> 
+                        <!-- Nav start -->
+                        <div class="navbar navbar-default" role="navigation">
+                            <div class="navbar-collapse collapse" id="nav-main">
+                                <ul class="nav navbar-nav">
+                                    <li class="dropdown"><a href="index.html">Home <span class="caret"></span></a> 
+                                        <!-- dropdown start -->
+                                        <ul class="dropdown-menu">
+                                            <li><a href="index.html">Home Static Image</a></li>
+                                            <li><a href="index2.html">Home With Map</a></li>
+                                            <li><a href="index3.html">Home With Slider</a></li>
+                                        </ul>
+                                        <!-- dropdown end --> 
+                                    </li>
+                                    <li><a href="about-us.html">About us</a></li>
+                                    <li class="dropdown active"><a href="#.">Pages <span class="caret"></span></a> 
+                                        <!-- dropdown start -->
+                                        <ul class="dropdown-menu">
+                                            <li><a href="about-us.html">About Us</a></li>
+                                            <li><a href="login.html">Login</a></li>
+                                            <li><a href="register.html">Register</a></li>
+                                            <li><a href="job-listing.html">Job Listing</a></li>
+                                            <li><a href="job-detail.html">Job Detail</a></li>
+                                            <li><a href="candidate-listing.html">Candidate Listing</a></li>
+                                            <li><a href="candidate-detail.html">Candidate Detail</a></li>
+                                            <li><a href="company-detail.html">Company Profile</a></li>
+                                            <li><a href="edit-profile.html">Edit Profile</a></li>
+                                            <li class="active"><a href="post-job.html">Post a Job</a></li>
+                                            <li><a href="packages.html">Packages</a></li>
+                                            <li><a href="faqs.html">FAQs</a></li>
+                                            <li><a href="404.html">404 Page</a></li>
+                                            <li><a href="typography.html">Typography</a></li>
+                                        </ul>
+                                        <!-- dropdown end --> 
+                                    </li>
+                                    <li class="dropdown"><a href="blog.html">Blog <span class="caret"></span></a> 
+                                        <!-- dropdown start -->
+                                        <ul class="dropdown-menu">
+                                            <li><a href="blog.html">Blog List</a></li>
+                                            <li><a href="blog-detail.html">Blog Detail</a></li>
+                                            <li><a href="blog-grid.html">Blog Grid</a></li>
+                                            <li><a href="blog-full-width.html">Blog Grid Full Width</a></li>
+                                        </ul>
+                                        <!-- dropdown end --> 
+                                    </li>
+                                    <li><a href="contact-us.html">Contact</a></li>
+                                    <li class="postjob"><a href="post-job.html">Post a job</a></li>
+                                    <li class="jobseeker"><a href="candidate-listing.html">Job Seeker</a></li>
+                                    <li class="dropdown userbtn"><a href=""><img src="images/candidates/01.jpg" alt="" class="userimg" /></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+                                            <li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>
+                                            <li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>
+                                            <li role="separator" class="divider"></li>
+                                            <li><a href="#"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                                <!-- Nav collapes end --> 
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- Nav end --> 
+                    </div>
+                </div>
+                <!-- row end --> 
+            </div>
+            <!-- Header container end --> 
+        </div>
+        <!-- Header end --> 
+
+
+        <style>
+            .searchList li:hover{box-shadow: 0 5px 11px 0 rgb(0 0 0 / 18%), 0 4px 15px 0 rgb(0 0 0 / 15%);border:none;}
+            .usernavdash li a{display: flex;align-items: center;}
+            .usernavdash .fa-plus{color: #4088ff !important;font-size: 20px !important;top: 3px;}
+            .usernavdash .fa-angle-right{color: #4088ff !important;font-size: 23px !important;font-weight: bold;}
+            .usernavdash i{position: relative;color: #d9e0e8 !important; font-size: 25px !important;}
+            /*.usernavdash i span{position: absolute;left: 7px;color: #000;font-size: 14px;top: 4px;}*/
+            .round{width: 1.5rem;height: 1.5rem;justify-content: center;background: #d9e0e8;border-radius: 100%;font-size: .75rem;margin-right: 1rem;text-align: center;line-height: 23px;}
+            .font-a{position: absolute;right:10px;}
+            .range-content{background: #3ca0d6; padding: 15px;}
+            .range-content .title{font-weight: bold;font-size: 15px;color: #fff;}
+            .range-content .profile-percent{text-align: center;margin-bottom: 15px;}
+            .range-content .profile-percent a{font-weight: bold;font-size: 13px;padding: 5px; background: #263bd6;color: #fff;margin-top: 15px;}
+            .listbtn .round{float:right;float: right;position: absolute;right: 0;top: 0px;width: 2.5rem;height: 2.5rem;line-height: 38px;}
+            .searchList li .companyName a{color: #fff;}
+            .card {
+                padding-left:auto;
+                padding-right:auto;
+                border-radius: 10px;
+                /*padding: 20px;*/
+                margin-top:15px;
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+                -webkit-transition: .25s box-shadow;
+                transition: .25s box-shadow;
+            }
+            .card:focus, .card:hover {
+                box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+            }
+            .card-inverse .card-img-overlay {
+                background-color: rgba(51, 51, 51, 0.85);
+                border-color: rgba(51, 51, 51, 0.85);
+            }
+            .card-img-top{
+                margin-top:10px;
+            }
+
+            .jobinfo .card .card-header, .jobinfo .card .card-footer{display: flex;align-items: center;border-bottom: 1px solid #d4dce0;padding: 20px;}
+            .jobinfo .card .card-header .card-title{margin-bottom: 0;margin-left: 10px;}
+            .jobinfo .card .card-block{padding:20px;border-bottom: 1px solid #d4dce0;}
+            .jobinfo .card .card-header .card-icon{margin-right: 0;height: 35px;width: 35px;line-height: 2;font-size: 17px;background: #3ca0d6;}
+            .jobinfo .card .card-header .card-icon .fa{color:#fff;}
+            .action {padding: 0px 15px 0px 15px;}
+            .action .info{border-top: 1px solid black;    margin: 10px 0px 10px 0px;}
+            .action .info a{text-decoration: none;font-weight: bold;font-size: 20px;display: flex;align-items: center;}
+            .action .info a .action-icon{position: absolute;right:10px;top:5px;}
+            .action .info a .action-icon .fa-angle-right{font-weight: bold;font-size: 30px;}
+            .box-padding{padding:0 !important;}
+            .box-padding .jobinfo{padding:20px 0px 0px 20px;}
+            .box-padding .content{padding:0px 0px 0px 20px;}
+        </style>
+
+        <div class="listpgWraper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="fixed-sidebar">
+                            <div class="range-content">
+                                <p class="title">Let's Improve Your Profile !</p>
+                                <div class="profile-percent">
+                                    <a href="#" class="btn">Profile strength: 53%</a>
+                                </div>
+                                <input id="range" type="range" min="0" max="50000" >
+                            </div>
+                            <ul class="usernavdash">
+                                <li class="active"><a href="#"><div class="round">1</div> Create a NurseFly account <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                                <li><a href="#"><div class="round">2</div> Documents <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                                <li><a href="#"><div class="round">3</div> License <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                                <li><a href="#"><div class="round">4</div> Certifications <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                                <li><a href="#"><div class="round">5</div> Work experience <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                                <li><a href="#"><div class="round">6</div> Education <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                                <li><a href="#"><div class="round">7</div> About You <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                                <li><a href="#"><div class="round">8</div> Job Search<span class="round font-a"><i class="fa fa-angle-right"></i></span> </a></li>
+                                <li><a href="#"><div class="round">9</div> References<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
+                                <li><a href="#"><div class="round">10</div> Skills Checklist <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-8 col-sm-6">
+                        <div class="myads">
+                            <ul class="searchList">
+                                <!-- start -->
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-8 col-sm-8">
+                                            <div class="jobimg"><img src="images/jobs/jobimg.jpg" alt="Job Name"></div>
+                                            <div class="jobinfo">
+                                                <h5>User Name</h5>
+                                                <div class="location">User Designation</div>
+                                                <div class="companyName"><a href="#" class="btn btn-info" >Edit</a></div>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="listbtn">
+                                                <div class="round"><i class="fa fa-file"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </li>
+                                <!-- end --> 
+
+                                <!-- start -->
+                                <li>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Job Search</a></h3>
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="card-icon round"><i class="fa fa-shopping-bag"></i></div>
+                                                        <h4 class="card-title">Permanent Job Preferences</h4>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <p class="card-text">No Preferences Set</p>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <h4 class="card-title">Update Permanent Job Search Preferences</h4>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <div class="card-icon round"><i class="fa fa-file"></i></div>
+                                                        <h4 class="card-title">Travel Job Preferences</h4>
+                                                    </div>
+                                                    <div class="card-block">
+                                                        <p class="card-text">No Preferences Set</p>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <h4 class="card-title">Update Permanent Job Search Preferences</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </li>
+                                <!-- end --> 
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-8 col-sm-8">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">About You</a></h3>
+                                            </div>
+                                            <div class="content">
+                                                <p>Name</p>
+                                                <p>Discipline</p>
+                                                <p>Speciality</p>
+                                                <p>Secondary Speciality</p>
+                                                <p>Phone</p>
+                                                <p>Email</p>
+                                                <p>Last 4 of SSN</p>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-4">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+                                                <p>User Name</p>
+                                                <p>RN</p>
+                                                <p>-</p>
+                                                <p>-</p>
+                                                <p>-</p>
+                                                <p>-</p>
+                                                <p>-</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Update Information</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Work Experience</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add Work Experience</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Education</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add Education</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Licenses</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add Licenses</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Certifications</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add Certifications</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Documents</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add Documents</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">References</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add References</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+
+                                <!-- start -->
+                                <li class="box-padding">
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3><a href="#.">Skills checklist</a></h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="col-md-12 col-sm-12 col-12">
+                                            <div class="jobinfo">
+                                                <h3>&nbsp;</h3>
+                                            </div>
+                                            <div class="content">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row action">
+                                        <div class="col-md-12 col-sm-12 col-12 info">
+                                            <div class="">
+                                                <a href="#">
+                                                    <p>Add skills checklist</p>
+                                                    <div class="action-icon">
+                                                        <i class="fa fa-angle-right"></i>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <!-- end -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Footer-->
+        <div class="footerWrap">
+            <div class="container">
+                <div class="row"> 
+                    <!--About Us-->
+                    <div class="col-md-3 col-sm-12">
+                        <div class="ft-logo"><img src="images/logo.png" alt="Your alt text here"></div>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam et consequat elit. Proin molestie eros sed urna auctor lobortis. Integer eget scelerisque arcu. Pellentesque scelerisque pellentesque nisl, sit amet aliquam mi pellentesque fringilla. Ut porta augue a libero pretium laoreet. Suspendisse sit amet massa accumsan, pulvinar augue id, tristique tortor.</p>
+
+                        <!-- Social Icons -->
+                        <div class="social"> <a href="#." target="_blank"> <i class="fa fa-facebook-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-twitter-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a> </div>
+                        <!-- Social Icons end --> 
+                    </div>
+                    <!--About us End--> 
+
+                    <!--Quick Links-->
+                    <div class="col-md-2 col-sm-6">
+                        <h5>Quick Links</h5>
+                        <!--Quick Links menu Start-->
+                        <ul class="quicklinks">
+                            <li><a href="#.">Career Services</a></li>
+                            <li><a href="#.">CV Writing</a></li>
+                            <li><a href="#.">Career Resources</a></li>
+                            <li><a href="#.">Company Listings</a></li>
+                            <li><a href="#.">Success Stories</a></li>
+                            <li><a href="#.">Contact Us</a></li>
+                            <li><a href="#.">Create Account</a></li>
+                            <li><a href="#.">Post a Job</a></li>
+                            <li><a href="#.">Contact Sales</a></li>
+                        </ul>
+                    </div>
+                    <!--Quick Links menu end--> 
+
+                    <!--Jobs By Industry-->
+                    <div class="col-md-3 col-sm-6">
+                        <h5>Jobs By Industry</h5>
+                        <!--Industry menu Start-->
+                        <ul class="quicklinks">
+                            <li><a href="#.">Information Technology Jobs</a></li>
+                            <li><a href="#.">Recruitment/Employment Firms Jobs</a></li>
+                            <li><a href="#.">Education/Training Jobs</a></li>
+                            <li><a href="#.">Manufacturing Jobs</a></li>
+                            <li><a href="#.">Call Center Jobs</a></li>
+                            <li><a href="#.">N.G.O./Social Services Jobs</a></li>
+                            <li><a href="#.">BPO Jobs</a></li>
+                            <li><a href="#.">Textiles/Garments Jobs</a></li>
+                            <li><a href="#.">Telecommunication/ISP Jobs</a></li>
+                        </ul>
+                        <!--Industry menu End-->
+                        <div class="clear"></div>
+                    </div>
+
+                    <!--Latest Articles-->
+                    <div class="col-md-4 col-sm-12">
+                        <h5>Latest Articles</h5>
+                        <ul class="posts-list">
+                            <!--Article 1-->
+                            <li>
+                                <article class="post post-list">
+                                    <div class="entry-content media">
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-1.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-body">
+                                            <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
+                                            <div class="entry-content-inner">
+                                                <div class="entry-meta"> <span class="entry-date">Jan 28, 2016</span> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </li>
+                            <!--Article end 1--> 
+
+                            <!--Article 2-->
+                            <li>
+                                <article class="post post-list">
+                                    <div class="entry-content media">
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-2.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-body">
+                                            <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
+                                            <div class="entry-content-inner">
+                                                <div class="entry-meta"> <span class="entry-date">Jan 28, 2016</span> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </li>
+                            <!--Article end 2--> 
+
+                            <!--Article 3-->
+                            <li>
+                                <article class="post post-list">
+                                    <div class="entry-content media">
+                                        <div class="media-left"> <a href="#." title="" class="entry-image"> <img width="80" height="80" src="images/news-3.jpg" alt="Your alt text here"> </a> </div>
+                                        <div class="media-body">
+                                            <h4 class="entry-title"> <a href="#.">Sed fermentum at lectus nec porta.</a> </h4>
+                                            <div class="entry-content-inner">
+                                                <div class="entry-meta"> <span class="entry-date">Jan 28, 2016</span> </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </article>
+                            </li>
+                            <!--Article end 3-->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Footer end--> 
+
+        <!--Copyright-->
+        <div class="copyright">
+            <div class="container">
+                <div class="bttxt">Copyright &copy; 2017 Your Company Name. All Rights Reserved. Design by: <a href="http://graphicriver.net/user/ecreativesol" target="_blank">eCreativeSolutions</a></div>
+            </div>
+        </div>
+
+        <!-- Bootstrap's JavaScript --> 
+        <script src="js/jquery-2.1.4.min.js"></script> 
+        <script src="js/bootstrap.min.js"></script> 
+
+        <!-- Owl carousel --> 
+        <script src="js/owl.carousel.js"></script> 
+
+        <!-- Custom js --> 
+        <script src="js/script.js"></script>
+    </body>
+</html>
