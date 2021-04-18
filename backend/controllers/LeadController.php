@@ -27,7 +27,7 @@ class LeadController extends Controller {
                         [
                         'actions' => ['index', 'get-pending', 'get-approved', 'approve', 'edit'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('lead-verify', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                 ],
             ],
