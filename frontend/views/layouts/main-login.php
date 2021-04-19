@@ -25,12 +25,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
         <style>
-            .header {background: #3ca0d6;}
             .listpgWraper {background: #f9f9ff;}
-            .navbar-default .navbar-nav>.active>a{color: #fff;}
-            .navbar-default .navbar-nav>li>a{color: #fff;}
-            .navbar-nav>li>a:hover, .navbar-nav>li:hover>a, .navbar-nav>li.active>a {border-bottom-color: #26343c;}
-            .topsearchwrap h4,.topsearchwrap h5{    background: #3ca0d6;}
         </style>
     </head>
     <body>

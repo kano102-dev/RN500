@@ -2,6 +2,7 @@
 /* @var $this yii\web\View */
 
 $this->title = 'My Yii Application';
+$assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 ?>
 <style>
     .employee-details p{margin: 0 !important;font-weight: 600;}
@@ -14,6 +15,42 @@ $this->title = 'My Yii Application';
 
 
 </style>
+
+<!-- slider start -->
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+        <li data-target="#myCarousel" data-slide-to="1"></li>
+        <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner">
+        <div class="item active">
+            <img src="<?= $assetDir . "/images/1 Brooklyn_Bridge.jpg" ?>" alt="Los Angeles" style="width:100%;">
+        </div>
+
+        <div class="item">
+            <img src="<?= $assetDir . "/images/2B (1).jpg" ?>" alt="Chicago" style="width:100%;">
+        </div>
+
+        <div class="item">
+            <img src="<?= $assetDir . "/images/3BB.jpg" ?>" alt="New york" style="width:100%;">
+        </div>
+    </div>
+
+    <!-- Left and right controls -->
+    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<!-- slider End --> 
 
 <!-- How it Works start -->
 <div class="section howitwrap">
@@ -311,36 +348,36 @@ $this->title = 'My Yii Application';
 <!--<div class="listpgWraper">
     <div class="container"> -->
 
-        <!-- Page Title start -->
-        <!--        <div class="pageSearch pageSearch-new">
-                    <div class="row">
-                        <div class="col-md-3">
-                            <div class="sidebar sidebar-new">
-                                <p>My Profile</p>
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="sidebar sidebar-new">
-                                <p>Make sure your Profile is up to date. This will help to find job faster. </p>
-                            </div>
-                        </div>
+<!-- Page Title start -->
+<!--        <div class="pageSearch pageSearch-new">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sidebar sidebar-new">
+                        <p>My Profile</p>
                     </div>
-                </div> -->
-        <!--        <div class="row">
-                    <div class="col-md-3 col-sm-12"> 
-                        <div class="sidebar">
-                            <div class="gad">
-                                <p>XX New Jobs</p>
-                                <p>Posted in last X days</p>
-                                <p>XX State Jobs</p>
-                                <p>Posted in last X days</p>
-                            </div>
-                            <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
-                            <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
-                            <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
-                            <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
-                        </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="sidebar sidebar-new">
+                        <p>Make sure your Profile is up to date. This will help to find job faster. </p>
                     </div>
-                </div>-->
+                </div>
+            </div>
+        </div> -->
+<!--        <div class="row">
+            <div class="col-md-3 col-sm-12"> 
+                <div class="sidebar">
+                    <div class="gad">
+                        <p>XX New Jobs</p>
+                        <p>Posted in last X days</p>
+                        <p>XX State Jobs</p>
+                        <p>Posted in last X days</p>
+                    </div>
+                    <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
+                    <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
+                    <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
+                    <div class="gad"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/540x540-376x376.png" alt="your alt text" /></div>
+                </div>
+            </div>
+        </div>-->
 <!--    </div>
 </div>-->
