@@ -23,12 +23,13 @@ use common\CommonFunction;
                         <ul class="nav navbar-nav">
                             <li class="active"><a href="<?= Yii::$app->urlManager->createUrl("/"); ?>">Home</a> 
                             </li>
-<!--                            <li><a href="<?= $assetDir ?>/about-us.html">About us</a></li>
-                            <li><a href="<?= $assetDir ?>/contact-us.html">Contact</a></li>-->
+                            <li><a href="">About us</a></li>
+                            <li><a href="">Contact</a></li>
+                            <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
                             <?php if (CommonFunction::isEmployer()) { ?>
                                 <li class="postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
-<!--<li class="jobseeker"><a href="<?= $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
+                            <!--<li class="jobseeker"><a href="<?php // echo $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
 
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
