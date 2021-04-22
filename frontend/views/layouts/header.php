@@ -7,7 +7,18 @@
 
 use common\CommonFunction;
 ?>
+
+<style>
+    .top-content{position: absolute;top: 20px;right: 30px;}
+    .top-content p{font-size: 15px;font-weight: 600;color: black;}
+    
+    @media (max-width:767px){
+        .top-content{display: none}
+    }
+</style>
+
 <div class="header">
+    <!--<div class="top-content"><p>One million success stories. Start yours today.</p></div>-->
     <div class="container">
         <div class="row">
             <div class="col-md-2 col-sm-3 col-xs-12"> <a href="<?= Yii::$app->urlManager->createUrl("/"); ?>" class="logo"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></a>
@@ -26,6 +37,7 @@ use common\CommonFunction;
                             <li><a href="">About us</a></li>
                             <li><a href="">Contact</a></li>
                             <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
+                            <li><a href="<?= Yii::$app->urlManager->createUrl("/site/job-seeker/"); ?>">Profile</a></li>
                             <?php if (CommonFunction::isEmployer()) { ?>
                                 <li class="postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>

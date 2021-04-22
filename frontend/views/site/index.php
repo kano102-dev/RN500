@@ -12,7 +12,8 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     /* fix blank or flashing items on carousel */
     .owl-carousel .item {position: relative;z-index: 100; -webkit-backface-visibility: hidden;text-align: center;margin-bottom: 25px}
     .owl-carousel .owl-nav{display: none}
-
+    .searchbar .form-control{    border: 2px solid #3ca0d6;}
+    .searchbar{margin-left: 2rem}
 
 </style>
 
@@ -52,10 +53,36 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 </div>
 <!-- slider End --> 
 
+<div class="container">
+    <div class="searchbar row">
+        <div class="col-md-12 col-sm-12 col-12"> 
+            <div class="carousel-wrap">
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" placeholder="Search Open Jobs" />
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control" placeholder="City" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control" placeholder="State" />
+                </div>
+                <div class="col-sm-2">
+                    <input type="submit" class="btn" value="Search Job">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
 <!-- How it Works start -->
 <div class="section howitwrap">
     <div class="container"> 
         <div class="row">
+
+
+
             <div class="col-md-12 col-sm-12 col-12"> 
                 <div class="carousel-wrap">
                     <div class="owl-carousel">
