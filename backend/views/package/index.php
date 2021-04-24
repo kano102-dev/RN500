@@ -27,7 +27,41 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         'title',
-                        ['class' => 'yii\grid\ActionColumn'],
+                        'price',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($data) {
+                                return $data->status == 1 ? 'Active' : 'Inactive';
+                            },
+                            'format' => 'raw',
+                            'options' => ['width' => '200'],
+                            'filter' => \yii\bootstrap\Html::activeDropDownList($searchModel, 'status', ['1' => 'Active', '2' => 'Inactive'], ['class' => 'form-control','prompt'=>'Select'])
+                        ],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['style' => 'width:5%;'],
+                            'header' => 'Actions',
+                            'template' => '{view} {update}',
+                            'buttons' => [
+                                //view button
+                                'view' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                                'update' => function ($url, $model) {
+                                    if ($model->id != 1) {
+                                        return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                                    'data-pjax' => 0,
+                                                    'title' => Yii::t('app', 'Update'),
+                                                    'class' => 'btn btn-primary btn-xs',
+                                        ]);
+                                    }
+                                },
+                            ],
+                        ],
                     ],
                 ]);
                 ?>

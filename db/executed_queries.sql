@@ -767,3 +767,13 @@ CHANGE `phone` `phone` varchar(20) NOT NULL AFTER `email`;
 
 ALTER TABLE `advertisement`
 CHANGE `location_display` `location_display` tinyint NOT NULL COMMENT '1:Home Page' AFTER `is_active`;
+
+ALTER TABLE `package_master`
+ADD `price` float NOT NULL AFTER `title`;
+
+ALTER TABLE `package_master`
+ADD `created_at` int(11) NOT NULL,
+ADD `updated_at` int(11) NOT NULL AFTER `created_at`,
+ADD `created_by` int(11) NOT NULL AFTER `updated_at`,
+ADD `updated_by` int(11) NOT NULL AFTER `created_by`;
+
