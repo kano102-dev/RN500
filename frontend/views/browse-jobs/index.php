@@ -14,6 +14,10 @@ use common\CommonFunction;
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 ?>
+<style>
+    .browse-jobs li p {line-height: 22px;color: #333;margin: 0;font-weight: 600}
+</style>
+
 <!-- Page Title start -->
 <div class="pageTitle">
     <div class="container">
@@ -191,33 +195,46 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
             </div>
             <div class="col-md-9 col-sm-12"> 
                 <!-- Search List -->
-                <ul class="searchList">
+                <ul class="searchList browse-jobs">
                     <?php foreach ($models as $model) { ?>
                         <!-- Candidate -->
                         <li>
                             <div class="row">
-                                <div class="col-md-5 col-sm-5">
+                                <div class="col-md-4 col-sm-4">
                                     <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Candidate Name" /></div>
                                     <div class="jobinfo">
                                         <h3><a href="#."><?= $model->title ?></a></h3>
-                                        <div class="location"> New York City, New York</div>
+                                        <div class="companyName">Staffing Company</div>
+                                        <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
+                                        <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="minsalary">$<?= $model->jobseeker_payment ?> <span>/ <?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></span></div>
+                                <div class="col-md-4 col-sm-4 employee-details">
+                                    <p><?= $model->title ?></p>
+                                    <p>New York City, New York</p>
+                                    <p>Posted X days ago</p>
+                                    <p>Benefits starts from Day 1</p>
+                                    <p>Employee Assistance</p>
+                                </div>
+                                <div class="col-md-4 col-sm-4 employee-details">
+                                    <p>$XX – XX/hour OR</p>
+                                    <p><?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                    <p>$ <?= $model->jobseeker_payment ?></p>
+                                    <p><?= Yii::$app->params['job.type'][$model->job_type] ?></p>
+
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9 col-sm-9">
+                                    <p>&nbsp;</p>
+                                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp <span>Description :</span><?= $model->description ?></p>
+
                                 </div>
                                 <div class="col-md-3 col-sm-3">
                                     <div class="listbtn"><a href="#.">View Profile</a></div>
                                 </div>
                             </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-md-5 col-sm-5">
-                                   <b>Job Type:-</b><?= Yii::$app->params['job.type'][$model->job_type] ?>
-                                </div>
-                            </div>
-                            <p><?= $model->description ?></p>
                         </li>
                     <?php } ?>
                 </ul>
