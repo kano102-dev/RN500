@@ -56,7 +56,7 @@ class BrowseJobsController extends Controller {
 
     public function actionIndex() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch']);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status'=> LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
@@ -106,7 +106,7 @@ class BrowseJobsController extends Controller {
 
     public function actionRecruiterLead() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch']);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status'=> LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
