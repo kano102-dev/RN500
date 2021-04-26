@@ -8,13 +8,8 @@ use yii\helpers\Html;
 
 ?>
 <div class="login-otp">
-    <p>Hello ,</p>
-
     <br/>
-    <p> This is in response to your request for One Time Password (OTP) for your account to login </p> 
-    <br/><br/>
-
-    OTP: <?php echo $otp ?>
+    <p> Your RN500 Verification Code is:  <?php echo $otp ?></p> 
     <br/><br/><br/><br/>
     Regards,
 </div>

@@ -109,6 +109,7 @@ class SiteController extends Controller {
     }
     
     public function actionJobSeeker() {
+        
         return $this->render('job-seeker');
     }
     

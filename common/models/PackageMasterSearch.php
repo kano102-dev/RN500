@@ -9,24 +9,22 @@ use common\models\PackageMaster;
 /**
  * PackageMasterSearch represents the model behind the search form of `backend\Models\PackageMaster`.
  */
-class PackageMasterSearch extends PackageMaster
-{
+class PackageMasterSearch extends PackageMaster {
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'status'], 'integer'],
-            [['title'], 'safe'],
+            [['title', 'price'], 'safe'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,8 +36,7 @@ class PackageMasterSearch extends PackageMaster
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = PackageMaster::find();
 
         // add conditions that should always apply here
@@ -60,10 +57,12 @@ class PackageMasterSearch extends PackageMaster
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
+            'price' => $this->price,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title]);
 
         return $dataProvider;
     }
+
 }

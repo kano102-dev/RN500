@@ -63,13 +63,14 @@ class LoginForm extends Model {
     }
 
     public function sendOTP() {
+        $user = $this->getUser();
         if (!$this->otp) {
             $otp_generated = CommonFunction::generateOTP(6);
             $otp_request = new OtpRequest();
             $otp_request->otp = $otp_generated;
             $otp_request->is_verified = 0;
             $otp_request->created_at = $otp_request->updated_at = CommonFunction::currentTimestamp();
-            $otp_request->user_id = ($this->_user) ? $this->_user->id : 0;
+            $otp_request->user_id = !empty($user) ? $user->id : 0;
             if ($otp_request->save() && $this->sendOTPMail($otp_generated)) {
                 $this->is_otp_sent = true;
             } else {
@@ -82,13 +83,14 @@ class LoginForm extends Model {
     }
 
     public function sendOTPMail($otp) {
-        if ($this->_user) {
-            $to_email = $this->_user->email;
+        $user = $this->getUser();
+        if (!empty($user)) {
+            $to_email = $user->email;
             try {
                 return $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
                         ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                         ->setTo($to_email)
-                        ->setSubject('One Time Password (OTP) ')
+                        ->setSubject('RN500 Verification Code')
                         ->send();
             } catch (\Exception $ex) {
                 return false;
@@ -97,8 +99,9 @@ class LoginForm extends Model {
     }
 
     public function OTPVerified() {
+        $user = $this->getUser();
         if ($otp = $this->otp) {
-            $sent_otp_detail = OtpRequest::find()->where(['user_id' => $this->_user->id, 'is_verified' => OtpRequest::STATUS_NOT_VERIFIED, 'otp' => $otp])->orderBy("id desc")->one();
+            $sent_otp_detail = OtpRequest::find()->where(['user_id' => $user->id, 'is_verified' => OtpRequest::STATUS_NOT_VERIFIED, 'otp' => $otp])->orderBy("id desc")->one();
             if (!empty($sent_otp_detail) || $otp == '111111') {
                 if (!empty($sent_otp_detail)) {
 

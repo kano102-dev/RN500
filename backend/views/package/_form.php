@@ -18,6 +18,14 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
             <div class="col-6">
                 <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
             </div>
+            <div class="col-6">
+                <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6">
+                <?= $form->field($model, 'status')->dropDownList([1 => 'Active', 2 => 'Inactive'], ['prompt' => 'Select']) ?>
+            </div>
         </div>
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
