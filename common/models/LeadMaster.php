@@ -35,7 +35,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public $disciplines;
     public $benefits;
     public $specialies;
-    
+
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
 
@@ -51,15 +51,15 @@ class LeadMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
-                [['description'], 'string'],
-                [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-                [['jobseeker_payment',], 'number'],
-                [['title'], 'string', 'max' => 250],
-                [['reference_no'], 'string', 'max' => 50],
-                [['comment'], 'string', 'max' => 500],
-                [['reference_no'], 'unique'],
-                [['branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
+            [['title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
+            [['description'], 'string'],
+            [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['jobseeker_payment',], 'number'],
+            [['title'], 'string', 'max' => 250],
+            [['reference_no'], 'string', 'max' => 50],
+            [['comment'], 'string', 'max' => 500],
+            [['reference_no'], 'unique'],
+            [['approved_at','branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
         ];
     }
 
@@ -100,6 +100,22 @@ class LeadMaster extends \yii\db\ActiveRecord {
         } else {
             return $code;
         }
+    }
+
+    public function getBenefits() {
+        return $this->hasMany(LeadBenefit::className(), ['lead_id' => 'id']);
+    }
+
+    public function getDisciplines() {
+        return $this->hasMany(LeadDiscipline::className(), ['lead_id' => 'id']);
+    }
+
+    public function getSpecialty() {
+        return $this->hasMany(LeadSpeciality::className(), ['lead_id' => 'id']);
+    }
+
+    public function getBranch() {
+        return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
     }
 
 }

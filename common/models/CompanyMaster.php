@@ -27,6 +27,10 @@ use borales\extensions\phoneInput\PhoneInputValidator;
 class CompanyMaster extends \yii\db\ActiveRecord {
 
     public $state;
+    const PRIORITY_HIGH= 1;
+    const PRIORITY_MODRATE= 2;
+    const PRIORITY_SEMIMODRATE= 3;
+    const PRIORITY_LOW= 4;
 
     public static function tableName() {
         return 'company_master';

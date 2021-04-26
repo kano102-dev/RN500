@@ -5,6 +5,8 @@ use yii\bootstrap4\ActiveForm;
 use kartik\select2\Select2;
 use kartik\date\DatePicker;
 use common\CommonFunction;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -110,38 +112,35 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                         <div class="widget">
                             <h4 class="widget-title">Location</h4>
                             <ul class="optionlist">
-                                <li>
-                                    <input type="checkbox" name="checkname" id="infotech" />
-                                    <label for="infotech"></label>
-                                    Information Technology
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="checkname" id="advertise" />
-                                    <label for="advertise"></label>
-                                    Advertising/PR
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="checkname" id="services" />
-                                    <label for="services"></label>
-                                    Services
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="checkname" id="health" />
-                                    <label for="health"></label>
-                                    Health & Fitness
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="checkname" id="mediacomm" />
-                                    <label for="mediacomm"></label>
-                                    Media/Communications
-                                </li>
-                                <li>
-                                    <input type="checkbox" name="checkname" id="fashion" />
-                                    <label for="fashion"></label>
-                                    Fashion
-                                </li>
+                                <?php
+                                $url = Url::to(['browse-jobs/get-cities']);
+                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                                echo Select2::widget([
+                                    'name' => 'location',
+//                                    'value' => isset($_GET['location']) ? $_GET['location'] : [],
+//                                    'data' => isset($data) && !empty($data) ? $data : [],
+                                    'options' => [
+                                        'id' => 'select_location',
+                                        'placeholder' => 'Select Location...',
+                                        'multiple' => true,
+                                        'class' => ''
+                                    ],
+                                    'pluginOptions' => [
+                                        'allowClear' => true,
+                                        'minimumInputLength' => 1,
+                                        'ajax' => [
+                                            'url' => $url,
+                                            'dataType' => 'json',
+                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                                        ],
+                                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                                    ],
+                                ]);
+                                ?>
                             </ul>
-                            <a href="#.">View More</a> </div>
+                        </div>
 
                         <!-- Top Benefits -->
                         <div class="widget" id="benefit-widget">
@@ -155,32 +154,56 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <h4 class="widget-title">Salary Range</h4>
                             <ul class="optionlist">
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price1" />
+                                    <?php if (isset($_GET['salary']) && in_array(1, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="1" checked id="price1" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="1" id="price1" />
+                                    <?php } ?>
                                     <label for="price1"></label>
                                     0 to $100
                                 </li>
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price2" />
+                                    <?php if (isset($_GET['salary']) && in_array(2, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="2" checked id="price2" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="2" id="price2" />
+                                    <?php } ?>
                                     <label for="price2"></label>
                                     $100 to $199
                                 </li>
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price3" />
+                                    <?php if (isset($_GET['salary']) && in_array(3, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="3" checked id="price3" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="3" id="price3" />
+                                    <?php } ?>
                                     <label for="price3"></label>
                                     $199 to $499
                                 </li>
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price4" />
+                                    <?php if (isset($_GET['salary']) && in_array(4, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="4" checked id="price4" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="4" id="price4" />
+                                    <?php } ?>
                                     <label for="price4"></label>
                                     $499 to $999
                                 </li>
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price5" />
+                                    <?php if (isset($_GET['salary']) && in_array(5, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="5" checked id="price5" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="5" id="price5" />
+                                    <?php } ?>
                                     <label for="price5"></label>
                                     $999 to $4999
                                 </li>
                                 <li>
-                                    <input type="checkbox" name="checkname" id="price6" />
+                                    <?php if (isset($_GET['salary']) && in_array(6, $_GET['salary'])) { ?>
+                                        <input type="checkbox" name="salary[]" value="6" checked id="price6" />
+                                    <?php } else { ?>
+                                        <input type="checkbox" name="salary[]" value="6" id="price6" />
+                                    <?php } ?>
                                     <label for="price6"></label>
                                     Above $4999
                                 </li>
@@ -201,34 +224,34 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                         <li>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Candidate Name" /></div>
+                                    <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Candidate Name" /></div><br/><br/>
                                     <div class="jobinfo">
-                                        <h3><a href="#."><?= $model->title ?></a></h3>
-                                        <div class="companyName">Staffing Company</div>
-                                        <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
+                                        <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
                                         <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="col-md-4 col-sm-4 employee-details">
-                                    <p><?= $model->title ?></p>
+                                    <h3><a href="#."><?= $model->title ?></a></h3>
                                     <p>New York City, New York</p>
-                                    <p>Posted X days ago</p>
+                                    <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
                                     <p>Benefits starts from Day 1</p>
-                                    <p>Employee Assistance</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 employee-details">
-                                    <p>$XX – XX/hour OR</p>
-                                    <p><?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
-                                    <p>$ <?= $model->jobseeker_payment ?></p>
-                                    <p><?= Yii::$app->params['job.type'][$model->job_type] ?></p>
-
+                                    <p>Estimated Pay: $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                    <br/>
+                                    <p>Response Time: within a day</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-9 col-sm-9">
                                     <p>&nbsp;</p>
-                                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp <span>Description :</span><?= $model->description ?></p>
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                    </div><br/>
+                                    <div><span>Description :</span><?= $model->description ?></div><br/>
 
                                 </div>
                                 <div class="col-md-3 col-sm-3">
@@ -236,7 +259,12 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                 </div>
                             </div>
                         </li>
-                    <?php } ?>
+                        <?php
+                    }
+                    if (count($models) <= 0) {
+                        echo "<h1>No Record Found</h1>";
+                    }
+                    ?>
                 </ul>
 
                 <!-- Pagination Start -->

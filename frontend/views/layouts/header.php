@@ -11,7 +11,7 @@ use common\CommonFunction;
 <style>
     .top-content{position: absolute;top: 20px;right: 30px;}
     .top-content p{font-size: 15px;font-weight: 600;color: black;}
-    
+
     @media (max-width:767px){
         .top-content{display: none}
     }
@@ -37,18 +37,19 @@ use common\CommonFunction;
                             <li><a href="">About us</a></li>
                             <li><a href="">Contact</a></li>
                             <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
-                            <li><a href="<?= Yii::$app->urlManager->createUrl("/site/job-seeker/"); ?>">Profile</a></li>
+                            <?php if (CommonFunction::isRecruiter()) { ?>
+                                <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
+                            <?php } ?>
                             <?php if (CommonFunction::isEmployer()) { ?>
                                 <li class="postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
-                            <!--<li class="jobseeker"><a href="<?php // echo $assetDir ?>/candidate-listing.html">Job Seeker</a></li>-->
+                    <!--<li class="jobseeker"><a href="<?php // echo $assetDir   ?>/candidate-listing.html">Job Seeker</a></li>-->
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
 
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-                                            <!--<li><a href="#"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profilt</a></li>-->
-                                        <!--<li><a href="#"><i class="fa fa-briefcase" aria-hidden="true"></i> My Jobs</a></li>-->
+                                        <li><a href="<?= Yii::$app->urlManager->createUrl("/site/job-seeker/"); ?>">Profile</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>

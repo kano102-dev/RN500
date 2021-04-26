@@ -777,3 +777,5 @@ ADD `updated_at` int(11) NOT NULL AFTER `created_at`,
 ADD `created_by` int(11) NOT NULL AFTER `updated_at`,
 ADD `updated_by` int(11) NOT NULL AFTER `created_by`;
 
+ALTER TABLE `lead_master`
+ADD `approved_at` int(11) NULL AFTER `updated_at`

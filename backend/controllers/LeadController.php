@@ -24,7 +24,7 @@ class LeadController extends Controller {
                 'class' => \yii\filters\AccessControl::className(),
                 'only' => ['index', 'get-pending', 'get-approved', 'approve', 'edit'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['index', 'get-pending', 'get-approved', 'approve', 'edit'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -73,7 +73,7 @@ class LeadController extends Controller {
 
         if (isset($search) && $search != "") {
             $dataProvider->query->andWhere(['OR', ['like', 'title', $search],
-                    ['like', 'reference_no', $search],
+                ['like', 'reference_no', $search],
             ]);
         }
 
@@ -123,7 +123,7 @@ class LeadController extends Controller {
         $dataProvider = $searchModel->searchApproved(Yii::$app->request->queryParams);
         if (isset($search) && $search != "") {
             $dataProvider->query->andWhere(['OR', ['like', 'title', $search],
-                    ['like', 'reference_no', $search],
+                ['like', 'reference_no', $search],
             ]);
         }
 
@@ -155,7 +155,7 @@ class LeadController extends Controller {
         $model = LeadMaster::findOne(['id' => $id]);
         if ($model->load(Yii::$app->request->post())) {
             $model->status = LeadMaster::STATUS_APPROVED;
-            $model->updated_at = CommonFunction::currentTimestamp();
+            $model->updated_at = $model->approved_at = CommonFunction::currentTimestamp();
             $model->updated_by = Yii::$app->user->identity->id;
             if ($model->save(false)) {
                 Yii::$app->session->setFlash("success", "Lead approved successfully.");
