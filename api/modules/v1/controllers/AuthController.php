@@ -10,6 +10,10 @@ use api\modules\v1\components\Controller;
 use Firebase\JWT\JWT;
 use common\models\OtpRequest;
 use common\models\LoginForm;
+use frontend\models\JobseekerForm;
+use common\models\UserDetails;
+use common\models\PasswordResetRequestForm;
+use common\CommonFunction;
 
 /**
  * Company Controller API
@@ -21,7 +25,7 @@ class AuthController extends Controller {
     public function actionLogin() {
         $data = [];
         $code = 201;
-        $msg = "Required parameter missing";
+        $msg = "Required Data Missing in Request.";
         $request = Yii::$app->request->post();
         try {
             if (isset($request["email"]) && isset($request['password']) && !empty($request["email"]) && !empty($request["password"])) {
@@ -36,7 +40,7 @@ class AuthController extends Controller {
                             $jwtToken = $this->generateJWTtoken($user);
                             $code = 200;
                             $msg = "You have successfully Logged In!";
-                            $data = ['token' => $jwtToken];
+                            $data = ['token' => $jwtToken, 'first_name' => $user->details->first_name, 'last_name' => $user->details->last_name, 'email' => $user->email];
                         } else {
                             $code = 202;
                             $msg = "Invalid OTP.";
@@ -56,7 +60,7 @@ class AuthController extends Controller {
             $msg = "Internal server error";
             $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
         }
-        $response = Json::encode(['code' => $code, 'msg' => $msg, (count($data) > 0) ? $data : new \yii\base\Object]);
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
         echo $response;
         exit;
     }
@@ -88,7 +92,7 @@ class AuthController extends Controller {
             $msg = "Internal server error";
             $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
         }
-        $response = Json::encode(['code' => $code, 'msg' => $msg, (count($data) > 0) ? $data : new \yii\base\Object]);
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
         echo $response;
         exit;
     }
@@ -97,12 +101,71 @@ class AuthController extends Controller {
         $key = Yii::$app->params['jwtTokenInfo']["key"];
         $token = array(
             "id" => $user->id,
+            "email" => $user->email,
             "encPID" => (string) $user->id,
             "randomString" => \common\CommonFunction::generateRandomString(32),
             "iat" => time(),
-            "exp" => time(),
+            "exp" => strtotime(Yii::$app->params['session_expire'], strtotime('now')),
         );
         return JWT::encode($token, $key);
+    }
+
+    public function actionRegistration() {
+        $data = [];
+        $code = 201;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        if (isset($request["email"]) && isset($request['first_name']) && isset($request['last_name']) && !empty($request["email"]) && !empty($request["first_name"]) && !empty($request["last_name"])) {
+            $model = new JobseekerForm();
+            $model->email = $request["email"];
+            $model->first_name = $request["first_name"];
+            $model->last_name = $request['last_name'];
+            if ($model->validate()) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    $user = new User();
+                    $user->email = $model->email;
+                    $user->type = User::TYPE_JOB_SEEKER;
+                    $user->status = User::STATUS_APPROVED;
+                    if ($user->save()) {
+                        $userDetails = New UserDetails();
+                        $userDetails->scenario = 'registration';
+                        $userDetails->email = $model->email;
+                        $userDetails->first_name = $model->first_name;
+                        $userDetails->last_name = $model->last_name;
+                        $userDetails->user_id = $user->id;
+                        $userDetails->unique_id = $model->getUniqueId();
+                        $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
+                        if ($userDetails->save(false)) {
+                            $transaction->commit();
+                            $resetPasswordModel = new PasswordResetRequestForm();
+                            $resetPasswordModel->email = $user->email;
+                            $is_welcome_mail = 1;
+                            $resetPasswordModel->sendEmail($is_welcome_mail);
+                            CommonFunction::sendWelcomeMail($user);
+                            $code = 200;
+                            $msg = "You have registered successfully. Please check your email for verification.";
+                        } else {
+                            $transaction->rollBack();
+                            $code = 202;
+                            $msg = "Something went wrong.";
+                        }
+                    } else {
+                        $transaction->rollBack();
+                        $code = 202;
+                        $msg = "Something went wrong.";
+                    }
+                } catch (\Exception $exc) {
+                    $transaction->rollBack();
+                    $code = 500;
+                    $msg = "Internal server error";
+                    $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+                }
+            }
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
     }
 
 }

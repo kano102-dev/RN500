@@ -28,12 +28,10 @@ use common\CommonFunction;
                 <h5>Quick Links</h5>
                 <!--Quick Links menu Start-->
                 <ul class="quicklinks">
-                    <li><a href="#.">Search your Job</a></li>
-                    <li><a href="#.">Job Listing</a></li>
-                    <li><a href="#.">Success Stories</a></li>
-                    <li><a href="#.">Post a Job</a></li>
-                    <li><a href="#.">Contact Sales</a></li>
-                    <li><a href="#.">Contact Us</a></li>                    
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Search your Job</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Job Listing</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a Job</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("site/contact-us"); ?>">Contact Us</a></li>                    
                 </ul>
             </div>
             <!--Quick Links menu end--> 
@@ -42,10 +40,10 @@ use common\CommonFunction;
             <div class="col-md-3 col-sm-6">
                 <!--Industry menu Start-->
                 <ul class="quicklinks">
-                    <li><a href="#.">Jobs by Specialty</a></li>
-                    <li><a href="#.">Jobs by Disciptline</a></li>
-                    <li><a href="#.">Jobs by Benefits</a></li>
-                    <li><a href="#.">Jobs by Locations</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Jobs by Specialty</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Jobs by Disciptline</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Jobs by Benefits</a></li>
+                    <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Jobs by Locations</a></li>
                 </ul>
                 <!--Industry menu End-->
                 <div class="clear"></div>

@@ -224,7 +224,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                         <li>
                             <div class="row">
                                 <div class="col-md-4 col-sm-4">
-                                    <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Candidate Name" /></div><br/><br/>
+                                    <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></div><br/><br/>
                                     <div class="jobinfo">
                                         <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
                                         <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->

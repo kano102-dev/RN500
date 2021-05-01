@@ -779,3 +779,29 @@ ADD `updated_by` int(11) NOT NULL AFTER `created_by`;
 
 ALTER TABLE `lead_master`
 ADD `approved_at` int(11) NULL AFTER `updated_at`
+
+CREATE TABLE `mobile_version_master` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `device_type` varchar(250) NOT NULL,
+  `version` varchar(250) NOT NULL,
+  `force_update` tinyint NOT NULL DEFAULT '0' COMMENT '1:yes 0:no',
+  `created_at` timestamp NOT NULL,
+  `updated_at` timestamp NOT NULL
+);
+
+INSERT INTO `mobile_version_master` (`device_type`, `version`, `force_update`, `created_at`, `updated_at`)
+VALUES ('android', '1.0.0', '0', now(), now());
+
+INSERT INTO `mobile_version_master` (`device_type`, `version`, `force_update`, `created_at`, `updated_at`)
+VALUES ('ios', '1.0.0', '0', now(), now());
+
+ALTER TABLE `company_subscription_payment`
+DROP `payment_type`,
+ADD `payment_response` text NULL AFTER `lead_id`,
+ADD `customer_transaction_id` text NULL AFTER `payment_response`;
+
+ALTER TABLE `company_subscription_payment`
+ADD `status` tinyint NULL COMMENT '1: success 2:fail' AFTER `customer_transaction_id`;
+
+ALTER TABLE `company_subscription_payment`
+CHANGE `status` `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1: success 2:fail' AFTER `customer_transaction_id`;

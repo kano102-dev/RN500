@@ -32,11 +32,12 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','recruiter-lead'],
+                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
                 'rules' => [
                     [
-                        'actions' => ['index'],
-                        'allow' => true
+                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
+                        'allow' => true,
+                        'roles' => ['*']
                     ],
                     [
                         'actions' => ['recruiter-lead'],
@@ -56,7 +57,7 @@ class BrowseJobsController extends Controller {
 
     public function actionIndex() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status'=> LeadMaster::STATUS_APPROVED]);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
@@ -106,7 +107,7 @@ class BrowseJobsController extends Controller {
 
     public function actionRecruiterLead() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status'=> LeadMaster::STATUS_APPROVED]);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }

@@ -17,6 +17,10 @@ use Yii;
  */
 class CompanySubscriptionPayment extends \yii\db\ActiveRecord
 {
+    const STATUS_PENDING=0;
+    const STATUS_SUCCESS=1;
+    const STATUS_Fail=2;
+    
     /**
      * {@inheritdoc}
      */
@@ -31,8 +35,9 @@ class CompanySubscriptionPayment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['subscription_id', 'amount', 'payment_type', 'created_at', 'updated_at'], 'required'],
-            [['subscription_id', 'amount', 'payment_type', 'lead_id', 'created_at', 'updated_at'], 'integer'],
+            [['subscription_id', 'amount', 'created_at', 'updated_at'], 'required'],
+            [['subscription_id', 'amount', 'lead_id', 'created_at', 'updated_at'], 'integer'],
+            [['payment_response','customer_transaction_id','status'], 'safe'],
         ];
     }
 
@@ -45,7 +50,9 @@ class CompanySubscriptionPayment extends \yii\db\ActiveRecord
             'id' => 'ID',
             'subscription_id' => 'Subscription ID',
             'amount' => 'Amount',
-            'payment_type' => 'Payment Type',
+            'status' => 'Status',
+            'payment_response' => 'Payment Response',
+            'customer_transaction_id' => 'Transaction ID',
             'lead_id' => 'Lead ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

@@ -25,7 +25,9 @@
         "yii2mod/yii2-rbac": "*",
         "borales/yii2-phone-input": "*",
         "stripe/stripe-php": "^7.77",
-        "firebase/php-jwt": "^5.2"
+        "firebase/php-jwt": "^5.2",
+        "intercom/intercom-php": "^4.4",
+        "php-http/guzzle6-adapter": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -59,7 +59,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
             [['reference_no'], 'string', 'max' => 50],
             [['comment'], 'string', 'max' => 500],
             [['reference_no'], 'unique'],
-            [['approved_at','branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
+            [['approved_at', 'branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
         ];
     }
 
@@ -116,6 +116,42 @@ class LeadMaster extends \yii\db\ActiveRecord {
 
     public function getBranch() {
         return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
+    }
+
+    public function getBenefitsNames() {
+        $names = "";
+        if (isset($this->benefits) && !empty($this->benefits)) {
+            $benefits = [];
+            foreach ($this->benefits as $value) {
+                $benefits[] = $value->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
+    }
+
+    public function getDisciplineNames() {
+        $names = "";
+        if (isset($this->disciplines) && !empty($this->disciplines)) {
+            $benefits = [];
+            foreach ($this->disciplines as $value) {
+                $benefits[] = $value->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
+    }
+
+    public function getSpecialtyNames() {
+        $names = "";
+        if (isset($this->specialty) && !empty($this->specialty)) {
+            $benefits = [];
+            foreach ($this->specialty as $value) {
+                $benefits[] = $value->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
     }
 
 }
