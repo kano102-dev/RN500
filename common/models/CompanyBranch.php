@@ -33,11 +33,11 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public function rules() {
         return [
-                [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
-                [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
-                [['branch_name'], 'string', 'max' => 200],
-                [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-                [['zip_code'], 'string', 'max' => 20],
+            [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
+            [['branch_name'], 'string', 'max' => 200],
+            [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+            [['zip_code'], 'string', 'max' => 20],
         ];
     }
 
@@ -70,6 +70,14 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public static function getAllBranchesOfLoggedInUser() {
         return self::find()->where(['company_id' => CommonFunction::getLoggedInUserCompanyId()])->all();
+    }
+
+    public function getLocation() {
+        $location = "";
+        if (isset($this->cityRef)) {
+            $location = $this->cityRef->city . "-" . $this->cityRef->state_code;
+        }
+        return $location;
     }
 
 }

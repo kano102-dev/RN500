@@ -14,7 +14,15 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     .owl-carousel .owl-nav{display: none}
     .searchbar .form-control{    border: 2px solid #3ca0d6;}
     .searchbar{margin-left: 2rem}
-
+    .carousel .main-item{
+        height: 400px;
+    }
+    .main-item .main-carousel{
+        position: absolute;
+        top: -263px;
+        left: 0;
+        min-height: 400px;
+    }
 </style>
 
 <!-- slider start -->
@@ -28,16 +36,16 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
-        <div class="item active">
-            <img src="<?= $assetDir . "/images/1 Brooklyn_Bridge.jpg" ?>" alt="Los Angeles" style="width:100%;">
+        <div class="item active main-item">
+            <img class="main-carousel" src="<?= $assetDir . "/images/1 Brooklyn_Bridge.jpg" ?>" alt="Los Angeles" style="width:100%;">
         </div>
 
-        <div class="item">
-            <img src="<?= $assetDir . "/images/2B (1).jpg" ?>" alt="Chicago" style="width:100%;">
+        <div class="item main-item">
+            <img class="main-carousel" src="<?= $assetDir . "/images/2B (1).jpg" ?>" alt="Chicago" style="width:100%;">
         </div>
 
-        <div class="item">
-            <img src="<?= $assetDir . "/images/3BB.jpg" ?>" alt="New york" style="width:100%;">
+        <div class="item main-item">
+            <img class="main-carousel" src="<?= $assetDir . "/images/3BB.jpg" ?>" alt="New york" style="width:100%;">
         </div>
     </div>
 

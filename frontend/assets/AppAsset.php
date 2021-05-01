@@ -21,7 +21,8 @@ class AppAsset extends AssetBundle {
         'js/bootstrap.min.js',
 //        'js/jquery-2.1.4.min.js',
         'js/owl.carousel.js',
-        'js/script.js'
+        'js/script.js',
+        'https://js.stripe.com/v3/',
     ];
     public $depends = [
         'yii\web\YiiAsset'
