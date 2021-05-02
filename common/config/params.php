@@ -13,6 +13,7 @@ return [
     'job.shift' => ['1' => 'All', '2' => 'Morning', '3' => 'Evening', '4' => 'Night', '5' => 'Flatulate'],
     'company.priority' => [1 => 'High', 2 => 'Modrate', 3 => 'Semi Modrate', 4 => 'Low'],
     'COMMISSION_MODE' => [0 => 'One Time', 1 => 'Monthly', 2 => 'Yearly'],
+    'job.visible' => [0 => 'Both', 1 => 'Other Recruiter', 2 => 'RN500'],
     'date.format.display.php' => "d-M-Y", // 16-Apr-2021
     'date.format.datepicker.js' => "d-M-yyyy", // 16-Apr-2021
     'STRIP_TEST_MODE' => "on",

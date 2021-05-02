@@ -203,6 +203,48 @@ use common\CommonFunction;
                         </div>
 
                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'recruiter_commission', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->textInput(['placeholder' => $model->getAttributeLabel('recruiter_commission')]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'recruiter_commission_type', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->dropdownList([1 => 'Percentage (%)', 0 => 'Amount ($)'], ['class' => 'form-control', 'prompt' => $model->getAttributeLabel('recruiter_commission_type')]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'recruiter_commission_mode', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->dropdownList(Yii::$app->params['COMMISSION_MODE'], ['class' => 'form-control', 'prompt' => $model->getAttributeLabel('recruiter_commission_mode')]);
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="formrow">
                                     <?php

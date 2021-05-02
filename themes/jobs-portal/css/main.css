@@ -1174,8 +1174,9 @@ a.wit-btn {
 /*Page Title*/
 .pageTitle {
     background: url(../images/1_Brooklyn_Bridge.jpg) no-repeat;
-    background-size: cover;
+    background-position: center;
     padding: 70px 0;
+    background-size: cover;
 }
 .pageTitle h1 {
     font-size: 40px;

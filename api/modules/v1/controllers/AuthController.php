@@ -40,7 +40,7 @@ class AuthController extends Controller {
                             $jwtToken = $this->generateJWTtoken($user);
                             $code = 200;
                             $msg = "You have successfully Logged In!";
-                            $data = ['token' => $jwtToken, 'first_name' => $user->details->first_name, 'last_name' => $user->details->last_name, 'email' => $user->email];
+                            $data = ['token' => $jwtToken, 'first_name' => $user->details->first_name, 'last_name' => $user->details->last_name, 'email' => $user->email, 'profile_image' => !empty($user->details->profile_pic) ? $user->details->profile_pic : ''];
                         } else {
                             $code = 202;
                             $msg = "Invalid OTP.";

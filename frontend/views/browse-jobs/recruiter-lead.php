@@ -219,59 +219,75 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
             <div class="col-md-9 col-sm-12"> 
                 <!-- Search List -->
                 <ul class="searchList browse-jobs">
-                    <?php foreach ($models as $model) { ?>
-                        <!-- Candidate -->
-                        <li>
-                            <div class="row">
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></div><br/><br/>
-                                    <div class="jobinfo">
-                                        <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
-                                        <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->
+                    <?php
+                    foreach ($models as $model) {
+                        $flag = false;
+                        ?>
+                        <?php
+                        if ($model->visible_to == 0) {
+                            $flag = true;
+                        } elseif ($model->visible_to == 1 && CommonFunction::getLoggedInUserCompanyId() != '' && CommonFunction::getLoggedInUserCompanyId() != 1) {
+                            $flag = true;
+                        } elseif ($model->visible_to == 2 && CommonFunction::getLoggedInUserCompanyId() != '' && CommonFunction::getLoggedInUserCompanyId() == 1) {
+                            $flag = true;
+                        }
+                        ?>
+                        <?php if ($flag) { ?>
+                            <!-- Candidate -->
+                            <li>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></div><br/><br/>
+                                        <div class="jobinfo">
+                                            <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+                                            <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->
+                                        </div>
+                                        <div class="clearfix"></div>
                                     </div>
-                                    <div class="clearfix"></div>
+                                    <div class="col-md-4 col-sm-4 employee-details">
+                                        <h3><a href="#."><?= $model->title ?></a></h3>
+                                        <p><?= $model->branch->location ?></p>
+                                        <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
+                                        <p>Benefits starts from Day 1</p>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4 employee-details">
+                                        <p>Estimated Pay: $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                        <br/>
+                                        <p>Response Time: within a day</p><br/>
+                                        <p>Recruiter Commission: <?= $model->recruiter_commission_type == 1 ? $model->recruiter_commission . "%" : "$" . $model->recruiter_commission ?></p><br/>
+                                        <p>Commission Mode: <?= Yii::$app->params['COMMISSION_MODE'][$model->recruiter_commission_mode] ?></p><br/>
+                                    </div>
                                 </div>
-                                <div class="col-md-4 col-sm-4 employee-details">
-                                    <h3><a href="#."><?= $model->title ?></a></h3>
-                                    <p>New York City, New York</p>
-                                    <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
-                                    <p>Benefits starts from Day 1</p>
-                                </div>
-                                <div class="col-md-4 col-sm-4 employee-details">
-                                    <p>Estimated Pay: $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
-                                    <br/>
-                                    <p>Response Time: within a day</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-9 col-sm-9">
-                                    <p>&nbsp;</p>
-                                    <div class="row">
-                                        <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= Yii::$app->params['job.shift'][$model->shift] ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
-                                    </div><br/>
-                                    <div><span>Description :</span><?= $model->description ?></div><br/>
+                                <div class="row">
+                                    <div class="col-md-9 col-sm-9">
+                                        <p>&nbsp;</p>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                            <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                            <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                        </div><br/>
+                                        <div><span>Description :</span><?= $model->description ?></div><br/>
 
-                                </div>
-                                <div class="col-md-3 col-sm-3">
-                                    <div class="listbtn">
-                                        <?php if (!CommonFunction::isExpired() && in_array($model->id, CommonFunction::getAllPurchasedLead())) { ?>
-                                            <a href="#.">View Profile</a>
-                                        <?php } else { ?>
-                                            <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
-                                                <a href="#.">Buy Now <?= "$" . $model->price ?></a>
-                                            <?php } else {
-                                                ?>
-                                                <h4 style="color:blue">Comming Soon</h4>
-                                                <?php
+                                    </div>
+                                    <div class="col-md-3 col-sm-3">
+                                        <div class="listbtn">
+                                            <?php if (!CommonFunction::isExpired() && in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1) { ?>
+                                                <a href="#.">View Profile</a>
+                                            <?php } else { ?>
+                                                <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
+                                                    <a href="#.">Buy Now <?= "$" . $model->price ?></a>
+                                                <?php } else {
+                                                    ?>
+                                                    <h4 style="color:blue">Comming Soon</h4>
+                                                    <?php
+                                                }
                                             }
-                                        }
-                                        ?>
+                                            ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </li>
+                            </li>
+                        <?php } ?>
                         <?php
                     }
                     if (count($models) <= 0) {
