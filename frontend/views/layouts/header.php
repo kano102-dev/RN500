@@ -6,6 +6,19 @@
  */
 
 use common\CommonFunction;
+use yii\widgets\Pjax;
+use yii\web\View;
+
+Pjax::begin(['id' => 'res-messages', 'timeout' => false]);
+foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+    $temp_key = explode("_", $key);
+    $key = $temp_key[0];
+    $scripta = <<< JS
+ toastr.$key("$message","",{timeOut:5000,progressBar:true,preventDuplicates:false});
+JS;
+    $this->registerJs($scripta);
+}
+Pjax::end()
 ?>
 
 <style>
