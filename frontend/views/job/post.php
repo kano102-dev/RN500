@@ -216,7 +216,7 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
                                     echo $form->field($model, 'recruiter_commission_type', [
@@ -229,7 +229,10 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                            <div class="col-md-3">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
                                     echo $form->field($model, 'recruiter_commission_mode', [
@@ -239,6 +242,76 @@ use common\CommonFunction;
                                             ])
                                             ->label(false)
                                             ->dropdownList(Yii::$app->params['COMMISSION_MODE'], ['class' => 'form-control', 'prompt' => $model->getAttributeLabel('recruiter_commission_mode')]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'street_no', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->textInput(['placeholder' => $model->getAttributeLabel('street_no')]);
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'street_address', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->textInput(['placeholder' => $model->getAttributeLabel('street_address')]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'apt', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->textInput(['placeholder' => $model->getAttributeLabel('apt')]);
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'state', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->dropdownList($states, ['class' => 'form-control', 'prompt' => $model->getAttributeLabel('state')]);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
+                                    echo $form->field($model, 'city', [
+                                                'options' => ['class' => 'form-group has-feedback'],
+                                                'inputTemplate' => '{input}',
+                                                'template' => '{input}{error}',
+                                            ])
+                                            ->label(false)
+                                            ->dropdownList($cities, ['class' => 'form-control', 'prompt' => $model->getAttributeLabel('city')]);
                                     ?>
                                 </div>
                             </div>
@@ -270,3 +343,24 @@ use common\CommonFunction;
         </div>
     </div>
 </div>
+<?php
+$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['job/get-cities']);
+$script = <<< JS
+    $(document).on('change','#leadmaster-state',function(){
+        var state=$(this).val();
+        if(state){
+            $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#leadmaster-city').html(response);
+                }
+            });
+        }else{
+            $('#leadmaster-city').html("");
+            $('#leadmaster-city').val("");
+        }
+    });
+JS;
+$this->registerJs($script);

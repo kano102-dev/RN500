@@ -35,6 +35,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public $disciplines;
     public $benefits;
     public $specialies;
+    public $state;
 
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
@@ -51,15 +52,15 @@ class LeadMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
-            [['description'], 'string'],
+            [['street_no', 'street_address', 'city', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
+            [['description', 'apt', 'zip_code'], 'string'],
             [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['jobseeker_payment',], 'number'],
             [['title'], 'string', 'max' => 250],
             [['reference_no'], 'string', 'max' => 50],
             [['comment'], 'string', 'max' => 500],
             [['reference_no'], 'unique'],
-            [['comment','visible_to'],'safe', 'on' => 'approve'],
+            [['comment', 'visible_to'], 'safe', 'on' => 'approve'],
             [['price'], 'required', 'on' => 'approve'],
             [['approved_at', 'branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
         ];
@@ -67,7 +68,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
 
     public function scenarios() {
         $scenarios = parent::scenarios();
-        $scenarios['approve'] = ['comment', 'price','visible_to'];
+        $scenarios['approve'] = ['comment', 'price', 'visible_to'];
         return $scenarios;
     }
 
@@ -125,6 +126,18 @@ class LeadMaster extends \yii\db\ActiveRecord {
 
     public function getBranch() {
         return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
+    }
+
+    public function getCities() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
+
+    public function getCitiesName() {
+        $names = "";
+        if (isset($this->cities) && !empty($this->cities)) {
+            $names = $this->cities->city . "-" . $this->cities->state_code;
+        }
+        return $names;
     }
 
     public function getBenefitsNames() {

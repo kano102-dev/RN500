@@ -8,6 +8,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
+use ranamehul20\twak\TwakWidget;
 
 AppAsset::register($this);
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
@@ -48,7 +49,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 
         <?= $content ?>
 
-
+        <?= TwakWidget::widget(['key' => '609387b9185beb22b30a8c79/1f504kd7t']) ?>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" ></script>
 

@@ -246,7 +246,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     </div>
                                     <div class="col-md-4 col-sm-4 employee-details">
                                         <h3><a href="#."><?= $model->title ?></a></h3>
-                                        <p><?= $model->branch->location ?></p>
+                                        <p><?= $model->citiesName ?></p>
                                         <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
                                         <p>Benefits starts from Day 1</p>
                                     </div>
@@ -263,7 +263,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         <p>&nbsp;</p>
                                         <div class="row">
                                             <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                            <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                            <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
                                             <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                         </div><br/>
                                         <div><span>Description :</span><?= $model->description ?></div><br/>
@@ -272,7 +272,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     <div class="col-md-3 col-sm-3">
                                         <div class="listbtn">
                                             <?php if (!CommonFunction::isExpired() && in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1) { ?>
-                                                <a href="#.">View Profile</a>
+                                                <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
                                             <?php } else { ?>
                                                 <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
                                                     <a href="#.">Buy Now <?= "$" . $model->price ?></a>

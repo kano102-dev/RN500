@@ -30,20 +30,6 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <div class="item active main-item">
             <img class="main-carousel" src="<?= $assetDir . "/images/Brooklyn_Bridge.png" ?>" alt="Los Angeles" style="width:100%;">
         </div>
-
-        <div class="item main-item">
-            <img class="main-carousel" src="<?= $assetDir . "/images/4_NY_City.jpg" ?>" alt="Chicago" style="width:100%;">
-        </div>
-
-        <div class="item main-item">
-            <img class="main-carousel" src="<?= $assetDir . "/images/3_NY_City.jpg" ?>" alt="New york" style="width:100%;">
-        </div>
-        <div class="item main-item">
-            <img class="main-carousel" src="<?= $assetDir . "/images/2_Brooklyn_Bridge.jpg" ?>" alt="New york" style="width:100%;">
-        </div>
-        <div class="item main-item">
-            <img class="main-carousel" src="<?= $assetDir . "/images/1_Brooklyn_Bridge.jpg" ?>" alt="New york" style="width:100%;">
-        </div>
     </div>
 
     <!-- Left and right controls -->

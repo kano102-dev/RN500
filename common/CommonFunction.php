@@ -135,7 +135,7 @@ class CommonFunction {
                         ->send();
     }
 
-    public function dateDiffInDays($date1) {
+    public static function dateDiffInDays($date1) {
         $date2 = strtotime('now');
         // Calculating the difference in timestamps
         $diff = $date2 - $date1;

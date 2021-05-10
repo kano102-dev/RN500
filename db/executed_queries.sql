@@ -805,3 +805,18 @@ ADD `status` tinyint NULL COMMENT '1: success 2:fail' AFTER `customer_transactio
 
 ALTER TABLE `company_subscription_payment`
 CHANGE `status` `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1: success 2:fail' AFTER `customer_transaction_id`;
+
+ALTER TABLE `lead_master` ADD `visible_to` TINYINT NOT NULL DEFAULT '0' COMMENT '0:Both 1:recruiter 2:self' AFTER `recruiter_commission_mode`;
+
+ALTER TABLE `lead_discipline` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `lead_benefit` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `lead_specialty` ADD `id` INT NOT NULL AUTO_INCREMENT FIRST, ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `lead_master`
+ADD `street_no` varchar(255) NOT NULL,
+ADD `street_address` varchar(255) NOT NULL AFTER `street_no`,
+ADD `apt` varchar(255) NULL AFTER `street_address`,
+ADD `city` int NULL AFTER `apt`,
+ADD `zip_code` varchar(20) NULL AFTER `city`;

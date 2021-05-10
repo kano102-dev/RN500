@@ -192,7 +192,6 @@ class SiteController extends Controller {
 //                    ->setSubject('One Time Password (OTP) ')
 //                    ->send();
             $sent = \Yii::$app->mailer->compose()->setTextBody("Hii <br/> Your OT is 11111")
-//                    ->setFrom(["info@RN500.com" => 'Test Mail'])
                     ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                     ->setTo('ranamehul19@gmail.com')
                     ->setSubject('One Time Password (OTP) ')
