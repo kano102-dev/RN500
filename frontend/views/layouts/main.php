@@ -11,6 +11,7 @@ use common\widgets\Alert;
 
 AppAsset::register($this);
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
+$assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte');
 //$webImageDir = Yii::$app->assetManager->getPublishedUrl('@themes');
 ?>
 <?php $this->beginPage() ?>
@@ -25,7 +26,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <?php $this->head() ?>
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
-
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <style>
             .listpgWraper {background: #f9f9ff;}
             .carousel-item {
@@ -82,6 +83,10 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <?= $this->render('footer', ['assetDir' => $assetDir]) ?>
         <!-- Footer end --> 
         <?php $this->endBody() ?>
+        <?php
+        echo \common\components\FlashmessageWidget::widget();
+        ?>
+        
     </body>
 </html>
 <?php $this->endPage() ?>
