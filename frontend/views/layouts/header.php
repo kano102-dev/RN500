@@ -6,6 +6,19 @@
  */
 
 use common\CommonFunction;
+use yii\widgets\Pjax;
+use yii\web\View;
+
+Pjax::begin(['id' => 'res-messages', 'timeout' => false]);
+foreach (Yii::$app->session->getAllFlashes() as $key => $message) {
+    $temp_key = explode("_", $key);
+    $key = $temp_key[0];
+    $scripta = <<< JS
+ toastr.$key("$message","",{timeOut:5000,progressBar:true,preventDuplicates:false});
+JS;
+    $this->registerJs($scripta);
+}
+Pjax::end()
 ?>
 
 <style>
@@ -43,7 +56,7 @@ use common\CommonFunction;
                             <?php if (CommonFunction::isEmployer()) { ?>
                                 <li class="postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
-                    <!--<li class="jobseeker"><a href="<?php // echo $assetDir   ?>/candidate-listing.html">Job Seeker</a></li>-->
+                <!--<li class="jobseeker"><a href="<?php // echo $assetDir    ?>/candidate-listing.html">Job Seeker</a></li>-->
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
 
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>

@@ -22,6 +22,7 @@ class AppAsset extends AssetBundle {
 //        'js/jquery-2.1.4.min.js',
         'js/owl.carousel.js',
         'js/script.js',
+        'js/toastr/toastr.min.js',
         'https://js.stripe.com/v3/',
     ];
     public $depends = [

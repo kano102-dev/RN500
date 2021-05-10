@@ -1,5 +1,7 @@
 <?php
+use yii\widgets\Pjax;
 
+Pjax::begin(['id' => 'res-messages','timeout' => false]);
 $type = "";
 $message = "";
 
@@ -25,4 +27,7 @@ JS;
     $this->registerJs($script);
     Yii::$app->session->getAllFlashes(false);
 }
+
+Pjax::end()
+?>
     

@@ -15,6 +15,12 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\WorkExperience;
+use frontend\models\Documents;
+use frontend\models\Licenses;
+use frontend\models\Certifications;
+use frontend\models\Education;
+use frontend\models\References;
 
 /**
  * Site controller
@@ -110,7 +116,23 @@ class SiteController extends Controller {
     
     public function actionJobSeeker() {
         
-        return $this->render('job-seeker');
+        $workExperience = WorkExperience::find()->joinWith('discipline')->asArray()->all();
+        $certification = Certifications::find()->asArray()->all();
+        $documents = Documents::find()->asArray()->all();
+        $license = Licenses::find()->asArray()->all();
+        $education = Education::find()->asArray()->all();
+        $references = References::find()->asArray()->all();
+        $userDetails = \frontend\models\UserDetails::findOne(['user_id' => 1]);
+         
+        return $this->render('job-seeker',[
+            'workExperience' => $workExperience,
+            'certification' => $certification,
+            'documents' => $documents,
+            'license' => $license,
+            'education' => $education,
+            'references' => $references,
+            'userDetails' => $userDetails
+        ]);
     }
     
     
@@ -252,6 +274,13 @@ class SiteController extends Controller {
         return $this->render('resendVerificationEmail', [
                     'model' => $model
         ]);
+    }
+    
+    public function actionEditProfile() {
+        echo 'enter';
+        exit;
+        
+        return $this->render('edit-profile');
     }
 
 }
