@@ -805,3 +805,44 @@ ADD `status` tinyint NULL COMMENT '1: success 2:fail' AFTER `customer_transactio
 
 ALTER TABLE `company_subscription_payment`
 CHANGE `status` `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1: success 2:fail' AFTER `customer_transaction_id`;
+
+
+# **************NIRAV 10-05-2021 ***********
+
+ALTER TABLE `user_details`
+ADD `looking_for` text COLLATE 'latin1_swedish_ci' NULL AFTER `speciality`,
+ADD `dob` date NULL AFTER `looking_for`;
+
+ALTER TABLE `user_details`
+ADD `email` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `last_name`;
+
+ALTER TABLE `work_experience`
+ADD `title` varchar(255) NULL AFTER `user_id`,
+ADD `discipline_id` int(11) NULL AFTER `title`,
+ADD `specialty` int(11) NULL AFTER `discipline_id`,
+ADD `employment_type` int(11) NULL AFTER `specialty`,
+ADD `currently_working` tinyint(1) NULL AFTER `employment_type`,
+ADD `facility_name` varchar(255) NULL AFTER `currently_working`,
+ADD `city` int(11) NULL AFTER `facility_name`;
+
+ALTER TABLE `licenses`
+ADD `license_number` varchar(250) COLLATE 'latin1_swedish_ci' NULL AFTER `license_name`,
+ADD `compact_states` tinyint(1) NULL AFTER `license_number`,
+ADD `document` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `compact_states`;
+
+ALTER TABLE `certifications`
+ADD `certification_active` tinyint(1) NULL AFTER `certificate_name`,
+ADD `document` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `certification_active`;
+
+ALTER TABLE `documents`
+ADD `document_type` int(11) NULL AFTER `path`;
+
+ALTER TABLE `references`
+ADD `title` int(11) NULL AFTER `first_name`;
+
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `document_type` int(11) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `user_id` int(11) NOT NULL
+);

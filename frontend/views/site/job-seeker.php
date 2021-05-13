@@ -44,13 +44,11 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     .box-padding{padding:0 !important;}
     .box-padding .jobinfo{padding:20px 0px 0px 20px;}
     .box-padding .content{padding:0px 0px 0px 20px;}
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-        font-weight: 700;
-    }
-
+    label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
+    .ui-state-default{display: none;}
+    .ui-widget-header{background: #263bd6;}
+    .sticky-sidebar{position: fixed !important;width: 350px;top: 10px;}
+    
 </style>
 
 <div class="listpgWraper">
@@ -58,24 +56,25 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <div class="row">
             <div class="col-md-4 col-sm-6">
                 <div class="fixed-sidebar">
+
                     <div class="range-content">
                         <p class="title">Let's Improve Your Profile !</p>
                         <div class="profile-percent">
-                            <a href="#" class="btn">Profile strength: 53%</a>
+                            <a href="#" class="btn">Profile strength: <span id="profile-percentage"></span></a>
                         </div>
-                        <input id="range" type="range" min="0" max="50000" >
+                        <div class="range"></div>
                     </div>
+
                     <ul class="usernavdash">
-                        <li class="active"><a href="#"><div class="round">1</div> Create a NurseFly account <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#"><div class="round">2</div> Documents <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
-                        <li><a href="#"><div class="round">3</div> License <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#"><div class="round">4</div> Certifications <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
-                        <li><a href="#"><div class="round">5</div> Work experience <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#"><div class="round">6</div> Education <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
-                        <li><a href="#"><div class="round">7</div> About You <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#"><div class="round">8</div> Job Search<span class="round font-a"><i class="fa fa-angle-right"></i></span> </a></li>
-                        <li><a href="#"><div class="round">9</div> References<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
-                        <li><a href="#"><div class="round">10</div> Skills Checklist <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li class="active"><a href="#update-account"><div class="round">1</div> Update account <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#job-search"><div class="round">2</div> Job Search<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
+                        <li><a href="#about-you"><div class="round">3</div> About You <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#work-experience"><div class="round">4</div> Work experience <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#education"><div class="round">5</div> Education <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#license"><div class="round">6</div> License <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#certifications"><div class="round">7</div> Certifications <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#documents"><div class="round">8</div> Documents <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
+                        <li><a href="#references"><div class="round">9</div> References<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
                     </ul>
                 </div>
             </div>
@@ -84,7 +83,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                 <div class="myads">
                     <ul class="searchList">
                         <!-- start -->
-                        <li>
+                        <li id="update-account">
                             <div class="row">
                                 <div class="col-md-8 col-sm-8">
                                     <div class="jobimg">
@@ -108,7 +107,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end --> 
 
                         <!-- start -->
-                        <li>
+                        <li id="job-search">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -119,10 +118,24 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                                 <h4 class="card-title">Job Preferences</h4>
                                             </div>
                                             <div class="card-block">
-                                                <p class="card-text">No Preferences Set</p>
+                                                <?php if (isset($jobPreference) && !empty($jobPreference)) { ?>
+                                                    <?php foreach ($jobPreference as $key => $value) { ?>
+                                                        <div class="content">
+                                                            <div class="row">
+                                                                <div class="col-sm-8">
+                                                                    <h4><?= $value['job_preference'] ?></h4>
+                                                                    <p><?= $value['location'] ?></p>
+                                                                </div>
+                                                                <div class="col-sm-4">
+                                                                    <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-job-prefernce?id=' . $value['id']]) ?>" class="addPreference">Edit</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    <?php } ?>
+                                                <?php } ?>
                                             </div>
                                             <div class="card-footer">
-                                                <h4 class="card-title">Update Permanent Job Search Preferences</h4>
+                                                <h4 class="card-title"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-job-prefernce']) ?>" class="addPreference">Update Permanent Job Search Preferences</a></h4>
                                             </div>
                                         </div>
 
@@ -135,7 +148,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end --> 
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="about-you">
                             <div class="row">
                                 <div class="col-md-8 col-sm-8">
                                     <div class="jobinfo">
@@ -154,7 +167,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <h3>&nbsp;</h3>
                                     </div>
                                     <div class="content">
-                                        <p><?= $userDetails->first_name." ".$userDetails->last_name ?></p>
+                                        <p><?= $userDetails->first_name . " " . $userDetails->last_name ?></p>
                                         <p><?= $userDetails->mobile_no ?></p>
                                         <p><?= $userDetails->email ?></p>
                                         <p><?= $userDetails->ssn ?></p>
@@ -177,7 +190,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="work-experience">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -225,7 +238,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="education">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -266,7 +279,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="license">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -314,7 +327,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="certifications">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -362,7 +375,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="documents">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -410,7 +423,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end -->
 
                         <!-- start -->
-                        <li class="box-padding">
+                        <li class="box-padding" id="references">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-12">
                                     <div class="jobinfo">
@@ -476,6 +489,8 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 
 
 <?php
+$getProfilePercentageUrl = Yii::$app->urlManager->createUrl(['user-details/get-profile-percentage']);
+
 $js = <<< JS
         
         
@@ -526,16 +541,58 @@ $(document).on("click", ".AddReference", function() {
     $("#profile-modal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
+}); 
+    
+$(document).on("click", ".addPreference", function() {
+    $(".modal-title").text("Add Job Preference");
+    $("#profile-modal").modal('show')
+        .find("#modalContent")
+        .load($(this).attr('url'));
 });        
     
-        
-        
 
+        
+function getProfilePercentage(){
+        $.ajax({
+             url    : '$getProfilePercentageUrl',
+             type   : 'post',
+             success: function (response){
+                 console.log('enter');   
+                 try{
+                     if(response){
+                         $('#profile-percentage').text(response + "%");
+                         $('.range').slider({
+                            range: "min",
+                            animate: true,
+                            value: response,
+                            min: 0,
+                            max: 100,
+                            step: 1,
+                          });
+                           
+                     }
+                 }catch(e){
+                    
+                 }
+             }
+         });
    
+}
     
+getProfilePercentage();  
+    
+$(window).scroll(function(){
+  var scroll = $(window).scrollTop();      
+  console.log(scroll);      
+  if(scroll >= 100 && scroll <= 1600){
+      $('.fixed-sidebar').addClass('sticky-sidebar');
+   } else {
+       $('.fixed-sidebar').removeClass('sticky-sidebar');
+   }      
+});        
         
 JS;
-$this->registerJs($js);
+$this->registerJs($js, \yii\web\View::POS_END);
 ?>
 
 

@@ -12,24 +12,21 @@ use kartik\date\DatePicker;
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
-                'id' => 'add-reference'
+                'id' => 'add-job-preference'
     ]);
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'first_name')->textInput(); ?>
+            <?= $form->field($model, 'job_preference')->textInput(); ?>
         </div>
         <div class="col-sm-12">
-            <?= $form->field($model, 'last_name')->textInput(); ?>
+            <?= $form->field($model, 'location')->textInput(); ?>
         </div>
         <div class="col-sm-12">
-            <?= $form->field($model, 'email')->textInput(); ?>
+            <?= $form->field($model, 'shift')->textInput(); ?>
         </div>
         <div class="col-sm-12">
-            <?= $form->field($model, 'mobile_no')->textInput(); ?>
-        </div>
-        <div class="col-sm-12">
-            <?= $form->field($model, 'title')->dropDownList(Yii::$app->params['REFERENCE_TYPE']) ?>
+            <?= $form->field($model, 'pay')->textInput(); ?>
         </div>
     </div>
 
@@ -44,7 +41,7 @@ use kartik\date\DatePicker;
 <?php
 $script = <<< JS
 
-$(document).on("beforeSubmit", "#add-reference", function () {
+$(document).on("beforeSubmit", "#add-job-preference", function () {
    var form = $(this);
         $.ajax({
             url    : form.attr('action'),

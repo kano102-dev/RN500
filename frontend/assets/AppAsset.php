@@ -16,6 +16,7 @@ class AppAsset extends AssetBundle {
         'css/font-awesome.css',
         'css/main.css',
         'css/site.css',
+        'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css'
     ];
     public $js = [
         'js/bootstrap.min.js',
@@ -24,6 +25,7 @@ class AppAsset extends AssetBundle {
         'js/script.js',
         'js/toastr/toastr.min.js',
         'https://js.stripe.com/v3/',
+        'https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'
     ];
     public $depends = [
         'yii\web\YiiAsset'
