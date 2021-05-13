@@ -84,7 +84,7 @@ class UserDetailsController extends Controller {
         $model = new UserDetails();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->created_at = time();
             $model->updated_at = time();
 
@@ -176,7 +176,7 @@ class UserDetailsController extends Controller {
         
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
                 if ($model->save()) {
@@ -212,7 +212,7 @@ class UserDetailsController extends Controller {
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
             $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
 
@@ -246,7 +246,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->year_complete = date('Y-m-d', strtotime("01-" . $model->year_complete));
 
             if ($model->validate()) {
@@ -280,7 +280,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
 
             $document_file = UploadedFile::getInstance($model, 'document');
@@ -343,7 +343,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
 
             $document_file = UploadedFile::getInstance($model, 'document');
@@ -404,7 +404,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
 
             $document_file = UploadedFile::getInstance($model, 'path');
 
@@ -460,7 +460,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
                 if ($model->save()) {
@@ -524,14 +524,14 @@ class UserDetailsController extends Controller {
         $hasCompletedDocuments = 0;
         $hasCompletedReference = 0;
 
-        $userDetails = UserDetails::findOne(['user_id' => '1']);
-        $workExperience = WorkExperience::findOne(['user_id' => '1']);
-        $jobPreference = JobPreference::findOne(['user_id' => '1']);
-        $education = Education::findOne(['user_id' => '1']);
-        $license = Licenses::findOne(['user_id' => '1']);
-        $certification = Certifications::findOne(['user_id' => '1']);
-        $documents = Documents::findOne(['user_id' => '1']);
-        $reference = References::findOne(['user_id' => '1']);
+        $userDetails = UserDetails::findOne(['user_id' => \Yii::$app->user->id]);
+        $workExperience = WorkExperience::findOne(['user_id' => \Yii::$app->user->id]);
+        $jobPreference = JobPreference::findOne(['user_id' => \Yii::$app->user->id]);
+        $education = Education::findOne(['user_id' => \Yii::$app->user->id]);
+        $license = Licenses::findOne(['user_id' => \Yii::$app->user->id]);
+        $certification = Certifications::findOne(['user_id' => \Yii::$app->user->id]);
+        $documents = Documents::findOne(['user_id' => \Yii::$app->user->id]);
+        $reference = References::findOne(['user_id' => \Yii::$app->user->id]);
 
         if (isset($userDetails) && !empty($userDetails)) {
             $hasCompletedUserDetails = 12.5;

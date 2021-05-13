@@ -116,14 +116,14 @@ class SiteController extends Controller {
     
     public function actionJobSeeker() {
         
-        $workExperience = WorkExperience::find()->where(['user_id' => 1])->joinWith('discipline')->asArray()->all();
-        $certification = Certifications::find()->where(['user_id' => 1])->asArray()->all();
-        $documents = Documents::find()->where(['user_id' => 1])->asArray()->all();
-        $license = Licenses::find()->where(['user_id' => 1])->asArray()->all();
-        $education = Education::find()->where(['user_id' => 1])->asArray()->all();
-        $references = References::find()->where(['user_id' => 1])->asArray()->all();
-        $userDetails = \frontend\models\UserDetails::findOne(['user_id' => 1]);
-        $jobPreference = \frontend\models\JobPreference::find()->where(['user_id' => 1])->all();
+        $workExperience = WorkExperience::find()->where(['user_id' => \Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
+        $certification = Certifications::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $documents = Documents::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $license = Licenses::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $education = Education::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $references = References::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $userDetails = \frontend\models\UserDetails::findOne(['user_id' => \Yii::$app->user->id]);
+        $jobPreference = \frontend\models\JobPreference::find()->where(['user_id' => \Yii::$app->user->id])->all();
          
         return $this->render('job-seeker',[
             'workExperience' => $workExperience,
