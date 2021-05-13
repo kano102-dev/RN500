@@ -117,29 +117,24 @@ $script_new = <<<JS
                     return result.json();
                 })
                 .then(function (data) {
+                    console.log("publicKey",data.publicKey);
                     stripe = Stripe(data.publicKey);
 
                 });
     };
 
-    function createCheckoutSession() {
+    setupElements();
+    document.querySelector("#submit").addEventListener("click", function (evt) {
+        evt.preventDefault();
         $.ajax({
             url:"$checkoutSessionUrl",
-            type: "post", //request type,
+            type: "get", //request type,
             dataType: 'json',
             data: "",
             success: function (result) {
                 checkoutSessionId = result.checkoutSessionId;
-                 console.log(result.checkoutSessionId);
-            }
-        });
-    }
-
-    setupElements();
-    document.querySelector("#submit").addEventListener("click", function (evt) {
-        evt.preventDefault();
-        createCheckoutSession();
-        if(checkoutSessionId!=''){
+                 console.log("key",result.checkoutSessionId);
+                 if(checkoutSessionId!=''){
         // Initiate payment
         stripe.redirectToCheckout({
                     sessionId: checkoutSessionId
@@ -154,6 +149,8 @@ $script_new = <<<JS
                     alert(err);
                 });
         }
+            }
+        });
     });
 JS;
 $this->registerJS($script_new);

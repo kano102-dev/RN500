@@ -145,7 +145,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
         if (isset($this->benefits) && !empty($this->benefits)) {
             $benefits = [];
             foreach ($this->benefits as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->benefits->name;
             }
             $names = implode(',', $benefits);
         }
@@ -157,7 +157,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
         if (isset($this->disciplines) && !empty($this->disciplines)) {
             $benefits = [];
             foreach ($this->disciplines as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->disciplines->name;
             }
             $names = implode(',', $benefits);
         }
@@ -169,7 +169,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
         if (isset($this->specialty) && !empty($this->specialty)) {
             $benefits = [];
             foreach ($this->specialty as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->speciality->name;
             }
             $names = implode(',', $benefits);
         }

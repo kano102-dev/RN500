@@ -275,7 +275,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                                 <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
                                             <?php } else { ?>
                                                 <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
-                                                    <a href="#.">Buy Now <?= "$" . $model->price ?></a>
+                                                    <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['payment/index', 'id' => $model->id]) ?>">Buy Now <?= "$" . $model->price ?></a>
                                                 <?php } else {
                                                     ?>
                                                     <h4 style="color:blue">Comming Soon</h4>
