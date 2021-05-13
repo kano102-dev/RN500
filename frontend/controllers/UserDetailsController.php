@@ -17,6 +17,7 @@ use frontend\models\Licenses;
 use frontend\models\Certifications;
 use frontend\models\Documents;
 use frontend\models\References;
+use frontend\models\JobPreference;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
@@ -37,6 +38,14 @@ class UserDetailsController extends Controller {
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($action) {
+        if ($action->id == 'get-profile-percentage') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -154,6 +163,35 @@ class UserDetailsController extends Controller {
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionAddJobPrefernce() {
+        $id = \Yii::$app->request->get('id');
+
+        if ($id !== null) {
+            $model = JobPreference::findOne($id);
+        } else {
+            $model = new JobPreference();
+        }
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            $model->user_id = '1';
+
+            if ($model->validate()) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', "Job Prefernce Updated successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Job Prefernce Updated successfully.']);
+                }
+            } else {
+                Yii::$app->session->setFlash('success', "Job Prefernce Updated failed.");
+                return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
+            }
+        }
+
+        return $this->renderAjax('add-job-prefernce', [
+                    'model' => $model
+        ]);
     }
 
     public function actionWorkExperience() {
@@ -471,6 +509,58 @@ class UserDetailsController extends Controller {
         }
 
         echo $deleteFlag;
+    }
+
+    public function actionGetProfilePercentage() {
+
+        $totalPercentage = 100;
+
+        $hasCompletedUserDetails = 0;
+        $hasCompletedJobPrefernce = 0;
+        $hasCompletedWE = 0;
+        $hasCompletedEducation = 0;
+        $hasCompletedLicense = 0;
+        $hasCompletedCertification = 0;
+        $hasCompletedDocuments = 0;
+        $hasCompletedReference = 0;
+
+        $userDetails = UserDetails::findOne(['user_id' => '1']);
+        $workExperience = WorkExperience::findOne(['user_id' => '1']);
+        $jobPreference = JobPreference::findOne(['user_id' => '1']);
+        $education = Education::findOne(['user_id' => '1']);
+        $license = Licenses::findOne(['user_id' => '1']);
+        $certification = Certifications::findOne(['user_id' => '1']);
+        $documents = Documents::findOne(['user_id' => '1']);
+        $reference = References::findOne(['user_id' => '1']);
+
+        if (isset($userDetails) && !empty($userDetails)) {
+            $hasCompletedUserDetails = 12.5;
+        }
+        if (isset($jobPreference) && !empty($jobPreference)) {
+            $hasCompletedJobPrefernce = 12.5;
+        }
+        if (isset($workExperience) && !empty($workExperience)) {
+            $hasCompletedWE = 12.5;
+        }
+        if (isset($education) && !empty($education)) {
+            $hasCompletedEducation = 12.5;
+        }
+        if (isset($license) && !empty($license)) {
+            $hasCompletedLicense = 12.5;
+        }
+        if (isset($certification) && !empty($certification)) {
+            $hasCompletedCertification = 12.5;
+        }
+        if (isset($documents) && !empty($documents)) {
+            $hasCompletedDocuments = 12.5;
+        }
+        if (isset($reference) && !empty($reference)) {
+            $hasCompletedReference = 12.5;
+        }
+
+        $percentage = ($hasCompletedUserDetails + $hasCompletedJobPrefernce + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
+
+        echo $percentage;
     }
 
 }
