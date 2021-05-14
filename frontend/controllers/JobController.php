@@ -16,6 +16,7 @@ use yii\helpers\ArrayHelper;
 use common\models\LeadDiscipline;
 use common\models\LeadBenefit;
 use common\models\LeadSpeciality;
+use common\models\Cities;
 
 /**
  * Site controller
@@ -31,10 +32,10 @@ class JobController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['post'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['post'],
                         'allow' => true,
-                        'roles' => (CommonFunction::isEmployer()) ? ['@'] : ['*'],
+                        'roles' => (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) ? ['@'] : ['*'],
                     ],
                 ],
             ],
@@ -56,6 +57,8 @@ class JobController extends Controller {
         $benefitList = ArrayHelper::map(Benefits::getAllBenefits(), 'id', 'name');
         $specialiesList = ArrayHelper::map(Speciality::getAllSpecialities(), 'id', 'name');
         $branchList = ArrayHelper::map(CompanyBranch::getAllBranchesOfLoggedInUser(), 'id', 'branch_name');
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $cities = [];
         if ($model->load(Yii::$app->request->post())) {
             if (!CommonFunction::isLoggedInUserDefaultBranch()) {
                 $model->branch_id = CommonFunction::getLoggedInUserBranchId();
@@ -108,9 +111,21 @@ class JobController extends Controller {
                     'model' => $model,
                     'disciplinesList' => $disciplineList,
                     'benefitList' => $benefitList,
-                    'specialiesList' => $specialiesList,
-                    'branchList' => $branchList,
+                    'specialiesList' => $specialiesList, 'cities' => $cities,
+                    'branchList' => $branchList, 'states' => $states,
         ]);
+    }
+
+    public function actionGetCities($id) {
+        $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $id])->all(), 'id', 'city');
+        $options = '';
+        if (!empty($cities)) {
+            foreach ($cities as $key => $city) {
+                $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
     }
 
 }

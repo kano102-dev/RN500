@@ -35,6 +35,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public $disciplines;
     public $benefits;
     public $specialies;
+    public $state;
 
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
@@ -51,16 +52,24 @@ class LeadMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
-            [['description'], 'string'],
+            [['street_no', 'street_address', 'city', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
+            [['description', 'apt', 'zip_code'], 'string'],
             [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['jobseeker_payment',], 'number'],
             [['title'], 'string', 'max' => 250],
             [['reference_no'], 'string', 'max' => 50],
             [['comment'], 'string', 'max' => 500],
             [['reference_no'], 'unique'],
+            [['comment', 'visible_to'], 'safe', 'on' => 'approve'],
+            [['price'], 'required', 'on' => 'approve'],
             [['approved_at', 'branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
         ];
+    }
+
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['approve'] = ['comment', 'price', 'visible_to'];
+        return $scenarios;
     }
 
     /**
@@ -81,6 +90,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
             'recruiter_commission' => 'Recruiter Commission',
             'recruiter_commission_type' => 'Recruiter Commision Type',
             'recruiter_commission_mode' => 'Recruiter Commision Mode',
+            'visible_to' => 'Visible To',
             'price' => 'Price',
             'status' => 'Status',
             'created_at' => 'Created At',
@@ -118,12 +128,24 @@ class LeadMaster extends \yii\db\ActiveRecord {
         return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
     }
 
+    public function getCities() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
+
+    public function getCitiesName() {
+        $names = "";
+        if (isset($this->cities) && !empty($this->cities)) {
+            $names = $this->cities->city . "-" . $this->cities->state_code;
+        }
+        return $names;
+    }
+
     public function getBenefitsNames() {
         $names = "";
         if (isset($this->benefits) && !empty($this->benefits)) {
             $benefits = [];
             foreach ($this->benefits as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->benefits->name;
             }
             $names = implode(',', $benefits);
         }
@@ -135,7 +157,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
         if (isset($this->disciplines) && !empty($this->disciplines)) {
             $benefits = [];
             foreach ($this->disciplines as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->disciplines->name;
             }
             $names = implode(',', $benefits);
         }
@@ -147,7 +169,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
         if (isset($this->specialty) && !empty($this->specialty)) {
             $benefits = [];
             foreach ($this->specialty as $value) {
-                $benefits[] = $value->name;
+                $benefits[] = $value->speciality->name;
             }
             $names = implode(',', $benefits);
         }

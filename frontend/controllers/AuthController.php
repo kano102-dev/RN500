@@ -114,63 +114,131 @@ class AuthController extends Controller {
         $this->layout = 'main-login';
         $model = new JobseekerForm();
         $employer = new EmployerForm();
+        $recruiter = new \frontend\models\RecruiterForm();
         $companyMasterModel = new CompanyMaster;
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         if (\Yii::$app->request->isPost) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
-                $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
-                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
-                    $transaction = Yii::$app->db->beginTransaction();
-                    try {
-                        $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
-                        if ($companyMasterModel->save()) {
-                            $company_branch = new CompanyBranch();
-                            $company_branch->branch_name = "HO";
-                            $company_branch->city = $companyMasterModel->city;
-                            $company_branch->company_id = $companyMasterModel->id;
-                            $company_branch->setAttributes($companyMasterModel->getAttributes());
-                            $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
-                            $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
-                            if ($company_branch->save()) {
-                                $user = new User();
-                                $user->email = $employer->email;
-                                $user->type = User::TYPE_EMPLOYER;
-                                $user->status = User::STATUS_PENDING;
-                                $user->is_owner = User::OWNER_YES;
-                                $user->branch_id = $company_branch->id;
-                                if ($user->save()) {
-                                    $userDetails = New UserDetails();
-                                    $userDetails->scenario = 'registration';
-                                    $userDetails->email = $employer->email;
-                                    $userDetails->first_name = $employer->first_name;
-                                    $userDetails->last_name = $employer->last_name;
-                                    $userDetails->user_id = $user->id;
-                                    $userDetails->unique_id = $employer->getUniqueId();
-                                    $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
-                                    if ($userDetails->save(false)) {
-                                        $is_error = 1;
-                                        $resetPasswordModel = new PasswordResetRequestForm();
-                                        $resetPasswordModel->email = $user->email;
-                                        $is_welcome_mail = 1;
-                                        if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                $company = CompanyMaster::findOne(['company_name' => $companyMasterModel->company_name]);
+                if (empty($company)) {
+                    $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
+                    if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+                        $transaction = Yii::$app->db->beginTransaction();
+                        try {
+                            $companyMasterModel->city1 = $companyMasterModel->city;
+                            $companyMasterModel->mobile = $companyMasterModel->company_mobile;
+                            $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
+                            if ($companyMasterModel->save()) {
+                                $company_branch = new CompanyBranch();
+                                $company_branch->branch_name = "HO";
+                                $company_branch->city = $companyMasterModel->city;
+                                $company_branch->company_id = $companyMasterModel->id;
+                                $company_branch->setAttributes($companyMasterModel->getAttributes());
+                                $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
+                                $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
+                                if ($company_branch->save()) {
+                                    $user = new User();
+                                    $user->email = $employer->email;
+                                    $user->type = User::TYPE_EMPLOYER;
+                                    $user->status = User::STATUS_PENDING;
+                                    $user->is_owner = User::OWNER_YES;
+                                    $user->branch_id = $company_branch->id;
+                                    if ($user->save()) {
+                                        $userDetails = New UserDetails();
+                                        $userDetails->scenario = 'registration';
+                                        $userDetails->email = $employer->email;
+                                        $userDetails->first_name = $employer->first_name;
+                                        $userDetails->last_name = $employer->last_name;
+                                        $userDetails->user_id = $user->id;
+                                        $userDetails->unique_id = $employer->getUniqueId();
+                                        $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
+                                        if ($userDetails->save(false)) {
                                             $is_error = 1;
+                                            $resetPasswordModel = new PasswordResetRequestForm();
+                                            $resetPasswordModel->email = $user->email;
+                                            $is_welcome_mail = 1;
+                                            if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                                $is_error = 1;
+                                            }
                                         }
-                                        CommonFunction::sendWelcomeMail($user);
                                     }
                                 }
                             }
-                        }
-                        if ($is_error) {
-                            $transaction->commit();
-                            Yii::$app->session->setFlash("success", "You have registered successfully. Please check your email for verification.");
-                            return $this->redirect(['login']);
-                        } else {
+                            if ($is_error) {
+                                $transaction->commit();
+                                Yii::$app->session->setFlash("success", "You have registered successfully. Please check your email for verification.");
+                                return $this->redirect(['login']);
+                            } else {
+                                $transaction->rollBack();
+                                Yii::$app->session->setFlash("warning", "Something went wrong.");
+                            }
+                        } catch (\Exception $ex) {
                             $transaction->rollBack();
-                            Yii::$app->session->setFlash("warning", "Something went wrong.");
                         }
-                    } catch (\Exception $ex) {
-                        $transaction->rollBack();
                     }
+                } else {
+                    Yii::$app->session->setFlash("warning", "Company Already Registered");
+                }
+            } elseif (isset($_POST['type']) && Yii::$app->request->post('type') === 'recruiter') {
+                $company = CompanyMaster::findOne(['company_name' => $companyMasterModel->company_name]);
+                if (empty($company)) {
+                    $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
+                    if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+                        $transaction = Yii::$app->db->beginTransaction();
+                        try {
+                            $companyMasterModel->city = $companyMasterModel->city1;
+                            $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
+                            $companyMasterModel->company_mobile = $companyMasterModel->mobile;
+                            if ($companyMasterModel->save()) {
+                                $company_branch = new CompanyBranch();
+                                $company_branch->branch_name = "HO";
+                                $company_branch->city = $companyMasterModel->city;
+                                $company_branch->company_id = $companyMasterModel->id;
+                                $company_branch->setAttributes($companyMasterModel->getAttributes());
+                                $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
+                                $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
+                                if ($company_branch->save()) {
+                                    $user = new User();
+                                    $user->email = $employer->email;
+                                    $user->type = User::TYPE_RECRUITER;
+                                    $user->status = User::STATUS_PENDING;
+                                    $user->is_owner = User::OWNER_YES;
+                                    $user->branch_id = $company_branch->id;
+                                    if ($user->save()) {
+                                        $userDetails = New UserDetails();
+                                        $userDetails->scenario = 'registration';
+                                        $userDetails->email = $employer->email;
+                                        $userDetails->first_name = $employer->first_name;
+                                        $userDetails->last_name = $employer->last_name;
+                                        $userDetails->user_id = $user->id;
+                                        $userDetails->unique_id = $employer->getUniqueId();
+                                        $userDetails->created_at = $userDetails->updated_at = CommonFunction::currentTimestamp();
+                                        if ($userDetails->save(false)) {
+                                            $is_error = 1;
+                                            $resetPasswordModel = new PasswordResetRequestForm();
+                                            $resetPasswordModel->email = $user->email;
+                                            $is_welcome_mail = 1;
+                                            if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
+                                                $is_error = 1;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if ($is_error) {
+                                $transaction->commit();
+                                Yii::$app->session->setFlash("success", "You have registered successfully. Please check your email for verification.");
+                                return $this->redirect(['login']);
+                            } else {
+                                $transaction->rollBack();
+                                Yii::$app->session->setFlash("warning", "Something went wrong.");
+                            }
+                        } catch (\Exception $ex) {
+                            $transaction->rollBack();
+                        }
+                    }
+                } else {
+                    Yii::$app->session->setFlash("warning", "Company Already Registered");
                 }
             } else {
                 if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -214,7 +282,7 @@ class AuthController extends Controller {
         }
         return $this->render('register', [
                     'model' => $model, 'companyMasterModel' => $companyMasterModel,
-                    'states' => $states, 'employer' => $employer
+                    'states' => $states, 'employer' => $employer, 'recruiter' => $recruiter
         ]);
     }
 
@@ -230,6 +298,76 @@ class AuthController extends Controller {
         }
         echo $options;
         exit;
+    }
+
+    public function actionChangePassword() {
+        $this->layout = 'main-form';
+        $model = new \frontend\models\ChangePasswordForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $user = User::findIdentity(Yii::$app->user->identity->id);
+            $user->password = Yii::$app->security->generatePasswordHash($model->new_password);
+            $user->original_password = trim($model->new_password);
+            if ($user->save()) {
+                Yii::$app->session->setFlash('success', "Password changed successfully");
+                Yii::$app->user->logout();
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', "Something went wrong");
+            }
+            return $this->redirect(['site/index']);
+        }
+        return $this->render('change-password', [
+                    'model' => $model
+        ]);
+    }
+
+    /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset() {
+        $this->layout = 'main-login';
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', "Reset Password Link sent sucessfully. Ckeck your registered email id");
+
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', "something went wrong");
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', [
+                    'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token) {
+        $this->layout = 'main-login';
+        try {
+            $model = new \common\models\ResetPasswordForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'Password reset sucessfully');
+
+            return $this->goHome();
+        }
+
+        return $this->render('reset-password', [
+                    'model' => $model,
+        ]);
     }
 
     /**

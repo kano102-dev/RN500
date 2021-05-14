@@ -55,7 +55,7 @@ class Controller extends ActiveController {
                                 $msg = "You are not authorized user.";
                             }
                         } else {
-                            $code = 403;
+                            $code = 440;
                             $msg = "You are not authorized user.";
                         }
                     }

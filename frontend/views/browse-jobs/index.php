@@ -233,7 +233,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                 </div>
                                 <div class="col-md-4 col-sm-4 employee-details">
                                     <h3><a href="#."><?= $model->title ?></a></h3>
-                                    <p>New York City, New York</p>
+                                    <p><?= $model->citiesName ?></p>
                                     <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
                                     <p>Benefits starts from Day 1</p>
                                 </div>
@@ -248,14 +248,14 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     <p>&nbsp;</p>
                                     <div class="row">
                                         <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
                                         <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                     </div><br/>
                                     <div><span>Description :</span><?= $model->description ?></div><br/>
 
                                 </div>
                                 <div class="col-md-3 col-sm-3">
-                                    <div class="listbtn"><a href="#.">View Profile</a></div>
+                                    <div class="listbtn"><a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/view','id' => $model->id]) ?>">View Profile</a></div>
                                 </div>
                             </div>
                         </li>

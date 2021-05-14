@@ -98,8 +98,10 @@ class LeadController extends Controller {
 
             $response['data'][] = [
                 $i,
-                $model->title,
                 $model->reference_no,
+                $model->title,
+                $model->recruiter_commission_type == 1 ? $model->recruiter_commission . "%" : "$" . $model->recruiter_commission,
+                "$" . $model->jobseeker_payment . "/" . Yii::$app->params['job.payment_type'][$model->payment_type],
                 $actionDiv
             ];
             $i++;
@@ -142,8 +144,10 @@ class LeadController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $response['data'][] = [
                 $i,
-                $model->title,
                 $model->reference_no,
+                $model->title,
+                $model->recruiter_commission_type == 1 ? $model->recruiter_commission . "%" : "$" . $model->recruiter_commission,
+                "$" . $model->jobseeker_payment . "/" . Yii::$app->params['job.payment_type'][$model->payment_type],
             ];
             $i++;
         }
@@ -153,6 +157,7 @@ class LeadController extends Controller {
 
     public function actionApprove($id) {
         $model = LeadMaster::findOne(['id' => $id]);
+        $model->scenario = 'approve';
         if ($model->load(Yii::$app->request->post())) {
             $model->status = LeadMaster::STATUS_APPROVED;
             $model->updated_at = $model->approved_at = CommonFunction::currentTimestamp();

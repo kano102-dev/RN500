@@ -37,7 +37,7 @@ class BrowseJobsController extends Controller {
                     [
                         'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
                         'allow' => true,
-                        'roles' => ['*']
+                        'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
                     [
                         'actions' => ['recruiter-lead'],
@@ -62,13 +62,13 @@ class BrowseJobsController extends Controller {
             $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
         if (isset($request['speciality']) && !empty($request['speciality'])) {
-            $query->andWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['discipline'])]);
+            $query->andWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['speciality'])]);
         }
         if (isset($request['benefit']) && !empty($request['benefit'])) {
             $query->andWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
         }
         if (isset($request['location']) && !empty($request['location'])) {
-            $query->andWhere(['IN', 'company_branch.city', implode(',', $request['location'])]);
+            $query->andWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
@@ -98,10 +98,13 @@ class BrowseJobsController extends Controller {
             }
         }
 
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id']);
+        $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
         $pages->setPageSize(10);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
+//        echo "<pre/>";print_r($pages);exit;
         return $this->render('index', ['models' => $models, 'pages' => $pages]);
     }
 
@@ -118,7 +121,7 @@ class BrowseJobsController extends Controller {
             $query->andWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
         }
         if (isset($request['location']) && !empty($request['location'])) {
-            $query->andWhere(['IN', 'company_branch.city', implode(',', $request['location'])]);
+            $query->andWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
@@ -147,7 +150,8 @@ class BrowseJobsController extends Controller {
                 }
             }
         }
-
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id']);
+        $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
         $pages->setPageSize(10);
@@ -258,6 +262,22 @@ class BrowseJobsController extends Controller {
             $out['pagination'] = ['more' => !empty($data) ? true : false];
         }
         return $out;
+    }
+
+    public function actionView($id) {
+        $model = LeadMaster::findOne(['id' => $id]);
+        $benefit = LeadBenefit::findAll(['lead_id' => $id]);
+        $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
+        $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
+        return $this->render('view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+    }
+    
+    public function actionRecruiterView($id) {
+        $model = LeadMaster::findOne(['id' => $id]);
+        $benefit = LeadBenefit::findAll(['lead_id' => $id]);
+        $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
+        $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
+        return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
     }
 
 }
