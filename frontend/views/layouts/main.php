@@ -28,6 +28,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        
         <style>
             .listpgWraper {background: #f9f9ff;}
             .carousel-item {
@@ -53,7 +54,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <?= TwakWidget::widget(['key' => '609387b9185beb22b30a8c79/1f504kd7t']) ?>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" ></script>
-
+        <!--<script src="" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>-->
         <script>
 
             $('.owl-carousel').owlCarousel({

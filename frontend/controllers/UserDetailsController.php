@@ -17,6 +17,7 @@ use frontend\models\Licenses;
 use frontend\models\Certifications;
 use frontend\models\Documents;
 use frontend\models\References;
+use frontend\models\JobPreference;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
@@ -37,6 +38,14 @@ class UserDetailsController extends Controller {
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($action) {
+        if ($action->id == 'get-profile-percentage') {
+            $this->enableCsrfValidation = false;
+        }
+
+        return parent::beforeAction($action);
     }
 
     /**
@@ -75,7 +84,7 @@ class UserDetailsController extends Controller {
         $model = new UserDetails();
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->created_at = time();
             $model->updated_at = time();
 
@@ -156,6 +165,35 @@ class UserDetailsController extends Controller {
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
+    public function actionAddJobPrefernce() {
+        $id = \Yii::$app->request->get('id');
+
+        if ($id !== null) {
+            $model = JobPreference::findOne($id);
+        } else {
+            $model = new JobPreference();
+        }
+        
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            $model->user_id = \Yii::$app->user->id;
+
+            if ($model->validate()) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', "Job Prefernce Updated successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Job Prefernce Updated successfully.']);
+                }
+            } else {
+                Yii::$app->session->setFlash('success', "Job Prefernce Updated failed.");
+                return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
+            }
+        }
+
+        return $this->renderAjax('add-job-prefernce', [
+                    'model' => $model
+        ]);
+    }
+
     public function actionWorkExperience() {
 
         $id = \Yii::$app->request->get('id');
@@ -174,7 +212,7 @@ class UserDetailsController extends Controller {
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
             $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
 
@@ -208,7 +246,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->year_complete = date('Y-m-d', strtotime("01-" . $model->year_complete));
 
             if ($model->validate()) {
@@ -242,7 +280,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
 
             $document_file = UploadedFile::getInstance($model, 'document');
@@ -305,7 +343,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
 
             $document_file = UploadedFile::getInstance($model, 'document');
@@ -366,7 +404,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
 
             $document_file = UploadedFile::getInstance($model, 'path');
 
@@ -422,7 +460,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->user_id = '1';
+            $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
                 if ($model->save()) {
@@ -471,6 +509,58 @@ class UserDetailsController extends Controller {
         }
 
         echo $deleteFlag;
+    }
+
+    public function actionGetProfilePercentage() {
+
+        $totalPercentage = 100;
+
+        $hasCompletedUserDetails = 0;
+        $hasCompletedJobPrefernce = 0;
+        $hasCompletedWE = 0;
+        $hasCompletedEducation = 0;
+        $hasCompletedLicense = 0;
+        $hasCompletedCertification = 0;
+        $hasCompletedDocuments = 0;
+        $hasCompletedReference = 0;
+
+        $userDetails = UserDetails::findOne(['user_id' => \Yii::$app->user->id]);
+        $workExperience = WorkExperience::findOne(['user_id' => \Yii::$app->user->id]);
+        $jobPreference = JobPreference::findOne(['user_id' => \Yii::$app->user->id]);
+        $education = Education::findOne(['user_id' => \Yii::$app->user->id]);
+        $license = Licenses::findOne(['user_id' => \Yii::$app->user->id]);
+        $certification = Certifications::findOne(['user_id' => \Yii::$app->user->id]);
+        $documents = Documents::findOne(['user_id' => \Yii::$app->user->id]);
+        $reference = References::findOne(['user_id' => \Yii::$app->user->id]);
+
+        if (isset($userDetails) && !empty($userDetails)) {
+            $hasCompletedUserDetails = 12.5;
+        }
+        if (isset($jobPreference) && !empty($jobPreference)) {
+            $hasCompletedJobPrefernce = 12.5;
+        }
+        if (isset($workExperience) && !empty($workExperience)) {
+            $hasCompletedWE = 12.5;
+        }
+        if (isset($education) && !empty($education)) {
+            $hasCompletedEducation = 12.5;
+        }
+        if (isset($license) && !empty($license)) {
+            $hasCompletedLicense = 12.5;
+        }
+        if (isset($certification) && !empty($certification)) {
+            $hasCompletedCertification = 12.5;
+        }
+        if (isset($documents) && !empty($documents)) {
+            $hasCompletedDocuments = 12.5;
+        }
+        if (isset($reference) && !empty($reference)) {
+            $hasCompletedReference = 12.5;
+        }
+
+        $percentage = ($hasCompletedUserDetails + $hasCompletedJobPrefernce + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
+
+        echo $percentage;
     }
 
 }

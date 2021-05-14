@@ -322,6 +322,55 @@ class AuthController extends Controller {
     }
 
     /**
+     * Requests password reset.
+     *
+     * @return mixed
+     */
+    public function actionRequestPasswordReset() {
+        $this->layout = 'main-login';
+        $model = new PasswordResetRequestForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail()) {
+                Yii::$app->session->setFlash('success', "Reset Password Link sent sucessfully. Ckeck your registered email id");
+
+                return $this->goHome();
+            } else {
+                Yii::$app->session->setFlash('error', "something went wrong");
+            }
+        }
+
+        return $this->render('requestPasswordResetToken', [
+                    'model' => $model,
+        ]);
+    }
+
+    /**
+     * Resets password.
+     *
+     * @param string $token
+     * @return mixed
+     * @throws BadRequestHttpException
+     */
+    public function actionResetPassword($token) {
+        $this->layout = 'main-login';
+        try {
+            $model = new \common\models\ResetPasswordForm($token);
+        } catch (InvalidArgumentException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'Password reset sucessfully');
+
+            return $this->goHome();
+        }
+
+        return $this->render('reset-password', [
+                    'model' => $model,
+        ]);
+    }
+
+    /**
      * Logout action.
      *
      * @return string

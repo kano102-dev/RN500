@@ -116,13 +116,14 @@ class SiteController extends Controller {
     
     public function actionJobSeeker() {
         
-        $workExperience = WorkExperience::find()->joinWith('discipline')->asArray()->all();
-        $certification = Certifications::find()->asArray()->all();
-        $documents = Documents::find()->asArray()->all();
-        $license = Licenses::find()->asArray()->all();
-        $education = Education::find()->asArray()->all();
-        $references = References::find()->asArray()->all();
-        $userDetails = \frontend\models\UserDetails::findOne(['user_id' => 1]);
+        $workExperience = WorkExperience::find()->where(['user_id' => \Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
+        $certification = Certifications::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $documents = Documents::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $license = Licenses::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $education = Education::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $references = References::find()->where(['user_id' => \Yii::$app->user->id])->asArray()->all();
+        $userDetails = \frontend\models\UserDetails::findOne(['user_id' => \Yii::$app->user->id]);
+        $jobPreference = \frontend\models\JobPreference::find()->where(['user_id' => \Yii::$app->user->id])->all();
          
         return $this->render('job-seeker',[
             'workExperience' => $workExperience,
@@ -131,7 +132,8 @@ class SiteController extends Controller {
             'license' => $license,
             'education' => $education,
             'references' => $references,
-            'userDetails' => $userDetails
+            'userDetails' => $userDetails,
+            'jobPreference' => $jobPreference
         ]);
     }
     
