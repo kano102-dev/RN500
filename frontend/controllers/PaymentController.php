@@ -57,6 +57,7 @@ class PaymentController extends Controller {
     }
 
     public function actionCheckoutsession($id) {
+        $flag = true;
         $lead_id = base64_decode($id);
         $payment_id = '';
         $session = Yii::$app->session;
@@ -75,9 +76,18 @@ class PaymentController extends Controller {
             $paymentModel->amount = $model->price;
             $paymentModel->lead_id = $lead_id;
             $paymentModel->status = CompanySubscriptionPayment::STATUS_PENDING;
+            $paymentModel->created_at = $paymentModel->updated_at = \common\CommonFunction::currentTimestamp();
             if ($paymentModel->save()) {
                 $payment_id = $paymentModel->id;
+            } else {
+                $flag = false;
             }
+        } else {
+            $flag = false;
+        }
+        if (!$flag) {
+            echo json_encode(['checkoutSessionId' => '']);
+            exit;
         }
         if ($session->isActive) {
             $session->set('payment_id', $payment_id);
@@ -103,10 +113,12 @@ class PaymentController extends Controller {
                     'amount' => $amount_cents,
                     'currency' => 'usd',
                     'quantity' => 1,
-                    'name' => Yii::$app->user->identity->details->companyNames,]]
+                    'name' => Yii::$app->user->identity->details->companyNames,
+                    ]]
         ]);
 
         echo json_encode(['checkoutSessionId' => $checkout_session['id']]);
+        exit;
     }
 
     public function actionSuccess($session_id = Null) {
@@ -120,19 +132,17 @@ class PaymentController extends Controller {
         $checkout_session = \Stripe\Checkout\Session::retrieve($id);
         $session = Yii::$app->session;
         $payment_id = $session->get('payment_id');
-        if (empty($payment_id)) {
-            return $this->redirect(['/browse-jobs/recruiter-lead']);
-        } else {
+        if (!empty($payment_id)) {
             $paymentModel = CompanySubscriptionPayment::findOne(['id' => $payment_id]);
             $paymentModel->customer_transaction_id = $checkout_session->customer;
             $paymentModel->payment_response = json_encode($checkout_session);
             $paymentModel->status = CompanySubscriptionPayment::STATUS_SUCCESS;
-            $paymentModel->save();
+            $flag = $paymentModel->save();
             $session->remove('payment_id');
             $session->close();
             Yii::$app->session->setFlash("success", "Your payment is recived successfully.");
-            return $this->redirect(['/browse-jobs/recruiter-lead']);
         }
+        return $this->redirect(['/browse-jobs/recruiter-lead']);
     }
 
     public function actionCancel() {

@@ -11,4 +11,5 @@ return [
     ],
     'maintenance_mode' => 'OFF',
     'session_expire' => '+48 hours',
+    'API_PAGINATION_RECORD_LIMIT' => 10
 ];

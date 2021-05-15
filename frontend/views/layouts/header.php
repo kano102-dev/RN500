@@ -53,7 +53,7 @@ Pjax::end()
                             <?php if (CommonFunction::isRecruiter()) { ?>
                                 <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
                             <?php } ?>
-                            <?php if (CommonFunction::isEmployer()) { ?>
+                            <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
                                 <li class="postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
                 <!--<li class="jobseeker"><a href="<?php // echo $assetDir    ?>/candidate-listing.html">Job Seeker</a></li>-->
@@ -61,8 +61,11 @@ Pjax::end()
 
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
-                                        <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
-                                        <li><a href="<?= Yii::$app->urlManager->createUrl("/site/job-seeker/"); ?>">Profile</a></li>
+                                        <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
+                                            <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+                                        <?php } ?>
+                                        <li><a href="<?= Yii::$app->urlManager->createUrl("/site/job-seeker/"); ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
+                                        <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/change-password"); ?>"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>

@@ -10,6 +10,15 @@ use yii\bootstrap\ActiveForm;
 use kartik\select2\Select2;
 use borales\extensions\phoneInput\PhoneInput;
 ?>
+<style>
+    .nav-tabs{
+        display:inline-flex;
+    }
+    .nav-tabs li{
+        margin-right: 10px;
+        list-style-type:none;
+    }    
+</style>
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
@@ -17,8 +26,9 @@ use borales\extensions\phoneInput\PhoneInput;
                 <div class="userccount">
                     <div class="userbtns">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#candidate">Candidate</a></li>
+                            <li class="active"><a data-toggle="tab" href="#candidate">Jobseeker</a></li>
                             <li><a data-toggle="tab" href="#employer">Employer</a></li>
+                            <li><a data-toggle="tab" href="#recruiter">Recruiter</a></li>
                         </ul>
                     </div>
                     <div class="tab-content">
@@ -112,7 +122,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 ])->label(false);
                                 ?>
                             </div>
-                            <div><h3>User Details</h3></div>
+                            <div><h3>Company Owner Details</h3></div>
                             <hr/>
                             <div class="formrow">
                                 <?php
@@ -150,6 +160,95 @@ use borales\extensions\phoneInput\PhoneInput;
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
+                        <div id="recruiter" class="formpanel tab-pane fade in">
+                            <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'recruiter-form']) ?>
+                            <div><h3>Company Details</h3></div>
+                            <hr/>
+                            <?= Html::hiddenInput('type', 'recruiter') ?>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?=
+                                $form->field($companyMasterModel, 'mobile')->widget(PhoneInput::className(), [
+                                    'jsOptions' => [
+                                        'preferredCountries' => ['us', 'in'],
+                                    ]
+                                ])->label(false);
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'street_address')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_address')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'apt')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('apt')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?=
+                                $form->field($companyMasterModel, 'state1')->widget(Select2::classname(), [
+                                    'data' => $states,
+                                    'options' => ['placeholder' => 'Select a province'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label(false);
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?=
+                                $form->field($companyMasterModel, 'city1')->widget(Select2::classname(), [
+                                    'data' => [],
+                                    'options' => ['placeholder' => 'Select a city'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ])->label(false);
+                                ?>
+                            </div>
+                            <div><h3>Company Owner Details</h3></div>
+                            <hr/>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($recruiter, 'first_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $recruiter->getAttributeLabel('first_name')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($recruiter, 'last_name', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $recruiter->getAttributeLabel('last_name')])
+                                ?>
+                            </div>
+                            <div class="formrow">
+                                <?php
+                                echo $form->field($recruiter, 'email', [
+                                            'options' => ['class' => 'form-group has-feedback'],
+                                            'inputTemplate' => '{input}',
+                                            'template' => '{input}{error}',
+                                        ])
+                                        ->label(false)
+                                        ->textInput(['placeholder' => $recruiter->getAttributeLabel('email')])
+                                ?>
+                            </div>
+                            <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
+                            <?php \yii\bootstrap4\ActiveForm::end(); ?>
+                        </div>
                     </div>
                     <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManager->createUrl('auth/login'); ?>">Login Here</a></div>
                 </div>
@@ -168,6 +267,17 @@ $script = <<< JS
                 data: {'id':state},
                 success: function (response) {
                     $('#companymaster-city').html(response);
+                }
+            });
+   });
+   $(document).on('change','#companymaster-state1',function(){
+        var state=$(this).val();
+       $.ajax({
+                method: 'GET',
+                url: '$getCitiesUrl',
+                data: {'id':state},
+                success: function (response) {
+                    $('#companymaster-city1').html(response);
                 }
             });
    });

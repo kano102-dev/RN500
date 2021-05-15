@@ -14,18 +14,16 @@ $is_otp_sent = $model->is_otp_sent;
         padding-top: 8px;
         color:red;
     }
+    .field_icon{
+        float: right;
+        margin-top: -24px;
+    }
 </style>
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
-                    <!--<div class="socialLogin">-->
-<!--                        <h5>Login Or Register with Social</h5>
-                        <a href="#." class="fb"><i class="fa fa-facebook" aria-hidden="true"></i></a> 
-                        <a href="#." class="gp"><i class="fa fa-google-plus" aria-hidden="true"></i></a> 
-                        <a href="#." class="tw"><i class="fa fa-twitter" aria-hidden="true"></i></a> -->
-                    <!--</div>-->
                     <h5>User Login</h5>
                     <!-- login form -->
                     <div class="formpanel">
@@ -45,13 +43,16 @@ $is_otp_sent = $model->is_otp_sent;
                             <?php
                             echo $form->field($model, 'password', [
                                         'options' => ['class' => 'form-group has-feedback'],
-                                        'inputTemplate' => '{input}',
-                                        'template' => '{input}{error}',
+//                                        'inputTemplate' => '{input}',
+                                        'template' => '{input}<span toggle="#password-field" class="fa fa-fw fa-eye field_icon toggle-password"></span>{error}',
                                     ])
                                     ->label(false)
                                     ->passwordInput(['placeholder' => $model->getAttributeLabel('password'), 'readOnly' => $is_otp_sent])
                             ?>
                         </div>
+                        <!--                        <div class="formrow">
+                                                    <input type="checkbox" onclick="showPassword()"> Show Password
+                                                </div>-->
                         <div class="formrow">
                             <?php
                             if ($is_otp_sent) {
@@ -78,3 +79,22 @@ $is_otp_sent = $model->is_otp_sent;
         </div>
     </div>
 </div>
+<?php
+$script = <<< JS
+        $(document).on('click', '.toggle-password', function() {
+
+    $(this).toggleClass("fa-eye fa-eye-slash");
+    
+    var input = $("#loginform-password");
+    input.attr('type') === 'password' ? input.attr('type','text') : input.attr('type','password')
+});
+    function showPassword() {
+        var x = document.getElementById("loginform-password");
+        if (x.type === "password") {
+          x.type = "text";
+        } else {
+          x.type = "password";
+        }
+    }
+JS;
+$this->registerJs($script);

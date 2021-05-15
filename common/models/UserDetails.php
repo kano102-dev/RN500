@@ -173,6 +173,10 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function getCompanyNames() {
         return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
     }
+    
+    public function getCompanyEmail() {
+        return isset($this->branch->company->company_email) ? $this->branch->company->company_email : "";
+    }
 
     public function getCityRef() {
         return $this->hasOne(Cities::className(), ['id' => 'city']);
