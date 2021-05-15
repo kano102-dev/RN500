@@ -20,18 +20,28 @@ use yii\web\JsExpression;
         <div class="col-sm-12">
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'discipline_id')->dropDownList($discipline); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'specialty')->dropDownList($speciality); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'employment_type')->dropDownList(Yii::$app->params['EMPLOYEMENT_TYPE']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'currently_working')->checkbox(['id' => 'currently_working']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'start_date')->widget(DatePicker::classname(), [
@@ -53,6 +63,8 @@ use yii\web\JsExpression;
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'end_date')->widget(DatePicker::classname(), [
@@ -75,9 +87,13 @@ use yii\web\JsExpression;
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'facility_name')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <label class="control-label" for="city">City</label>
             <ul class="optionlist">

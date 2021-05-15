@@ -122,7 +122,7 @@ class UserDetailsController extends Controller {
 //        $model->city = $model->city;
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->city = $postData['city'];
-            
+
             $model->dob = date('Y-m-d', strtotime($model->dob));
             if ($model->validate()) {
                 if ($model->save()) {
@@ -138,6 +138,34 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('update', [
+                    'model' => $model,
+        ]);
+    }
+
+    public function actionProfile($id) {
+        $postData = Yii::$app->request->post();
+        $model = UserDetails::findOne(['user_id' => $id]);
+        $model->updated_at = time();
+        if (isset($model->dob) && !empty($model->dob)) {
+            $model->dob = date('d-m-Y', strtotime($model->dob));
+        }
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->city = $postData['city'];
+
+            $model->dob = date('Y-m-d', strtotime($model->dob));
+            if ($model->validate()) {
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('error', "User Details Updated Successfully.");
+                    return $this->redirect(['profile', 'id' => $id]);
+                }
+            } else {
+                Yii::$app->session->setFlash('error', "User Details Updated failed.");
+                return $this->redirect(['profile', 'id' => $id]);
+            }
+        }
+
+        return $this->render('profile', [
                     'model' => $model,
         ]);
     }
@@ -173,7 +201,7 @@ class UserDetailsController extends Controller {
     public function actionAddJobPrefernce() {
         $id = \Yii::$app->request->get('id');
         $postData = Yii::$app->request->post();
-        
+
         if ($id !== null) {
             $model = JobPreference::findOne($id);
         } else {
@@ -181,7 +209,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            
+
             $model->location = $postData['location'];
             $model->user_id = \Yii::$app->user->id;
 
@@ -257,7 +285,7 @@ class UserDetailsController extends Controller {
             $model->user_id = \Yii::$app->user->id;
             $model->year_complete = date('Y-m-d', strtotime("01-" . $model->year_complete));
             $model->location = $postData['location'];
-            
+
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Education Details Updated successfully.");
@@ -290,7 +318,7 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            
+
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
             $model->issuing_state = $postData['issuing_state'];
@@ -571,7 +599,7 @@ class UserDetailsController extends Controller {
 
         $percentage = ($hasCompletedUserDetails + $hasCompletedJobPrefernce + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
 
-        echo round($percentage,0);
+        echo round($percentage, 0);
     }
 
 }

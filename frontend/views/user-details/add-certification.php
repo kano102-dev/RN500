@@ -19,9 +19,13 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'certificate_name')->dropDownList(Yii::$app->params['CERTIFICATION_TYPE']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'certification_active')->radioList([1 => 'Yes', 2 => 'No']) ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12 expiry_date" style="display:none;">
             <?php
             echo $form->field($model, 'expiry_date')->widget(DatePicker::classname(), [

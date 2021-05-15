@@ -48,6 +48,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     .ui-state-default{display: none;}
     .ui-widget-header{background: #263bd6;}
     .sticky-sidebar{position: fixed !important;width: 350px;top: 10px;}
+    .jobinfo h3 a,.jobinfo .card .card-footer .card-title a{text-decoration: none;}
     
 </style>
 
@@ -584,7 +585,7 @@ getProfilePercentage();
 $(window).scroll(function(){
   var scroll = $(window).scrollTop();      
   console.log(scroll);      
-  if(scroll >= 100 && scroll <= 1600){
+  if(scroll >= 100 && scroll <= 1100){
       $('.fixed-sidebar').addClass('sticky-sidebar');
    } else {
        $('.fixed-sidebar').removeClass('sticky-sidebar');

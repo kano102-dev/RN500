@@ -16,7 +16,8 @@ use yii\web\JsExpression;
         <div class="col-sm-12">
             <?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
         </div>
-        
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <label class="control-label" for="city">Location</label>
             <ul class="optionlist">
@@ -48,6 +49,8 @@ use yii\web\JsExpression;
                 ?>
             </ul>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'year_complete')->widget(DatePicker::classname(), [
@@ -69,11 +72,11 @@ use yii\web\JsExpression;
             ]);
             ?>
         </div>
-        
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE']) ?>
         </div>
-        
     </div>
 
     <div class="form-group">

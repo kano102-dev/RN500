@@ -12,9 +12,11 @@ use yii\web\JsExpression;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <style>
-    .field-userdetails-street_address{margin-bottom: 5px;}
+    label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
+    .mb-100{margin-bottom: 100px;}
+    .mt-100{margin-top: 100px;}
 </style>
-<div class="user-details-form">
+<div class="container mb-100 mt-100">
     <?php
     $form = ActiveForm::begin([
                 "id" => "user-details",
@@ -29,18 +31,11 @@ use yii\web\JsExpression;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <?= $form->field($model, 'mobile_no')->textInput(['maxlength' => true]) ?>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <?= $form->field($model, 'looking_for')->textarea(['row' => 3]) ?>
         </div>
     </div>
     <div class="row">
@@ -59,16 +54,15 @@ use yii\web\JsExpression;
             <label class="control-label" for="city">City</label>
             <ul class="optionlist">
                 <?php
+                $value = ['city' => $model->city];
                 $url = Url::to(['browse-jobs/get-cities']);
                 $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'city',
                     'options' => [
                         'id' => 'city',
-                        'placeholder' => 'Select Location...',
+                        'value' => $value,
                         'multiple' => false,
-                        'class' => '',
-                        'value' => isset($model->city) ? $model->city : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -113,12 +107,53 @@ use yii\web\JsExpression;
             ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <?= $form->field($model, 'looking_for')->textarea(['row' => 3]) ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-
 </div>
-      
+
+
+
+<?php
+$script = <<< JS
+        
+$(document).on("beforeSubmit", "#user-details", function () {
+   var form = $(this);
+        $.ajax({
+            url    : form.attr('action'),
+            type   : 'post',
+            dataType : 'json',
+            data   : form.serialize(),
+            success: function (response){
+                try{
+                    if(!response.error){
+                        $("#profile-modal").modal('hide');
+                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                        $(document).on("pjax:success", "#job-seeker", function (event) {
+                            $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                        });
+                        getProfilePercentage();
+                    }
+                }catch(e){
+                    $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                }
+            },
+            error  : function () 
+            {
+                console.log('internal server error');
+            }
+        });
+        return false;
+});        
+        
+JS;
+$this->registerJs($script, yii\web\View::POS_END);
+?>        

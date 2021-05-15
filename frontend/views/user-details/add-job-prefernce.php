@@ -22,6 +22,8 @@ use yii\web\JsExpression;
         <div class="col-sm-12">
             <?= $form->field($model, 'job_preference')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <label class="control-label" for="city">location</label>
             <ul class="optionlist">
@@ -52,9 +54,13 @@ use yii\web\JsExpression;
                 ?>
             </ul>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'shift')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'pay')->textInput(); ?>
         </div>

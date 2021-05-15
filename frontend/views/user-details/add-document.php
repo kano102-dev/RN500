@@ -19,6 +19,8 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'document_type')->dropDownList([0 => 'Resume', 1 => 'Other']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'path')->fileInput()->label('document') ?>
             <?php if ($deleteFlag) { ?>

@@ -22,6 +22,8 @@ use yii\web\JsExpression;
         <div class="col-sm-12">
             <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <label class="control-label" for="issuing_state">Issuing State</label>
             <ul class="optionlist">
@@ -53,6 +55,8 @@ use yii\web\JsExpression;
                 ?>
             </ul>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'expiry_date')->widget(DatePicker::classname(), [
@@ -74,12 +78,18 @@ use yii\web\JsExpression;
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'license_number')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'compact_states')->checkbox(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'document')->fileInput() ?>
 

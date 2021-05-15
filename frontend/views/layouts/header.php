@@ -49,6 +49,13 @@ Pjax::end()
                             </li>
                             <li><a href="">About us</a></li>
                             <li><a href="">Contact</a></li>
+                            
+                            <?php if(Yii::$app->user->identity->type == \common\models\User::TYPE_JOB_SEEKER){ ?>
+                            <li><a href="<?= Yii::$app->urlManager->createUrl("site/job-seeker"); ?>">Job Seeker</a></li>
+                            <?php } else { ?>
+                            <li><a href="<?= Yii::$app->urlManager->createUrl(["user-details/profile",'id' => Yii::$app->user->id]); ?>">Profile</a></li>
+                            <?php } ?>
+                            
                             <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
                             <?php if (CommonFunction::isRecruiter()) { ?>
                                 <li><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>

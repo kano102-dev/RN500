@@ -94,8 +94,6 @@ class AuthController extends Controller {
         if (
                 $model->load(Yii::$app->request->post()) &&
                 $model->validatePassword('password', []) &&
-                $model->sendOTP() &&
-                $model->OTPVerified() &&
                 $model->login()
         ) {
             if (Yii::$app->user->identity->type == 1) {
