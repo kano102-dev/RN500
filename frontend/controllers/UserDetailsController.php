@@ -115,10 +115,15 @@ class UserDetailsController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
         $model->updated_at = time();
-
+        $model->dob = date('d-m-Y', strtotime($model->dob));
+//        $model->city = $model->city;
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            $model->city = $postData['city'];
+            
+            $model->dob = date('Y-m-d', strtotime($model->dob));
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
@@ -167,15 +172,17 @@ class UserDetailsController extends Controller {
 
     public function actionAddJobPrefernce() {
         $id = \Yii::$app->request->get('id');
-
+        $postData = Yii::$app->request->post();
+        
         if ($id !== null) {
             $model = JobPreference::findOne($id);
         } else {
             $model = new JobPreference();
         }
-        
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
+            $model->location = $postData['location'];
             $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
@@ -195,7 +202,7 @@ class UserDetailsController extends Controller {
     }
 
     public function actionWorkExperience() {
-
+        $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
 
         if ($id !== null) {
@@ -215,6 +222,7 @@ class UserDetailsController extends Controller {
             $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
             $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
+            $model->city = $postData['city'];
 
             if ($model->validate()) {
                 if ($model->save()) {
@@ -235,7 +243,7 @@ class UserDetailsController extends Controller {
     }
 
     public function actionAddEducation() {
-
+        $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
 
         if ($id !== null) {
@@ -248,7 +256,8 @@ class UserDetailsController extends Controller {
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
             $model->year_complete = date('Y-m-d', strtotime("01-" . $model->year_complete));
-
+            $model->location = $postData['location'];
+            
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Education Details Updated successfully.");
@@ -266,6 +275,7 @@ class UserDetailsController extends Controller {
     }
 
     public function actionAddLicence() {
+        $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
@@ -280,9 +290,10 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
-
+            $model->issuing_state = $postData['issuing_state'];
             $document_file = UploadedFile::getInstance($model, 'document');
 
             $folder = \Yii::$app->basePath . "/web/uploads/user-details/license/";
@@ -560,7 +571,7 @@ class UserDetailsController extends Controller {
 
         $percentage = ($hasCompletedUserDetails + $hasCompletedJobPrefernce + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
 
-        echo $percentage;
+        echo round($percentage,0);
     }
 
 }

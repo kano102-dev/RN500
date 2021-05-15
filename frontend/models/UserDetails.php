@@ -61,10 +61,11 @@ class UserDetails extends \yii\db\ActiveRecord
             ['email','email'],
             [['unique_id', 'zip_code'], 'string', 'max' => 20],
             [['first_name', 'last_name'], 'string', 'max' => 50],
-            [['mobile_no'], 'string', 'max' => 11],
+            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address','ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

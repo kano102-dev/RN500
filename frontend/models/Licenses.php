@@ -42,6 +42,7 @@ class Licenses extends \yii\db\ActiveRecord
             [['document'], 'string', 'max' => 255],
             [['expiry_date'], 'string', 'max' => 50],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],   
         ];
     }
 

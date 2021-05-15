@@ -33,6 +33,7 @@ class JobPreference extends \yii\db\ActiveRecord
             [['user_id', 'job_preference', 'location', 'shift', 'pay'], 'required'],
             [['user_id'], 'integer'],
             [['job_preference', 'location', 'shift', 'pay'], 'string', 'max' => 255],
+            [['job_preference', 'shift', 'pay'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

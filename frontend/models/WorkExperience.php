@@ -4,6 +4,7 @@ namespace frontend\models;
 
 use Yii;
 use common\models\User;
+
 /**
  * This is the model class for table "work_experience".
  *
@@ -23,24 +24,22 @@ use common\models\User;
  *
  * @property User $user
  */
-class WorkExperience extends \yii\db\ActiveRecord
-{
+class WorkExperience extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'work_experience';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['user_id', 'start_date','end_date'], 'required'],
-            [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working', 'city'], 'integer'],
+            [['user_id', 'start_date', 'end_date'], 'required'],
+            [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working'], 'integer'],
             [['start_date', 'end_date'], 'safe'],
             [['end_date'], 'required', "message" => "Please enter {attribute}.", 'when' => function($model) {
                     return $model->currently_working != 1;
@@ -50,14 +49,14 @@ class WorkExperience extends \yii\db\ActiveRecord
             [['title', 'facility_name'], 'string', 'max' => 255],
             [['organization_name', 'description'], 'string', 'max' => 500],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['title', 'facility_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
@@ -80,13 +79,12 @@ class WorkExperience extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
-    
-    public function getDiscipline()
-    {
+
+    public function getDiscipline() {
         return $this->hasOne(\common\models\Discipline::className(), ['id' => 'discipline_id']);
     }
+
 }

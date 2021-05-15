@@ -32,10 +32,10 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
+                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
+                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits'],
                         'allow' => true,
                         'roles' => ['*']
                     ],

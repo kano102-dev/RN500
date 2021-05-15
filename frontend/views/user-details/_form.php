@@ -2,12 +2,18 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .field-userdetails-street_address{margin-bottom: 5px;}
+</style>
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
@@ -40,13 +46,59 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'street_address')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-sm-6">
-            <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
+            <label class="control-label" for="city">City</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'city',
+                    'options' => [
+                        'id' => 'city',
+                        'placeholder' => 'Select Location...',
+                        'multiple' => false,
+                        'class' => '',
+                        'value' => isset($model->city) ? $model->city : [],
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
         </div>
         <div class="col-sm-6">
             <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-sm-6">
-            <?= $form->field($model, 'dob')->textInput(['maxlength' => true]) ?>
+
+            <?php
+            echo $form->field($model, 'dob')->widget(DatePicker::classname(), [
+                'name' => 'dob',
+                'value' => date('d-M-Y'),
+                'options' => ['placeholder' => 'Enter DOB..'],
+                'pluginOptions' => [
+                    'format' => 'dd-mm-yyyy',
+                    'todayHighlight' => true,
+                    'autoclose' => true,
+//                    'startDate' => date('d-m-Y'),
+                ],
+                'pluginEvents' => [
+                    "changeDate" => "function(e) {
+
+                            }"
+                ]
+            ]);
+            ?>
         </div>
     </div>
 

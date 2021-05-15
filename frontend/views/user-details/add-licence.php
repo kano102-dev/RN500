@@ -3,6 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
@@ -20,7 +23,35 @@ use kartik\date\DatePicker;
             <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE']); ?>
         </div>
         <div class="col-sm-12">
-            <?= $form->field($model, 'issuing_state')->dropDownList([1 => 'test']) ?>
+            <label class="control-label" for="issuing_state">Issuing State</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'issuing_state',
+                    'options' => [
+                        'id' => 'issuing_state',
+                        'placeholder' => 'Select location...',
+                        'multiple' => false,
+                        'class' => '',
+//                        'value' => isset($model->city) ? $model->city : [],
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
         </div>
         <div class="col-sm-12">
             <?php
@@ -32,7 +63,6 @@ use kartik\date\DatePicker;
                     'format' => 'mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-                    'startDate' => date('d-m-Y'),
                     'minViewMode' => 'months',
                     'startView' => 'year',
                 ],
@@ -47,7 +77,6 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'license_number')->textInput(); ?>
         </div>
-
         <div class="col-sm-12">
             <?= $form->field($model, 'compact_states')->checkbox(); ?>
         </div>

@@ -17,7 +17,7 @@ use kartik\date\DatePicker;
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'certificate_name')->dropDownList([ 1 => 'Test' ]); ?>
+            <?= $form->field($model, 'certificate_name')->dropDownList(Yii::$app->params['CERTIFICATION_TYPE']); ?>
         </div>
         <div class="col-sm-12">
             <?= $form->field($model, 'certification_active')->radioList([1 => 'Yes', 2 => 'No']) ?>
@@ -32,7 +32,6 @@ use kartik\date\DatePicker;
                     'format' => 'mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-                    'startDate' => date('d-m-Y'),
                     'minViewMode' => 'months',
                     'startView' => 'year',
                 ],

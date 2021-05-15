@@ -21,5 +21,6 @@ return [
     'EMPLOYEMENT_TYPE' => [1 => 'Interim', 2 => 'Local Contract', 3 => 'PRN',4 => 'Project',5 => 'Staff',6 => 'Temp to Perm',7 => 'Travel'],
     'DEGREE_TYPE' => [1 => 'AS', 2 => 'AA', 3 => 'ADN',4 => 'BA',5 => 'BS',6 => 'BSN',7 => 'DN', 8 => 'DSP', 9 => 'DNS',10 => 'DPT',11 => 'MA',12 => 'MPH',13 => 'MS',14 => 'MSN', 15 => 'MHHS',16 => 'PhD',17 => 'Other'],
     'LICENSE_TYPE' => [1 => 'RN', 2 => 'PN', 3 => 'APRN-CNP',4 => 'APRN-CRNA',5 => 'APRN-CNS',6 => 'APRN-CNM',7 => 'Other'],
-    'REFERENCE_TYPE' => [1 => 'Charge RN', 2 => 'RN Manager', 3 => 'DON', 4 => 'ADON', 5 => 'RN Supervisor', 6 => 'Chief Nursing Officer', 7 => 'NP', 8 => 'PA', 9 => 'APRN', 10 => 'MD', 11 => 'Other']
- ];
+    'REFERENCE_TYPE' => [1 => 'Charge RN', 2 => 'RN Manager', 3 => 'DON', 4 => 'ADON', 5 => 'RN Supervisor', 6 => 'Chief Nursing Officer', 7 => 'NP', 8 => 'PA', 9 => 'APRN', 10 => 'MD', 11 => 'Other'],
+    'CERTIFICATION_TYPE' => [1 => '(ABMP) Diagnostic Imaging',2 => '(ABMP) Hyperthermia',3 => '(ABMP) Medical Health',4 => '(ABMP) Radiation',5 => '(ABMP) Nuclear Medicine'],
+    ];
