@@ -5,6 +5,9 @@ namespace common;
 use Yii;
 use common\models\User;
 use common\models\CompanyBranch;
+use common\models\CompanyMaster;
+use common\models\CompanySubscription;
+use common\models\CompanySubscriptionPayment;
 
 class CommonFunction {
 
@@ -57,6 +60,15 @@ class CommonFunction {
             $companyId = Yii::$app->user->identity->branch->company_id;
         }
         return $companyId;
+    }
+
+    // RETURN LOGGED-IN USER COMPANY ID
+    public static function getLoggedInUserCompanyPriority() {
+        $priority = "";
+        if (isset(Yii::$app->user->identity->branch)) {
+            $priority = Yii::$app->user->identity->branch->company->priority;
+        }
+        return $priority;
     }
 
     // RETURN TRUE IF LOGGED-IN USER BELONGS TO DEFAULT BRANCH, GENERALLY "HO"
@@ -121,6 +133,67 @@ class CommonFunction {
                         ->setTo($user->email)
                         ->setSubject($subject)
                         ->send();
+    }
+
+    public static function dateDiffInDays($date1) {
+        $date2 = strtotime('now');
+        // Calculating the difference in timestamps
+        $diff = $date2 - $date1;
+
+        // 1 day = 24 hours
+        // 24 * 60 * 60 = 86400 seconds
+        return abs(round($diff / 86400));
+    }
+
+    public static function isExpired() {
+        $flag = true;
+        $company_id = CommonFunction::getLoggedInUserCompanyId();
+        if (isset(Yii::$app->user->identity) && !empty($company_id)) {
+            $subscription = CompanySubscription::find()->where(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->andWhere(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->one();
+            if (!empty($subscription)) {
+                return false;
+            }
+        }
+    }
+
+    public static function getAllPurchasedLead() {
+        $leads = [];
+        $company_id = CommonFunction::getLoggedInUserCompanyId();
+        if (isset(Yii::$app->user->identity) && !empty($company_id)) {
+            $subscription_lead = CompanySubscriptionPayment::find()->select('company_subscription_payment.lead_id')->innerJoin('company_subscription', 'company_subscription.id=company_subscription_payment.subscription_id')->where(['company_subscription.company_id' => $company_id])->andWhere('company_subscription_payment.lead_id IS NOT NULL')->asArray()->all();
+            $leads = array_column($subscription_lead, 'lead_id');
+        }
+        return $leads;
+    }
+
+    public static function isVisibleLead($approved_at) {
+        $flag = false;
+        $priority = CommonFunction::getLoggedInUserCompanyPriority();
+        $approved_date = date('Y-m-d H:i:s', $approved_at);
+        if (!empty($priority)) {
+            if ($priority == CompanyMaster::PRIORITY_HIGH) {
+                $flag = true;
+            } else if ($priority == CompanyMaster::PRIORITY_MODRATE) {
+                $new_time = date("Y-m-d H:i:s", strtotime($approved_date . '+24 hours'));
+                $time = date("Y-m-d H:i:s", strtotime('now'));
+                if ($new_time <= $time) {
+                    $flag = true;
+                }
+            } else if ($priority == CompanyMaster::PRIORITY_MODRATE) {
+                $new_time = date("Y-m-d H:i:s", strtotime($approved_date . '+36 hours'));
+                $time = date("Y-m-d H:i:s", strtotime('now'));
+                if ($new_time <= $time) {
+                    $flag = true;
+                }
+            } else {
+                $new_time = date("Y-m-d H:i:s", strtotime($approved_date . '+42 hours'));
+                $time = date("Y-m-d H:i:s", strtotime('now'));
+                if ($new_time <= $time) {
+                    $flag = true;
+                }
+            }
+        }
+        return $flag;
     }
 
 }

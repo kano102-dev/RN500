@@ -1,0 +1,40 @@
+[13-Oct-2015 11:34:53 UTC] PHP Fatal error:  Undefined class constant 'STATUS_ACTIVE' in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 60
+[13-Oct-2015 14:35:57 UTC] PHP Fatal error:  Class 'common\models\CompanyMeta' not found in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 118
+[13-Oct-2015 14:36:23 UTC] PHP Fatal error:  Class 'common\models\CompanyMeta' not found in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 118
+[13-Oct-2015 14:37:08 UTC] PHP Fatal error:  Class 'common\models\CompanyMeta' not found in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 120
+[13-Oct-2015 14:37:57 UTC] PHP Fatal error:  Class 'common\models\CompanyMeta' not found in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 120
+[13-Oct-2015 14:38:46 UTC] PHP Fatal error:  Class 'common\models\CompanyMeta' not found in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 120
+[13-Oct-2015 14:39:56 UTC] PHP Fatal error:  Class 'common\models\TimestampBehavior' not found in /home/ongraph/php/www/panelmanagement/common/models/Companymeta.php on line 62
+[13-Oct-2015 14:40:30 UTC] PHP Fatal error:  Class 'common\models\BlameableBehavior' not found in /home/ongraph/php/www/panelmanagement/common/models/Companymeta.php on line 65
+[13-Oct-2015 17:28:38 UTC] PHP Parse error:  syntax error, unexpected ')', expecting '&' or variable (T_VARIABLE) in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 134
+[13-Oct-2015 17:29:17 UTC] PHP Parse error:  syntax error, unexpected ')', expecting '&' or variable (T_VARIABLE) in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 134
+[13-Oct-2015 17:29:29 UTC] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 135
+[13-Oct-2015 17:30:27 UTC] PHP Parse error:  syntax error, unexpected 'var' (T_VAR) in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 135
+[13-Oct-2015 17:30:43 UTC] PHP Parse error:  syntax error, unexpected '{' in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 136
+[15-Oct-2015 14:18:47 UTC] PHP Fatal error:  Call to undefined function common\models\save() in /home/ongraph/php/www/panelmanagement/common/models/Companymeta.php on line 76
+[16-Oct-2015 10:54:03 UTC] PHP Parse error:  syntax error, unexpected ')', expecting '&' or variable (T_VARIABLE) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 35
+[16-Oct-2015 10:54:13 UTC] PHP Parse error:  syntax error, unexpected ')', expecting '&' or variable (T_VARIABLE) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 35
+[16-Oct-2015 12:32:54 UTC] PHP Fatal error:  Call to undefined method common\models\Company::model() in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 56
+[16-Oct-2015 13:22:40 UTC] PHP Fatal error:  Call to undefined function common\models\getCompanySubscribe() in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 123
+[16-Oct-2015 13:41:32 UTC] PHP Fatal error:  Call to undefined method common\models\Company::model() in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 58
+[16-Oct-2015 13:48:01 UTC] PHP Parse error:  syntax error, unexpected ''id'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 58
+[16-Oct-2015 13:53:15 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 13:53:56 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 13:55:13 UTC] PHP Fatal error:  Call to undefined method common\models\Company::model() in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 58
+[16-Oct-2015 14:21:37 UTC] PHP Parse error:  syntax error, unexpected 'null' (T_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 14:34:50 UTC] PHP Parse error:  syntax error, unexpected 'null' (T_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 14:36:04 UTC] PHP Parse error:  syntax error, unexpected 'null' (T_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 15:00:11 UTC] PHP Fatal error:  Class 'api\modules\v1\controllers\Expression' not found in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 15:00:58 UTC] PHP Fatal error:  Class 'yii\mongodb\Expression' not found in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 59
+[16-Oct-2015 17:23:28 UTC] PHP Fatal error:  Call to undefined method common\models\Company::model() in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 61
+[16-Oct-2015 18:14:09 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 63
+[16-Oct-2015 18:18:53 UTC] PHP Parse error:  syntax error, unexpected 'echo' (T_ECHO) in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 63
+[16-Oct-2015 19:15:03 UTC] PHP Parse error:  syntax error, unexpected 'null' (T_STRING), expecting ')' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 61
+[19-Oct-2015 15:03:59 UTC] PHP Parse error:  syntax error, unexpected ''deletecompany'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 26
+[19-Oct-2015 18:56:55 UTC] PHP Fatal error:  Call to a member function delete() on a non-object in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 90
+[20-Oct-2015 10:50:41 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 90
+[20-Oct-2015 11:10:17 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 90
+[20-Oct-2015 11:10:27 UTC] PHP Parse error:  syntax error, unexpected ',' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 90
+[20-Oct-2015 11:34:50 UTC] PHP Fatal error:  Class 'api\modules\v1\controllers\MongoId' not found in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 90
+[20-Oct-2015 18:04:28 UTC] PHP Parse error:  syntax error, unexpected ''delete'' (T_CONSTANT_ENCAPSED_STRING), expecting ']' in /home/ongraph/php/www/panelmanagement/api/modules/v1/controllers/CompanyController.php on line 33
+[21-Oct-2015 10:11:20 UTC] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/ongraph/php/www/panelmanagement/common/models/Company.php on line 128

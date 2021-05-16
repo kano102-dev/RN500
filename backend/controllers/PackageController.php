@@ -105,6 +105,8 @@ class PackageController extends Controller {
         $model = new PackageMaster();
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = $model->updated_at = CommonFunction::currentTimestamp();
+            $model->created_by = $model->updated_by = \Yii::$app->user->identity->id;
             if ($model->save()) {
                 Yii::$app->session->setFlash("success", "Package created successfully.");
             } else {
@@ -130,9 +132,10 @@ class PackageController extends Controller {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->updated_at = CommonFunction::currentTimestamp();
+            $model->updated_by = \Yii::$app->user->identity->id;
             if ($model->save()) {
-                // 
-                Yii::$app->session->setFlash("success", "Package created successfully.");
+                Yii::$app->session->setFlash("success", "Package updated successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong.");
             }

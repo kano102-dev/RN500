@@ -31,7 +31,7 @@ return [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'mail.rn500.com',
                 'username' => 'info@rn500.com',
-                'password' => 'frGNIZab6gcR',
+                'password' => 'welcome@12345',
                 'port' => '26',
 //                'host' => 'smtp.sendgrid.net',
 //                'username' => 'apikey',

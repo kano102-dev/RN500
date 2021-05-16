@@ -2,9 +2,9 @@
 
 namespace frontend\controllers;
 
+use Yii;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
-use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
@@ -15,6 +15,14 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use common\models\WorkExperience;
+use common\models\Documents;
+use common\models\Licenses;
+use common\models\Certifications;
+use common\models\Education;
+use common\models\References;
+use common\models\UserDetails;
+use common\models\JobPreference;
 
 /**
  * Site controller
@@ -109,7 +117,26 @@ class SiteController extends Controller {
     }
     
     public function actionJobSeeker() {
-        return $this->render('job-seeker');
+        
+        $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
+        $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
+        $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
+         
+        return $this->render('job-seeker',[
+            'workExperience' => $workExperience,
+            'certification' => $certification,
+            'documents' => $documents,
+            'license' => $license,
+            'education' => $education,
+            'references' => $references,
+            'userDetails' => $userDetails,
+            'jobPreference' => $jobPreference
+        ]);
     }
     
     
@@ -251,6 +278,13 @@ class SiteController extends Controller {
         return $this->render('resendVerificationEmail', [
                     'model' => $model
         ]);
+    }
+    
+    public function actionEditProfile() {
+        echo 'enter';
+        exit;
+        
+        return $this->render('edit-profile');
     }
 
 }

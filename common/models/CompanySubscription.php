@@ -18,6 +18,8 @@ use Yii;
  */
 class CompanySubscription extends \yii\db\ActiveRecord {
 
+    const PAY_AS_A_GO = 1;
+
     /**
      * {@inheritdoc}
      */

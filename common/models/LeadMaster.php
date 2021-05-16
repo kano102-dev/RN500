@@ -35,7 +35,8 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public $disciplines;
     public $benefits;
     public $specialies;
-    
+    public $state;
+
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
 
@@ -51,16 +52,24 @@ class LeadMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
-                [['description'], 'string'],
-                [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-                [['jobseeker_payment',], 'number'],
-                [['title'], 'string', 'max' => 250],
-                [['reference_no'], 'string', 'max' => 50],
-                [['comment'], 'string', 'max' => 500],
-                [['reference_no'], 'unique'],
-                [['branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
+            [['street_no', 'street_address', 'city', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'title', 'reference_no', 'jobseeker_payment', 'payment_type', 'job_type', 'shift', 'start_date', 'created_at', 'updated_at', 'created_by', 'updated_by', 'description', 'branch_id'], 'required'],
+            [['description', 'apt', 'zip_code'], 'string'],
+            [['payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['jobseeker_payment',], 'number'],
+            [['title'], 'string', 'max' => 250],
+            [['reference_no'], 'string', 'max' => 50],
+            [['comment'], 'string', 'max' => 500],
+            [['reference_no'], 'unique'],
+            [['comment', 'visible_to'], 'safe', 'on' => 'approve'],
+            [['price'], 'required', 'on' => 'approve'],
+            [['approved_at', 'branch_id', 'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
         ];
+    }
+
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['approve'] = ['comment', 'price', 'visible_to'];
+        return $scenarios;
     }
 
     /**
@@ -81,6 +90,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
             'recruiter_commission' => 'Recruiter Commission',
             'recruiter_commission_type' => 'Recruiter Commision Type',
             'recruiter_commission_mode' => 'Recruiter Commision Mode',
+            'visible_to' => 'Visible To',
             'price' => 'Price',
             'status' => 'Status',
             'created_at' => 'Created At',
@@ -100,6 +110,70 @@ class LeadMaster extends \yii\db\ActiveRecord {
         } else {
             return $code;
         }
+    }
+
+    public function getBenefits() {
+        return $this->hasMany(LeadBenefit::className(), ['lead_id' => 'id']);
+    }
+
+    public function getDisciplines() {
+        return $this->hasMany(LeadDiscipline::className(), ['lead_id' => 'id']);
+    }
+
+    public function getSpecialty() {
+        return $this->hasMany(LeadSpeciality::className(), ['lead_id' => 'id']);
+    }
+
+    public function getBranch() {
+        return $this->hasOne(CompanyBranch::className(), ['id' => 'branch_id']);
+    }
+
+    public function getCities() {
+        return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
+
+    public function getCitiesName() {
+        $names = "";
+        if (isset($this->cities) && !empty($this->cities)) {
+            $names = $this->cities->city . "-" . $this->cities->state_code;
+        }
+        return $names;
+    }
+
+    public function getBenefitsNames() {
+        $names = "";
+        if (isset($this->benefits) && !empty($this->benefits)) {
+            $benefits = [];
+            foreach ($this->benefits as $value) {
+                $benefits[] = $value->benefits->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
+    }
+
+    public function getDisciplineNames() {
+        $names = "";
+        if (isset($this->disciplines) && !empty($this->disciplines)) {
+            $benefits = [];
+            foreach ($this->disciplines as $value) {
+                $benefits[] = $value->disciplines->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
+    }
+
+    public function getSpecialtyNames() {
+        $names = "";
+        if (isset($this->specialty) && !empty($this->specialty)) {
+            $benefits = [];
+            foreach ($this->specialty as $value) {
+                $benefits[] = $value->speciality->name;
+            }
+            $names = implode(',', $benefits);
+        }
+        return $names;
     }
 
 }

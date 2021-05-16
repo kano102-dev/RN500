@@ -35,6 +35,8 @@
                                                 <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
                                                     <th>Reference No</th>
                                                     <th>Title</th>
+                                                    <th>Commision</th>
+                                                    <th>Salary</th>
                                                     <th style="width:5%">Action</th>
                                                 </tr>
                                             </thead>
@@ -52,6 +54,8 @@
                                                 <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
                                                     <th>Reference No</th>
                                                     <th>Title</th>
+                                                    <th>Commision</th>
+                                                    <th>Salary</th>
                                                 </tr>
                                             </thead>
 
@@ -100,6 +104,8 @@ getPendingRecords();
                 {"name": "s.no", "orderable": false},
                 {"name": "reference_no"},
                 {"name": "title"},
+                {"name": "recruiter_commission"},
+                {"name": "jobseeker_payment"},
                 {"name": "actions", "orderable": false},
             ],
             "bDestroy": true,
@@ -124,7 +130,9 @@ getPendingRecords();
             "columns": [
                  {"name": "s.no", "orderable": false},
                 {"name": "reference_no"},
-                {"name": "title"}
+                {"name": "title"},
+                {"name": "recruiter_commission"},
+                {"name": "jobseeker_payment"},
             ],
             "bDestroy": true,
         });

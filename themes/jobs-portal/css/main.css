@@ -384,7 +384,6 @@ h6 {
 
 .header {
     padding: 0;
-    background: #3ca0d6;
 }
 .header .row {
     margin: 0;
@@ -1174,9 +1173,10 @@ a.wit-btn {
 
 /*Page Title*/
 .pageTitle {
-    background: url(../images/page-title-bg.jpg) no-repeat;
-    background-size: cover;
+    background: url(../images/1_Brooklyn_Bridge.jpg) no-repeat;
+    background-position: center;
     padding: 70px 0;
+    background-size: cover;
 }
 .pageTitle h1 {
     font-size: 40px;
@@ -3232,7 +3232,7 @@ blockquote:after {
            ==Footer css==
 *************************************************/
 .footerWrap {
-    background: cornflowerblue;
+    background: rebeccapurple;
     padding: 50px 0;
 }
 .footerWrap h5 {
