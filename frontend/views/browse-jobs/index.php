@@ -250,9 +250,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
                                         <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
                                         <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
-                                    </div><br/>
-                                    <div><span>Description :</span><?= $model->description ?></div><br/>
-
+                                    </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3">
                                     <div class="listbtn"><a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/view','id' => $model->id]) ?>">View Profile</a></div>
