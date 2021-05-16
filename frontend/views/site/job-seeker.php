@@ -173,7 +173,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                     </div>
                                     <div class="content">
                                         <p><?= $userDetails->first_name . " " . $userDetails->last_name ?></p>
-                                        <p><?= $userDetails->mobile_no ?></p>
+                                        <p><?= empty($userDetails->mobile_no) ? '' : $userDetails->mobile_no ?></p>
                                         <p><?= Yii::$app->user->identity->email ?></p>
                                         <p><?= $userDetails->ssn ?></p>
                                     </div>

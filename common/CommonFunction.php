@@ -89,6 +89,11 @@ class CommonFunction {
     public static function isEmployer() {
         return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_EMPLOYER) ? true : false;
     }
+    
+    // RETURN TRUE IF LOGGED_IN USER IS Jobseeker ELSE FALSE
+    public static function isJobSeeker() {
+        return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) ? true : false;
+    }
 
     // RETURN TRUE IF LOGGED_IN USER assign permission ELSE FALSE
     public static function checkAccess($permission, $user_id) {
@@ -179,7 +184,7 @@ class CommonFunction {
                 if ($new_time <= $time) {
                     $flag = true;
                 }
-            } else if ($priority == CompanyMaster::PRIORITY_MODRATE) {
+            } else if ($priority == CompanyMaster::PRIORITY_SEMIMODRATE) {
                 $new_time = date("Y-m-d H:i:s", strtotime($approved_date . '+36 hours'));
                 $time = date("Y-m-d H:i:s", strtotime('now'));
                 if ($new_time <= $time) {
