@@ -3,21 +3,21 @@
 namespace frontend\controllers;
 
 use Yii;
-use frontend\models\UserDetails;
-use frontend\models\UserDetailsSearch;
+use common\models\UserDetails;
+use common\models\UserDetailsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use frontend\models\WorkExperience;
+use common\models\WorkExperience;
 use yii\helpers\ArrayHelper;
 use common\models\Speciality;
 use common\models\Discipline;
-use frontend\models\Education;
-use frontend\models\Licenses;
-use frontend\models\Certifications;
-use frontend\models\Documents;
-use frontend\models\References;
-use frontend\models\JobPreference;
+use common\models\Education;
+use common\models\Licenses;
+use common\models\Certifications;
+use common\models\Documents;
+use common\models\References;
+use common\models\JobPreference;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
 
@@ -121,7 +121,8 @@ class UserDetailsController extends Controller {
         $model->dob = date('d-m-Y', strtotime($model->dob));
 //        $model->city = $model->city;
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->city = $postData['city'];
+            
+            $model->city = isset($postData['city']) ? $postData['city'] : '';
 
             $model->dob = date('Y-m-d', strtotime($model->dob));
             if ($model->validate()) {
@@ -151,7 +152,7 @@ class UserDetailsController extends Controller {
         }
         
         if ($model->load(Yii::$app->request->post())) {
-            $model->city = $postData['city'];
+            $model->city = isset($postData['city']) ? $postData['city'] : '';
 
             $model->dob = date('Y-m-d', strtotime($model->dob));
             if ($model->validate()) {
@@ -246,7 +247,7 @@ class UserDetailsController extends Controller {
         $discipline = ArrayHelper::map(Discipline::find()->all(), 'id', 'name');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-
+            
             $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
             $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
@@ -261,7 +262,7 @@ class UserDetailsController extends Controller {
                 Yii::$app->session->setFlash('success', "Work Experience Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
             }
-        }
+        } 
 
         return $this->renderAjax('work-experience', [
                     'model' => $model,

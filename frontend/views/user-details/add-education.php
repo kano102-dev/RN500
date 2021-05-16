@@ -7,7 +7,9 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 
 ?>
-
+<style>
+    .mb-15{margin-bottom: 15px;}
+</style>
 <div class="user-details-form">
 <?php $form = ActiveForm::begin([
     'id' => 'add-education'
@@ -17,7 +19,7 @@ use yii\web\JsExpression;
             <?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-15">
         <div class="col-sm-12">
             <label class="control-label" for="city">Location</label>
             <ul class="optionlist">

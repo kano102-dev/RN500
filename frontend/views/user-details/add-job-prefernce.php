@@ -11,7 +11,9 @@ use yii\web\JsExpression;
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .field-jobpreference-shift{margin-top: 15px;}
+</style>
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([

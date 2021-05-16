@@ -11,10 +11,12 @@ use yii\web\JsExpression;
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .mb-15{margin-bottom: 15px;}
+</style>
 <div class="user-details-form">
     <?php $form = ActiveForm::begin([
-        "id" => "work-experience",
+        "id" => "work-experience-new",
     ]); ?>
     <div class="row">
         <div class="col-sm-12">
@@ -93,7 +95,7 @@ use yii\web\JsExpression;
             <?= $form->field($model, 'facility_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-15">
         <div class="col-sm-12">
             <label class="control-label" for="city">City</label>
             <ul class="optionlist">
@@ -107,7 +109,6 @@ use yii\web\JsExpression;
                         'placeholder' => 'Select City...',
                         'multiple' => false,
                         'class' => '',
-//                        'value' => isset($model->city) ? $model->city : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -147,7 +148,7 @@ $script = <<< JS
         }        
     });
         
-  $(document).on("beforeSubmit", "#work-experience", function () {
+  $(document).on("beforeSubmit", "#work-experience-new", function () {
     var form = $(this);
          $.ajax({
              url    : form.attr('action'),

@@ -1,9 +1,10 @@
 <?php
 
-namespace frontend\models;
+namespace common\models;
 
 use Yii;
 use common\models\User;
+use borales\extensions\phoneInput\PhoneInputValidator;
 /**
  * This is the model class for table "references".
  *
@@ -39,7 +40,8 @@ class References extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'mobile_no', 'email', 'user_id'], 'required'],
             [['title', 'city', 'state', 'user_id'], 'integer'],
             ['email','email'],
-            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
+//            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
+            [['mobile_no'], PhoneInputValidator::className()],
             [['first_name', 'last_name', 'email', 'relation'], 'string', 'max' => 250],
             [['mobile_no'], 'string', 'max' => 11],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],

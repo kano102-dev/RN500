@@ -11,7 +11,9 @@ use yii\web\JsExpression;
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .mb-15{margin-bottom: 15px;}
+</style>
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
@@ -23,7 +25,7 @@ use yii\web\JsExpression;
             <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE']); ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-15">
         <div class="col-sm-12">
             <label class="control-label" for="issuing_state">Issuing State</label>
             <ul class="optionlist">

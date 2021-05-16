@@ -6,6 +6,7 @@ use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use borales\extensions\phoneInput\PhoneInput;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
@@ -15,7 +16,9 @@ use yii\web\JsExpression;
     label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
     .mb-100{margin-bottom: 100px;}
     .mt-100{margin-top: 100px;}
+    .iti--allow-dropdown{width: 100%;}
 </style>
+
 <div class="container mb-100 mt-100">
     <?php
     $form = ActiveForm::begin([
@@ -32,10 +35,16 @@ use yii\web\JsExpression;
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'mobile_no')->textInput(['maxlength' => true]) ?>
+            <?=
+            $form->field($model, 'mobile_no')->widget(PhoneInput::className(), [
+                'jsOptions' => [
+                    'preferredCountries' => ['us', 'in'],
+                ]
+            ]);
+            ?>
         </div>
         <div class="col-sm-6">
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email,'readonly' => true]) ?>
         </div>
     </div>
     <div class="row">
@@ -122,38 +131,3 @@ use yii\web\JsExpression;
 
 
 
-<?php
-$script = <<< JS
-        
-$(document).on("beforeSubmit", "#user-details", function () {
-   var form = $(this);
-        $.ajax({
-            url    : form.attr('action'),
-            type   : 'post',
-            dataType : 'json',
-            data   : form.serialize(),
-            success: function (response){
-                try{
-                    if(!response.error){
-                        $("#profile-modal").modal('hide');
-                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                        $(document).on("pjax:success", "#job-seeker", function (event) {
-                            $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                        });
-                        getProfilePercentage();
-                    }
-                }catch(e){
-                    $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                }
-            },
-            error  : function () 
-            {
-                console.log('internal server error');
-            }
-        });
-        return false;
-});        
-        
-JS;
-$this->registerJs($script, yii\web\View::POS_END);
-?>        

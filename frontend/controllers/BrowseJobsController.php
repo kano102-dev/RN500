@@ -32,10 +32,10 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits'],
+                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits'],
+                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
