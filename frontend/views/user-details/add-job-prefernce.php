@@ -3,12 +3,17 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .field-jobpreference-shift{margin-top: 15px;}
+</style>
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
@@ -19,12 +24,45 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'job_preference')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'location')->textInput(); ?>
+            <label class="control-label" for="city">location</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'location',
+                    'options' => [
+                        'id' => 'location',
+                        'placeholder' => 'Select Location...',
+                        'multiple' => false,
+                        'class' => '',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'shift')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'pay')->textInput(); ?>
         </div>

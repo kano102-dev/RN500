@@ -3,32 +3,47 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .mb-15{margin-bottom: 15px;}
+</style>
 <div class="user-details-form">
     <?php $form = ActiveForm::begin([
-        "id" => "work-experience",
+        "id" => "work-experience-new",
     ]); ?>
     <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'discipline_id')->dropDownList($discipline); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'specialty')->dropDownList($speciality); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'employment_type')->dropDownList(Yii::$app->params['EMPLOYEMENT_TYPE']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'currently_working')->checkbox(['id' => 'currently_working']); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'start_date')->widget(DatePicker::classname(), [
@@ -39,7 +54,6 @@ use kartik\date\DatePicker;
                     'format' => 'mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-//                            'startDate' => date('d-m-Y'),
                     'minViewMode' => 'months',
                     'startView' => 'year',
                 ],
@@ -51,6 +65,8 @@ use kartik\date\DatePicker;
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'end_date')->widget(DatePicker::classname(), [
@@ -73,11 +89,42 @@ use kartik\date\DatePicker;
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'facility_name')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
+    <div class="row mb-15">
         <div class="col-sm-12">
-            <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
+            <label class="control-label" for="city">City</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'city',
+                    'options' => [
+                        'id' => 'city',
+                        'placeholder' => 'Select City...',
+                        'multiple' => false,
+                        'class' => '',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
         </div>
 
     </div>
@@ -101,7 +148,7 @@ $script = <<< JS
         }        
     });
         
-  $(document).on("beforeSubmit", "#work-experience", function () {
+  $(document).on("beforeSubmit", "#work-experience-new", function () {
     var form = $(this);
          $.ajax({
              url    : form.attr('action'),

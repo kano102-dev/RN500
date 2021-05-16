@@ -62,7 +62,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
-            [['work_authorization_comment', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
+            [['work_authorization_comment','looking_for','license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string'],
             [['mobile_no'], PhoneInputValidator::className()],
@@ -89,6 +89,7 @@ class UserDetails extends \yii\db\ActiveRecord {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'employer'
             ],
+            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address','ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

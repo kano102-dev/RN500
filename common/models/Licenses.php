@@ -1,33 +1,33 @@
 <?php
 
-namespace frontend\models;
+namespace common\models;
 
 use Yii;
 use common\models\User;
-
 /**
- * This is the model class for table "certifications".
+ * This is the model class for table "licenses".
  *
  * @property int $id
  * @property int $issuing_state
- * @property string $certificate_name
- * @property int|null $certification_active
+ * @property string $license_name
+ * @property string|null $license_number
+ * @property int|null $compact_states
  * @property string|null $document
  * @property string $expiry_date
  * @property string $issue_by
- * @property int $verified
+ * @property int $verified 1:yes 0:no
  * @property int $user_id
  *
  * @property User $user
  */
-class Certifications extends \yii\db\ActiveRecord
+class Licenses extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'certifications';
+        return 'licenses';
     }
 
     /**
@@ -36,12 +36,13 @@ class Certifications extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['certificate_name', 'user_id'], 'required'],
-            [['issuing_state', 'certification_active', 'verified', 'user_id'], 'integer'],
-            [['certificate_name', 'expiry_date'], 'string', 'max' => 250],
+            [['issuing_state', 'license_name', 'expiry_date', 'user_id'], 'required'],
+            [['issuing_state', 'compact_states', 'verified', 'user_id'], 'integer'],
+            [['license_name', 'license_number', 'issue_by'], 'string', 'max' => 250],
             [['document'], 'string', 'max' => 255],
-            [['issue_by'], 'string', 'max' => 500],
+            [['expiry_date'], 'string', 'max' => 50],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],   
         ];
     }
 
@@ -53,8 +54,9 @@ class Certifications extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'issuing_state' => 'Issuing State',
-            'certificate_name' => 'Certificate Name',
-            'certification_active' => 'Certification Active',
+            'license_name' => 'License Name',
+            'license_number' => 'License Number',
+            'compact_states' => 'Compact States',
             'document' => 'Document',
             'expiry_date' => 'Expiry Date',
             'issue_by' => 'Issue By',

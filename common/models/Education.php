@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models;
+namespace common\models;
 
 use Yii;
 use common\models\User;
@@ -39,6 +39,7 @@ class Education extends \yii\db\ActiveRecord
             [['year_complete'], 'string', 'max' => 50],
             [['institution', 'location'], 'string', 'max' => 500],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['institution'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

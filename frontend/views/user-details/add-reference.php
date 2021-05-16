@@ -3,12 +3,17 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use yii\helpers\Url;
+use yii\web\JsExpression;
+use borales\extensions\phoneInput\PhoneInput;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<style>
+    .iti--allow-dropdown{width: 100%;}
+</style>
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
@@ -19,15 +24,29 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'first_name')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'last_name')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'email')->textInput(); ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'mobile_no')->textInput(); ?>
+            <?=
+            $form->field($model, 'mobile_no')->widget(PhoneInput::className(), [
+                'jsOptions' => [
+                    'preferredCountries' => ['us', 'in'],
+                ]
+            ]);
+            ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'title')->dropDownList(Yii::$app->params['REFERENCE_TYPE']) ?>
         </div>

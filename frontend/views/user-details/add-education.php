@@ -2,9 +2,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 ?>
-
+<style>
+    .mb-15{margin-bottom: 15px;}
+</style>
 <div class="user-details-form">
 <?php $form = ActiveForm::begin([
     'id' => 'add-education'
@@ -13,9 +18,41 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
         </div>
+    </div>
+    <div class="row mb-15">
         <div class="col-sm-12">
-            <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+            <label class="control-label" for="city">Location</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'location',
+                    'options' => [
+                        'id' => 'location',
+                        'placeholder' => 'Select location...',
+                        'multiple' => false,
+                        'class' => '',
+//                        'value' => isset($model->city) ? $model->city : [],
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?php
             echo $form->field($model, 'year_complete')->widget(DatePicker::classname(), [
@@ -26,7 +63,6 @@ use kartik\date\DatePicker;
                     'format' => 'mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-                    'startDate' => date('d-m-Y'),
                     'minViewMode' => 'months',
                     'startView' => 'year',
                 ],
@@ -38,10 +74,11 @@ use kartik\date\DatePicker;
             ]);
             ?>
         </div>
-        
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE']) ?>
-        </div>        
+        </div>
     </div>
 
     <div class="form-group">
