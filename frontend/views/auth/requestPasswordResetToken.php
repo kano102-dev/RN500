@@ -1,44 +1,35 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model \frontend\models\ResetPasswordForm */
+/* @var $model \frontend\models\PasswordResetRequestForm */
 
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 
 $this->title = 'RN500';
-?>
 
+?>
 
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
-                    <h5>Password Rest</h5>
+                    <h5>Forgot Password Request</h5>
                     <!-- login form -->
                     <div class="formpanel">
                         <div class="row">
                             <div class="col-lg-12">
-                                <?php $form = ActiveForm::begin(['id' => 'reset-password-form', 'options' => ['autocomplete' => 'off']]) ?>
+                                <p>Please fill out your registered email, a link to reset password will be sent.</p> <br/>
+                                <?php $form = ActiveForm::begin(['id' => 'password-reset-form', 'options' => ['autocomplete' => 'off']]) ?>
 
                                 <div class="formrow">
                                     <?php
-                                    echo $form->field($model, 'password', [
+                                    echo $form->field($model, 'email', [
                                         'options' => ['class' => 'form-group has-feedback', 'autofocus' => true,],
                                         'inputTemplate' => '{input}',
                                         'template' => '{input}{error}',
-                                    ])->label(false)->passwordInput(['placeholder' => $model->getAttributeLabel('password'),])
-                                    ?>
-                                </div>
-                                
-                                <div class="formrow">
-                                    <?php
-                                    echo $form->field($model, 'confirm_password', [
-                                        'options' => ['class' => 'form-group has-feedback', 'autofocus' => true,],
-                                        'inputTemplate' => '{input}',
-                                        'template' => '{input}{error}',
-                                    ])->label(false)->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password'),])
+                                    ])->label(false)->textInput(['placeholder' => $model->getAttributeLabel('email'),])
                                     ?>
                                 </div>
 
@@ -56,3 +47,4 @@ $this->title = 'RN500';
         </div>
     </div>
 </div>
+
