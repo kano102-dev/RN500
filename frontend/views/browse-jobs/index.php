@@ -114,11 +114,14 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <ul class="optionlist">
                                 <?php
                                 $url = Url::to(['browse-jobs/get-cities']);
-                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : [];
                                 echo Select2::widget([
                                     'name' => 'location',
-//                                    'value' => isset($_GET['location']) ? $_GET['location'] : [],
-//                                    'data' => isset($data) && !empty($data) ? $data : [],
+                                    'value' => array_keys($selectedLocations),
+                                     'initValueText' => ($selectedLocations),
+//                                     'data' =>$selectedLocations,
+//                                     'showToggleAll' => true,
+                                    'hideSearch' => false,
                                     'options' => [
                                         'id' => 'select_location',
                                         'placeholder' => 'Select Location...',
@@ -126,6 +129,11 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         'class' => ''
                                     ],
                                     'pluginOptions' => [
+//                                          'tags' => true,
+//                                            'tokenSeparators' => [',', ' '],
+                                         'tags' => true,
+//                                          'tokenSeparators' => [],
+                                           'multiple' => true,
                                         'allowClear' => true,
                                         'minimumInputLength' => 1,
                                         'ajax' => [
@@ -286,6 +294,7 @@ $get_specialty_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-
 $get_benefits_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
+
 $script_new = <<<JS
 getDisciplineRecords();
 getSpecialtyRecords();

@@ -18,6 +18,7 @@ use common\CommonFunction;
 use frontend\models\EmployerForm;
 use frontend\models\JobseekerForm;
 use common\models\PasswordResetRequestForm;
+use common\models\ResetPasswordForm;
 
 /**
  * Site controller
@@ -41,11 +42,11 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'index', 'get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                 'rules' => [
-                    [
+                        [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
-                    [
+                        [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -347,9 +348,8 @@ class AuthController extends Controller {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', "Reset Password Link sent sucessfully. Ckeck your registered email id");
-
-                return $this->goHome();
+                Yii::$app->session->setFlash('success', "Password reset link sent sucessfully. Please check your inbox.");
+                return $this->redirect(['login']);
             } else {
                 Yii::$app->session->setFlash('error', "something went wrong");
             }
@@ -370,15 +370,15 @@ class AuthController extends Controller {
     public function actionResetPassword($token) {
         $this->layout = 'main-login';
         try {
-            $model = new \common\models\ResetPasswordForm($token);
+            $model = new ResetPasswordForm($token);
         } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'Password reset sucessfully');
+            Yii::$app->session->setFlash('success', 'Password reset sucessfully. Please login to continue.');
 
-            return $this->goHome();
+            return $this->redirect(['login']);
         }
 
         return $this->render('reset-password', [

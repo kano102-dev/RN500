@@ -32,95 +32,96 @@ $action = Yii::$app->controller->action->id;
             <?php
             echo \hail812\adminlte3\widgets\Menu::widget([
                 'items' => [
-                    [
+                        [
                         'label' => 'Home',
                         'url' => ['site/index'],
                         'icon' => 'tachometer-alt',
                         'active' => ($controller == "site" && $action == "index")
                     ],
-                    [
+                        [
                         'label' => 'Role',
                         'url' => ['role/index'],
                         'icon' => 'tasks',
                         'active' => ($controller == "role"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('role-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('role-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'Package',
                         'url' => ['package/index'],
                         'icon' => 'book',
                         'active' => ($controller == "package"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('package-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('package-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('package-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('package-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'Branch',
                         'url' => ['company-branch/index'],
                         'icon' => 'sitemap',
                         'active' => ($controller == "company-branch"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'Recruiter',
                         'url' => ['recruiter/index'],
                         'icon' => 'users',
                         'active' => ($controller == "recruiter"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'Employer',
                         'url' => ['employer/index'],
                         'icon' => 'hospital-alt',
                         'active' => ($controller == "employer"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('employer-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('employer-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('employer-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'Staff Management',
                         'url' => ['staff/index'],
                         'icon' => 'user-friends',
                         'active' => ($controller == "staff"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-view', Yii::$app->user->identity->id) : false
                     ],
-                    [
+                        [
                         'label' => 'User Approval',
                         'url' => ['user/index'],
                         'icon' => 'user-check',
                         'active' => ($controller == "user"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-request-view', Yii::$app->user->identity->id) : false
                     ],
-                     [
+                        [
                         'label' => 'Lead Approval',
                         'url' => ['lead/index'],
                         'icon' => 'clipboard-check',
-                        'active' => ($controller == "lead")
+                        'active' => ($controller == "lead"),
+                        'visible' => isset(Yii::$app->user->identity) && CommonFunction::checkAccess('lead-verify', Yii::$app->user->identity->id) ?: false
                     ],
-                    [
+                        [
                         'label' => 'Benefits',
                         'url' => ['/benefits'],
                         'icon' => 'user-check',
                         'active' => ($controller == "benefits"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || Yii::$app->user->identity->type == User::TYPE_EMPLOYER : false
                     ],
-                    [
+                        [
                         'label' => 'Specialty',
                         'url' => ['/speciality'],
                         'icon' => 'user-check',
                         'active' => ($controller == "speciality"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || Yii::$app->user->identity->type == User::TYPE_EMPLOYER : false
                     ],
-                    [
+                        [
                         'label' => 'Discipline',
                         'url' => ['/discipline'],
                         'icon' => 'user-check',
                         'active' => ($controller == "discipline"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || Yii::$app->user->identity->type == User::TYPE_EMPLOYER : false
                     ],
-                    [
+                        [
                         'label' => 'Advertisement',
                         'url' => ['/advertisement'],
                         'icon' => 'user-check',
                         'active' => ($controller == "advertisement")
                     ],
-                    [
+                        [
                         'label' => 'Vendor',
                         'url' => ['/vendor'],
                         'icon' => 'user-check',

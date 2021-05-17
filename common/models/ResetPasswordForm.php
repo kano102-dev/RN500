@@ -43,9 +43,16 @@ class ResetPasswordForm extends Model {
      */
     public function rules() {
         return [
-            [['password', 'confirm_password'], 'required'],
-            ['confirm_password', 'compare', 'compareAttribute' => 'password'],
-            ['password', 'string', 'min' => 6],
+                [['password', 'confirm_password'], 'required'],
+                ['confirm_password', 'compare', 'compareAttribute' => 'password'],
+                ['password', 'string', 'min' => 6],
+        ];
+    }
+
+    public function attributeLabels() {
+        return [
+            'password' => 'Password',
+            'confirm_password' => 'Confirm Password',
         ];
     }
 

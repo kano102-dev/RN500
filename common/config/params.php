@@ -5,7 +5,7 @@ return [
     'supportEmail' => 'support@example.com',
     'senderEmail' => 'info@rn500.com',
     'senderName' => 'RN500',
-    'user.passwordResetTokenExpire' => 86400,
+    'user.passwordResetTokenExpire' => 86400, // Valid upto next 2 days
     'user.passwordMinLength' => 8,
     'user.types' => ['1' => 'Recruiter', '2' => 'Employeer', '3' => 'Jobseeker', '4' => 'Staff'],
     'job.payment_type' => ['1' => 'Hourly', '2' => 'Weekly', '3' => 'Monthly'],
