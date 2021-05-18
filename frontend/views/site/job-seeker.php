@@ -10,8 +10,6 @@ use yii\widgets\Pjax;
 $document_type = [0 => 'Resume', 1 => 'Other'];
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $frontendDir = yii\helpers\Url::base(true);
-
-
 ?>
 
 <style>
@@ -97,13 +95,18 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row">
                                 <div class="col-md-8 col-sm-8">
                                     <div class="jobimg">
-                                        <img src="<?= $frontendDir."/uploads/user-details/profile/".$userDetails->profile_pic ?>" style="width:70px;height:70px;">
+                                        <?php if (isset($userDetails->profile_pic) && !empty($userDetails->profile_pic)) { ?>
+                                            <img src="<?= $frontendDir . "/uploads/user-details/profile/" . $userDetails->profile_pic ?>" style="width:70px;height:70px;">
+                                        <?php } else { ?>
+                                            <img src="<?= $assetDir ?>/images/jobs/jobimg.jpg" style="width:70px;height:70px;">
+                                        <?php } ?>
+
                                     </div>
                                     <div class="jobinfo">
-                                        <h5><?= $userDetails->first_name." ".$userDetails->last_name ?></h5>
+                                        <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
                                         <div class="location"><?= Yii::$app->user->identity->email ?></div>
-                                        <!--<div class="location"><?php //  $userDetails->mobile_no ?></div>-->
-                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update','id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
+                                        <!--<div class="location"><?php //  $userDetails->mobile_no   ?></div>-->
+                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>

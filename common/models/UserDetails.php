@@ -56,10 +56,10 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['email'], 'email'],
-            [['email', 'street_no', 'street_address'], 'required'],
+            [['email', 'street_no', 'street_address', 'role_id'], 'required'],
             [['role_id', 'branch_id', 'company_id'], 'required', 'on' => 'staff'],
             [['branch_id', 'company_id'], 'required', 'on' => 'employer'],
-            [['user_id', 'first_name', 'last_name', 'mobile_no', 'updated_at'], 'required'],
+            [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
             [['work_authorization_comment','looking_for','license_suspended', 'professional_liability', 'unique_id'], 'string'],
