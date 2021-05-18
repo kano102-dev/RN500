@@ -23,6 +23,7 @@ use borales\extensions\phoneInput\PhoneInput;
     <?php
     $form = ActiveForm::begin([
                 "id" => "user-details",
+                'options' => ['enctype' => 'multipart/form-data']
     ]);
     ?>
     <div class="row">
@@ -44,7 +45,7 @@ use borales\extensions\phoneInput\PhoneInput;
             ?>
         </div>
         <div class="col-sm-6">
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email,'readonly' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email, 'readonly' => true]) ?>
         </div>
     </div>
     <div class="row">
@@ -119,6 +120,12 @@ use borales\extensions\phoneInput\PhoneInput;
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'looking_for')->textarea(['row' => 3]) ?>
+        </div>
+        <div class="col-sm-6">
+            <?= $form->field($model, 'profile_pic')->fileInput() ?>
+            <?php if(isset($model->profile_pic)){ ?>
+                <p><?= $model->profile_pic ?></p>
+            <?php } ?>
         </div>
     </div>
 

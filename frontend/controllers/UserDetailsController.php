@@ -115,16 +115,39 @@ class UserDetailsController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
+        
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
         $model->updated_at = time();
         $model->dob = date('d-m-Y', strtotime($model->dob));
-//        $model->city = $model->city;
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            
-            $model->city = isset($postData['city']) ? $postData['city'] : '';
+        $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
 
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            $model->city = isset($postData['city']) ? $postData['city'] : '';
             $model->dob = date('Y-m-d', strtotime($model->dob));
+            
+            $document_file = UploadedFile::getInstance($model, 'profile_pic');
+            
+            $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
+            if (!file_exists($folder)) {
+                FileHelper::createDirectory($folder, 0777);
+            }
+            
+            $uploadPath = './uploads/user-details/profile/';
+            
+            if ($document_file) {
+                $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
+                $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->profile_pic);
+            }
+            
+            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
+                if ($document_upload_flag) {
+                    unlink($uploadPath . $temp_document_file);
+                } else {
+                    $model->profile_pic = $temp_document_file;
+                }
+            }
+            
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
@@ -147,14 +170,37 @@ class UserDetailsController extends Controller {
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
         $model->updated_at = time();
+        $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
         if (isset($model->dob) && !empty($model->dob)) {
             $model->dob = date('d-m-Y', strtotime($model->dob));
         }
         
         if ($model->load(Yii::$app->request->post())) {
             $model->city = isset($postData['city']) ? $postData['city'] : '';
-
             $model->dob = date('Y-m-d', strtotime($model->dob));
+            
+            $document_file = UploadedFile::getInstance($model, 'profile_pic');
+            
+            $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
+            if (!file_exists($folder)) {
+                FileHelper::createDirectory($folder, 0777);
+            }
+            
+            $uploadPath = './uploads/user-details/profile/';
+            
+            if ($document_file) {
+                $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
+                $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->profile_pic);
+            }
+            
+            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
+                if ($document_upload_flag) {
+                    unlink($uploadPath . $temp_document_file);
+                } else {
+                    $model->profile_pic = $temp_document_file;
+                }
+            }
+            
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('error', "User Details Updated Successfully.");

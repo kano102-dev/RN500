@@ -43,7 +43,7 @@ class References extends \yii\db\ActiveRecord
 //            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
             [['mobile_no'], PhoneInputValidator::className()],
             [['first_name', 'last_name', 'email', 'relation'], 'string', 'max' => 250],
-            [['mobile_no'], 'string', 'max' => 11],
+//            [['mobile_no'], 'string', 'max' => 11],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['first_name','last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];

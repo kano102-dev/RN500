@@ -71,45 +71,26 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 <div class="section howitwrap">
     <div class="container"> 
         <div class="row">
-
-
-
-            <div class="col-md-12 col-sm-12 col-12"> 
-                <div class="carousel-wrap">
-                    <div class="owl-carousel">
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 1</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 2</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 3</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150"><p>Advertisment 4</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 5</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 6</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 7</p>
-                        </div>
-                        <div class="item">
-                            <img src="http://placehold.it/150x150">
-                            <p>Advertisment 8</p>
-                        </div>
+            <?php
+            $i = 0;
+            if (isset($advertisment) && !empty($advertisment)) {
+                ?>
+                <?php foreach ($advertisment as $key => $value) { ?>
+                    <div class="col-md-2 moreFTypeBox blogFTypeBox" <?php if ($i >= 6) { ?> style="display:none;" <?php } ?>>
+                        <img src="<?= $value ?>">
+                        <p>Advertisment 1</p>
+                        <p>&nbsp;</p>
                     </div>
-                </div>
+                    <?php
+                    $i++;
+                }
+                ?>
+            <?php } ?>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center" id="viewFTypeMore">
+                <p>&nbsp;</p>
+                <a href="#" class="wp_view_more btn btn-info">View More</a>
             </div>
         </div>
     </div>

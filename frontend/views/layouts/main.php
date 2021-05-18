@@ -28,7 +28,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        
+
         <style>
             .listpgWraper {background: #f9f9ff;}
             .carousel-item {
@@ -80,6 +80,18 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
                     }
                 }
             })
+
+            $(".moreFTypeBox").slice(0, 3).show();
+            if ($(".blogFTypeBox:hidden").length != 0) {
+                $("#viewFTypeMore").show();
+            }
+            $("#viewFTypeMore").on('click', function (e) {
+                e.preventDefault();
+                $(".moreFTypeBox:hidden").slice(0, 6).slideDown();
+                if ($(".moreFTypeBox:hidden").length == 0) {
+                    $("#viewFTypeMore").fadeOut('slow');
+                }
+            });
         </script>
         <!-- Footer start -->
         <?= $this->render('footer', ['assetDir' => $assetDir]) ?>
@@ -88,7 +100,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <?php
         echo \common\components\FlashmessageWidget::widget();
         ?>
-        
+
     </body>
 </html>
 <?php $this->endPage() ?>
