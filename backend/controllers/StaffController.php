@@ -239,7 +239,6 @@ class StaffController extends Controller {
                     $user = clone $model;
                     $user->email = $userDetailModel->email;
                     $user->role_id = $userDetailModel->role_id;
-                    $user->type = User::TYPE_RECRUITER;
                     if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
                         $user->branch_id = \Yii::$app->user->identity->branch_id;
                     } else {

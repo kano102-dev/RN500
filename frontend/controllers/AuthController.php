@@ -42,11 +42,11 @@ class AuthController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'index', 'get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['get-cities', 'register', 'login', 'error', 'check-mail', 'reset-password'],
                         'allow' => true,
                     ],
-                        [
+                    [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -320,7 +320,7 @@ class AuthController extends Controller {
     public function actionChangePassword() {
         $this->layout = 'main-form';
         $model = new \frontend\models\ChangePasswordForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->sendOTP() && $model->OTPVerified()) {
             $user = User::findIdentity(Yii::$app->user->identity->id);
             $user->password = Yii::$app->security->generatePasswordHash($model->new_password);
             $user->original_password = trim($model->new_password);
