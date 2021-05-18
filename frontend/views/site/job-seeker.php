@@ -9,6 +9,7 @@ use yii\widgets\Pjax;
 
 $document_type = [0 => 'Resume', 1 => 'Other'];
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
+$frontendDir = yii\helpers\Url::base(true);
 ?>
 
 <style>
@@ -52,6 +53,10 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     .mb-10{margin-bottom: 10px;}
     .edit-icon-right a{float: right;margin-right:10px;}
     .edit-icon-right a i{font-size: 20px;color: #000;}
+    @media (max-width: 425px) {
+        .sticky-sidebar{position: relative !important;width: 100% !important;}
+        .new-searchList li{text-align: left;}
+    }
 </style>
 
 <div class="listpgWraper">
@@ -84,19 +89,24 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             <?php Pjax::begin(['id' => 'job-seeker', 'enablePushState' => false]); ?>
             <div class="col-md-8 col-sm-6">
                 <div class="myads">
-                    <ul class="searchList">
+                    <ul class="searchList new-searchList">
                         <!-- start -->
                         <li id="update-account">
                             <div class="row">
                                 <div class="col-md-8 col-sm-8">
                                     <div class="jobimg">
-                                        <img src="<?= $assetDir ?>/images/jobs/jobimg.jpg" alt="Job Name">
+                                        <?php if (isset($userDetails->profile_pic) && !empty($userDetails->profile_pic)) { ?>
+                                            <img src="<?= $frontendDir . "/uploads/user-details/profile/" . $userDetails->profile_pic ?>" style="width:70px;height:70px;">
+                                        <?php } else { ?>
+                                            <img src="<?= $assetDir ?>/images/jobs/jobimg.jpg" style="width:70px;height:70px;">
+                                        <?php } ?>
+
                                     </div>
                                     <div class="jobinfo">
-                                        <h5><?= $userDetails->first_name." ".$userDetails->last_name ?></h5>
+                                        <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
                                         <div class="location"><?= Yii::$app->user->identity->email ?></div>
-                                        <!--<div class="location"><?php //  $userDetails->mobile_no ?></div>-->
-                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update?id=1']) ?>" class="btn btn-info editProfile" >Edit</a></div>
+                                        <!--<div class="location"><?php //  $userDetails->mobile_no   ?></div>-->
+                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -111,51 +121,9 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- end --> 
 
                         <!-- start -->
-                        <li id="job-search">
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
-                                    <div class="jobinfo">
-                                        <h3><a href="#.">Job Search</a></h3>
-                                        <div class="card">
-                                            <div class="card-header">
-                                                <div class="card-icon round"><i class="fa fa-shopping-bag"></i></div>
-                                                <h4 class="card-title">Job Preferences</h4>
-                                            </div>
-                                            <div class="card-block">
-                                                <?php if (isset($jobPreference) && !empty($jobPreference)) { ?>
-                                                    <?php foreach ($jobPreference as $key => $value) { ?>
-                                                        <div class="content">
-                                                            <div class="row">
-                                                                <div class="col-sm-8">
-                                                                    <h4><?= $value['job_preference'] ?></h4>
-                                                                    <p><?= $value['shift'] ?></p>
-                                                                    <p><?= $value['pay'] ?></p>
-                                                                </div>
-                                                                <div class="col-sm-4 edit-icon-right">
-                                                                    <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-job-prefernce?id=' . $value['id']]) ?>" class="addPreference"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                            </div>
-                                            <div class="card-footer">
-                                                <h4 class="card-title"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-job-prefernce']) ?>" class="addPreference">Update Permanent Job Search Preferences</a></h4>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </li>
-                        <!-- end --> 
-
-                        <!-- start -->
                         <li class="box-padding" id="about-you">
                             <div class="row">
-                                <div class="col-md-8 col-sm-8">
+                                <div class="col-md-8 col-sm-4 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">About You</a></h3>
                                     </div>
@@ -167,20 +135,20 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
-                                <div class="col-md-4 col-sm-4">
+                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="jobinfo">
                                         <h3>&nbsp;</h3>
                                     </div>
                                     <div class="content">
                                         <p><?= $userDetails->first_name . " " . $userDetails->last_name ?></p>
-                                        <p><?= empty($userDetails->mobile_no) ? '' : $userDetails->mobile_no ?></p>
-                                        <p><?= Yii::$app->user->identity->email ?></p>
+                                        <p><?= isset($userDetails->mobile_no) ? $userDetails->mobile_no : "&nbsp;" ?></p>
+                                        <p><?= isset(Yii::$app->user->identity->email) ? Yii::$app->user->identity->email : "&nbsp;" ?></p>
                                         <p><?= $userDetails->ssn ?></p>
                                     </div>
                                 </div>
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update?id=1']) ?>" class="editProfile">
                                             <p>Update Information</p>
@@ -197,7 +165,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="work-experience">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">Work Experience</a></h3>
                                     </div>
@@ -205,11 +173,11 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($workExperience as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $value['title'] ?></h4>
                                                         <p><?= $value['discipline']['name'] ?></p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
+                                                    <div class="col-sm-4 edit-icon-right col-xs-3">
                                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/work-experience?id=' . $value['id']]) ?>" class="work-experience"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
@@ -220,7 +188,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                 </div>
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/work-experience']) ?>" class="work-experience">
                                             <p>Add Work Experience</p>
@@ -237,7 +205,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="education">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">Education</a></h3>
                                     </div>
@@ -245,11 +213,11 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($education as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $value['institution'] ?></h4>
                                                         <p><?= Yii::$app->params['DEGREE_TYPE'][$value['degree_name']] ?></p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
+                                                    <div class="col-sm-4 col-xs-3 edit-icon-right">
                                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-education?id=' . $value['id']]) ?>" class="AddEducation"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
@@ -261,7 +229,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-education']) ?>" class="AddEducation">
                                             <p>Add Education</p>
@@ -278,7 +246,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="license">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">Licenses</a></h3>
                                     </div>
@@ -286,11 +254,12 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($license as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $value['license_number'] ?></h4>
-                                                        <p>Testing</p>
+                                                        <p><?= Yii::$app->params['LICENSE_TYPE'][$value['license_name']] ?></p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
+                                                    <div class="col-sm-4 col-xs-3 edit-icon-right">
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="licenses" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-licence?id=' . $value['id']]) ?>" class="AddLicence"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
@@ -301,7 +270,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                 </div>
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-licence']) ?>" class="AddLicence">
                                             <p>Add Licenses</p>
@@ -318,7 +287,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="certifications">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">Certifications</a></h3>
                                     </div>
@@ -326,11 +295,12 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($certification as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
-                                                        <h4><?= $value['certificate_name'] ?></h4>
-                                                        <p>Testing</p>
+                                                    <div class="col-sm-8 col-xs-9">
+                                                        <h4><?= Yii::$app->params['CERTIFICATION_TYPE'][$value['certificate_name']] ?></h4>
+                                                        <p>&nbsp;</p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
+                                                    <div class="col-sm-4 edit-icon-right col-xs-3">
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="certification" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
                                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-certification?id=' . $value['id']]) ?>" class="AddCertification "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
@@ -339,17 +309,9 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                     <?php } ?>
                                     <div class="clearfix"></div>
                                 </div>
-                                <!--                                <div class="col-md-12 col-sm-12 col-12">
-                                                                    <div class="jobinfo">
-                                                                        <h3>&nbsp;</h3>
-                                                                    </div>
-                                                                    <div class="content">
-                                
-                                                                    </div>
-                                                                </div>-->
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-certification']) ?>" class="AddCertification">
                                             <p>Add Certifications</p>
@@ -366,7 +328,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="documents">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">Documents</a></h3>
                                     </div>
@@ -374,12 +336,13 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($documents as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $document_type[$value['document_type']] ?></h4>
                                                         <p><?= $value['path'] ?></p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-document?id=' . $value['id']]) ?>" class="AddDocument"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                    <div class="col-sm-4 col-xs-3 edit-icon-right">
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="document" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-document?id=' . $value['id']]) ?>" class="AddDocument"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -389,7 +352,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                 </div>
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-document']) ?>" class="AddDocument">
                                             <p>Add Documents</p>
@@ -406,7 +369,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                         <!-- start -->
                         <li class="box-padding" id="references">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 col-12">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
                                         <h3><a href="#.">References</a></h3>
                                     </div>
@@ -414,11 +377,11 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                         <?php foreach ($references as $key => $value) { ?>
                                             <div class="content">
                                                 <div class="row">
-                                                    <div class="col-sm-8">
+                                                    <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $value['first_name'] . " " . $value['last_name'] ?></h4>
                                                         <p><?= $value['email'] ?></p>
                                                     </div>
-                                                    <div class="col-sm-4 edit-icon-right">
+                                                    <div class="col-sm-4 edit-icon-right col-xs-3">
                                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-reference?id=' . $value['id']]) ?>" class="AddReference"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
@@ -429,7 +392,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                 </div>
                             </div>
                             <div class="row action">
-                                <div class="col-md-12 col-sm-12 col-12 info">
+                                <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
                                         <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-reference']) ?>" class="AddReference">
                                             <p>Add References</p>
@@ -572,7 +535,34 @@ $(window).scroll(function(){
        $('.fixed-sidebar').removeClass('sticky-sidebar');
         $('.font-a').css("right","10px");
    }      
-});        
+}); 
+    
+$(document).on('click','.delete-documents',function(){
+      var document = $(this).data('document');  
+      var url =   $(this).attr('url');
+      swal({
+            title: "Are you sure?",
+            text: "Are you sure you want to delete this Document !",
+            icon: "warning",
+            buttons: [
+              'No, cancel it!',
+              'Yes, I am sure!'
+            ],
+            dangerMode: true,
+          }).then(function(isConfirm) {
+            if (isConfirm) {
+              $.post(url, {document: document}, function(result){
+                    if(result){
+                         $("#profile-modal").modal('hide');
+                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                         $(document).on("pjax:success", "#job-seeker", function (event) {
+                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                         });
+                    }
+                }); 
+            }
+          })
+  });        
         
 JS;
 $this->registerJs($js, \yii\web\View::POS_END);

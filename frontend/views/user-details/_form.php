@@ -119,6 +119,15 @@ use borales\extensions\phoneInput\PhoneInput;
             ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <?= $form->field($model, 'profile_pic')->fileInput() ?>
+            
+            <?php if(isset($model->profile_pic)){ ?>
+                <p><?= $model->profile_pic ?></p>
+            <?php } ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -131,12 +140,15 @@ use borales\extensions\phoneInput\PhoneInput;
 $script = <<< JS
         
 $(document).on("beforeSubmit", "#user-details", function () {
-   var form = $(this);
+        var form = $(this);
+        var formData = new FormData(form[0]); 
         $.ajax({
             url    : form.attr('action'),
             type   : 'post',
             dataType : 'json',
-            data   : form.serialize(),
+            data   : formData,
+            processData: false,
+            contentType: false,
             success: function (response){
                 try{
                     if(!response.error){

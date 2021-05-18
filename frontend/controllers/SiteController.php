@@ -80,7 +80,11 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        return $this->render('index');
+        $advertisment = [1 => 'http://placehold.it/150x150', 2 => 'http://placehold.it/150x150', 3 => 'http://placehold.it/150x150', 4 => 'http://placehold.it/150x150', 5 => 'http://placehold.it/150x150', 6 => 'http://placehold.it/150x150', 7 => 'http://placehold.it/150x150', 8 => 'http://placehold.it/150x150'];
+        
+        return $this->render('index', [
+                    'advertisment' => $advertisment
+        ]);
     }
 
     /**
@@ -115,9 +119,9 @@ class SiteController extends Controller {
 
         return $this->goHome();
     }
-    
+
     public function actionJobSeeker() {
-        
+
         $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
         $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
@@ -126,20 +130,18 @@ class SiteController extends Controller {
         $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
         $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
-         
-        return $this->render('job-seeker',[
-            'workExperience' => $workExperience,
-            'certification' => $certification,
-            'documents' => $documents,
-            'license' => $license,
-            'education' => $education,
-            'references' => $references,
-            'userDetails' => $userDetails,
-            'jobPreference' => $jobPreference
+
+        return $this->render('job-seeker', [
+                    'workExperience' => $workExperience,
+                    'certification' => $certification,
+                    'documents' => $documents,
+                    'license' => $license,
+                    'education' => $education,
+                    'references' => $references,
+                    'userDetails' => $userDetails,
+                    'jobPreference' => $jobPreference
         ]);
     }
-    
-    
 
     /**
      * Displays contact page.
@@ -279,11 +281,11 @@ class SiteController extends Controller {
                     'model' => $model
         ]);
     }
-    
+
     public function actionEditProfile() {
         echo 'enter';
         exit;
-        
+
         return $this->render('edit-profile');
     }
 
