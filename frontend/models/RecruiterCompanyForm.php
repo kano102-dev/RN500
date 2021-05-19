@@ -1,58 +1,36 @@
 <?php
 
-namespace common\models;
+namespace frontend\models;
 
 use Yii;
+use yii\base\Model;
+use common\models\User;
 use common\CommonFunction;
+use common\models\CompanyMaster;
 use borales\extensions\phoneInput\PhoneInputValidator;
 
 /**
- * This is the model class for table "company_master".
- *
- * @property int $id
- * @property string $company_name
- * @property string $company_email
- * @property string $company_mobile
- * @property int $priority 1:high 2:modrate 3:semi modrate 4:low
- * @property string $street_no
- * @property string $street_address
- * @property string|null $apt
- * @property int|null $city
- * @property string|null $zip_code
- * @property int $is_master
- * @property int $created_at
- * @property int $updated_at
- * @property string $reference_no
+ * Signup form
  */
-class CompanyMaster extends \yii\db\ActiveRecord {
+class RecruiterCompanyForm extends CompanyMaster {
 
-    public $state;
-
-    const PRIORITY_HIGH = 1;
-    const PRIORITY_MODRATE = 2;
-    const PRIORITY_SEMIMODRATE = 3;
-    const PRIORITY_LOW = 4;
-
+    public $state;   
     public $mobile;
-
-    public static function tableName() {
-        return 'company_master';
-    }
 
     /**
      * {@inheritdoc}
      */
     public function rules() {
         return [
-            [['city1', 'mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
             [['company_email'], 'string', 'max' => 100],
             [['employer_identification_number'], 'string', 'max' => 200],
             [['employer_identification_number'], 'checkUniqueEIN'],
-            [['employer_identification_number'], 'required'],
             [['company_mobile'], 'string'],
+            [['employer_identification_number'], 'required'],
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
@@ -71,8 +49,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'company_mobile' => 'Mobile',
             'employer_identification_number' => 'Employer Indetification Number',
             'mobile' => 'Mobile',
-            'city1' => 'City',
-            'state1' => 'State',
             'priority' => 'Priority',
             'street_no' => 'Street No',
             'street_address' => 'Street Address',
@@ -100,10 +76,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
         } else {
             return $code;
         }
-    }
-
-    public function getCityRef() {
-        return $this->hasOne(Cities::className(), ['id' => 'city']);
     }
 
 }

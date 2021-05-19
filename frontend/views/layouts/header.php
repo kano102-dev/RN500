@@ -59,9 +59,8 @@ $action = Yii::$app->controller->action->id;
                             <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
                                 <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
-<!--<li class="jobseeker"><a href="<?php // echo $assetDir             ?>/candidate-listing.html">Job Seeker</a></li>-->
-                            <?php if (!empty(Yii::$app->user->identity)) { ?>                            
 
+                            <?php if (!empty(Yii::$app->user->identity)) { ?>                            
                                 <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>

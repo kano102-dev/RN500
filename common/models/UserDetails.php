@@ -62,10 +62,10 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
             [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
             [['job_looking_from'], 'safe'],
-            [['work_authorization_comment','looking_for','license_suspended', 'professional_liability', 'unique_id'], 'string'],
+            [['work_authorization_comment', 'looking_for', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string'],
-            [['mobile_no'], PhoneInputValidator::className()],
+//            [['mobile_no'], PhoneInputValidator::className()],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
@@ -73,6 +73,9 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['first_name', 'last_name', 'email'], 'required', 'on' => 'registration'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
             [['email'], 'checkUniqueValidation', 'on' => 'registration'],
+            [['email'], 'checkUniqueValidation', 'on' => 'staff'],
+            [['email'], 'checkUniqueValidation', 'on' => 'employer'],
+            [['email'], 'checkUniqueValidation', 'on' => 'recruiter'],
             [['company_id'], 'required', 'when' => function ($model) {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id) || CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'staff'
@@ -89,7 +92,7 @@ class UserDetails extends \yii\db\ActiveRecord {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'employer'
             ],
-            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address','ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address', 'ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 
@@ -103,7 +106,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     }
 
     public function checkUniqueValidation($attribute, $param) {
-        $query = User::find()->where(['email' => $this->email])->one();
+        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]])->one();
         if (!empty($query)) {
             return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
         }
@@ -174,7 +177,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function getCompanyNames() {
         return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
     }
-    
+
     public function getCompanyEmail() {
         return isset($this->branch->company->company_email) ? $this->branch->company->company_email : "";
     }

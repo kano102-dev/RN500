@@ -145,13 +145,14 @@ class StaffController extends Controller {
                     $user = new User();
                     $user->email = $userDetailModel->email;
                     $user->role_id = $userDetailModel->role_id;
-                    $user->type = User::TYPE_RECRUITER;
                     $user->status = User::STATUS_APPROVED;
                     if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
                         $user->branch_id = \Yii::$app->user->identity->branch_id;
                     } else {
                         $user->branch_id = $userDetailModel->branch_id;
                     }
+                    $branch = CompanyBranch::findOne(['id' => $user->branch_id]);
+                    $user->type = $branch->company->type == 0 ? User::TYPE_EMPLOYER : User::TYPE_RECRUITER;
                     $user->is_owner = User::OWNER_NO;
                     if ($user->save()) {
                         $userDetailModel->user_id = $user->id;

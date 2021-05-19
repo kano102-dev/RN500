@@ -30,9 +30,7 @@ use kartik\date\DatePicker;
     </div>
 
     <div class="form-group">
-        <?php if ($deleteFlag) { ?>
-            <a href="#" class="delete-documents" data-document="document" style="color: red;font-weight: bold;float: right;text-decoration: none">Delete Documents</a>
-        <?php } ?>
+       
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -41,12 +39,6 @@ use kartik\date\DatePicker;
 </div>
 
 <?php
-$DeleteUrl = '';
-
-if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManager->createUrl(['user-details/delete-document?id='. $model->id]);
-}
-
 $script = <<< JS
 
   $(document).on("beforeSubmit", "#add-document", function () {
@@ -82,33 +74,7 @@ $script = <<< JS
          return false;
  });
      
-  $(document).on('click','.delete-documents',function(){
-      var document = $(this).data('document');  
-        
-      swal({
-            title: "Are you sure?",
-            text: "Are you sure you want to delete this Document !",
-            icon: "warning",
-            buttons: [
-              'No, cancel it!',
-              'Yes, I am sure!'
-            ],
-            dangerMode: true,
-          }).then(function(isConfirm) {
-            if (isConfirm) {
-              $.post("$DeleteUrl", {document: document}, function(result){
-                    if(result){
-                         $("#profile-modal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                         $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                         });
-                    }
-                }); 
-            }
-          })
-  });       
-        
+ 
 JS;
 $this->registerJs($script, yii\web\View::POS_END);
 ?>

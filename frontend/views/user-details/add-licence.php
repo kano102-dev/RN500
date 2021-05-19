@@ -7,9 +7,7 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 
-/* @var $this yii\web\View */
-/* @var $model frontend\models\UserDetails */
-/* @var $form yii\widgets\ActiveForm */
+$frontendDir = yii\helpers\Url::base(true);
 ?>
 <style>
     .mb-15{margin-bottom: 15px;}
@@ -91,21 +89,18 @@ use yii\web\JsExpression;
             <?= $form->field($model, 'compact_states')->checkbox(); ?>
         </div>
     </div>
-    <div class="row">
+    <div class="row mb-15">
         <div class="col-sm-12">
             <?= $form->field($model, 'document')->fileInput() ?>
 
             <?php if ($deleteFlag) { ?>
-                <p><?= $model->document ?></p>
+            <a href="<?= $frontendDir."/uploads/user-details/document/".$model->document ?>" download><?= $model->document ?></a>
             <?php } ?>
 
         </div>
     </div>
 
     <div class="form-group">
-        <?php if ($deleteFlag) { ?>
-            <a href="#" class="delete-documents" data-document="licenses" style="color: red;font-weight: bold;float: right;text-decoration: none">Delete License</a>
-        <?php } ?>
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
@@ -154,33 +149,7 @@ $script = <<< JS
          });
          return false;
  });    
-     
-  $(document).on('click','.delete-documents',function(){
-      var document = $(this).data('document');  
-        
-      swal({
-            title: "Are you sure?",
-            text: "Are you sure you want to delete this Document !",
-            icon: "warning",
-            buttons: [
-              'No, cancel it!',
-              'Yes, I am sure!'
-            ],
-            dangerMode: true,
-          }).then(function(isConfirm) {
-            if (isConfirm) {
-              $.post("$DeleteUrl", {document: document}, function(result){
-                    if(result){
-                         $("#profile-modal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                         $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                         });
-                    }
-                }); 
-            }
-          })
-  });      
+          
         
 JS;
 $this->registerJs($script, yii\web\View::POS_END);

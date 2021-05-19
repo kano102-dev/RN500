@@ -80,6 +80,18 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
                     }
                 }
             })
+
+            $(".moreFTypeBox").slice(0, 3).show();
+            if ($(".blogFTypeBox:hidden").length != 0) {
+                $("#viewFTypeMore").show();
+            }
+            $("#viewFTypeMore").on('click', function (e) {
+                e.preventDefault();
+                $(".moreFTypeBox:hidden").slice(0, 6).slideDown();
+                if ($(".moreFTypeBox:hidden").length == 0) {
+                    $("#viewFTypeMore").fadeOut('slow');
+                }
+            });
         </script>
         <!-- Footer start -->
         <?= $this->render('footer', ['assetDir' => $assetDir]) ?>
