@@ -32,16 +32,15 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-//                'only' => ['index', 'recruiter-lead', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
-                'only' => ['recruiter-lead'],
+                'only' => ['recruiter-lead','view','recruiter-view'],
                 'rules' => [
-//                    [
-//                        'actions' => ['index', 'get-discipline', 'get-specialty', 'get-benefits', 'get-cities'],
-//                        'allow' => true,
-//                        'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
-//                    ],
                     [
-                        'actions' => ['recruiter-lead'],
+                        'actions' => ['view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
+                    ],
+                    [
+                        'actions' => ['recruiter-lead','recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],

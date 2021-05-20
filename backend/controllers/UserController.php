@@ -243,9 +243,12 @@ class UserController extends Controller {
 
     public function actionChangeStatus($id, $status) {
         $model = User::findOne(['id' => $id]);
+        $company = CompanyMaster::findOne(['id' => $model->branch->company_id]);
         $model->scenario = $status == User::STATUS_APPROVED ? 'approve' : 'reject';
         if ($model->load(Yii::$app->request->post())) {
+            $company->status = $status;
             $model->status = $status;
+            $company->updated_at = CommonFunction::currentTimestamp();
             if ($model->save(false)) {
                 if ($model->status == User::STATUS_APPROVED) {
                     CommonFunction::sendWelcomeMail($model);

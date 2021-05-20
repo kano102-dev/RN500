@@ -34,8 +34,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
     const PRIORITY_LOW = 4;
 
     public $mobile;
-    public $city1;
-    public $state1;
 
     public static function tableName() {
         return 'company_master';
@@ -46,16 +44,19 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['city1','mobile','company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['city1', 'mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
             [['company_email'], 'string', 'max' => 100],
+            [['employer_identification_number'], 'string', 'max' => 200],
+            [['employer_identification_number'], 'checkUniqueEIN'],
+            [['employer_identification_number'], 'required'],
             [['company_mobile'], 'string'],
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type', 'status', 'reference_no'], 'safe'],
+            [['state', 'type', 'status', 'reference_no', 'employer_identification_number'], 'safe'],
         ];
     }
 
@@ -68,6 +69,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'company_name' => 'Name',
             'company_email' => 'Email',
             'company_mobile' => 'Mobile',
+            'employer_identification_number' => 'Employer Indetification Number',
             'mobile' => 'Mobile',
             'city1' => 'City',
             'state1' => 'State',
@@ -81,6 +83,13 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    public function checkUniqueEIN($attribute) {
+        $checkein = CompanyMaster::findOne(['employer_identification_number' => $this->employer_identification_number]);
+        if (isset($checkein) && !empty($checkein)) {
+            $this->addError("employer_identification_number", "Company already registered.");
+        }
     }
 
     public function getUniqueReferenceNumber() {

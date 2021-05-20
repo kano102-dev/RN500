@@ -57,7 +57,7 @@ class LoginForm extends Model {
                     return true;
                 }
             }else{
-                $this->addError($attribute, 'Your account does not verify.');
+                $this->addError($attribute, "Your account doesn't verified.More details please contact info@rn500.com");
             }
         }
     }
