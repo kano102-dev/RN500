@@ -11,6 +11,7 @@ use common\models\CompanySubscriptionPayment;
 
 class CommonFunction {
 
+    // GENERATE RANDOM DIGITS, ACCORDING TO LENGTH PASSED OTHERWISE 6 DIGITS
     public static function generateOTP($digits = 6) {
         $characters = '0123456789';
         $charactersLength = strlen($characters);
@@ -89,7 +90,7 @@ class CommonFunction {
     public static function isEmployer() {
         return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_EMPLOYER) ? true : false;
     }
-    
+
     // RETURN TRUE IF LOGGED_IN USER IS Jobseeker ELSE FALSE
     public static function isJobSeeker() {
         return (isset(Yii::$app->user->identity->type) && Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) ? true : false;
@@ -199,6 +200,11 @@ class CommonFunction {
             }
         }
         return $flag;
+    }
+
+    // RETURN TRUE IF LOGGED_IN USER IS HO Admin ELSE FALSE
+    public static function getProfilePictureBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/profile";
     }
 
 }
