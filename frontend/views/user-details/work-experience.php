@@ -138,43 +138,55 @@ use yii\web\JsExpression;
 </div>
 
 <?php
+$currently_working = isset($model->currently_working) ? $model->currently_working : ''; 
+
 $script = <<< JS
+  var currently_working = '$currently_working';
+   
+  if(currently_working == '1'){
+      $('#workexperience-end_date').attr('disabled',true);
+  }      
         
   $('.field-currently_working input').change(function() {
         if($(this).is(":checked")) {
+            $('#workexperience-end_date').val('');
             $('#workexperience-end_date').attr('disabled',true);
         } else {
             $('#workexperience-end_date').attr('disabled',false);
         }        
     });
         
+  var click=0;
   $(document).on("beforeSubmit", "#work-experience-new", function () {
-    var form = $(this);
-         $.ajax({
-             url    : form.attr('action'),
-             type   : 'post',
-             dataType : 'json',
-             data   : form.serialize(),
-             success: function (response){
-                 try{
-                     if(!response.error){
-                         $("#profile-modal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                         $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                         });
-                         getProfilePercentage();
+       if(click==0){
+            ++click;
+            var form = $(this);
+             $.ajax({
+                 url    : form.attr('action'),
+                 type   : 'post',
+                 dataType : 'json',
+                 data   : form.serialize(),
+                 success: function (response){
+                     try{
+                         if(!response.error){
+                             $("#profile-modal").modal('hide');
+                             $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                             $(document).on("pjax:success", "#job-seeker", function (event) {
+                                 $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                             });
+                             getProfilePercentage();
+                         }
+                     }catch(e){
+                         $.pjax.reload({'container': '#res-messages', timeout: 2000});
                      }
-                 }catch(e){
-                     $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                 },
+                 error  : function () 
+                 {
+                     console.log('internal server error');
                  }
-             },
-             error  : function () 
-             {
-                 console.log('internal server error');
-             }
-         });
-         return false;
+             });
+             return false;
+        }
  });      
         
 JS;

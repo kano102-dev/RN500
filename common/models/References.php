@@ -37,7 +37,8 @@ class References extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'mobile_no', 'email', 'user_id'], 'required'],
+            [['first_name', 'last_name', 'email', 'user_id'], 'required'],
+            ['mobile_no','required','message' => 'Mobile No. cannot be blank.'],
             [['title', 'city', 'state', 'user_id'], 'integer'],
             ['email','email'],
 //            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],

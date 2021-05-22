@@ -87,7 +87,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
             }
             $("#viewFTypeMore").on('click', function (e) {
                 e.preventDefault();
-                $(".moreFTypeBox:hidden").slice(0, 6).slideDown();
+                $(".moreFTypeBox:hidden").slice(0, 3).slideDown();
                 if ($(".moreFTypeBox:hidden").length == 0) {
                     $("#viewFTypeMore").fadeOut('slow');
                 }

@@ -38,7 +38,7 @@ class WorkExperience extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'start_date', 'end_date'], 'required'],
+            [['user_id', 'start_date', 'end_date','employment_type'], 'required'],
             [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working'], 'integer'],
             [['start_date', 'end_date'], 'safe'],
             [['end_date'], 'required', "message" => "Please enter {attribute}.", 'when' => function($model) {

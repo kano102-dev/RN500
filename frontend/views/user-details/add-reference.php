@@ -62,9 +62,11 @@ use borales\extensions\phoneInput\PhoneInput;
 
 <?php
 $script = <<< JS
-
+var click = 0;
 $(document).on("beforeSubmit", "#add-reference", function () {
-   var form = $(this);
+    if(click==0){
+        ++click;
+        var form = $(this);
         $.ajax({
             url    : form.attr('action'),
             type   : 'post',
@@ -90,6 +92,7 @@ $(document).on("beforeSubmit", "#add-reference", function () {
             }
         });
         return false;
+     }
 });  
         
 JS;

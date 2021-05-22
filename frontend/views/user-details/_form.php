@@ -102,18 +102,13 @@ use borales\extensions\phoneInput\PhoneInput;
             <?php
             echo $form->field($model, 'dob')->widget(DatePicker::classname(), [
                 'name' => 'dob',
-                'value' => date('d-M-Y'),
-                'options' => ['placeholder' => 'Enter DOB..'],
+//                'value' => date('d-m-Y'),
+//                'options' => ['placeholder' => 'Enter DOB..'],
                 'pluginOptions' => [
                     'format' => 'dd-mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-//                    'startDate' => date('d-m-Y'),
-                ],
-                'pluginEvents' => [
-                    "changeDate" => "function(e) {
-
-                            }"
+                    'startDate' => date('d-m-Y'),
                 ]
             ]);
             ?>

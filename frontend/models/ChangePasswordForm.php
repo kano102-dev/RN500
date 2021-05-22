@@ -34,7 +34,7 @@ class ChangePasswordForm extends Model {
             [['password', 'new_password', 'confirm_password'], 'required'],
             ['confirm_password', 'compare', 'compareAttribute' => 'new_password'],
             ['password', 'validatePassword'],
-//            [['new_password'], 'match', 'pattern' => "/^^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", 'message' => Yii::t('app', 'Minimum 8 Characters with at least 1 Capital, 1 Number and 1 special Characters.')],
+            [['new_password'], 'match', 'pattern' => "/^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", 'message' => Yii::t('app', 'Password required atlest 1 alphabet, 1 numeric and 1 special character.')],
         ];
     }
 
