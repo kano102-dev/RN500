@@ -320,8 +320,6 @@ class UserDetailsController extends Controller {
             
             if($model->currently_working != '1'){
                 $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
-            } else {
-                $model->end_date = null;
             }
             
             $model->city = $postData['city'];

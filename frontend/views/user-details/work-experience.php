@@ -59,7 +59,13 @@ use yii\web\JsExpression;
                 ],
                 'pluginEvents' => [
                     "changeDate" => "function(e) {
-
+                                $('#workexperience-end_date').kvDatepicker({                  
+                                    minViewMode : 'months',
+                                    startView : 'year',
+                                    autoclose : true,
+                                    format : 'mm-yyyy'
+                                });
+                                $('#workexperience-end_date').kvDatepicker('setStartDate', e.date);
                             }"
                 ]
             ]);
@@ -83,7 +89,13 @@ use yii\web\JsExpression;
                 ],
                 'pluginEvents' => [
                     "changeDate" => "function(e) {
-
+                                $('#workexperience-start_date').kvDatepicker({                  
+                                    minViewMode : 'months',
+                                    startView : 'year',
+                                    autoclose : true,
+                                    format : 'mm-yyyy'
+                                });
+                                $('#workexperience-start_date').kvDatepicker('setEndDate', e.date);
                             }"
                 ]
             ]);

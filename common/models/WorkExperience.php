@@ -38,13 +38,13 @@ class WorkExperience extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['user_id', 'start_date', 'end_date','employment_type'], 'required'],
+            [['user_id', 'start_date','employment_type'], 'required'],
             [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working'], 'integer'],
             [['start_date', 'end_date'], 'safe'],
             [['end_date'], 'required', "message" => "Please enter {attribute}.", 'when' => function($model) {
-                    return $model->currently_working != 1;
+                    return $model->currently_working == 0;
                 }, 'whenClient' => "function (attribute, value) {
-                return ($('#currently_working').is(':checked'));
+                return (!$('#currently_working').is(':checked'));
             }"],
             [['title', 'facility_name'], 'string', 'max' => 255],
             [['organization_name', 'description'], 'string', 'max' => 500],

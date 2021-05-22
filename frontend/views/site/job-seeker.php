@@ -526,9 +526,10 @@ function getProfilePercentage(){
 getProfilePercentage();  
     
 $(window).scroll(function(){
-  var scroll = $(window).scrollTop();      
-  console.log(scroll);      
-  if(scroll >= 100 && scroll <= 1100){
+  var scroll = $(window).scrollTop();    
+  var profileSectionHeight = $('.listpgWraper').height() - 500;
+       
+  if(scroll >= 100 && scroll <= profileSectionHeight){
       $('.fixed-sidebar').addClass('sticky-sidebar');
       $('.font-a').css("right","-5px");  
    } else {
