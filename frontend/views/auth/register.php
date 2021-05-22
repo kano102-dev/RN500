@@ -26,13 +26,13 @@ use borales\extensions\phoneInput\PhoneInput;
                 <div class="userccount">
                     <div class="userbtns">
                         <ul class="nav nav-tabs">
-                            <li class="active"><a data-toggle="tab" href="#candidate">Jobseeker</a></li>
-                            <li><a data-toggle="tab" href="#employer">Employer</a></li>
-                            <li><a data-toggle="tab" href="#recruiter">Recruiter</a></li>
+                            <li class="<?= (isset($tab) && empty($tab)) ? 'active' : '' ?>"><a data-toggle="tab" href="#candidate">Jobseeker</a></li>
+                            <li class="<?= (isset($tab) && !empty($tab) && $tab == 'employer') ? 'active' : '' ?>"><a data-toggle="tab" href="#employer">Employer</a></li>
+                            <li class="<?= (isset($tab) && !empty($tab) && $tab == 'recruiter') ? 'active' : '' ?>"><a data-toggle="tab" href="#recruiter">Recruiter</a></li>
                         </ul>
                     </div>
                     <div class="tab-content">
-                        <div id="candidate" class="formpanel tab-pane fade in active">
+                        <div id="candidate" class="formpanel tab-pane fade in <?= isset($tab) && empty($tab) ? 'active' : '' ?>">
                             <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'candidate-form']) ?>
                             <?= Html::hiddenInput('type', 'candidate') ?>
                             <div class="formrow">
@@ -71,7 +71,7 @@ use borales\extensions\phoneInput\PhoneInput;
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
-                        <div id="employer" class="formpanel tab-pane fade in">
+                        <div id="employer" class="formpanel tab-pane fade in <?= isset($tab) && !empty($tab) && $tab == 'employer' ? 'active' : '' ?>">
                             <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'employer-form']) ?>
                             <div><h3>Company Details</h3></div>
                             <hr/>
@@ -90,6 +90,9 @@ use borales\extensions\phoneInput\PhoneInput;
                                     ]
                                 ])->label(false);
                                 ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'employer_identification_number')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('employer_identification_number')])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
@@ -114,13 +117,16 @@ use borales\extensions\phoneInput\PhoneInput;
                             <div class="formrow">
                                 <?=
                                 $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
-                                    'data' => [],
+                                    'data' => $cities,
                                     'options' => ['placeholder' => 'Select a city'],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
                                 ])->label(false);
                                 ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('zip_code')])->label(false); ?>
                             </div>
                             <div><h3>Company Owner Details</h3></div>
                             <hr/>
@@ -160,20 +166,20 @@ use borales\extensions\phoneInput\PhoneInput;
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
-                        <div id="recruiter" class="formpanel tab-pane fade in">
+                        <div id="recruiter" class="formpanel tab-pane fade in <?= isset($tab) && !empty($tab) && $tab == 'recruiter' ? 'active' : '' ?>">
                             <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'recruiter-form']) ?>
                             <div><h3>Company Details</h3></div>
                             <hr/>
                             <?= Html::hiddenInput('type', 'recruiter') ?>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
-                                $form->field($companyMasterModel, 'mobile')->widget(PhoneInput::className(), [
+                                $form->field($recruiterCompany, 'mobile')->widget(PhoneInput::className(), [
                                     'jsOptions' => [
                                         'preferredCountries' => ['us', 'in'],
                                     ]
@@ -181,17 +187,20 @@ use borales\extensions\phoneInput\PhoneInput;
                                 ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'employer_identification_number')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('employer_identification_number')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'street_address')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_address')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'street_no')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_no')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'apt')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('apt')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'street_address')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('street_address')])->label(false); ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($recruiterCompany, 'apt')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('apt')])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
-                                $form->field($companyMasterModel, 'state1')->widget(Select2::classname(), [
+                                $form->field($recruiterCompany, 'state')->widget(Select2::classname(), [
                                     'data' => $states,
                                     'options' => ['placeholder' => 'Select a province'],
                                     'pluginOptions' => [
@@ -202,14 +211,17 @@ use borales\extensions\phoneInput\PhoneInput;
                             </div>
                             <div class="formrow">
                                 <?=
-                                $form->field($companyMasterModel, 'city1')->widget(Select2::classname(), [
-                                    'data' => [],
+                                $form->field($recruiterCompany, 'city')->widget(Select2::classname(), [
+                                    'data' => $cities,
                                     'options' => ['placeholder' => 'Select a city'],
                                     'pluginOptions' => [
                                         'allowClear' => true
                                     ],
                                 ])->label(false);
                                 ?>
+                            </div>
+                            <div class="formrow">
+                                <?= $form->field($recruiterCompany, 'zip_code')->textInput(['maxlength' => true, 'placeholder' => $recruiterCompany->getAttributeLabel('zip_code')])->label(false); ?>
                             </div>
                             <div><h3>Company Owner Details</h3></div>
                             <hr/>
@@ -270,14 +282,14 @@ $script = <<< JS
                 }
             });
    });
-   $(document).on('change','#companymaster-state1',function(){
+   $(document).on('change','#recruitercompanyform-state',function(){
         var state=$(this).val();
        $.ajax({
                 method: 'GET',
                 url: '$getCitiesUrl',
                 data: {'id':state},
                 success: function (response) {
-                    $('#companymaster-city1').html(response);
+                    $('#recruitercompanyform-city').html(response);
                 }
             });
    });

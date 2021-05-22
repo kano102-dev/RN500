@@ -230,7 +230,6 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
             $transaction = Yii::$app->db->beginTransaction();
             try {
                 $permissions = explode(',', $_POST['RoleMaster']['permissions']);
-                $model->created_at = time();
                 $model->updated_at = time();
                 if ($model->save()) {
                     $auth->revokeAll($model->id);
@@ -262,7 +261,7 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
                 return $this->redirect(['index']);
             }
         }
-
+ 
         return $this->render('_form', [
                     'model' => $model, 'tree' => $tree,
                     'companyList' => $companyList

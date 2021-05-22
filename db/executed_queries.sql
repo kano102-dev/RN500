@@ -860,3 +860,6 @@ CREATE TABLE `documents` (
   `path` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL
 );
+
+ALTER TABLE `company_master`
+ADD `employer_identification_number` varchar(200) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `company_mobile`;

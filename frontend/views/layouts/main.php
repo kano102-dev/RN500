@@ -8,7 +8,7 @@ use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use common\widgets\Alert;
-//use ranamehul20\twak\TwakWidget;
+use ranamehul20\twak\TwakWidget;
 
 AppAsset::register($this);
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
@@ -51,11 +51,20 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
 
         <?= $content ?>
 
-        <!--<?  TwakWidget::widget(['key' => '609387b9185beb22b30a8c79/1f504kd7t']) ?>-->
+        <?= TwakWidget::widget(['key' => '609adcc8185beb22b30c5a77/1f5eesrhe']) ?>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" ></script>
         <!--<script src="" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>-->
         <script>
+
+            $(window).scroll(function () {
+                var scroll = $(window).scrollTop();
+                if (scroll >= 30) {
+                    $(".header").addClass('header-new');
+                } else {
+                    $(".header").removeClass('header-new');
+                }
+            });
 
             $('.owl-carousel').owlCarousel({
                 loop: true,

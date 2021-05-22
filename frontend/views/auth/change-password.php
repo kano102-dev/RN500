@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 use kartik\date\DatePicker;
+
+$is_otp_sent = $model->is_otp_sent;
 ?>
 <style>
     .field_icon{
@@ -13,7 +15,7 @@ use kartik\date\DatePicker;
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-6 col-md-offset-2">
                 <div class="userccount">
                     <div class="formpanel"> 
                         <?php $form = ActiveForm::begin(); ?>
@@ -54,6 +56,21 @@ use kartik\date\DatePicker;
                                         ->label(false)
                                         ->passwordInput(['placeholder' => $model->getAttributeLabel('confirm_password')])
                                 ?>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div  class="col-sm-12">
+                                <?php
+                                if ($is_otp_sent) {
+                                    echo "<p> We have sent an OTP to your registered email. </p>";
+                                    echo $form->field($model, 'otp', [
+                                                'options' => ['class' => 'form-group']
+                                            ])
+                                            ->label(false)
+                                            ->textInput(['placeholder' => 'OTP']);
+                                }
+                                ?>
+
                             </div>
                         </div>
                         <div class = "form-group">

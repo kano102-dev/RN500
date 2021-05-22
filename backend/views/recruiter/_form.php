@@ -91,6 +91,11 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                             <?= $form->field($companyMasterModel, 'priority')->dropDownList([1 => 'High', 2 => 'Modrate', 3 => 'Semi Modrate', 4 => 'Low'], ['prompt' => 'Select']) ?>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <?= $form->field($companyMasterModel, 'employer_identification_number')->textInput(['maxlength' => true]); ?>
+                        </div>
+                    </div>
                 </div>
             </div>
 

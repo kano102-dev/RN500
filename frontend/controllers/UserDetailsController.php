@@ -306,7 +306,6 @@ class UserDetailsController extends Controller {
             } else {
                 $model->end_date = null;
             }
-            
         } else {
             $model = new WorkExperience();
         }
@@ -315,8 +314,7 @@ class UserDetailsController extends Controller {
         $discipline = ArrayHelper::map(Discipline::find()->all(), 'id', 'name');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-//            echo 'sdasdasd';
-//            exit;
+
             $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
             

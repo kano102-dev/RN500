@@ -48,7 +48,7 @@ $frontendDir = yii\helpers\Url::base(true);
     label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
     .ui-state-default{display: none;}
     .ui-widget-header{background: #263bd6;}
-    .sticky-sidebar{position: fixed !important;width: 360px;top: 10px;}
+    .sticky-sidebar{position: fixed !important;width: 360px;top: 70px;}
     .jobinfo h3 a,.jobinfo .card .card-footer .card-title a{text-decoration: none;}
     .mb-10{margin-bottom: 10px;}
     .edit-icon-right a{float: right;margin-right:10px;}
