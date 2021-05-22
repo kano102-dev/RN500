@@ -12,7 +12,7 @@ use yii\web\JsExpression;
 </style>
 <div class="user-details-form">
 <?php $form = ActiveForm::begin([
-    'id' => 'add-education'
+    'id' => 'add-education-new'
 ]); ?>
     <div class="row">
         <div class="col-sm-12">
@@ -91,35 +91,38 @@ use yii\web\JsExpression;
 
 <?php
 $script = <<< JS
-
-  $(document).on("beforeSubmit", "#add-education", function () {
-    var form = $(this);
-         $.ajax({
-             url    : form.attr('action'),
-             type   : 'post',
-             dataType : 'json',
-             data   : form.serialize(),
-             success: function (response){
-                console.log(response);
-                 try{
-                     if(!response.error){
-                         $("#profile-modal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                         $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                         });
-                         getProfilePercentage();
+  var click=0;      
+  $(document).on("beforeSubmit", "#add-education-new", function () {
+    if(click==0){
+        ++click;
+        var form = $(this);
+             $.ajax({
+                 url    : form.attr('action'),
+                 type   : 'post',
+                 dataType : 'json',
+                 data   : form.serialize(),
+                 success: function (response){
+                    console.log(response);
+                     try{
+                         if(!response.error){
+                             $("#profile-modal").modal('hide');
+                             $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                             $(document).on("pjax:success", "#job-seeker", function (event) {
+                                 $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                             });
+                             getProfilePercentage();
+                         }
+                     }catch(e){
+                         $.pjax.reload({'container': '#res-messages', timeout: 2000});
                      }
-                 }catch(e){
-                     $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                 },
+                 error  : function () 
+                 {
+                     console.log('internal server error');
                  }
-             },
-             error  : function () 
-             {
-                 console.log('internal server error');
-             }
-         });
-         return false;
+             });
+             return false;
+      }
  });      
         
 JS;

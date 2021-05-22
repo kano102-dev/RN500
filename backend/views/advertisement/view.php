@@ -32,7 +32,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'description:ntext',
                         'link_url:url',
                         'icon',
-                        'location_name',
                         [
                             'attribute' => 'is_active',
                             'value' => function ($model) use ($status) {

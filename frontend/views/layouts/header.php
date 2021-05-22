@@ -25,9 +25,11 @@ $action = Yii::$app->controller->action->id;
 ?>
 
 <style>
+    .listpgWraper{padding: 100px 0 !important;}
     .top-content{position: absolute;top: 20px;right: 30px;}
     .top-content p{font-size: 15px;font-weight: 600;color: black;}
-
+    .header-new{position: fixed;left: 0;right: 0;background: white;z-index: 999;}
+    .nav-tabs li{margin-right: 5px !important;}
     @media (max-width:767px){
         .top-content{display: none}
     }
@@ -61,7 +63,7 @@ $action = Yii::$app->controller->action->id;
                             <?php } ?>
 
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
-                                <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
+                                <li class="dropdown userbtn"><a href="javascript:void(0);"><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
                                             <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>

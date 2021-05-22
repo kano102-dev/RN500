@@ -7,12 +7,13 @@ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
+$frontendDir = yii\helpers\Url::base(true);
 ?>
 
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
-                'id' => 'add-certification'
+                'id' => 'add-certification-new'
     ]);
     ?>
     <div class="row">
@@ -50,7 +51,8 @@ use kartik\date\DatePicker;
         <div class="col-sm-12">
             <?= $form->field($model, 'document')->fileInput() ?>
             <?php if ($deleteFlag) { ?>
-                <p><?= $model->document ?></p>
+                <a href="<?= $frontendDir."/uploads/user-details/certification/".$model->document ?>" download><?= $model->document ?></a>
+                <p>&nbsp;</p>
             <?php } ?>
         </div>
     </div>
@@ -64,17 +66,13 @@ use kartik\date\DatePicker;
 </div>
 
 <?php
-$DeleteUrl = '';
-
-if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManager->createUrl(['user-details/delete-document?id='. $model->id]);
-}
-
 $script = <<< JS
-
-  $(document).on("beforeSubmit", "#add-certification", function () {
-    var form = $(this);
-    var formData = new FormData(form[0]);    
+  var click = 0;      
+  $(document).on("beforeSubmit", "#add-certification-new", function () {
+    if(click == 0){
+        ++click;    
+        var form = $(this);
+        var formData = new FormData(form[0]);    
          $.ajax({
              url    : form.attr('action'),
              type   : 'post',
@@ -103,6 +101,7 @@ $script = <<< JS
              }
          });
          return false;
+      }
  });
         
    $(document).on('click','#certifications-certification_active input',function(){
