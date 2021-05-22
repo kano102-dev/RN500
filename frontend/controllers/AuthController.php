@@ -329,7 +329,7 @@ class AuthController extends Controller {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', "Password reset link sent sucessfully. Please check your inbox.");
+                Yii::$app->session->setFlash('success', "Password reset link sent Successfully. Please check your inbox.");
                 return $this->redirect(['login']);
             } else {
                 Yii::$app->session->setFlash('error', "something went wrong");

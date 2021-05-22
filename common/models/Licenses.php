@@ -36,13 +36,14 @@ class Licenses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['issuing_state', 'license_name', 'expiry_date', 'user_id'], 'required'],
+            [['issuing_state', 'license_name', 'expiry_date', 'user_id','document'], 'required'],
             [['issuing_state', 'compact_states', 'verified', 'user_id'], 'integer'],
             [['license_name', 'license_number', 'issue_by'], 'string', 'max' => 250],
             [['document'], 'string', 'max' => 255],
             [['expiry_date'], 'string', 'max' => 50],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],   
+            [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['document'], 'file', 'skipOnEmpty' => true, 'extensions'=>['png', 'jpg', 'jpeg'], 'checkExtensionByMimeType'=>false]
         ];
     }
 
