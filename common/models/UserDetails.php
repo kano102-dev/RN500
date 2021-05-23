@@ -45,6 +45,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $role_id;
     public $branch_id;
     public $company_id;
+    public $profile_pic_url;
 
     public static function tableName() {
         return 'user_details';
