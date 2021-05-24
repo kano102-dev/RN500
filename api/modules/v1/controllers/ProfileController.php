@@ -8,6 +8,8 @@ use api\modules\v1\components\Controller;
 use common\models\UserDetails;
 use common\CommonFunction;
 use yii\helpers\FileHelper;
+use yii\helpers\Url;
+use common\models\WorkExperience;
 
 /**
  * Company Controller API
@@ -21,19 +23,64 @@ class ProfileController extends Controller {
         exit;
     }
 
+    public function actionGetStaticData() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+
+        try {
+            $employment_type = [];
+            foreach (Yii::$app->params['EMPLOYEMENT_TYPE'] as $value => $text) {
+                $employment_type[] = ['value' => (string) $value, 'text' => $text];
+            }
+
+            $degree_type = [];
+            foreach (Yii::$app->params['DEGREE_TYPE'] as $value => $text) {
+                $degree_type[] = ['value' => (string) $value, 'text' => $text];
+            }
+
+            $data['employment_type'] = $employment_type;
+            $data['degree_type'] = $degree_type;
+            $code = 200;
+            $msg = "success!!";
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
     public function actionGetProfile() {
         $data = [];
         $code = 202;
         $msg = "Required Data Missing in Request.";
         $request = Yii::$app->request->post();
         try {
+
             $loggedInUserId = $this->user_id;
             $model = UserDetails::find()->where(['user_id' => $loggedInUserId])->one();
             if ($model !== null) {
                 $model->email = $model->user->email;
+                $model->profile_pic_url = ($model->profile_pic) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/$model->profile_pic"]), true) : "";
+
+                $data['first_name'] = $model->first_name;
+                $data['last_name'] = $model->last_name;
+                $data['email'] = (isset($model->user->email) && $model->user->email != "") ? $model->user->email : "";
+                $data['mobile_no'] = ($model->mobile_no) ? $model->mobile_no : "";
+                $data['looking_for'] = ($model->looking_for) ? $model->looking_for : "";
+                $data['apt'] = ($model->apt) ? $model->apt : "";
+                $data['street_no'] = ($model->street_no) ? $model->street_no : "";
+                $data['street_address'] = ($model->street_address) ? $model->street_address : "";
+                $data['city'] = ($model->city) ? $model->city : "";
+                $data['ssn'] = ($model->ssn) ? $model->ssn : "";
+                $data['dob'] = ($model->dob) ? $model->dob : "";
+                $data['profile_pic'] = ($model->profile_pic) ? $model->profile_pic : "";
+                $data['profile_pic_url'] = ($model->profile_pic_url) ? $model->profile_pic_url : "";
                 $code = 200;
-                $msg = "Success!";
-                $data = $model;
+                $msg = "success!";
             } else {
                 $code = 203;
                 $msg = "No such user detail exists.";
@@ -52,7 +99,7 @@ class ProfileController extends Controller {
         $data = [];
         $code = 202;
         $msg = "Required Data Missing in Request.";
-        $request = Yii::$app->request->post();
+        $request = array_map("trim", Yii::$app->request->post());
         extract($request);
         try {
             $loggedInUserId = $this->user_id;
@@ -120,6 +167,134 @@ class ProfileController extends Controller {
             } else {
                 $code = 203;
                 $msg = "No such user detail exists.";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionWorkExperienceList() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            $models = WorkExperience::find()->where(['user_id' => $loggedInUserId])->all();
+
+            if (!empty($models)) {
+                $result = [];
+                foreach ($models as $record) {
+                    $result[] = [
+                        'id' => $record->id,
+                        'title' => $record->title,
+                        'start_date' => ($record->start_date) ? $record->start_date : '',
+                        'end_date' => ($record->end_date) ? $record->end_date : '',
+                        'discipline_id' => ($record->discipline_id) ? (string) $record->discipline_id : '',
+                        'discipline_name' => (isset($record->discipline->name)) ? $record->discipline->name : '',
+                        'specialty' => ($record->specialty) ? (string) $record->specialty : '',
+                        'specialty_name' => (isset($record->specialityRel->name)) ? $record->specialityRel->name : '',
+                        'employment_type' => ($record->employment_type) ? (string) $record->employment_type : '',
+                        'employment_type_name' => (isset(Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type])) ? Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type] : '',
+                        'currently_working' => ($record->currently_working == 1) ? "1" : "0",
+                        'facility_name' => ($record->facility_name) ? $record->facility_name : '',
+                        'city' => ($record->city) ? (string) $record->city : '',
+                        'city_name' => (isset($record->cityRel->city)) ? $record->cityRel->city : '',
+                    ];
+                }
+                $code = 200;
+                $msg = "success!!";
+                $data = $result;
+            } else {
+                $code = 201;
+                $msg = "None of work experience is added.";
+                $data = [];
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionWorkExperienceDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = WorkExperience::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    if ($model->delete()) {
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionWorkExperienceSubmit() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            $model = new WorkExperience();
+            $model->user_id = $loggedInUserId;
+            if (isset($id) && $id != '') {
+                $model = WorkExperience::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model == null) {
+                    $code = 204;
+                    $msg = "No record exists with such id.";
+                    echo Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+                    exit;
+                }
+            }
+            if (isset($discipline_id) && $discipline_id != '' && isset($specialty) && $specialty != '' && isset($employment_type) && $employment_type != '' && isset($start_date) && $start_date != '' && isset($end_date)) {
+                $model->setAttributes($request);
+                $model->start_date = date('Y-m-d', strtotime($start_date));
+                $model->end_date = (isset($currently_working) && $currently_working == "1" ) ? null : ($end_date) ? date('Y-m-d', strtotime($end_date)) : null;
+                if ($model->save()) {
+                    $code = 200;
+                    $msg = "Record saved successfully.";
+                } else {
+                    $code = 205;
+                    $msg = "Something went wrong.";
+                }
+            } else {
+                $code = 201;
+                $msg = "Missing parameters : discipline_id, specialty, employment_type, start_date or end_date ";
             }
         } catch (\Exception $exc) {
             $code = 500;
