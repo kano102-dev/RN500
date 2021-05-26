@@ -24,4 +24,5 @@ return [
     'LICENSE_TYPE' => ['' => 'Select Name',1 => 'RN', 2 => 'PN', 3 => 'APRN-CNP',4 => 'APRN-CRNA',5 => 'APRN-CNS',6 => 'APRN-CNM',7 => 'Other'],
     'REFERENCE_TYPE' => [1 => 'Charge RN', 2 => 'RN Manager', 3 => 'DON', 4 => 'ADON', 5 => 'RN Supervisor', 6 => 'Chief Nursing Officer', 7 => 'NP', 8 => 'PA', 9 => 'APRN', 10 => 'MD', 11 => 'Other'],
     'CERTIFICATION_TYPE' => [1 => '(ABMP) Diagnostic Imaging',2 => '(ABMP) Hyperthermia',3 => '(ABMP) Medical Health',4 => '(ABMP) Radiation',5 => '(ABMP) Nuclear Medicine'],
+    'DOCUMENT_TYPE' => [0 => 'Resume', 1 => 'Other'],
     ];
