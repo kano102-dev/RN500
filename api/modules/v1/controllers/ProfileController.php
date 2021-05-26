@@ -10,6 +10,11 @@ use common\CommonFunction;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
 use common\models\WorkExperience;
+use common\models\Education;
+use common\models\Licenses;
+use common\models\Certifications;
+use common\models\Documents;
+use common\models\References;
 
 /**
  * Company Controller API
@@ -39,10 +44,130 @@ class ProfileController extends Controller {
                 $degree_type[] = ['value' => (string) $value, 'text' => $text];
             }
 
+            $document_type = [];
+            foreach (Yii::$app->params['DOCUMENT_TYPE'] as $value => $text) {
+                $document_type[] = ['value' => (string) $value, 'text' => $text];
+            }
+
             $data['employment_type'] = $employment_type;
             $data['degree_type'] = $degree_type;
+            $data['document_type'] = $document_type;
             $code = 200;
             $msg = "success!!";
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionGetProfileMaster() {
+
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        try {
+
+            $loggedInUserId = $this->user_id;
+            $model = UserDetails::find()->where(['user_id' => $loggedInUserId])->one();
+            if ($model !== null) {
+
+                $model->email = $model->user->email;
+                $model->profile_pic_url = ($model->profile_pic && file_exists(CommonFunction::getProfilePictureBasePath() . "/" . $model->profile_pic)) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/$model->profile_pic"]), true) : "";
+
+                // SELF DETAIL OF LOGGED-IN USER
+                $aboutYou['user_id'] = (string) $model->user_id;
+                $aboutYou['name'] = $model->first_name . " " . $model->last_name;
+                $aboutYou['email'] = (isset($model->user->email) && $model->user->email != "") ? $model->user->email : "";
+                $aboutYou['mobile_no'] = ($model->mobile_no) ? $model->mobile_no : "";
+                $aboutYou['ssn'] = ($model->ssn) ? (string) $model->ssn : "";
+                $aboutYou['profile_pic'] = ($model->profile_pic) ? $model->profile_pic : "";
+                $aboutYou['profile_pic_url'] = ($model->profile_pic_url) ? $model->profile_pic_url : "";
+
+                // WORK EXPERIENCES LIST OF LOGGED-IN USER
+                $workExperiences = WorkExperience::find()->where(['user_id' => $loggedInUserId])->all();
+                $workExperienceList = [];
+                foreach ($workExperiences as $key => $record) {
+                    $workExperienceList[] = [
+                        'id' => $record->id,
+                        'title' => ($record->title) ? $record->title : '',
+                        'discipline' => (isset($record->discipline->name)) ? $record->discipline->name : '',
+                    ];
+                }
+
+                // EDUCATION LIST OF LOGGED-IN USER
+                $educations = Education::find()->where(['user_id' => $loggedInUserId])->all();
+                $educationList = [];
+                foreach ($educations as $key => $record) {
+                    $educationList[] = [
+                        'id' => $record->id,
+                        'institution' => ($record->institution) ? $record->institution : '',
+                        'degree_name' => (isset(Yii::$app->params['DEGREE_TYPE'][$record['degree_name']])) ? Yii::$app->params['DEGREE_TYPE'][$record['degree_name']] : '',
+                    ];
+                }
+
+
+                // LICENSES LIST OF LOGGED-IN USER
+                $licenses = Licenses::find()->where(['user_id' => $loggedInUserId])->all();
+                $licenseList = [];
+                foreach ($licenses as $key => $record) {
+                    $licenseList[] = [
+                        'id' => $record->id,
+                        'license_number' => ($record->license_number) ? $record->license_number : '',
+                        'license_type' => (isset(Yii::$app->params['LICENSE_TYPE'][$record['license_name']])) ? Yii::$app->params['LICENSE_TYPE'][$record['license_name']] : '',
+                    ];
+                }
+
+                // CERTIFICATION LIST OF LOGGED-IN USER
+                $certifications = Certifications::find()->where(['user_id' => $loggedInUserId])->all();
+                $certificationList = [];
+                foreach ($certifications as $key => $record) {
+                    $certificationList[] = [
+                        'id' => $record->id,
+                        'certificat_type' => (isset(Yii::$app->params['CERTIFICATION_TYPE'][$record->certificate_name])) ? Yii::$app->params['CERTIFICATION_TYPE'][$record->certificate_name] : ''
+                    ];
+                }
+
+                // DOCUMENTS LIST OF LOGGED-IN USER
+                $documents = Documents::find()->where(['user_id' => $loggedInUserId])->all();
+                $documentList = [];
+                foreach ($documents as $key => $record) {
+                    $documentList[] = [
+                        'id' => $record->id,
+                        'document_type' => (isset(Yii::$app->params['DOCUMENT_TYPE'][$record->document_type])) ? Yii::$app->params['DOCUMENT_TYPE'][$record->document_type] : '',
+                        'doc_name' => $record->path,
+                        'url' => (isset($record->path) && file_exists(CommonFunction::getDocumentBasePath() . "/" . $record->path)) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/document/$record->path"]), true) : '',
+                    ];
+                }
+
+
+                // REFERENCE LIST OF LOGGED-IN USER
+                $references = References::find()->where(['user_id' => $loggedInUserId])->all();
+                $referenceList = [];
+                foreach ($references as $key => $record) {
+                    $referenceList[] = [
+                        'id' => $record->id,
+                        'name' => $record->first_name . " " . $record->last_name,
+                        'email' => $record->email,
+                    ];
+                }
+
+                $data['about_you'] = $aboutYou;
+                $data['work_experiences'] = $workExperienceList;
+                $data['educations'] = $educationList;
+                $data['licenses'] = $licenseList;
+                $data['certifications'] = $certificationList;
+                $data['documents'] = $documentList;
+                $data['references'] = $referenceList;
+                $code = 200;
+                $msg = "success!";
+            } else {
+                $code = 203;
+                $msg = "No such user detail exists.";
+            }
         } catch (\Exception $exc) {
             $code = 500;
             $msg = "Internal server error";
@@ -63,8 +188,9 @@ class ProfileController extends Controller {
             $loggedInUserId = $this->user_id;
             $model = UserDetails::find()->where(['user_id' => $loggedInUserId])->one();
             if ($model !== null) {
+
                 $model->email = $model->user->email;
-                $model->profile_pic_url = ($model->profile_pic) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/$model->profile_pic"]), true) : "";
+                $model->profile_pic_url = ($model->profile_pic && file_exists(CommonFunction::getProfilePictureBasePath() . "/" . $model->profile_pic)) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/$model->profile_pic"]), true) : "";
 
                 $data['first_name'] = $model->first_name;
                 $data['last_name'] = $model->last_name;
@@ -74,8 +200,8 @@ class ProfileController extends Controller {
                 $data['apt'] = ($model->apt) ? $model->apt : "";
                 $data['street_no'] = ($model->street_no) ? $model->street_no : "";
                 $data['street_address'] = ($model->street_address) ? $model->street_address : "";
-                $data['city'] = ($model->city) ? $model->city : "";
-                $data['ssn'] = ($model->ssn) ? $model->ssn : "";
+                $data['city'] = ($model->city) ? (string) $model->city : "";
+                $data['ssn'] = ($model->ssn) ? (string) $model->ssn : "";
                 $data['dob'] = ($model->dob) ? $model->dob : "";
                 $data['profile_pic'] = ($model->profile_pic) ? $model->profile_pic : "";
                 $data['profile_pic_url'] = ($model->profile_pic_url) ? $model->profile_pic_url : "";
@@ -178,55 +304,59 @@ class ProfileController extends Controller {
         exit;
     }
 
-    public function actionWorkExperienceList() {
-        $data = [];
-        $code = 202;
-        $msg = "Required Data Missing in Request.";
-        $request = Yii::$app->request->post();
-        extract($request);
-        try {
-            $loggedInUserId = $this->user_id;
-            $models = WorkExperience::find()->where(['user_id' => $loggedInUserId])->all();
+    /*
 
-            if (!empty($models)) {
-                $result = [];
-                foreach ($models as $record) {
-                    $result[] = [
-                        'id' => $record->id,
-                        'title' => $record->title,
-                        'start_date' => ($record->start_date) ? $record->start_date : '',
-                        'end_date' => ($record->end_date) ? $record->end_date : '',
-                        'discipline_id' => ($record->discipline_id) ? (string) $record->discipline_id : '',
-                        'discipline_name' => (isset($record->discipline->name)) ? $record->discipline->name : '',
-                        'specialty' => ($record->specialty) ? (string) $record->specialty : '',
-                        'specialty_name' => (isset($record->specialityRel->name)) ? $record->specialityRel->name : '',
-                        'employment_type' => ($record->employment_type) ? (string) $record->employment_type : '',
-                        'employment_type_name' => (isset(Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type])) ? Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type] : '',
-                        'currently_working' => ($record->currently_working == 1) ? "1" : "0",
-                        'facility_name' => ($record->facility_name) ? $record->facility_name : '',
-                        'city' => ($record->city) ? (string) $record->city : '',
-                        'city_name' => (isset($record->cityRel->city)) ? $record->cityRel->city : '',
-                    ];
-                }
-                $code = 200;
-                $msg = "success!!";
-                $data = $result;
-            } else {
-                $code = 201;
-                $msg = "None of work experience is added.";
-                $data = [];
-            }
-        } catch (\Exception $exc) {
-            $code = 500;
-            $msg = "Internal server error";
-            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
-        }
-        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
-        echo $response;
-        exit;
-    }
+      public function actionWorkExperienceList() {
+      $data = [];
+      $code = 202;
+      $msg = "Required Data Missing in Request.";
+      $request = Yii::$app->request->post();
+      extract($request);
+      try {
+      $loggedInUserId = $this->user_id;
+      $models = WorkExperience::find()->where(['user_id' => $loggedInUserId])->all();
 
-    public function actionWorkExperienceDelete() {
+      if (!empty($models)) {
+      $result = [];
+      foreach ($models as $record) {
+      $result[] = [
+      'id' => $record->id,
+      'title' => $record->title,
+      'start_date' => ($record->start_date) ? $record->start_date : '',
+      'end_date' => ($record->end_date) ? $record->end_date : '',
+      'discipline_id' => ($record->discipline_id) ? (string) $record->discipline_id : '',
+      'discipline_name' => (isset($record->discipline->name)) ? $record->discipline->name : '',
+      'specialty' => ($record->specialty) ? (string) $record->specialty : '',
+      'specialty_name' => (isset($record->specialityRel->name)) ? $record->specialityRel->name : '',
+      'employment_type' => ($record->employment_type) ? (string) $record->employment_type : '',
+      'employment_type_name' => (isset(Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type])) ? Yii::$app->params['EMPLOYEMENT_TYPE'][$record->employment_type] : '',
+      'currently_working' => ($record->currently_working == 1) ? "1" : "0",
+      'facility_name' => ($record->facility_name) ? $record->facility_name : '',
+      'city' => ($record->city) ? (string) $record->city : '',
+      'city_name' => (isset($record->cityRel->city)) ? $record->cityRel->city : '',
+      ];
+      }
+      $code = 200;
+      $msg = "success!!";
+      $data = $result;
+      } else {
+      $code = 201;
+      $msg = "None of work experience is added.";
+      $data = [];
+      }
+      } catch (\Exception $exc) {
+      $code = 500;
+      $msg = "Internal server error";
+      $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+      }
+      $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+      echo $response;
+      exit;
+      }
+     *
+     */
+
+    public function actionWorkExperienceDetail() {
         $data = [];
         $code = 202;
         $msg = "Required Data Missing in Request.";
@@ -235,15 +365,11 @@ class ProfileController extends Controller {
         try {
             $loggedInUserId = $this->user_id;
             if (isset($id) && $id != '') {
-                $model = WorkExperience::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                $model = WorkExperience::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->asArray()->one();
                 if ($model !== null) {
-                    if ($model->delete()) {
-                        $code = 200;
-                        $msg = "Record was deleted successfully.";
-                    } else {
-                        $code = 205;
-                        $msg = "something went wrong.";
-                    }
+                    $data = array_map('strval', $model);
+                    $code = 200;
+                    $msg = "success!!";
                 } else {
                     $code = 204;
                     $msg = "No record exists.";
@@ -295,6 +421,155 @@ class ProfileController extends Controller {
             } else {
                 $code = 201;
                 $msg = "Missing parameters : discipline_id, specialty, employment_type, start_date or end_date ";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionWorkExperienceDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = WorkExperience::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    if ($model->delete()) {
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionEducationDetail() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = Education::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->asArray()->one();
+                if ($model !== null) {
+                    $data = array_map('strval', $model);
+                    $code = 200;
+                    $msg = "success!!";
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionEducationSubmit() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            $model = new Education();
+            $model->user_id = $loggedInUserId;
+            if (isset($id) && $id != '') {
+                $model = Education::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model == null) {
+                    $code = 204;
+                    $msg = "No record exists with such id.";
+                    echo Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+                    exit;
+                }
+            }
+            if (isset($institution) && $institution != '' && isset($year_complete) && $year_complete != '' && isset($degree_name) && $degree_name != '') {
+                $model->setAttributes($request);
+                if ($model->save()) {
+                    $code = 200;
+                    $msg = "Record saved successfully.";
+                } else {
+                    echo "<pre/>";
+                    print_r($model->getErrors());
+                    exit;
+                    $code = 205;
+                    $msg = "Something went wrong.";
+                }
+            } else {
+                $code = 201;
+                $msg = "Missing parameters : institution, year_complete, degree_name.";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionEducationDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = Education::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    if ($model->delete()) {
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
             }
         } catch (\Exception $exc) {
             $code = 500;
