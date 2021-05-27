@@ -226,6 +226,12 @@ class ProfileController extends Controller {
         exit;
     }
 
+    public function actionTest()
+    {
+        echo 'string';
+        exit;
+    }
+
     public function actionWorkExperienceDelete() {
         $data = [];
         $code = 202;

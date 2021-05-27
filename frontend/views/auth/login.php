@@ -16,7 +16,8 @@ $is_otp_sent = $model->is_otp_sent;
     }
     .field_icon{
         float: right;
-        margin-top: -24px;
+        margin-top: -27px;
+        margin-right:10px;
     }
 </style>
 <div class="listpgWraper">
@@ -24,7 +25,7 @@ $is_otp_sent = $model->is_otp_sent;
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
-                    <h5>User Login</h5>
+                    <h5>User Sign In</h5>
                     <!-- login form -->
                     <div class="formpanel">
                         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form', 'options' => ['autocomplete' => 'off']]) ?>
@@ -36,7 +37,7 @@ $is_otp_sent = $model->is_otp_sent;
                                         'template' => '{input}{error}',
                                     ])
                                     ->label(false)
-                                    ->textInput(['placeholder' => $model->getAttributeLabel('username'), 'readOnly' => $is_otp_sent])
+                                    ->textInput(['placeholder' => 'Email Id', 'readOnly' => $is_otp_sent])
                             ?>
                         </div>
                         <div class="formrow">

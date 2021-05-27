@@ -35,6 +35,8 @@ class RecruiterCompanyForm extends CompanyMaster {
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
             [['state', 'type', 'status', 'reference_no', 'employer_identification_number'], 'safe'],
+            [['company_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field']
         ];
     }
 
