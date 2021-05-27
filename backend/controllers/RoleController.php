@@ -227,39 +227,33 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         }
         $tree = $this->parseTree($features, "", $model->id);
         if ($model->load(Yii::$app->request->post())) {
-            $transaction = Yii::$app->db->beginTransaction();
-            try {
                 $permissions = explode(',', $_POST['RoleMaster']['permissions']);
                 $model->updated_at = time();
                 if ($model->save()) {
+                    $cnt=0;
                     $auth->revokeAll($model->id);
                     $error = 1;
                     foreach ($permissions as $value) {
                         $access = $auth->getPermission($value);
                         if ($auth->assign($access, $model->id)) {
+                            $cnt=$cnt+1;
                             $error = 1;
                         } else {
+                            print_r($value);
                             $error = 0;
                             break;
                         }
                     }
                     if ($error) {
-                        $transaction->commit();
                         Yii::$app->session->setFlash("success", "Role updated successfully.");
                     } else {
                         $auth->revokeAll($model->id);
-                        $transaction->rollBack();
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } else {
-                    $transaction->rollBack();
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
-            } catch (\Exception $ex) {
-                $transaction->rollBack();
-            } finally {
                 return $this->redirect(['index']);
-            }
         }
  
         return $this->render('_form', [

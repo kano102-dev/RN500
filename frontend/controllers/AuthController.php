@@ -144,6 +144,7 @@ class AuthController extends Controller {
                                 $user->email = $employer->email;
                                 $user->type = User::TYPE_EMPLOYER;
                                 $user->status = User::STATUS_PENDING;
+                                $user->role_id = \common\models\RoleMaster::Employer_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 $user->branch_id = $company_branch->id;
                                 if ($user->save()) {
@@ -202,6 +203,7 @@ class AuthController extends Controller {
                                 $user->email = $recruiter->email;
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_PENDING;
+                                $user->role_id = \common\models\RoleMaster::RECRUITER_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 $user->branch_id = $company_branch->id;
                                 if ($user->save()) {

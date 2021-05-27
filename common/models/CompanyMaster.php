@@ -44,7 +44,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['city1', 'mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
@@ -71,8 +71,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'company_mobile' => 'Mobile',
             'employer_identification_number' => 'Employer Indetification Number',
             'mobile' => 'Mobile',
-            'city1' => 'City',
-            'state1' => 'State',
             'priority' => 'Priority',
             'street_no' => 'Street No',
             'street_address' => 'Street Address',

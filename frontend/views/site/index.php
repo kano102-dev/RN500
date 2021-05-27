@@ -75,9 +75,11 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             $i = 0;
             if (isset($advertisment) && !empty($advertisment)) {
                 ?>
-                <?php foreach ($advertisment as $key => $value) { ?>
+                <?php foreach ($advertisment as $key => $value) { 
+                    echo "<pre/>";print_r($value);exit;
+                    ?>
                     <div class="col-md-2 moreFTypeBox blogFTypeBox" <?php if ($i >= 6) { ?> style="display:none;" <?php } ?>>
-                        <img src="<?= $value ?>">
+                        <img src="<?= Yii::getAlias('@frontend') . $value ?>">
                         <p>Advertisment 1</p>
                         <p>&nbsp;</p>
                     </div>

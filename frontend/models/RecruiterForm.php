@@ -40,4 +40,14 @@ class RecruiterForm extends \common\models\UserDetails {
         return $unique_id;
     }
 
+    public function checkUniqueValidation() {
+        $userModel = User::find(['email' => $this->email])->orWhere(['status'=>0])->orWhere(['status'=>1])->createCommand()->rawSql;
+        echo $userModel;exit;
+        if (!empty($userModel)) {
+            if ($userModel->status == 0 || $userModel->status == 1) {
+                return $this->addError('email', 'Account Already Exist.');
+            }
+        }
+    }
+
 }
