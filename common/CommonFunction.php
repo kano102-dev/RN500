@@ -206,5 +206,10 @@ class CommonFunction {
     public static function getProfilePictureBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/profile";
     }
+    
+    // RETURN TRUE IF LOGGED_IN USER IS HO Admin ELSE FALSE
+    public static function getDocumentBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/document";
+    }
 
 }
