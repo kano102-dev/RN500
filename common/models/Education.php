@@ -65,4 +65,29 @@ class Education extends \yii\db\ActiveRecord {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
+    public function getLocationRel() {
+        return $this->hasOne(Cities::className(), ['id' => 'location']);
+    }
+
+    public function getStateName() {
+        return isset($this->locationRel->stateRef->state) ? $this->locationRel->stateRef->state : "";
+    }
+
+    
+    public function getCityStateName() {
+        $name = '';
+        if ($this->locationRel) {
+            $name .= $this->locationRel->city . " - " . $this->getStateName();
+        }
+        return $name;
+    }
+
+    public function getDegreeTypeName() {
+        $name = '';
+        if ($this->degree_name) {
+            $name = isset(Yii::$app->params['DEGREE_TYPE'][$this->degree_name]) ? Yii::$app->params['DEGREE_TYPE'][$this->degree_name] : '';
+        }
+        return $name;
+    }
+
 }
