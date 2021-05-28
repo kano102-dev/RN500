@@ -124,11 +124,11 @@ class AuthController extends Controller {
         if (\Yii::$app->request->isPost) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
                 $tab = 'employer';
-                $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
-                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+                $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $_POST['CompanyMaster']['state']])->all(), 'id', 'city');
+                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post()) && $employer->validate()) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
-                        $cities = ArrayHelper::map(Cities::find()->where(['id' => $companyMasterModel->city])->all(), 'id', 'city');
+                        $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
                         $companyMasterModel->mobile = $companyMasterModel->company_mobile;
                         $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
                         if ($companyMasterModel->save()) {
@@ -141,9 +141,11 @@ class AuthController extends Controller {
                             $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
                             if ($company_branch->save()) {
                                 $user = new User();
+                                $user->scenario = "create";
                                 $user->email = $employer->email;
                                 $user->type = User::TYPE_EMPLOYER;
                                 $user->status = User::STATUS_PENDING;
+                                $user->role_id = \common\models\RoleMaster::Employer_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 $user->branch_id = $company_branch->id;
                                 if ($user->save()) {
@@ -181,11 +183,11 @@ class AuthController extends Controller {
                 }
             } elseif (isset($_POST['type']) && Yii::$app->request->post('type') === 'recruiter') {
                 $tab = 'recruiter';
-                $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
-                if ($recruiter->load(Yii::$app->request->post()) && $recruiterCompany->load(Yii::$app->request->post())) {
+                $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $_POST['RecruiterCompanyForm']['state']])->all(), 'id', 'city');
+                if ($recruiter->load(Yii::$app->request->post()) && $recruiterCompany->load(Yii::$app->request->post()) && $recruiter->validate()) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
-                        $cities = ArrayHelper::map(Cities::find()->where(['id' => $recruiterCompany->city])->all(), 'id', 'city');
+                        $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
                         $recruiterCompany->created_at = $recruiterCompany->updated_at = CommonFunction::currentTimestamp();
                         $recruiterCompany->company_mobile = $recruiterCompany->mobile;
                         $companyMasterModel = clone $recruiterCompany;
@@ -199,9 +201,11 @@ class AuthController extends Controller {
                             $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
                             if ($company_branch->save()) {
                                 $user = new User();
+                                $user->scenario = "create";
                                 $user->email = $recruiter->email;
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_PENDING;
+                                $user->role_id = \common\models\RoleMaster::RECRUITER_OWNER;
                                 $user->is_owner = User::OWNER_YES;
                                 $user->branch_id = $company_branch->id;
                                 if ($user->save()) {
@@ -243,6 +247,7 @@ class AuthController extends Controller {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         $user = new User();
+                        $user->scenario = "create";
                         $user->email = $model->email;
                         $user->type = User::TYPE_JOB_SEEKER;
                         $user->status = User::STATUS_APPROVED;
@@ -280,7 +285,7 @@ class AuthController extends Controller {
         }
         return $this->render('register', [
                     'model' => $model, 'companyMasterModel' => $companyMasterModel, 'recruiterCompany' => $recruiterCompany,
-                    'states' => $states, 'employer' => $employer, 'recruiter' => $recruiter, 'tab' => $tab,'cities'=>$cities
+                    'states' => $states, 'employer' => $employer, 'recruiter' => $recruiter, 'tab' => $tab, 'cities' => $cities
         ]);
     }
 

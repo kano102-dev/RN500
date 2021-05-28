@@ -41,7 +41,7 @@ class AdvertisementController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['advertisements/']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['advertisements/']),
         ];
     }
 

@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
 
                             <?php if (!$companyMasterModel->isNewRecord) { ?>
-                                 <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true,'readonly' => true]) ?>
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'readonly' => true]) ?>
                             <?php } else { ?>
                                 <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true]) ?>
                             <?php } ?>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($companyMasterModel, 'city')->widget(Select2::classname(), [
-                                'data' => $companyMasterModel->isNewRecord ? [] : $CompanyCity,
+                                'data' => $CompanyCity,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -124,11 +124,10 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
 
                     <div class="row">
                         <div class="col-6">
-                            
-                            <?php if (!$userDetailModel->isNewRecord) { ?>
-                                 <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true,'readonly' => true]) ?>
+                            <?php if (!$model->isNewRecord) { ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'readonly' => true]) ?>
                             <?php } else { ?>
-                                <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
                             <?php } ?>
                         </div>
                         <div class="col-6">
@@ -172,7 +171,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
-                                'data' => $userDetailModel->isNewRecord ? [] : $city,
+                                'data' => $city,
                                 'options' => ['placeholder' => 'Select a city'],
                                 'pluginOptions' => [
                                     'allowClear' => true
@@ -202,7 +201,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['recruiter/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['recruiter/get-cities']);
 $script = <<< JS
    $(document).on('change','#companymaster-state',function(){
         var state=$(this).val();

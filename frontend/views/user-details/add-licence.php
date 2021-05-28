@@ -112,7 +112,7 @@ $frontendDir = yii\helpers\Url::base(true);
 $DeleteUrl = '';
 
 if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManager->createUrl(['user-details/delete-document?id='. $model->id]);
+    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id='. $model->id]);
 }
 
 $script = <<< JS
