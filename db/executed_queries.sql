@@ -848,8 +848,6 @@ ALTER TABLE `certifications`
 ADD `certification_active` tinyint(1) NULL AFTER `certificate_name`,
 ADD `document` varchar(255) COLLATE 'latin1_swedish_ci' NULL AFTER `certification_active`;
 
-ALTER TABLE `documents`
-ADD `document_type` int(11) NULL AFTER `path`;
 
 ALTER TABLE `references`
 ADD `title` int(11) NULL AFTER `first_name`;
@@ -868,3 +866,9 @@ UPDATE `auth_item` SET `type` = '2' WHERE `name` = 'recruiter-update' AND `name`
 
 ALTER TABLE `user_details`
 DROP `email`;
+
+# **************NIRAV 28-05-2021 ***********
+CREATE TABLE `emergency` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `name` varchar(255) NOT NULL
+);

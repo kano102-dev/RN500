@@ -7,6 +7,7 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use borales\extensions\phoneInput\PhoneInput;
+use common\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
@@ -32,7 +33,7 @@ use borales\extensions\phoneInput\PhoneInput;
     </div>
     <div class="row">
         <div class="col-sm-6">
-            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email,'readonly' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'value' => Yii::$app->user->identity->email, 'readonly' => true]) ?>
         </div>
         <div class="col-sm-6">
             <?=
@@ -94,9 +95,13 @@ use borales\extensions\phoneInput\PhoneInput;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
-        </div>
+        <?php if (isset(Yii::$app->user->id) && !empty(Yii::$app->user->id)) { ?>
+            <?php if (Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) { ?>
+                <div class="col-sm-6">
+                    <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
+                </div>
+            <?php } ?>
+        <?php } ?>
         <div class="col-sm-6">
 
             <?php
@@ -117,8 +122,8 @@ use borales\extensions\phoneInput\PhoneInput;
     <div class="row">
         <div class="col-sm-6">
             <?= $form->field($model, 'profile_pic')->fileInput() ?>
-            
-            <?php if(isset($model->profile_pic)){ ?>
+
+            <?php if (isset($model->profile_pic)) { ?>
                 <p><?= $model->profile_pic ?></p>
             <?php } ?>
         </div>

@@ -12,12 +12,12 @@ use kartik\date\DatePicker;
 <div class="user-details-form">
     <?php
     $form = ActiveForm::begin([
-                'id' => 'add-document'
+                'id' => 'add-document-new'
     ]);
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'document_type')->dropDownList([0 => 'Resume', 1 => 'Other']); ?>
+            <?= $form->field($model, 'document_type')->dropDownList(Yii::$app->params['DOCUMENT_TYPE']); ?>
         </div>
     </div>
     <div class="row">
@@ -41,7 +41,7 @@ use kartik\date\DatePicker;
 <?php
 $script = <<< JS
   var click = 0;      
-  $(document).on("beforeSubmit", "#add-document", function () {
+  $(document).on("beforeSubmit", "#add-document-new", function () {
     if(click == 0){ 
         ++click;    
         var form = $(this);
@@ -54,7 +54,7 @@ $script = <<< JS
              processData: false,
              contentType: false,
              success: function (response){
-//                console.log(response);
+                console.log(response);
                  try{
                      if(!response.error){
                          $("#profile-modal").modal('hide');

@@ -29,7 +29,12 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                             <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true]) ?>
+
+                            <?php if (!$companyMasterModel->isNewRecord) { ?>
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+                            <?php } else { ?>
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true]) ?>
+                            <?php } ?>
                         </div>
                     </div>
 
@@ -119,7 +124,11 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
 
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                            <?php if (!$model->isNewRecord) { ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+                            <?php } else { ?>
+                                <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+                            <?php } ?>
                         </div>
                         <div class="col-6">
                             <?=

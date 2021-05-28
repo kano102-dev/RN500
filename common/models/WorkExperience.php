@@ -94,5 +94,27 @@ class WorkExperience extends \yii\db\ActiveRecord {
     public function getCityRel() {
         return $this->hasOne(\common\models\Cities::className(), ['id' => 'city']);
     }
+    
+    public function getStateName() {
+        return isset($this->cityRel->stateRef->state) ? $this->cityRel->stateRef->state :"" ;
+    }
+    
+    public function getCityStateName(){
+        $name = '';
+        if($this->cityRel){
+            $name .= $this->cityRel->city . " - " . $this->getStateName();
+            
+        }
+        return $name;
+    }
+    
+    public function getEmploymentTypeName(){
+        $name = '';
+        if($this->employment_type){
+            $name = isset(Yii::$app->params['EMPLOYEMENT_TYPE'][$this->employment_type]) ? Yii::$app->params['EMPLOYEMENT_TYPE'][$this->employment_type] : '';
+            
+        }
+        return $name;
+    }
 
 }

@@ -34,7 +34,7 @@ $this->title = 'RN500';
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::submitButton('Send', ['class' => 'btn btn-primary']) ?>
+                                    <?= Html::submitButton('Reset Password', ['class' => 'btn btn-primary']) ?>
                                 </div>
 
                                 <?php ActiveForm::end(); ?>

@@ -7,6 +7,10 @@ use common\CommonFunction;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 ?>
+
+<style>
+    .job-header .description{text-align: justify;}
+</style>
 <!-- Page Title start -->
 <div class="pageTitle">
     <div class="container">
@@ -44,7 +48,7 @@ use yii\web\JsExpression;
                 <div class="job-header">
                     <div class="contentbox">
                         <h3>Job Description</h3>
-                        <p><?= $model->description ?></p>
+                        <p class="description"><?= $model->description ?></p>
                         <h3>Benifits</h3>
                         <ul>
                             <?php foreach ($benefit as $value) { ?>
@@ -161,7 +165,7 @@ use yii\web\JsExpression;
                     </div>
                 </div>
             </div>
-           
+
             <div class="col-md-4"> 
                 <!-- Job Detail start -->
                 <div class="job-header">
@@ -174,7 +178,7 @@ use yii\web\JsExpression;
                             </li>
                             <li class="row">
                                 <div class="col-md-6 col-xs-6">Address</div>
-                                <div class="col-md-6 col-xs-6"><span><?= $model->branch->street_no . " " . $model->branch->street_address . " " . $model->branch->apt." ".$model->branch->location." ".$model->branch->zip_code ?></span></div>
+                                <div class="col-md-6 col-xs-6"><span><?= $model->branch->street_no . " " . $model->branch->street_address . " " . $model->branch->apt . " " . $model->branch->location . " " . $model->branch->zip_code ?></span></div>
                             </li>
                             <li class="row">
                                 <div class="col-md-6 col-xs-6">Email Id</div>

@@ -8,6 +8,7 @@ use kartik\date\DatePicker;
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 $frontendDir = yii\helpers\Url::base(true);
+
 ?>
 
 <div class="user-details-form">
@@ -67,6 +68,12 @@ $frontendDir = yii\helpers\Url::base(true);
 
 <?php
 $script = <<< JS
+  var is_active = '$model->certification_active';
+
+  if(is_active == '1'){
+      $('.expiry_date').show();
+  } 
+        
   var click = 0;      
   $(document).on("beforeSubmit", "#add-certification-new", function () {
     if(click == 0){

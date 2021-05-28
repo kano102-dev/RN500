@@ -103,7 +103,14 @@ class UserDetails extends \yii\db\ActiveRecord {
         return $scenarios;
     }
 
-   
+    public function checkUniqueValidation($attribute, $param) {
+        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]])->one();
+       
+        
+        if (!empty($query)) {
+            return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
+        }
+    }
 
     /**
      * {@inheritdoc}
@@ -132,7 +139,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'professional_liability' => 'Professional Liability',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'street_no' => 'Street No',
+            'street_no' => 'Street No.',
             'street_address' => 'Street Address',
             'apt' => 'Suit/Apt',
             'city' => 'City',
@@ -177,6 +184,19 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function getCityRef() {
         return $this->hasOne(Cities::className(), ['id' => 'city']);
+    }
+    
+    public function getStateName() {
+        return isset($this->cityRef->stateRef->state) ? $this->cityRef->stateRef->state :"" ;
+    }
+    
+    public function getCityStateName(){
+        $name = '';
+        if($this->cityRef){
+            $name .= $this->cityRef->city . " - " . $this->getStateName();
+            
+        }
+        return $name;
     }
 
 }

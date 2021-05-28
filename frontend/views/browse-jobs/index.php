@@ -18,6 +18,10 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 ?>
 <style>
     .browse-jobs li p {line-height: 22px;color: #333;margin: 0;font-weight: 600}
+    .select2-container--krajee .select2-selection--multiple .select2-selection__choice{margin: 5px 0 0 3px;
+    padding: 0 15px;}
+    .select2-container--krajee .select2-selection--multiple .select2-selection__choice__remove{margin: -5px 0 0 0px;}
+    .optionlist li span{right: 2px;}
 </style>
 
 <!-- Page Title start -->
@@ -246,18 +250,18 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     <p>Benefits starts from Day 1</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 employee-details">
-                                    <p>Estimated Pay: $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                    <p><b>Estimated Pay:</b> $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
                                     <br/>
-                                    <p>Response Time: within a day</p>
+                                    <p><b>Response Time:</b> within a day</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-9 col-sm-9">
                                     <p>&nbsp;</p>
                                     <div class="row">
-                                        <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Starting Date</b> :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Shift</b> :</span> <?= $model->shift == 1 ? "Morning, Evening, Night, Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Job Type</b> :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3">
@@ -268,7 +272,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                         <?php
                     }
                     if (count($models) <= 0) {
-                        echo "<h1>No Record Found</h1>";
+                        echo "<h1>No Leads Found</h1>";
                     }
                     ?>
                 </ul>
