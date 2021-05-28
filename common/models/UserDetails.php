@@ -191,5 +191,18 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function getCityRef() {
         return $this->hasOne(Cities::className(), ['id' => 'city']);
     }
+    
+    public function getStateName() {
+        return isset($this->cityRef->stateRef->state) ? $this->cityRef->stateRef->state :"" ;
+    }
+    
+    public function getCityStateName(){
+        $name = '';
+        if($this->cityRef){
+            $name .= $this->cityRef->city . " - " . $this->getStateName();
+            
+        }
+        return $name;
+    }
 
 }
