@@ -48,7 +48,7 @@ $frontendDir = yii\helpers\Url::base(true);
     label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
     .ui-state-default{display: none;}
     .ui-widget-header{background: #263bd6;}
-    .sticky-sidebar{position: fixed !important;width: 360px;top: 10px;}
+    .sticky-sidebar{position: fixed !important;width: 360px;top: 70px;}
     .jobinfo h3 a,.jobinfo .card .card-footer .card-title a{text-decoration: none;}
     .mb-10{margin-bottom: 10px;}
     .edit-icon-right a{float: right;margin-right:10px;}
@@ -106,7 +106,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
                                         <div class="location"><?= Yii::$app->user->identity->email ?></div>
                                         <!--<div class="location"><?php //  $userDetails->mobile_no   ?></div>-->
-                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
+                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
@@ -150,7 +150,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update?id=1']) ?>" class="editProfile">
+                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update?id=1']) ?>" class="editProfile">
                                             <p>Update Information</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -178,7 +178,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p><?= $value['discipline']['name'] ?></p>
                                                     </div>
                                                     <div class="col-sm-4 edit-icon-right col-xs-3">
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/work-experience?id=' . $value['id']]) ?>" class="work-experience"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/work-experience?id=' . $value['id']]) ?>" class="work-experience"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -190,7 +190,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/work-experience']) ?>" class="work-experience">
+                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/work-experience']) ?>" class="work-experience">
                                             <p>Add Work Experience</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -218,7 +218,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p><?= Yii::$app->params['DEGREE_TYPE'][$value['degree_name']] ?></p>
                                                     </div>
                                                     <div class="col-sm-4 col-xs-3 edit-icon-right">
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-education?id=' . $value['id']]) ?>" class="AddEducation"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-education?id=' . $value['id']]) ?>" class="AddEducation"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,7 +231,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-education']) ?>" class="AddEducation">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-education']) ?>" class="AddEducation">
                                             <p>Add Education</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -248,7 +248,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
-                                        <h3><a href="#.">Licenses</a></h3>
+                                        <h3><a href="javascript:void(0);">Licenses</a></h3>
                                     </div>
                                     <?php if (isset($license) && !empty($license)) { ?>
                                         <?php foreach ($license as $key => $value) { ?>
@@ -259,8 +259,8 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p><?= Yii::$app->params['LICENSE_TYPE'][$value['license_name']] ?></p>
                                                     </div>
                                                     <div class="col-sm-4 col-xs-3 edit-icon-right">
-                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="licenses" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-licence?id=' . $value['id']]) ?>" class="AddLicence"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="licenses" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-licence?id=' . $value['id']]) ?>" class="AddLicence"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -272,7 +272,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-licence']) ?>" class="AddLicence">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-licence']) ?>" class="AddLicence">
                                             <p>Add Licenses</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -289,7 +289,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
-                                        <h3><a href="#.">Certifications</a></h3>
+                                        <h3><a href="javascript:void(0);">Certifications</a></h3>
                                     </div>
                                     <?php if (isset($certification) && !empty($certification)) { ?>
                                         <?php foreach ($certification as $key => $value) { ?>
@@ -300,8 +300,8 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p>&nbsp;</p>
                                                     </div>
                                                     <div class="col-sm-4 edit-icon-right col-xs-3">
-                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="certification" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-certification?id=' . $value['id']]) ?>" class="AddCertification "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="certification" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-certification?id=' . $value['id']]) ?>" class="AddCertification "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -313,7 +313,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-certification']) ?>" class="AddCertification">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-certification']) ?>" class="AddCertification">
                                             <p>Add Certifications</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -330,7 +330,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
-                                        <h3><a href="#.">Documents</a></h3>
+                                        <h3><a href="javascript:void(0);">Documents</a></h3>
                                     </div>
                                     <?php if (isset($documents) && !empty($documents)) { ?>
                                         <?php foreach ($documents as $key => $value) { ?>
@@ -341,8 +341,8 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p><?= $value['path'] ?></p>
                                                     </div>
                                                     <div class="col-sm-4 col-xs-3 edit-icon-right">
-                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="document" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-document?id=' . $value['id']]) ?>" class="AddDocument"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="document" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-document?id=' . $value['id']]) ?>" class="AddDocument"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -354,7 +354,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-document']) ?>" class="AddDocument">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-document']) ?>" class="AddDocument">
                                             <p>Add Documents</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -371,7 +371,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="jobinfo">
-                                        <h3><a href="#.">References</a></h3>
+                                        <h3><a href="javascript:void(0);">References</a></h3>
                                     </div>
                                     <?php if (isset($references) && !empty($references)) { ?>
                                         <?php foreach ($references as $key => $value) { ?>
@@ -382,7 +382,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                                         <p><?= $value['email'] ?></p>
                                                     </div>
                                                     <div class="col-sm-4 edit-icon-right col-xs-3">
-                                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-reference?id=' . $value['id']]) ?>" class="AddReference"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-reference?id=' . $value['id']]) ?>" class="AddReference"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -394,7 +394,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/add-reference']) ?>" class="AddReference">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/add-reference']) ?>" class="AddReference">
                                             <p>Add References</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -433,7 +433,7 @@ $frontendDir = yii\helpers\Url::base(true);
 
 
 <?php
-$getProfilePercentageUrl = Yii::$app->urlManager->createUrl(['user-details/get-profile-percentage']);
+$getProfilePercentageUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/get-profile-percentage']);
 
 $js = <<< JS
         
@@ -526,9 +526,10 @@ function getProfilePercentage(){
 getProfilePercentage();  
     
 $(window).scroll(function(){
-  var scroll = $(window).scrollTop();      
-  console.log(scroll);      
-  if(scroll >= 100 && scroll <= 1100){
+  var scroll = $(window).scrollTop();    
+  var profileSectionHeight = $('.listpgWraper').height() - 500;
+       
+  if(scroll >= 100 && scroll <= profileSectionHeight){
       $('.fixed-sidebar').addClass('sticky-sidebar');
       $('.font-a').css("right","-5px");  
    } else {

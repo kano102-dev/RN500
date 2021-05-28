@@ -76,8 +76,8 @@
 </div>
 <?php
 
-$pending_url = Yii::$app->urlManager->createAbsoluteUrl(['lead/get-pending']);
-$approved_url = Yii::$app->urlManager->createAbsoluteUrl(['lead/get-approved']);
+$pending_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['lead/get-pending']);
+$approved_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['lead/get-approved']);
 $pageLength = 10;
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();

@@ -7,6 +7,8 @@ use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use borales\extensions\phoneInput\PhoneInput;
+use common\models\User;
+use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
@@ -92,9 +94,13 @@ use borales\extensions\phoneInput\PhoneInput;
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
-        </div>
+        <?php if (isset(Yii::$app->user->id) && !empty(Yii::$app->user->id)) { ?>
+            <?php if (Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) { ?>
+                <div class="col-sm-6">
+                    <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
+                </div>
+            <?php } ?>
+        <?php } ?>
         <div class="col-sm-6">
 
             <?php
@@ -116,18 +122,53 @@ use borales\extensions\phoneInput\PhoneInput;
             ]);
             ?>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6">
-            <?= $form->field($model, 'looking_for')->textarea(['row' => 3]) ?>
-        </div>
+
         <div class="col-sm-6">
             <?= $form->field($model, 'profile_pic')->fileInput() ?>
-            <?php if(isset($model->profile_pic)){ ?>
+            <?php if (isset($model->profile_pic)) { ?>
                 <p><?= $model->profile_pic ?></p>
             <?php } ?>
         </div>
     </div>
+    <?php if (isset($comppanyDetail) && !empty($comppanyDetail)) { ?>
+        <p>&nbsp;</p>
+        <h3>Company Details</h3>
+        <?php
+        echo DetailView::widget([
+            'model' => $companyDetail,
+            'attributes' => [
+                'company_name',
+                'reference_no',
+                'company_email',
+                'company_mobile',
+            ],
+        ]);
+    }
+    ?>
+    <?php if (isset($branch) && !empty($branch)) { ?>
+        <p>&nbsp;</p>
+        <h3>Company Branch Details</h3>
+        <?php
+        echo DetailView::widget([
+            'model' => $branch,
+            'attributes' => [
+                'branch_name',
+                [
+                    'label' => 'Company Name',
+                    'value' => (isset($branch->company_id) && !empty($branch->company_id)) ? $branch->company->company_name : '',
+                ],
+                'street_no',
+                'street_address',
+                'apt',
+                [
+                    'label' => 'city',
+                    'value' => (isset($model->city) && !empty($model->city)) ? $model->cityRef->city : "",
+                ],
+                'zip_code',
+            ],
+        ]);
+    }
+    ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

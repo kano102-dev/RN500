@@ -15,7 +15,7 @@ $this->title = 'RN500';
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
-                    <h5>Password Rest</h5>
+                    <h5>Password Reset</h5>
                     <!-- login form -->
                     <div class="formpanel">
                         <div class="row">
@@ -48,7 +48,7 @@ $this->title = 'RN500';
 
                                 <?php ActiveForm::end(); ?>
                             </div>
-                            <div class="newuser"><i class="fa fa-lock" aria-hidden="true"></i> <a href="<?= Yii::$app->urlManager->createUrl('/auth/login'); ?>">Click here to login</a></div>
+                            <div class="newuser"><i class="fa fa-lock" aria-hidden="true"></i> <a href="<?= Yii::$app->urlManagerFrontend->createUrl('/auth/login'); ?>">Click here to login</a></div>
                         </div>
                     </div>
                 </div>

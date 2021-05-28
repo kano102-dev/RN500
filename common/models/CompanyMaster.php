@@ -33,8 +33,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
     const PRIORITY_SEMIMODRATE = 3;
     const PRIORITY_LOW = 4;
 
-    public $mobile;
-
     public static function tableName() {
         return 'company_master';
     }
@@ -44,7 +42,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],

@@ -865,3 +865,6 @@ ALTER TABLE `company_master`
 ADD `employer_identification_number` varchar(200) COLLATE 'latin1_swedish_ci' NOT NULL AFTER `company_mobile`;
 
 UPDATE `auth_item` SET `type` = '2' WHERE `name` = 'recruiter-update' AND `name` = 'recruiter-update' COLLATE utf8mb4_bin;
+
+ALTER TABLE `user_details`
+DROP `email`;

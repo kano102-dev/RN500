@@ -44,6 +44,7 @@ class ChangePasswordForm extends Model {
             ['otp', 'required', 'when' => function ($model) {
                     return $model->is_otp_sent;
                 }],
+            [['new_password'], 'match', 'pattern' => "/^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", 'message' => Yii::t('app', 'Password required atlest 1 alphabet, 1 numeric and 1 special character.')],
 //            [['new_password'], 'match', 'pattern' => "/^^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", 'message' => Yii::t('app', 'Minimum 8 Characters with at least 1 Capital, 1 Number and 1 special Characters.')],
         ];
     }

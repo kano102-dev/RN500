@@ -141,6 +141,7 @@ class AuthController extends Controller {
                             $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
                             if ($company_branch->save()) {
                                 $user = new User();
+                                $user->scenario = "create";
                                 $user->email = $employer->email;
                                 $user->type = User::TYPE_EMPLOYER;
                                 $user->status = User::STATUS_PENDING;
@@ -200,6 +201,7 @@ class AuthController extends Controller {
                             $company_branch->created_at = $company_branch->updated_at = CommonFunction::currentTimestamp();
                             if ($company_branch->save()) {
                                 $user = new User();
+                                $user->scenario = "create";
                                 $user->email = $recruiter->email;
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_PENDING;
@@ -245,6 +247,7 @@ class AuthController extends Controller {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         $user = new User();
+                        $user->scenario = "create";
                         $user->email = $model->email;
                         $user->type = User::TYPE_JOB_SEEKER;
                         $user->status = User::STATUS_APPROVED;
@@ -282,7 +285,7 @@ class AuthController extends Controller {
         }
         return $this->render('register', [
                     'model' => $model, 'companyMasterModel' => $companyMasterModel, 'recruiterCompany' => $recruiterCompany,
-                    'states' => $states, 'employer' => $employer, 'recruiter' => $recruiter, 'tab' => $tab,'cities'=>$cities
+                    'states' => $states, 'employer' => $employer, 'recruiter' => $recruiter, 'tab' => $tab, 'cities' => $cities
         ]);
     }
 
@@ -331,7 +334,7 @@ class AuthController extends Controller {
         $model = new PasswordResetRequestForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', "Password reset link sent sucessfully. Please check your inbox.");
+                Yii::$app->session->setFlash('success', "Password reset link sent Successfully. Please check your inbox.");
                 return $this->redirect(['login']);
             } else {
                 Yii::$app->session->setFlash('error', "something went wrong");

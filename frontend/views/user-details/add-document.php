@@ -40,11 +40,13 @@ use kartik\date\DatePicker;
 
 <?php
 $script = <<< JS
-
+  var click = 0;      
   $(document).on("beforeSubmit", "#add-document", function () {
-    var form = $(this);
-    var formData = new FormData(form[0]);    
-         $.ajax({
+    if(click == 0){ 
+        ++click;    
+        var form = $(this);
+        var formData = new FormData(form[0]);    
+        $.ajax({
              url    : form.attr('action'),
              type   : 'post',
              dataType : 'json',
@@ -71,7 +73,8 @@ $script = <<< JS
                  console.log('internal server error');
              }
          });
-         return false;
+         return false;  
+      }
  });
      
  

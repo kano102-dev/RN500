@@ -44,7 +44,7 @@ class LeadController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['lead/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['lead/index']),
         ];
     }
 

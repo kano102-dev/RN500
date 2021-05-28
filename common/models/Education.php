@@ -17,37 +17,35 @@ use common\models\User;
  *
  * @property User $user
  */
-class Education extends \yii\db\ActiveRecord
-{
+class Education extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'education';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['user_id', 'degree_name', 'year_complete', 'institution', 'location'], 'required'],
-            [['user_id'], 'integer'],
-            [['degree_name'], 'string', 'max' => 250],
-            [['year_complete'], 'string', 'max' => 50],
-            [['institution', 'location'], 'string', 'max' => 500],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['institution'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+                [['user_id', 'degree_name', 'year_complete', 'institution', 'location'], 'required'],
+                [['user_id'], 'integer'],
+                [['degree_name'], 'string', 'max' => 250],
+                [['year_complete'], 'string', 'max' => 50],
+                [['institution', 'location'], 'string', 'max' => 500],
+                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['institution'], 'match', 'pattern' => '/^[a-zA-Z0-9. ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+                [['user_id', 'degree_name', 'year_complete', 'institution', 'location'], 'safe']
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'user_id' => 'User ID',
@@ -63,8 +61,8 @@ class Education extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
 }

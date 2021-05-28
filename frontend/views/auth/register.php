@@ -262,14 +262,14 @@ use borales\extensions\phoneInput\PhoneInput;
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
                     </div>
-                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManager->createUrl('auth/login'); ?>">Login Here</a></div>
+                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManagerFrontend->createUrl('auth/login'); ?>">Login Here</a></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['auth/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['auth/get-cities']);
 $script = <<< JS
    $(document).on('change','#companymaster-state',function(){
         var state=$(this).val();

@@ -67,7 +67,7 @@ class PasswordResetRequestForm extends Model {
                 return false;
             }
         }
-        $resetLink = Yii::$app->urlManager->createAbsoluteUrl(['auth/reset-password', 'token' => $user->password_reset_token]);
+        $resetLink = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['auth/reset-password', 'token' => $user->password_reset_token]);
 
         $name = isset($user->fullName) ? $user->fullName : "";
 

@@ -13,6 +13,7 @@ use common\CommonFunction;
 use yii\helpers\FileHelper;
 use common\models\Vendor;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 /**
  * AdvertisementController implements the CRUD actions for Advertisement model.
@@ -40,7 +41,7 @@ class AdvertisementController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['advertisements/']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['advertisements/']),
         ];
     }
 
@@ -81,21 +82,22 @@ class AdvertisementController extends Controller {
         $post = Yii::$app->request->post();
         $vendor = ArrayHelper::map(Vendor::find()->asArray()->all(), 'id', 'company_name');
 
-        $model->created_at = CommonFunction::currentTimestamp();
-        $model->updated_at = CommonFunction::currentTimestamp();
+        $model->created_at = time();
+        $model->updated_at = time();
         $model->created_by = \Yii::$app->user->id;
+        
         if ($model->load(Yii::$app->request->post())) {
-
-            $icon = \yii\web\UploadedFile::getInstance($model, 'icon');
-            $folder = \Yii::$app->basePath . "/storage/web/source/advertisement/";
+            
+            $icon = UploadedFile::getInstance($model, 'icon');
+            $folder = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
 
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
 
             if (!empty($icon)) {
-                $model->icon = $icon->name;
-                $icon->saveAs($folder . $icon);
+                $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $icon->getExtension();;
+                $icon->saveAs($folder . $model->icon);
             } else {
                 $model->icon = null;
             }
@@ -126,7 +128,7 @@ class AdvertisementController extends Controller {
         $model = $this->findModel($id);
         $vendor = ArrayHelper::map(Vendor::find()->asArray()->all(), 'id', 'company_name');
 
-        $file = $model->icon;
+        $temp_document_file = isset($model->icon) && !empty($model->icon) ? $model->icon : NULL;
 
         $model->active_from = date("Y-m-d", strtotime($model->active_from));
         $model->active_to = date("Y-m-d", strtotime($model->active_to));
@@ -135,14 +137,26 @@ class AdvertisementController extends Controller {
         $model->updated_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
-            $folder = \Yii::$app->basePath . "/storage/web/source/advertisement/";
-
-            $icon = \yii\web\UploadedFile::getInstance($model, 'icon');
-            if (!empty($icon)) {
-                $model->icon = $icon->name;
-                $icon->saveAs($folder . $icon);
-            } else {
-                $model->icon = $file;
+            $document_file = UploadedFile::getInstance($model, 'icon');
+            
+            $folder = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
+            if (!file_exists($folder)) {
+                FileHelper::createDirectory($folder, 0777);
+            }
+            
+            $uploadPath = \Yii::getAlias('@frontend').'/web/uploads/advertisement/';
+            
+            if ($document_file) {
+                $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
+                $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->icon);
+            }
+            
+            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
+                if ($document_upload_flag) {
+                    unlink($uploadPath . $temp_document_file);
+                } else {
+                    $model->icon = $temp_document_file;
+                }
             }
 
             if ($model->save()) {

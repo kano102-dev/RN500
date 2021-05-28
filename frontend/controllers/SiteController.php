@@ -80,7 +80,7 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $advertisment = [1 => 'http://placehold.it/150x150', 2 => 'http://placehold.it/150x150', 3 => 'http://placehold.it/150x150', 4 => 'http://placehold.it/150x150', 5 => 'http://placehold.it/150x150', 6 => 'http://placehold.it/150x150', 7 => 'http://placehold.it/150x150', 8 => 'http://placehold.it/150x150'];
+        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->asArray()->all();
         
         return $this->render('index', [
                     'advertisment' => $advertisment
@@ -125,7 +125,7 @@ class SiteController extends Controller {
         $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
         $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();        
         $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);

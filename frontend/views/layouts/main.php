@@ -57,6 +57,15 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <!--<script src="" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>-->
         <script>
 
+            $(window).scroll(function () {
+                var scroll = $(window).scrollTop();
+                if (scroll >= 30) {
+                    $(".header").addClass('header-new');
+                } else {
+                    $(".header").removeClass('header-new');
+                }
+            });
+
             $('.owl-carousel').owlCarousel({
                 loop: true,
 //                margin: 0,
@@ -87,7 +96,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
             }
             $("#viewFTypeMore").on('click', function (e) {
                 e.preventDefault();
-                $(".moreFTypeBox:hidden").slice(0, 6).slideDown();
+                $(".moreFTypeBox:hidden").slice(0, 3).slideDown();
                 if ($(".moreFTypeBox:hidden").length == 0) {
                     $("#viewFTypeMore").fadeOut('slow');
                 }

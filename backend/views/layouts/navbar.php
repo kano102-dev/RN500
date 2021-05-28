@@ -112,7 +112,7 @@ use yii\helpers\Html;
                 </li>
                 <!-- Menu Footer-->
                 <li class="user-footer">
-                    <a href="<?= Yii::$app->urlManager->createUrl('../site/index') ?>" class="btn btn-default btn-flat">Frontend</a>
+                    <a href="<?= Yii::$app->urlManagerAdmin->createUrl('../site/index') ?>" class="btn btn-default btn-flat">Frontend</a>
                     <?php echo Html::a('Sign out', ['site/logout'], ['data-method' => 'post', 'class' => 'btn btn-default btn-flat float-right']) ?>
                 </li>
             </ul>

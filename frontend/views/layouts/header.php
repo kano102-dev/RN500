@@ -25,9 +25,11 @@ $action = Yii::$app->controller->action->id;
 ?>
 
 <style>
+    .listpgWraper{padding: 100px 0 !important;}
     .top-content{position: absolute;top: 20px;right: 30px;}
     .top-content p{font-size: 15px;font-weight: 600;color: black;}
-
+    .header-new{position: fixed;left: 0;right: 0;background: white;z-index: 999;}
+    .nav-tabs li{margin-right: 5px !important;}
     @media (max-width:767px){
         .top-content{display: none}
     }
@@ -37,7 +39,7 @@ $action = Yii::$app->controller->action->id;
     <!--<div class="top-content"><p>One million success stories. Start yours today.</p></div>-->
     <div class="container">
         <div class="row">
-            <div class="col-md-2 col-sm-3 col-xs-12"> <a href="<?= Yii::$app->urlManager->createUrl("/"); ?>" class="logo"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></a>
+            <div class="col-md-2 col-sm-3 col-xs-12"> <a href="<?= Yii::$app->urlManagerFrontend->createUrl("/"); ?>" class="logo"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="RN500" /></a>
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
                 </div>
@@ -48,32 +50,32 @@ $action = Yii::$app->controller->action->id;
                 <div class="navbar navbar-default" role="navigation">
                     <div class="navbar-collapse collapse" id="nav-main">
                         <ul class="nav navbar-nav">
-                            <li class="<?= $controller == 'site' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("/"); ?>">Home</a> 
+                            <li class="<?= $controller == 'site' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/"); ?>">Home</a> 
                             </li>
                             <li><a href="">About us</a></li>
                             <li><a href="">Contact</a></li>
-                            <li class="<?= $controller == 'browse-jobs' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
+                            <li class="<?= $controller == 'browse-jobs' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
                             <?php if (CommonFunction::isRecruiter()) { ?>
-                                <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
+                                <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
                             <?php } ?>
                             <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManager->createUrl("job/post"); ?>">Post a job</a></li>
+                                <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
 
                             <?php if (!empty(Yii::$app->user->identity)) { ?>                            
-                                <li class="dropdown userbtn"><a href=""><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
+                                <li class="dropdown userbtn"><a href="javascript:void(0);"><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
                                     <ul class="dropdown-menu">
                                         <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                            <li><a href="<?= Yii::$app->urlManager->createUrl('admin/site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+                                            <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
                                         <?php } ?>
-                                        <li class="<?= $controller == 'site' && $action == 'job-seeker' ? $activeClass : '' ?>"><a href="<?= CommonFunction::isJobSeeker() ? Yii::$app->urlManager->createUrl("/site/job-seeker/") : Yii::$app->urlManager->createUrl(["user-details/profile", 'id' => Yii::$app->user->identity->id]); ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
-                                        <li class="<?= $controller == 'auth' && $action == 'change-password' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("/auth/change-password"); ?>"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</a></li>
+                                        <li class="<?= $controller == 'site' && $action == 'job-seeker' ? $activeClass : '' ?>"><a href="<?= CommonFunction::isJobSeeker() ? Yii::$app->urlManagerFrontend->createUrl("/site/job-seeker/") : Yii::$app->urlManagerFrontend->createUrl(["user-details/profile", 'id' => Yii::$app->user->identity->id]); ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
+                                        <li class="<?= $controller == 'auth' && $action == 'change-password' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/change-password"); ?>"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="<?= Yii::$app->urlManager->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
+                                        <li><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>
                                 </li>
                             <?php } else { ?>
-                                <li class="<?= $controller == 'auth' && ($action == 'login' || $action == 'register' || $action == 'request-password-reset') ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("/auth/login"); ?>">Sign In / Sign Up</a></li>
+                                <li class="<?= $controller == 'auth' && ($action == 'login' || $action == 'register' || $action == 'request-password-reset') ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/login"); ?>">Sign In / Sign Up</a></li>
                             <?php } ?>
                         </ul>
                         <!-- Nav collapes end --> 

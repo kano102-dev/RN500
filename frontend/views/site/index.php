@@ -3,6 +3,8 @@
 
 $this->title = 'My Yii Application';
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
+$backendDir = Yii::$app->assetManager->getPublishedUrl('@backend/');
+$frontendDir = yii\helpers\Url::base(true);
 ?>
 <style>
     .employee-details p{margin: 0 !important;font-weight: 600;}
@@ -14,9 +16,12 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
     .owl-carousel .owl-nav{display: none}
     .searchbar .form-control{    border: 2px solid #3ca0d6;}
     .searchbar{margin-left: 2rem}
+    .moreFTypeBox{text-align: center;}
+    .moreFTypeBox p{text-align: center;font-size: 20px;font-weight: 600}
 </style>
 
 <!-- slider start -->
+<!--<div class="listpgWraper">-->
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
@@ -63,8 +68,6 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             </div>
         </div>
     </div>
-
-
 </div>
 
 <!-- How it Works start -->
@@ -75,12 +78,10 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             $i = 0;
             if (isset($advertisment) && !empty($advertisment)) {
                 ?>
-                <?php foreach ($advertisment as $key => $value) { 
-                    echo "<pre/>";print_r($value);exit;
-                    ?>
-                    <div class="col-md-2 moreFTypeBox blogFTypeBox" <?php if ($i >= 6) { ?> style="display:none;" <?php } ?>>
-                        <img src="<?= Yii::getAlias('@frontend') . $value ?>">
-                        <p>Advertisment 1</p>
+                <?php foreach ($advertisment as $key => $value) { ?>
+                    <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
+                        <img height="250px" width="350px" src="<?= $frontendDir . "/uploads/advertisement/" . $value['icon'] ?>" >
+                        <p><?= $value['name'] ?></p>
                         <p>&nbsp;</p>
                     </div>
                     <?php
@@ -92,7 +93,12 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         <div class="row">
             <div class="col-md-12 text-center" id="viewFTypeMore">
                 <p>&nbsp;</p>
-                <a href="#" class="wp_view_more btn btn-info">View More</a>
+
+                <?php if (isset($advertisment) && !empty($advertisment)) { ?>
+                    <?php if (count($advertisment) > 3) { ?>
+                        <a href="#" class="wp_view_more btn btn-info">View More</a>
+                    <?php } ?>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -382,3 +388,4 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
         </div>-->
 <!--    </div>
 </div>-->
+<!--</div>-->

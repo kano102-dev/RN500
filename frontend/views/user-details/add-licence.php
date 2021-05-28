@@ -94,7 +94,7 @@ $frontendDir = yii\helpers\Url::base(true);
             <?= $form->field($model, 'document')->fileInput() ?>
 
             <?php if ($deleteFlag) { ?>
-            <a href="<?= $frontendDir."/uploads/user-details/document/".$model->document ?>" download><?= $model->document ?></a>
+            <a href="<?= $frontendDir."/uploads/user-details/license/".$model->document ?>" download><?= $model->document ?></a>
             <?php } ?>
 
         </div>
@@ -112,14 +112,17 @@ $frontendDir = yii\helpers\Url::base(true);
 $DeleteUrl = '';
 
 if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManager->createUrl(['user-details/delete-document?id='. $model->id]);
+    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id='. $model->id]);
 }
 
 $script = <<< JS
-
+  
+  var click = 0;
   $(document).on("beforeSubmit", "#add-licenses", function () {
-    var form = $(this);
-    var formData = new FormData(form[0]);    
+    if(click == 0){  
+        ++click;
+        var form = $(this);
+        var formData = new FormData(form[0]);    
          $.ajax({
              url    : form.attr('action'),
              type   : 'post',
@@ -148,6 +151,7 @@ $script = <<< JS
              }
          });
          return false;
+      }
  });    
           
         

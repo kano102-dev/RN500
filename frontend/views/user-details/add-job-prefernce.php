@@ -78,34 +78,37 @@ use yii\web\JsExpression;
 
 <?php
 $script = <<< JS
-
+var click = 0;
 $(document).on("beforeSubmit", "#add-job-preference", function () {
-   var form = $(this);
-        $.ajax({
-            url    : form.attr('action'),
-            type   : 'post',
-            dataType : 'json',
-            data   : form.serialize(),
-            success: function (response){
-                try{
-                    if(!response.error){
-                        $("#profile-modal").modal('hide');
-                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                        $(document).on("pjax:success", "#job-seeker", function (event) {
-                            $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                        });
-                        getProfilePercentage();
-                    }
-                }catch(e){
-                    $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                }
-            },
-            error  : function () 
-            {
-                console.log('internal server error');
-            }
-        });
-        return false;
+   if(click == 0){  
+        ++click;   
+        var form = $(this);
+         $.ajax({
+             url    : form.attr('action'),
+             type   : 'post',
+             dataType : 'json',
+             data   : form.serialize(),
+             success: function (response){
+                 try{
+                     if(!response.error){
+                         $("#profile-modal").modal('hide');
+                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                         $(document).on("pjax:success", "#job-seeker", function (event) {
+                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                         });
+                         getProfilePercentage();
+                     }
+                 }catch(e){
+                     $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                 }
+             },
+             error  : function () 
+             {
+                 console.log('internal server error');
+             }
+         });
+         return false;
+    }
 });  
         
 JS;

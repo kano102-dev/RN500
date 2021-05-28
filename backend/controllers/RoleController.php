@@ -67,7 +67,7 @@ class RoleController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['role/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['role/index']),
         ];
     }
 

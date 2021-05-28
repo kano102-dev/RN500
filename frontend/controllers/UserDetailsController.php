@@ -20,6 +20,9 @@ use common\models\References;
 use common\models\JobPreference;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+use common\models\CompanyBranch;
+use common\models\CompanyMaster;
+use common\CommonFunction;
 
 /**
  * UserDetailsController implements the CRUD actions for UserDetails model.
@@ -115,31 +118,37 @@ class UserDetailsController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id) {
-        
+
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
+        $model->scenario = 'profile';
         $model->updated_at = time();
-        $model->dob = date('d-m-Y', strtotime($model->dob));
+        if (isset($model->dob) && !empty($model->dob)) {
+            $model->dob = date('d-m-Y', strtotime($model->dob));
+        } else {
+            $model->dob = date('d-m-Y');
+        }
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
-
+        $document_upload_flag = '';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->city = isset($postData['city']) ? $postData['city'] : '';
+//            $model->city = isset($postData['city']) ? $postData['city'] : '';
+            $model->city = '1';
             $model->dob = date('Y-m-d', strtotime($model->dob));
-            
+
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
-            
+
             $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
-            
+
             $uploadPath = './uploads/user-details/profile/';
-            
+
             if ($document_file) {
                 $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->profile_pic);
             }
-            
+
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
                     unlink($uploadPath . $temp_document_file);
@@ -147,7 +156,7 @@ class UserDetailsController extends Controller {
                     $model->profile_pic = $temp_document_file;
                 }
             }
-            
+
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
@@ -169,30 +178,36 @@ class UserDetailsController extends Controller {
     public function actionProfile($id) {
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
+        $model->scenario = 'profile';
         $model->updated_at = time();
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
+        $document_upload_flag = '';
+        $branch = CompanyBranch::findOne(['id' => CommonFunction::getLoggedInUserBranchId()]);
+        $companyDetail = CompanyMaster::findOne(['id' => CommonFunction::getLoggedInUserCompanyId()]);
+
         if (isset($model->dob) && !empty($model->dob)) {
             $model->dob = date('d-m-Y', strtotime($model->dob));
         }
-        
+
         if ($model->load(Yii::$app->request->post())) {
-            $model->city = isset($postData['city']) ? $postData['city'] : '';
+//            $model->city = isset($postData['city']) ? $postData['city'] : '';
+            $model->city = '1';
             $model->dob = date('Y-m-d', strtotime($model->dob));
-            
+
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
-            
+
             $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
-            
+
             $uploadPath = './uploads/user-details/profile/';
-            
+
             if ($document_file) {
                 $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->profile_pic);
             }
-            
+
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
                     unlink($uploadPath . $temp_document_file);
@@ -200,7 +215,7 @@ class UserDetailsController extends Controller {
                     $model->profile_pic = $temp_document_file;
                 }
             }
-            
+
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('error', "User Details Updated Successfully.");
@@ -214,6 +229,8 @@ class UserDetailsController extends Controller {
 
         return $this->render('profile', [
                     'model' => $model,
+                    'companyDetail' => $companyDetail,
+                    'branch' => $branch
         ]);
     }
 
@@ -284,7 +301,11 @@ class UserDetailsController extends Controller {
             $model = WorkExperience::findOne($id);
 
             $model->start_date = date('m-Y', strtotime($model->start_date));
-            $model->end_date = date('m-Y', strtotime($model->end_date));
+            if($model->currently_working != '1'){
+                $model->end_date = date('m-Y', strtotime($model->end_date));
+            } else {
+                $model->end_date = null;
+            }
         } else {
             $model = new WorkExperience();
         }
@@ -293,10 +314,14 @@ class UserDetailsController extends Controller {
         $discipline = ArrayHelper::map(Discipline::find()->all(), 'id', 'name');
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            
+
             $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
-            $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
+            
+            if($model->currently_working != '1'){
+                $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
+            }
+            
             $model->city = $postData['city'];
 
             if ($model->validate()) {
@@ -308,7 +333,7 @@ class UserDetailsController extends Controller {
                 Yii::$app->session->setFlash('success', "Work Experience Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
             }
-        } 
+        }
 
         return $this->renderAjax('work-experience', [
                     'model' => $model,
@@ -365,7 +390,6 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
             $model->issuing_state = $postData['issuing_state'];
@@ -488,7 +512,7 @@ class UserDetailsController extends Controller {
         } else {
             $model = new Documents();
         }
-
+        
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
 
@@ -517,6 +541,12 @@ class UserDetailsController extends Controller {
                     $model->path = NULL;
                 }
             }
+            
+            
+        echo '<pre>';
+        print_r($model);
+        exit;
+
 
             if ($model->validate()) {
                 if ($model->save()) {
