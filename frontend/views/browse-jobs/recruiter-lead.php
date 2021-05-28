@@ -291,7 +291,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                         <?php
                     }
                     if (count($models) <= 0) {
-                        echo "<h1>No Record Found</h1>";
+                        echo "<h1>No Leads Found</h1>";
                     }
                     ?>
                 </ul>

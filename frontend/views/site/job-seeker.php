@@ -6,6 +6,7 @@
  */
 
 use yii\widgets\Pjax;
+use common\CommonFunction;
 
 $document_type = [0 => 'Resume', 1 => 'Other'];
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
@@ -92,31 +93,33 @@ $frontendDir = yii\helpers\Url::base(true);
                     <ul class="searchList new-searchList">
                         <!-- start -->
                         <li id="update-account">
-                            <div class="row">
-                                <div class="col-md-8 col-sm-8">
-                                    <div class="jobimg">
-                                        <?php if (isset($userDetails->profile_pic) && !empty($userDetails->profile_pic)) { ?>
-                                            <img src="<?= $frontendDir . "/uploads/user-details/profile/" . $userDetails->profile_pic ?>" style="width:70px;height:70px;">
-                                        <?php } else { ?>
-                                            <img src="<?= $assetDir ?>/images/jobs/jobimg.jpg" style="width:70px;height:70px;">
-                                        <?php } ?>
 
-                                    </div>
-                                    <div class="jobinfo">
-                                        <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
-                                        <div class="location"><?= Yii::$app->user->identity->email ?></div>
-                                        <!--<div class="location"><?php //  $userDetails->mobile_no   ?></div>-->
-                                        <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
-                                    </div>
-                                    <div class="clearfix"></div>
-                                </div>
-                                <div class="col-md-4 col-sm-4">
-                                    <div class="listbtn">
-                                        <div class="round"><i class="fa fa-file"></i></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <?php if (isset($userDetails) && !empty($userDetails)) { ?>
+                                <div class="row">
+                                    <div class="col-md-8 col-sm-8">
+                                        <div class="jobimg">
+                                            <?php if (isset($userDetails->profile_pic) && !empty($userDetails->profile_pic)) { ?>
+                                                <img src="<?= $frontendDir . "/uploads/user-details/profile/" . $userDetails->profile_pic ?>" style="width:70px;height:70px;">
+                                            <?php } else { ?>
+                                                <img src="<?= $assetDir ?>/images/jobs/jobimg.jpg" style="width:70px;height:70px;">
+                                            <?php } ?>
 
+                                        </div>
+                                        <div class="jobinfo">
+                                            <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
+                                            <div class="location"><?= Yii::$app->user->identity->email ?></div>
+                                            <!--<div class="location"><?php //  $userDetails->mobile_no     ?></div>-->
+                                            <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-4">
+                                        <div class="listbtn">
+                                            <div class="round"><i class="fa fa-file"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
                         </li>
                         <!-- end --> 
 
@@ -135,6 +138,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
+                                <?php if (isset($userDetails) && !empty($userDetails)) { ?>
                                 <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="jobinfo">
                                         <h3>&nbsp;</h3>
@@ -146,6 +150,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <p><?= $userDetails->ssn ?></p>
                                     </div>
                                 </div>
+                                <?php } ?>
                             </div>
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
@@ -338,7 +343,10 @@ $frontendDir = yii\helpers\Url::base(true);
                                                 <div class="row">
                                                     <div class="col-sm-8 col-xs-9">
                                                         <h4><?= $document_type[$value['document_type']] ?></h4>
-                                                        <p><?= $value['path'] ?></p>
+
+                                                        <?php if (file_exists(CommonFunction::getDocumentBasePath() . "/" . $value['path'])) { ?>
+                                                            <p><?= $value['path'] ?></p>
+                                                        <?php } ?>
                                                     </div>
                                                     <div class="col-sm-4 col-xs-3 edit-icon-right">
                                                         <a href="javascript:void(0);" url="<?= Yii::$app->urlManager->createUrl(['user-details/delete-document?id=' . $value['id']]) ?>"  data-document="document" class="delete-documents"><i class="fa fa-trash" aria-hidden="true"></i></a>

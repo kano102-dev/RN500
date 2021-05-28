@@ -31,7 +31,7 @@ class Education extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['user_id', 'degree_name', 'year_complete', 'institution', 'location'], 'required'],
+                [['user_id', 'degree_name', 'year_complete', 'institution'], 'required'],
                 [['user_id'], 'integer'],
                 [['degree_name'], 'string', 'max' => 250],
                 [['year_complete'], 'string', 'max' => 50],

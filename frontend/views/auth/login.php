@@ -67,7 +67,7 @@ $is_otp_sent = $model->is_otp_sent;
                             ?>
 
                         </div>
-                        <?php echo Html::submitButton('Login', ['class' => 'btn btn-primary btn-block']) ?>
+                        <?php echo Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
                         <?php \yii\bootstrap4\ActiveForm::end(); ?>
                     </div>
                     <!-- login form  end--> 
