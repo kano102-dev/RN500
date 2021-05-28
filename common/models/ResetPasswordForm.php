@@ -45,7 +45,8 @@ class ResetPasswordForm extends Model {
         return [
                 [['password', 'confirm_password'], 'required'],
                 ['confirm_password', 'compare', 'compareAttribute' => 'password'],
-                ['password', 'string', 'min' => 6],
+                ['password', 'string', 'min' => 8],
+            [['password'], 'match', 'pattern' => "/^.*(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).*$/", 'message' => Yii::t('app', 'Password required atlest 1 alphabet, 1 numeric and 1 special character.')],
         ];
     }
 

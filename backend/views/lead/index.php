@@ -33,10 +33,12 @@
                                         <table class="table table-bordered" cellspacing="0" id="table-pending">
                                             <thead>
                                                 <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
-                                                    <th>Reference No</th>
+                                                    <th>Reference No.</th>
                                                     <th>Title</th>
                                                     <th>Commision</th>
                                                     <th>Salary</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
                                                     <th style="width:5%">Action</th>
                                                 </tr>
                                             </thead>
@@ -52,10 +54,12 @@
                                         <table class="table table-bordered" cellspacing="0" id="table-approved">
                                             <thead>
                                                 <tr style=" color: #337ab7 !important;background:#e5eaef !important; "><th>#</th>
-                                                    <th>Reference No</th>
+                                                    <th>Reference No.</th>
                                                     <th>Title</th>
                                                     <th>Commision</th>
                                                     <th>Salary</th>
+                                                    <th>Start Date</th>
+                                                    <th>End Date</th>
                                                 </tr>
                                             </thead>
 
@@ -106,6 +110,8 @@ getPendingRecords();
                 {"name": "title"},
                 {"name": "recruiter_commission"},
                 {"name": "jobseeker_payment"},
+                {"name": "start_date"},
+                {"name": "end_date"},
                 {"name": "actions", "orderable": false},
             ],
             "bDestroy": true,

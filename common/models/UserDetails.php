@@ -111,6 +111,8 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function checkUniqueValidation($attribute, $param) {
         $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]])->one();
+       
+        
         if (!empty($query)) {
             return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
         }
@@ -143,7 +145,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'professional_liability' => 'Professional Liability',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'street_no' => 'Street No',
+            'street_no' => 'Street No.',
             'street_address' => 'Street Address',
             'apt' => 'Suit/Apt',
             'city' => 'City',

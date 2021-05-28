@@ -4,7 +4,7 @@
 $this->title = 'My Yii Application';
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $backendDir = Yii::$app->assetManager->getPublishedUrl('@backend/');
-$frontendDir = yii\helpers\Url::base(true);
+$frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
 ?>
 <style>
     .employee-details p{margin: 0 !important;font-weight: 600;}
@@ -80,7 +80,7 @@ $frontendDir = yii\helpers\Url::base(true);
                 ?>
                 <?php foreach ($advertisment as $key => $value) { ?>
                     <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
-                        <img height="250px" width="350px" src="<?= $frontendDir . "/uploads/advertisement/" . $value['icon'] ?>" >
+                        <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>" >
                         <p><?= $value['name'] ?></p>
                         <p>&nbsp;</p>
                     </div>

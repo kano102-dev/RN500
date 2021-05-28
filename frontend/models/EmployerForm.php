@@ -28,6 +28,7 @@ class EmployerForm extends \common\models\UserDetails {
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe'],
             [['first_name', 'last_name', 'email'], 'required'],
             [['email'], 'checkUniqueValidation'],
+            [['first_name','last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

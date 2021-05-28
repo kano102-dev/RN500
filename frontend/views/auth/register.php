@@ -65,7 +65,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
@@ -80,7 +80,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => 'Email Id'])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
@@ -160,7 +160,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $employer->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
@@ -175,7 +175,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 <?= $form->field($recruiterCompany, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($recruiterCompany, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'company_email')->textInput(['maxlength' => true, 'placeholder' => 'Email Id'])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
@@ -255,7 +255,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $recruiter->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>

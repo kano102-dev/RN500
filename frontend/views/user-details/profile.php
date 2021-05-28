@@ -9,6 +9,7 @@ use yii\web\JsExpression;
 use borales\extensions\phoneInput\PhoneInput;
 use common\models\User;
 use yii\widgets\DetailView;
+use common\CommonFunction;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
@@ -106,12 +107,13 @@ use yii\widgets\DetailView;
             <?php
             echo $form->field($model, 'dob')->widget(DatePicker::classname(), [
                 'name' => 'dob',
-                'value' => date('d-M-Y'),
+//                'value' => date('d-M-Y'),
                 'options' => ['placeholder' => 'Enter DOB..'],
                 'pluginOptions' => [
                     'format' => 'dd-mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
+                    'endDate' => "-0d"
 //                    'startDate' => date('d-m-Y'),
                 ],
                 'pluginEvents' => [
@@ -125,8 +127,11 @@ use yii\widgets\DetailView;
 
         <div class="col-sm-6">
             <?= $form->field($model, 'profile_pic')->fileInput() ?>
-            <?php if (isset($model->profile_pic)) { ?>
-                <p><?= $model->profile_pic ?></p>
+            
+            <?php if(file_exists(CommonFunction::getProfilePictureBasePath()."/".$model->profile_pic)){ ?>
+                <?php if (isset($model->profile_pic)) { ?>
+                    <p><?= $model->profile_pic ?></p>
+                <?php } ?>
             <?php } ?>
         </div>
     </div>

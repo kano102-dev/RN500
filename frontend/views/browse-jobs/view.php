@@ -155,7 +155,7 @@ use yii\web\JsExpression;
                             </li>
                             <li class="row">
                                 <div class="col-md-6 col-xs-6">Shift</div>
-                                <div class="col-md-6 col-xs-6"><span><?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></span></div>
+                                <div class="col-md-6 col-xs-6"><span><?= $model->shift == 1 ? "Morning, Evening, Night, Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></span></div>
                             </li>
                         </ul>
                     </div>
