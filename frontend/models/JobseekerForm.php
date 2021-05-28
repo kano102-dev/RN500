@@ -17,18 +17,18 @@ class JobseekerForm extends \common\models\UserDetails {
     public $type;
     public $companyName;
     public $state;
-    
+
     /**
      * {@inheritdoc}
      */
     public function rules() {
         return [
-            [['email'], 'email','message' => 'Please enter valid email id!'],
+            [['email'], 'email', 'message' => 'Please enter valid email id!'],
+            [['email'], 'checkUniqueValidation'],
             [['email'], 'required'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe'],
             [['first_name', 'last_name', 'email'], 'required'],
-            [['email'], 'checkUniqueValidation'],
-            [['first_name','last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field']
+            [['first_name', 'last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field']
         ];
     }
 
@@ -39,6 +39,18 @@ class JobseekerForm extends \common\models\UserDetails {
             $this->getUniqueId();
         }
         return $unique_id;
+    }
+
+    public function checkUniqueValidation($attribute, $param) {
+        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]]);
+        if (isset($this->id) && !empty($this->id)) {
+            $query->andWhere(['!=', 'id', $this->id]);
+        }
+        $data = $query->one();
+        if (!empty($data)) {
+            return $this->addError('email', "Email already exists.");
+        }
+        return true;
     }
 
 }

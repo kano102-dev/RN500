@@ -103,15 +103,6 @@ class UserDetails extends \yii\db\ActiveRecord {
         return $scenarios;
     }
 
-    public function checkUniqueValidation($attribute, $param) {
-        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]])->one();
-       
-        
-        if (!empty($query)) {
-            return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
-        }
-    }
-
     /**
      * {@inheritdoc}
      */

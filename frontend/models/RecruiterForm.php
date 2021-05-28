@@ -25,10 +25,10 @@ class RecruiterForm extends \common\models\UserDetails {
         return [
             [['email'], 'email'],
             [['email'], 'required'],
+            [['email'], 'checkUniqueValidation'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe'],
             [['first_name', 'last_name', 'email'], 'required'],
-            [['email'], 'checkUniqueValidation'],
-            [['first_name','last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['first_name', 'last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 
@@ -41,14 +41,16 @@ class RecruiterForm extends \common\models\UserDetails {
         return $unique_id;
     }
 
-    public function checkUniqueValidation() {
-        $userModel = User::find(['email' => $this->email])->orWhere(['status'=>0])->orWhere(['status'=>1])->createCommand()->rawSql;
-        echo $userModel;exit;
-        if (!empty($userModel)) {
-            if ($userModel->status == 0 || $userModel->status == 1) {
-                return $this->addError('email', 'Account Already Exist.');
-            }
+    public function checkUniqueValidation($attribute, $param) {
+        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]]);
+        if (isset($this->id) && !empty($this->id)) {
+            $query->andWhere(['!=', 'id', $this->id]);
         }
+        $data = $query->one();
+        if (!empty($data)) {
+            return $this->addError('email', "Email already exists.");
+        }
+        return true;
     }
 
 }

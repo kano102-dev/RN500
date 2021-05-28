@@ -124,11 +124,11 @@ class AuthController extends Controller {
         if (\Yii::$app->request->isPost) {
             if (isset($_POST['type']) && Yii::$app->request->post('type') === 'employer') {
                 $tab = 'employer';
-                $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
-                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post())) {
+                $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $_POST['CompanyMaster']['state']])->all(), 'id', 'city');
+                if ($employer->load(Yii::$app->request->post()) && $companyMasterModel->load(Yii::$app->request->post()) && $employer->validate()) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
-                        $cities = ArrayHelper::map(Cities::find()->where(['id' => $companyMasterModel->city])->all(), 'id', 'city');
+                        $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
                         $companyMasterModel->mobile = $companyMasterModel->company_mobile;
                         $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
                         if ($companyMasterModel->save()) {
@@ -183,11 +183,11 @@ class AuthController extends Controller {
                 }
             } elseif (isset($_POST['type']) && Yii::$app->request->post('type') === 'recruiter') {
                 $tab = 'recruiter';
-                $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
-                if ($recruiter->load(Yii::$app->request->post()) && $recruiterCompany->load(Yii::$app->request->post())) {
+                $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $_POST['RecruiterCompanyForm']['state']])->all(), 'id', 'city');
+                if ($recruiter->load(Yii::$app->request->post()) && $recruiterCompany->load(Yii::$app->request->post()) && $recruiter->validate()) {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
-                        $cities = ArrayHelper::map(Cities::find()->where(['id' => $recruiterCompany->city])->all(), 'id', 'city');
+                        $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
                         $recruiterCompany->created_at = $recruiterCompany->updated_at = CommonFunction::currentTimestamp();
                         $recruiterCompany->company_mobile = $recruiterCompany->mobile;
                         $companyMasterModel = clone $recruiterCompany;
