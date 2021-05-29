@@ -82,7 +82,21 @@ $frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
                 ?>
                 <?php foreach ($advertisment as $key => $value) { ?>
                     <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
-                        <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>" >
+                        <?php if (isset($value['icon']) && !empty($value['icon'])) { ?>
+                            <?php if (file_exists($frontendDir . $value['icon'])) { ?>
+                                <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>">
+                            <?php } ?>
+                            <?php
+                        } else {
+                            if (isset($value['video_link']) && !empty($value['video_link'])) {
+                                ?>
+                                <video width="350" height="250" controls>
+                                    <source src="<?= $value['video_link'] ?>">
+                                </video>
+                            <?php
+                            }
+                        }
+                        ?>
                         <p><?= $value['name'] ?></p>
                         <p>&nbsp;</p>
                     </div>
@@ -90,7 +104,7 @@ $frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
                     $i++;
                 }
                 ?>
-            <?php } ?>
+<?php } ?>
         </div>
         <div class="row">
             <div class="col-md-12 text-center" id="viewFTypeMore">
@@ -100,7 +114,7 @@ $frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
                     <?php if (count($advertisment) > 3) { ?>
                         <a href="#" class="wp_view_more btn btn-info">View More</a>
                     <?php } ?>
-                <?php } ?>
+<?php } ?>
             </div>
         </div>
     </div>
@@ -111,7 +125,7 @@ $frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
     <div class="container"> 
         <div class="col-md-12 col-sm-12"> 
             <ul class="searchList browse-jobs">
-                <?php foreach ($leadModels as $model) { ?>
+<?php foreach ($leadModels as $model) { ?>
                     <!-- Candidate -->
                     <li>
                         <div class="row">

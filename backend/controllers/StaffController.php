@@ -128,11 +128,11 @@ class StaffController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
         $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $city = [];
@@ -221,11 +221,11 @@ class StaffController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
         $branchList = ArrayHelper::map(CompanyBranch::find()->where(['company_id' => $model->branch->company_id])->all(), 'id', 'branch_name');
         $userDetailModel->email = $model->email;

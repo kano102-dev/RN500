@@ -29,7 +29,7 @@ use yii\filters\AccessControl;
  */
 class EmployerController extends Controller {
 
-    public $title = "Employer";
+    public $title = "Employer Company";
     public $activeBreadcrumb, $breadcrumb;
 
     /**

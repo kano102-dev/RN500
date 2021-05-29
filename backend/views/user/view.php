@@ -4,20 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\CommonFunction;
 
-$this->title = 'Recruiter';
+$this->title = 'User Approval';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = "View";
 ?>
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-
-        <p class="text-right">
-            <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('recruiter-update', Yii::$app->user->identity->id)) { ?>
-                <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-            <?php } ?>
-        </p>
-
         <div class="row">
             <div class="col-6">
                 <h4> Company Details </h4>

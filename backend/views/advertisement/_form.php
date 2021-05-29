@@ -66,7 +66,7 @@ $status = [0 => 'No', 1 => 'Yes'];
 
             <div class="row">
                 <div class="col-lg-6">
-                    
+
 
                     <?=
                     $form->field($model, 'file_type')->radioList([1 => 'Image', 2 => 'Video Link'], [
@@ -85,7 +85,8 @@ $status = [0 => 'No', 1 => 'Yes'];
                         <?php echo $form->field($model, 'icon')->fileInput()->label(false); ?>
                         <?php if (isset($model->icon) && !empty($model->icon)) { ?>
                             <p><?php echo $model->icon; ?></p>
-                        <?php } ?> 
+                        <?php } ?>
+                        <a href="#" style="display:none" class="image_file">Remove file</a>   
                     </div>
 
                     <div class="video" style="<?= isset($model->video_link) && !empty($model->video_link) ? "" : "display: none" ?>">
@@ -122,13 +123,16 @@ $script = <<< JS
         var value = $(this).val();
         var image = $('#advertisement-icon').val();
         var video = $('#advertisement-video_link').val();
+        
+        
         if(value == '1'){
             if(video == ""){
                 $('.image').show();
                 $('.video').hide();
+                
             } else {
                 $("#type_2").attr('checked', 'checked');
-                alert('at the time only 1 file selected!');
+                swal("at the time only 1 file selected!");
             }
         } else {
             if(image == ""){
@@ -136,10 +140,23 @@ $script = <<< JS
                 $('.video').show();
             } else {
                 $("#type_1").prop("checked",true);
-                alert('at the time only 1 file selected!');
+                swal("at the time only 1 file selected!");
             }
         }
    });
+        
+        $(document).on('change','#advertisement-icon',function(){
+            var value = $(this).val();
+        
+            if(value != ""){
+                $('.image_file').show();
+            }
+        });
+        
+        $(document).on('click','.image_file',function(){
+            $('#advertisement-icon').val('');
+            $('.image_file').hide();
+        });
         
 JS;
 $this->registerJs($script, yii\web\View::POS_END);

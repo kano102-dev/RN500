@@ -44,7 +44,9 @@ class UserDetailsSearch extends UserDetails {
      * @return ActiveDataProvider
      */
     public function search($params) {
-        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->where(['user.status' => User::STATUS_APPROVED, 'user.type' => User::TYPE_RECRUITER, 'user.is_owner' => 1]);
+        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])
+                ->innerJoin('company_master', 'company_master.id=company_branch.company_id')
+                ->where(['user.status' => User::STATUS_APPROVED, 'user.type' => User::TYPE_RECRUITER, 'user.is_owner' => 1, 'company_branch.is_default' => 1]);
 
 
         // add conditions that should always apply here
@@ -134,7 +136,7 @@ class UserDetailsSearch extends UserDetails {
     }
 
     public function searchEmployer($params) {
-        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->where(['user.status' => User::STATUS_APPROVED, 'user.type' => User::TYPE_EMPLOYER, 'user.is_owner' => 1]);
+        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->where(['user.status' => User::STATUS_APPROVED, 'user.type' => User::TYPE_EMPLOYER, 'user.is_owner' => 1, 'company_branch.is_default' => 1]);
 
         // add conditions that should always apply here
         if ((\Yii::$app->request->get("sort") == Null)) {
@@ -223,8 +225,12 @@ class UserDetailsSearch extends UserDetails {
     }
 
     public function searchStaff($params) {
-        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])->leftJoin('role_master', 'user.role_id=role_master.id')->innerJoin('company_master', 'company_master.id=company_branch.company_id')
-                        ->where(['user.status' => User::STATUS_APPROVED, 'user.is_suspend' => 0])->andWhere(['IN', 'user.type', ['1', '2']]);
+        $subQuery = User::find()->select('user.id')->joinWith(['branch'])->where(['company_branch.is_default' => 1])->andWhere(['user.is_owner' => 1]);
+        $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])
+                ->leftJoin('role_master', 'user.role_id=role_master.id')->innerJoin('company_master', 'company_master.id=company_branch.company_id')
+                ->where(['user.status' => User::STATUS_APPROVED, 'user.is_suspend' => 0])
+                ->andWhere(['IN', 'user.type', [User::TYPE_RECRUITER, User::TYPE_EMPLOYER]]);
+        $query->andWhere(['not in', 'user.id', $subQuery]);
         if (!CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
             if (CommonFunction::isHoAdmin(\Yii::$app->user->identity->id)) {
                 $query->andWhere(['company_master.id' => \Yii::$app->user->identity->branch->company_id]);
@@ -237,6 +243,7 @@ class UserDetailsSearch extends UserDetails {
         if ((\Yii::$app->request->get("sort") == Null)) {
             $query->orderBy(['created_at' => SORT_DESC]);
         }
+//        echo $query->createCommand()->rawSql;exit;
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
