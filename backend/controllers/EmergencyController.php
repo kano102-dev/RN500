@@ -66,7 +66,12 @@ class EmergencyController extends Controller
     {
         $model = new Emergency();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save()){
+                Yii::$app->session->setFlash("success", "Emergency created successfully.");
+            } else {
+                Yii::$app->session->setFlash("success", "something went wrong.");
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -86,7 +91,14 @@ class EmergencyController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if($model->save()){
+                 Yii::$app->session->setFlash("success", "Emergency updated successfully.");
+            } else {
+                Yii::$app->session->setFlash("success", "something went wrong.");
+            }
+            
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

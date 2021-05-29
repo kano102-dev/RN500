@@ -3,37 +3,60 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\EmergencySearch */
+/* @var $searchModel common\models\VendorSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Emergencies';
+$this->title = 'Emergency';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="emergency-index">
+<div class="card card-default color-palette-box">
+    <div class="card-body">
+        <div class="col-12">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            <?= Html::a('Create Emergency', ['create'], ['class' => 'btn btn-success float-right']) ?>
 
-    <p>
-        <?= Html::a('Create Emergency', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+            <div class="table table-responsive pt-3">
+                <?php Pjax::begin(); ?>
+                <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
 
-    <?php Pjax::begin(); ?>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?=
+                GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        'name',
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['style' => 'width:5%;'],
+                            'header' => 'Actions',
+                            'template' => '{view} {update}',
+                            'buttons' => [
+                                //view button
+                                'view' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'View'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                                'update' => function ($url, $model) {
+                                    return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                                'data-pjax' => 0,
+                                                'title' => Yii::t('app', 'Update'),
+                                                'class' => 'btn btn-primary btn-xs',
+                                    ]);
+                                },
+                            ],
+                        ],
+                    ],
+                ]);
+                ?>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'name',
-
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-
-    <?php Pjax::end(); ?>
-
+                <?php Pjax::end(); ?>
+            </div>
+        </div>
+    </div>
 </div>

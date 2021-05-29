@@ -8,20 +8,18 @@ use yii\base\Model;
 /**
  * ContactForm is the model behind the contact form.
  */
-class ContactForm extends Model
-{
+class ContactForm extends Model {
+
     public $name;
     public $email;
     public $subject;
     public $body;
     public $verifyCode;
 
-
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             // name, email, subject and body are required
             [['name', 'email', 'subject', 'body'], 'required'],
@@ -35,8 +33,7 @@ class ContactForm extends Model
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'verifyCode' => 'Verification Code',
         ];
@@ -48,14 +45,26 @@ class ContactForm extends Model
      * @param string $email the target email address
      * @return bool whether the email was sent
      */
-    public function sendEmail($email)
-    {
+    public function sendEmail($email) {
         return Yii::$app->mailer->compose()
-            ->setTo($email)
-            ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
-            ->setReplyTo([$this->email => $this->name])
-            ->setSubject($this->subject)
-            ->setTextBody($this->body)
-            ->send();
+                        ->setTo($email)
+                        ->setFrom([Yii::$app->params['senderEmail'] => Yii::$app->params['senderName']])
+                        ->setReplyTo([$this->email => $this->name])
+                        ->setSubject($this->subject)
+                        ->setTextBody($this->body)
+                        ->send();
     }
+
+    public static function sendContactUsEmail($postData) {
+        
+        $subject = 'Contact Us Mail Enquiry';
+        $layout = '@common/mail/contactUs-html';
+
+        return Yii::$app->mailer->compose(['html' => $layout], ['user' => $postData])
+                        ->setFrom([Yii::$app->params['adminEmail'] => \Yii::$app->params['senderName']])
+                        ->setTo(Yii::$app->params['senderEmail'])
+                        ->setSubject($subject)
+                        ->send();
+    }
+
 }

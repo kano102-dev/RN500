@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'company_name',
                         'email:email',
                         'phone',
-                        ['class' => 'yii\grid\ActionColumn'],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => 'width:5%;'],

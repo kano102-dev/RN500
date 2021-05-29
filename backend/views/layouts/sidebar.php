@@ -121,11 +121,17 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "advertisement")
                     ],
-                        [
+                    [
                         'label' => 'Vendor',
                         'url' => ['/vendor'],
                         'icon' => 'user-check',
                         'active' => ($controller == "vendor")
+                    ],
+                    [
+                        'label' => 'Emergency',
+                        'url' => ['/emergency'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "emergency")
                     ],
 //                    [
 //                        'label' => 'Starter Pages',
