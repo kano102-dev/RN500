@@ -86,6 +86,11 @@ $frontendDir = yii\helpers\Url::base(true);
     </div>
     <div class="row">
         <div class="col-sm-12">
+            <?= $form->field($model, 'issue_by')->textInput(); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
             <?= $form->field($model, 'compact_states')->checkbox(); ?>
         </div>
     </div>

@@ -25,6 +25,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <?php $this->registerCsrfMetaTags() ?>
         <title>RN500</title>
         <link rel="stylesheet" href="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.css">
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <?php $this->head() ?>
     </head>
     <body class="hold-transition sidebar-mini">
