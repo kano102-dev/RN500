@@ -4,34 +4,32 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Emergency */
+/* @var $model common\models\Vendor */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Emergencies', 'url' => ['index']];
+$this->title = $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Emergency', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="emergency-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+        <p class="text-right">
+            <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-        ],
-    ]) ?>
-
+        <div class="row">
+            <div class="col-6">
+                <?=
+                DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'name',
+                    ],
+                ])
+                ?>
+            </div>
+        </div>
+    </div>
 </div>

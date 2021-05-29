@@ -64,6 +64,7 @@ use common\models\User;
                                                     <th>Company</th>
                                                     <th>User Type</th>
                                                     <th>Comment</th>
+                                                    <th style="width:5%">Action</th>
                                                 </tr>
                                             </thead>
 
@@ -83,6 +84,7 @@ use common\models\User;
                                                     <th>Company</th>
                                                     <th>User Type</th>
                                                     <th>Comment</th>
+                                                    <th style="width:5%">Action</th>
                                                 </tr>
                                             </thead>
 
@@ -105,7 +107,7 @@ use common\models\User;
 $pending_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-pending']);
 $approved_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-approved']);
 $rejected_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-rejected']);
-$pageLength = 10;
+$pageLength = Yii::$app->params['PAGE_LENGTH'];
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 $script_new = <<<JS
@@ -161,7 +163,8 @@ getPendingRecords();
                 { "name": "email"},
                 { "name": "company_name"},
                 { "name": "type"},                
-                { "name": "comment"},                
+                { "name": "comment"},
+                {"name": "actions", "orderable": false},
             ],
             "bDestroy": true,
         });
@@ -189,6 +192,7 @@ getPendingRecords();
                 { "name": "company_name"},
                 { "name": "type"},
                 { "name": "comment"},
+                {"name": "actions", "orderable": false},
             ],
             "bDestroy": true,
         });

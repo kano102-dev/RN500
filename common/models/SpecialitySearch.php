@@ -9,13 +9,12 @@ use common\models\Speciality;
 /**
  * SpecialitySearch represents the model behind the search form of `common\models\Speciality`.
  */
-class SpecialitySearch extends Speciality
-{
+class SpecialitySearch extends Speciality {
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'created_at', 'updated_at'], 'integer'],
             [['name'], 'safe'],
@@ -25,8 +24,7 @@ class SpecialitySearch extends Speciality
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,12 +36,13 @@ class SpecialitySearch extends Speciality
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Speciality::find();
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -67,4 +66,5 @@ class SpecialitySearch extends Speciality
 
         return $dataProvider;
     }
+
 }

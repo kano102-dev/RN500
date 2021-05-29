@@ -247,7 +247,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     <div class="col-md-4 col-sm-4 employee-details">
                                         <h3><a href="#."><?= $model->title ?></a></h3>
                                         <p><?= $model->citiesName ?></p>
-                                        <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
+                                        <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at) == 0 ? "Today" : CommonFunction::dateDiffInDays($model->created_at) . " days ago"; ?></p>
                                         <p>Benefits starts from Day 1</p>
                                     </div>
                                     <div class="col-md-4 col-sm-4 employee-details">

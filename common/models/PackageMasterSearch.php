@@ -40,7 +40,9 @@ class PackageMasterSearch extends PackageMaster {
         $query = PackageMaster::find();
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

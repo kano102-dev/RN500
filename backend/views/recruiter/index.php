@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="col-12">
             <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id)) { ?>
-                <?= Html::a('Add Recruiter', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+                <?= Html::a('Add Recruiter Company', ['create'], ['class' => 'btn btn-primary float-right']) ?>
             <?php } ?>
 
 

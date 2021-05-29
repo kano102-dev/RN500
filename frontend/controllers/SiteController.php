@@ -23,6 +23,8 @@ use common\models\Education;
 use common\models\References;
 use common\models\UserDetails;
 use common\models\JobPreference;
+use common\models\LeadMaster;
+use yii\base\DynamicModel;
 
 /**
  * Site controller
@@ -81,9 +83,12 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->asArray()->all();
-        
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
+        $query->groupBy(['lead_master.id']);
+        $query->orderBy(['lead_master.created_at' => SORT_DESC]);
+        $leadModels = $query->limit(10)->all();
         return $this->render('index', [
-                    'advertisment' => $advertisment
+                    'advertisment' => $advertisment, 'leadModels' => $leadModels
         ]);
     }
 
@@ -125,7 +130,7 @@ class SiteController extends Controller {
         $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
         $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();        
+        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
         $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
@@ -282,11 +287,26 @@ class SiteController extends Controller {
         ]);
     }
 
-    public function actionEditProfile() {
-        echo 'enter';
-        exit;
+    public function actionContactUs() {
+        $postData = Yii::$app->request->post();
+        $model = new DynamicModel(['name', 'email', 'subject', 'message']);
 
-        return $this->render('edit-profile');
+        $model->addRule(['name', 'email', 'subject', 'message'], 'string')
+                ->addRule(['name', 'email', 'subject', 'message'], 'required')
+                ->addRule('email', 'email');
+
+        if ($model->load(Yii::$app->request->post())) {
+            if (ContactForm::sendContactUsEmail($postData)) {
+                Yii::$app->session->setFlash("success", "Thank you for contacting. We will right back to you soon.");
+                return $this->redirect(['site/contact-us']);
+            }
+        }
+
+        return $this->render('contact-us', ['model' => $model]);
+    }
+
+    public function actionAboutUs() {
+        return $this->render('about-us');
     }
 
 }
