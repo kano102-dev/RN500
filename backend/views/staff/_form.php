@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                             <div class="col-6">
                                 <?=
                                 $form->field($userDetailModel, 'branch_id')->widget(Select2::classname(), [
-                                    'data' => $userDetailModel->isNewRecord ? [] : $branchList,
+                                    'data' => $branchList,
                                     'options' => ['placeholder' => 'Select a Branch'],
                                     'pluginOptions' => [
                                         'allowClear' => true
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
 
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
                         <div class="col-6">
                             <?=
@@ -149,8 +149,8 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['staff/get-cities']);
-$getBranchUrl = Yii::$app->urlManager->createAbsoluteUrl(['staff/get-branches']);
+$getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['staff/get-cities']);
+$getBranchUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['staff/get-branches']);
 $script = <<< JS
    $(document).on('change','#userdetails-state',function(){
         var state=$(this).val();

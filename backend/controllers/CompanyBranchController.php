@@ -70,7 +70,7 @@ class CompanyBranchController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['company-branch/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/index']),
         ];
     }
 

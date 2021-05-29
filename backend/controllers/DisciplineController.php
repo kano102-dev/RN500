@@ -39,7 +39,7 @@ class DisciplineController extends Controller
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['discipline/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['discipline/index']),
         ];
     }
 

@@ -266,16 +266,15 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                             <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
                                             <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                         </div><br/>
-                                        <div><span>Description :</span><?= $model->description ?></div><br/>
 
                                     </div>
                                     <div class="col-md-3 col-sm-3">
                                         <div class="listbtn">
                                             <?php if (!CommonFunction::isExpired() && in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1) { ?>
-                                                <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
+                                                <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
                                             <?php } else { ?>
                                                 <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
-                                                    <a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['payment/index', 'id' => $model->id]) ?>">Buy Now <?= "$" . $model->price ?></a>
+                                                    <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['payment/index', 'id' => $model->id]) ?>">Buy Now <?= "$" . $model->price ?></a>
                                                 <?php } else {
                                                     ?>
                                                     <h4 style="color:blue">Comming Soon</h4>
@@ -312,9 +311,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 $discipline_prams = isset($_GET['discipline']) ? implode(',', $_GET['discipline']) : '';
 $specialty_prams = isset($_GET['speciality']) ? implode(',', $_GET['speciality']) : '';
 $benefits_prams = isset($_GET['benefit']) ? implode(',', $_GET['benefit']) : '';
-$get_discipline_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-discipline']);
-$get_specialty_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-specialty']);
-$get_benefits_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-benefits']);
+$get_discipline_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-discipline']);
+$get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-specialty']);
+$get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 $script_new = <<<JS

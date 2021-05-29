@@ -265,7 +265,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3">
-                                    <div class="listbtn"><a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/view','id' => $model->id]) ?>">View Profile</a></div>
+                                    <div class="listbtn"><a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view','id' => $model->id]) ?>">View Profile</a></div>
                                 </div>
                             </div>
                         </li>
@@ -293,9 +293,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 $discipline_prams = isset($_GET['discipline']) ? implode(',', $_GET['discipline']) : '';
 $specialty_prams = isset($_GET['speciality']) ? implode(',', $_GET['speciality']) : '';
 $benefits_prams = isset($_GET['benefit']) ? implode(',', $_GET['benefit']) : '';
-$get_discipline_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-discipline']);
-$get_specialty_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-specialty']);
-$get_benefits_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-benefits']);
+$get_discipline_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-discipline']);
+$get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-specialty']);
+$get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 

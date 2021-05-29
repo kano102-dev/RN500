@@ -102,9 +102,9 @@ use common\models\User;
 </div>
 <?php
 
-$pending_url = Yii::$app->urlManager->createAbsoluteUrl(['user/get-pending']);
-$approved_url = Yii::$app->urlManager->createAbsoluteUrl(['user/get-approved']);
-$rejected_url = Yii::$app->urlManager->createAbsoluteUrl(['user/get-rejected']);
+$pending_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-pending']);
+$approved_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-approved']);
+$rejected_url = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/get-rejected']);
 $pageLength = 10;
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();

@@ -57,7 +57,7 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['email'], 'email'],
-            [['email', 'street_no', 'street_address', 'role_id'], 'required'],
+            [['street_no', 'street_address', 'role_id'], 'required'],
             [['role_id', 'branch_id', 'company_id'], 'required', 'on' => 'staff'],
             [['branch_id', 'company_id'], 'required', 'on' => 'employer'],
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
@@ -73,10 +73,6 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['zip_code'], 'string', 'max' => 20],
             [['first_name', 'last_name', 'email'], 'required', 'on' => 'registration'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
-            [['email'], 'checkUniqueValidation', 'on' => 'registration'],
-            [['email'], 'checkUniqueValidation', 'on' => 'staff'],
-            [['email'], 'checkUniqueValidation', 'on' => 'employer'],
-            [['email'], 'checkUniqueValidation', 'on' => 'recruiter'],
             [['company_id'], 'required', 'when' => function ($model) {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id) || CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'staff'
@@ -93,9 +89,7 @@ class UserDetails extends \yii\db\ActiveRecord {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'employer'
             ],
-
-            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address','ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field', 'on' => 'profile'],
-
+            [['first_name', 'last_name', 'looking_for', 'apt', 'street_address', 'ssn'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field', 'on' => 'profile'],
         ];
     }
 
@@ -105,17 +99,8 @@ class UserDetails extends \yii\db\ActiveRecord {
         $scenarios['staff'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['employer'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['recruiter'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
-        $scenarios['profile'] = ['first_name','last_name','email','looking_for','apt','street_no','street_address','city','ssn','dob','profile_pic','created_at', 'updated_at'];
+        $scenarios['profile'] = ['first_name', 'last_name', 'email', 'looking_for', 'apt', 'street_no', 'street_address', 'city', 'ssn', 'dob', 'profile_pic', 'created_at', 'updated_at'];
         return $scenarios;
-    }
-
-    public function checkUniqueValidation($attribute, $param) {
-        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]])->one();
-       
-        
-        if (!empty($query)) {
-            return $this->addError('email', $this->getAttributeLabel('email') . " already exists.");
-        }
     }
 
     /**

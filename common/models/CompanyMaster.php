@@ -33,8 +33,6 @@ class CompanyMaster extends \yii\db\ActiveRecord {
     const PRIORITY_SEMIMODRATE = 3;
     const PRIORITY_LOW = 4;
 
-    public $mobile;
-
     public static function tableName() {
         return 'company_master';
     }

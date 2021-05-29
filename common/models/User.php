@@ -48,22 +48,36 @@ class User extends ActiveRecord implements IdentityInterface {
      */
     public function rules() {
         return [
-                [['email'], 'required'],
-                [['comment'], 'required', 'on' => 'reject'],
-                [['password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'comment'], 'safe'],
-                [['email'], 'email'],
-                ['status', 'default', 'value' => self::STATUS_PENDING],
-                ['status', 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
-                ['is_owner', 'default', 'value' => self::OWNER_NO],
-                ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
+            [['email'], 'required'],
+            [['email'], 'checkUniqueValidation'],
+            [['comment'], 'required', 'on' => 'reject'],
+            [['password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'comment', 'password_hash'], 'safe'],
+            [['email'], 'email'],
+            ['status', 'default', 'value' => self::STATUS_PENDING],
+            ['status', 'in', 'range' => [self::STATUS_PENDING, self::STATUS_APPROVED, self::STATUS_REJECTED]],
+            ['is_owner', 'default', 'value' => self::OWNER_NO],
+            ['is_owner', 'in', 'range' => [self::OWNER_YES, self::OWNER_NO]],
         ];
     }
 
     public function scenarios() {
         $scenarios = parent::scenarios();
+        $scenarios['create'] = ['password_hash', 'email', 'password_reset_token', 'original_password', 'auth_key', 'is_suspend', 'is_owner'];
         $scenarios['approve'] = ['comment', 'status'];
         $scenarios['reject'] = ['comment', 'status'];
         return $scenarios;
+    }
+
+    public function checkUniqueValidation($attribute, $param) {
+        $query = User::find()->where(['email' => $this->email, 'is_suspend' => 0])->andWhere(['in', 'status', ["0", "1"]]);
+        if (isset($this->id) && !empty($this->id)) {
+            $query->andWhere(['!=', 'id', $this->id]);
+        }
+        $data = $query->one();
+        if (!empty($data)) {
+            return $this->addError('email', "Email already exists.");
+        }
+        return true;
     }
 
     /**
