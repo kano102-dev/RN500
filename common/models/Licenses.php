@@ -75,4 +75,21 @@ class Licenses extends \yii\db\ActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+    
+    
+    public function getIssuingStateRef() {
+        return $this->hasOne(Cities::className(), ['id' => 'issuing_state']);
+    }
+
+    public function getStateName() {
+        return isset($this->issuingStateRef->stateRef->state) ? $this->issuingStateRef->stateRef->state : "";
+    }
+
+    public function getCityStateName() {
+        $name = '';
+        if ($this->issuingStateRef) {
+            $name .= $this->issuingStateRef->city . " - " . $this->getStateName();
+        }
+        return $name;
+    }
 }
