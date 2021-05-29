@@ -81,6 +81,11 @@ class AuthController extends Controller {
                                 ->setTo($user->email)
                                 ->setSubject('RN500 Verification Code')
                                 ->send();
+                        $code = 200;
+                        $msg = "Success";
+                    } else {
+                        $code = 200;
+                        $msg = "OTP Not Found";
                     }
                 } else {
                     $code = 202;

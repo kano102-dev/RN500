@@ -23,6 +23,7 @@ use common\models\Education;
 use common\models\References;
 use common\models\UserDetails;
 use common\models\JobPreference;
+use common\models\LeadMaster;
 use yii\base\DynamicModel;
 
 /**
@@ -82,9 +83,12 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->asArray()->all();
-
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
+        $query->groupBy(['lead_master.id']);
+        $query->orderBy(['lead_master.created_at' => SORT_DESC]);
+        $leadModels = $query->limit(10)->all();
         return $this->render('index', [
-                    'advertisment' => $advertisment
+                    'advertisment' => $advertisment, 'leadModels' => $leadModels
         ]);
     }
 
@@ -300,8 +304,8 @@ class SiteController extends Controller {
 
         return $this->render('contact-us', ['model' => $model]);
     }
-    
-    public function actionAboutUs() { 
+
+    public function actionAboutUs() {
         return $this->render('about-us');
     }
 

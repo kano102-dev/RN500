@@ -9,13 +9,12 @@ use common\models\Advertisement;
 /**
  * AdvertisementSearch represents the model behind the search form of `common\models\Advertisement`.
  */
-class AdvertisementSearch extends Advertisement
-{
+class AdvertisementSearch extends Advertisement {
+
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['id', 'location_display'], 'integer'],
             [['name', 'description', 'link_url', 'icon', 'location_name', 'is_active', 'active_from', 'active_to', 'created_at', 'updated_at'], 'safe'],
@@ -25,8 +24,7 @@ class AdvertisementSearch extends Advertisement
     /**
      * {@inheritdoc}
      */
-    public function scenarios()
-    {
+    public function scenarios() {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
@@ -38,12 +36,14 @@ class AdvertisementSearch extends Advertisement
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
-    {
+    public function search($params) {
         $query = Advertisement::find();
 
         // add conditions that should always apply here
 
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -67,12 +67,13 @@ class AdvertisementSearch extends Advertisement
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'link_url', $this->link_url])
-            ->andFilterWhere(['like', 'icon', $this->icon])
-            ->andFilterWhere(['like', 'location_name', $this->location_name])
-            ->andFilterWhere(['like', 'is_active', $this->is_active]);
+                ->andFilterWhere(['like', 'description', $this->description])
+                ->andFilterWhere(['like', 'link_url', $this->link_url])
+                ->andFilterWhere(['like', 'icon', $this->icon])
+                ->andFilterWhere(['like', 'location_name', $this->location_name])
+                ->andFilterWhere(['like', 'is_active', $this->is_active]);
 
         return $dataProvider;
     }
+
 }
