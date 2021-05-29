@@ -83,7 +83,7 @@ class EmployerController extends Controller {
     public function actionIndex() {
         $searchModel = new UserDetailsSearch();
         $dataProvider = $searchModel->searchEmployer(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,

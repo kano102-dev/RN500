@@ -48,7 +48,9 @@ class UserDetailsSearch extends UserDetails {
 
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -130,11 +132,14 @@ class UserDetailsSearch extends UserDetails {
 
         return $dataProvider;
     }
+
     public function searchEmployer($params) {
         $query = UserDetails::find()->joinWith(['user', 'branch', 'cityRef'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->where(['user.status' => User::STATUS_APPROVED, 'user.type' => User::TYPE_EMPLOYER, 'user.is_owner' => 1]);
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -229,7 +234,9 @@ class UserDetailsSearch extends UserDetails {
         }
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
