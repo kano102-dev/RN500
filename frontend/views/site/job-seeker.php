@@ -155,7 +155,7 @@ $frontendDir = yii\helpers\Url::base(true);
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update?id=1']) ?>" class="editProfile">
+                                        <a href="#" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update','id' => Yii::$app->user->id]) ?>" class="editProfile">
                                             <p>Update Information</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
@@ -423,21 +423,6 @@ $frontendDir = yii\helpers\Url::base(true);
     </div>
 </div>
 
-<div id="profile-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"></h4>
-            </div>
-            <div class="modal-body" id="modalContent">
-
-            </div>
-        </div>
-    </div>
-</div>
-
 
 
 <?php
@@ -447,57 +432,57 @@ $js = <<< JS
         
         
 $(document).on("click", ".editProfile", function() {
-    $(".modal-title").text("Edit Profile");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Profile");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 });
         
 $(document).on("click", ".work-experience", function() {
-    $(".modal-title").text("Add Work Experience");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Work Experience");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 }); 
     
 $(document).on("click", ".AddEducation", function() {
-    $(".modal-title").text("Add Education");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Education");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 }); 
     
 $(document).on("click", ".AddLicence", function() {
-    $(".modal-title").text("Add Licence");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Licence");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 });
 
 $(document).on("click", ".AddCertification", function() {
-    $(".modal-title").text("Add Certification");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Certification");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 });
     
 $(document).on("click", ".AddDocument", function() {
-    $(".modal-title").text("Add Document");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Document");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 });
     
 $(document).on("click", ".AddReference", function() {
-    $(".modal-title").text("Add Reference");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Reference");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 }); 
     
 $(document).on("click", ".addPreference", function() {
-    $(".modal-title").text("Add Job Preference");
-    $("#profile-modal").modal('show')
+    $(".modal-title").text("Job Preference");
+    $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
 });        
@@ -562,7 +547,7 @@ $(document).on('click','.delete-documents',function(){
             if (isConfirm) {
               $.post(url, {document: document}, function(result){
                     if(result){
-                         $("#profile-modal").modal('hide');
+                         $("#commonModal").modal('hide');
                          $.pjax.reload({container: "#job-seeker", timeout: 2000});
                          $(document).on("pjax:success", "#job-seeker", function (event) {
                              $.pjax.reload({'container': '#res-messages', timeout: 2000});

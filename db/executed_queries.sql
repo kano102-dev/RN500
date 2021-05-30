@@ -872,3 +872,35 @@ CREATE TABLE `emergency` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) NOT NULL
 );
+
+# **************NIRAV 30-05-2021 ***********
+
+ALTER TABLE `work_experience`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `education`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `licenses`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `certifications`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `documents`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `references`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `certifications`
+CHANGE `expiry_date` `expiry_date` date NOT NULL AFTER `document`;
+
+ALTER TABLE `licenses`
+CHANGE `license_name` `license_name` int(11) NOT NULL AFTER `issuing_state`;

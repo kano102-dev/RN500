@@ -122,7 +122,7 @@ class UserDetailsController extends Controller {
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
         $model->scenario = 'profile';
-        $model->updated_at = time();
+        $model->updated_at = CommonFunction::currentTimestamp();
         if (isset($model->dob) && !empty($model->dob)) {
             $model->dob = date('d-m-Y', strtotime($model->dob));
         } else {
@@ -158,6 +158,10 @@ class UserDetailsController extends Controller {
             }
 
             if ($model->validate()) {
+                
+                echo '<pre>';
+                print_r($model);
+                exit;
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
                     return json_encode(['error' => 0, 'message' => 'User Details Updated successfully.']);
@@ -180,7 +184,7 @@ class UserDetailsController extends Controller {
         $model = UserDetails::findOne(['user_id' => $id]);
         
         $model->scenario = 'profile';
-        $model->updated_at = time();
+        $model->updated_at = CommonFunction::currentTimestamp();
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
         $document_upload_flag = '';
         $branch = CompanyBranch::findOne(['id' => CommonFunction::getLoggedInUserBranchId()]);
@@ -197,12 +201,12 @@ class UserDetailsController extends Controller {
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
 
-            $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
+            $folder = CommonFunction::getProfilePictureBasePath();
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
+            $uploadPath = CommonFunction::getProfilePictureBasePath();
 
             if ($document_file) {
                 $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -211,7 +215,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath . $temp_document_file);
+                    unlink($uploadPath ."/". $temp_document_file);
                 } else {
                     $model->profile_pic = $temp_document_file;
                 }
@@ -263,36 +267,36 @@ class UserDetailsController extends Controller {
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionAddJobPrefernce() {
-        $id = \Yii::$app->request->get('id');
-        $postData = Yii::$app->request->post();
-
-        if ($id !== null) {
-            $model = JobPreference::findOne($id);
-        } else {
-            $model = new JobPreference();
-        }
-
-        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-
-            $model->location = $postData['location'];
-            $model->user_id = \Yii::$app->user->id;
-
-            if ($model->validate()) {
-                if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Job Prefernce Updated successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Job Prefernce Updated successfully.']);
-                }
-            } else {
-                Yii::$app->session->setFlash('success', "Job Prefernce Updated failed.");
-                return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
-            }
-        }
-
-        return $this->renderAjax('add-job-prefernce', [
-                    'model' => $model
-        ]);
-    }
+//    public function actionAddJobPrefernce() {
+//        $id = \Yii::$app->request->get('id');
+//        $postData = Yii::$app->request->post();
+//
+//        if ($id !== null) {
+//            $model = JobPreference::findOne($id);
+//        } else {
+//            $model = new JobPreference();
+//        }
+//
+//        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+//
+//            $model->location = $postData['location'];
+//            $model->user_id = \Yii::$app->user->id;
+//
+//            if ($model->validate()) {
+//                if ($model->save()) {
+//                    Yii::$app->session->setFlash('success', "Job Prefernce Updated successfully.");
+//                    return json_encode(['error' => 0, 'message' => 'Job Prefernce Updated successfully.']);
+//                }
+//            } else {
+//                Yii::$app->session->setFlash('success', "Job Prefernce Updated failed.");
+//                return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
+//            }
+//        }
+//
+//        return $this->renderAjax('add-job-prefernce', [
+//                    'model' => $model
+//        ]);
+//    }
 
     public function actionWorkExperience() {
         $postData = Yii::$app->request->post();
@@ -300,15 +304,19 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = WorkExperience::findOne($id);
-
+            $model->updated_at = CommonFunction::currentTimestamp();
             $model->start_date = date('m-Y', strtotime($model->start_date));
+            
             if($model->currently_working != '1'){
                 $model->end_date = date('m-Y', strtotime($model->end_date));
             } else {
                 $model->end_date = null;
             }
+            
         } else {
             $model = new WorkExperience();
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
 
         $speciality = ArrayHelper::map(Speciality::find()->all(), 'id', 'name');
@@ -349,9 +357,12 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = Education::findOne($id);
+            $model->updated_at = CommonFunction::currentTimestamp();
             $model->year_complete = date('m-Y', strtotime($model->year_complete));
         } else {
             $model = new Education();
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -383,11 +394,16 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = Licenses::findOne($id);
+           
+            $model->updated_at = CommonFunction::currentTimestamp();
             $model->expiry_date = date('m-Y', strtotime($model->expiry_date));
             $temp_document_file = isset($model->document) && !empty($model->document) ? $model->document : NULL;
             $deleteFlag = true;
         } else {
             $model = new Licenses();
+            $model->scenario = 'create';
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -396,12 +412,12 @@ class UserDetailsController extends Controller {
             $model->issuing_state = $postData['issuing_state'];
             $document_file = UploadedFile::getInstance($model, 'document');
 
-            $folder = \Yii::$app->basePath . "/web/uploads/user-details/license/";
+            $folder = CommonFunction::getLicensesBasePath();
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/license/";
+            $uploadPath = CommonFunction::getLicensesBasePath();
 
             if ($document_file) {
                 $model->document = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -410,7 +426,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath . $temp_document_file);
+                    unlink($uploadPath ."/". $temp_document_file);
                 } else {
                     $model->document = $temp_document_file;
                 }
@@ -446,11 +462,14 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = Certifications::findOne($id);
+            $model->updated_at = CommonFunction::currentTimestamp();
             $model->expiry_date = date('m-Y', strtotime($model->expiry_date));
             $temp_document_file = isset($model->document) && !empty($model->document) ? $model->document : NULL;
             $deleteFlag = true;
         } else {
             $model = new Certifications();
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -508,10 +527,13 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = Documents::findOne($id);
+            $model->updated_at = CommonFunction::currentTimestamp();
             $temp_document_file = isset($model->path) && !empty($model->path) ? $model->path : NULL;
             $deleteFlag = true;
         } else {
             $model = new Documents();
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
         
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
@@ -519,12 +541,12 @@ class UserDetailsController extends Controller {
 
             $document_file = UploadedFile::getInstance($model, 'path');
 
-            $folder = \Yii::$app->basePath . "/web/uploads/user-details/document/";
+            $folder = CommonFunction::getDocumentBasePath();
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/document/";
+            $uploadPath = CommonFunction::getDocumentBasePath();
 
             if ($document_file) {
                 $model->path = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -533,7 +555,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath . $temp_document_file);
+                    unlink($uploadPath ."/". $temp_document_file);
                 } else {
                     $model->path = $temp_document_file;
                 }
@@ -566,8 +588,11 @@ class UserDetailsController extends Controller {
 
         if ($id !== null) {
             $model = References::findOne($id);
+            $model->updated_at = CommonFunction::currentTimestamp();
         } else {
             $model = new References();
+            $model->created_at = CommonFunction::currentTimestamp();
+            $model->updated_at = CommonFunction::currentTimestamp();
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
