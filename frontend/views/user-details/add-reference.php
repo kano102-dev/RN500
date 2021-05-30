@@ -51,6 +51,11 @@ use borales\extensions\phoneInput\PhoneInput;
             <?= $form->field($model, 'title')->dropDownList(Yii::$app->params['REFERENCE_TYPE']) ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <?= $form->field($model, 'relation')->textInput() ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

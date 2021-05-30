@@ -18,6 +18,8 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  * @property int $state
  * @property string $relation
  * @property int $user_id
+ * @property int $created_at
+ * @property int $updated_at
  *
  * @property User $user
  */
@@ -37,16 +39,16 @@ class References extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['first_name', 'last_name', 'email', 'user_id'], 'required'],
+            [['first_name', 'last_name', 'email', 'user_id','relation'], 'required'],
             ['mobile_no','required','message' => 'Mobile No. cannot be blank.'],
-            [['title', 'city', 'state', 'user_id'], 'integer'],
+            [['title', 'city', 'state', 'user_id','created_at','updated_at'], 'integer'],
             ['email','email'],
 //            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
-            [['mobile_no'], PhoneInputValidator::className()],
+//            [['mobile_no'], PhoneInputValidator::className()],
             [['first_name', 'last_name', 'email', 'relation'], 'string', 'max' => 250],
 //            [['mobile_no'], 'string', 'max' => 11],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['first_name','last_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['first_name','last_name','relation'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
         ];
     }
 

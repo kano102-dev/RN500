@@ -82,8 +82,8 @@ class AdvertisementController extends Controller {
         $post = Yii::$app->request->post();
         $vendor = ArrayHelper::map(Vendor::find()->asArray()->all(), 'id', 'company_name');
 
-        $model->created_at = time();
-        $model->updated_at = time();
+        $model->created_at = CommonFunction::currentTimestamp();
+        $model->updated_at = CommonFunction::currentTimestamp();
         $model->created_by = \Yii::$app->user->id;
         
         if ($model->load(Yii::$app->request->post())) {

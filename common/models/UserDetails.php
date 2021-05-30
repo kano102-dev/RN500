@@ -33,6 +33,7 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  * @property string|null $apt
  * @property int|null $city
  * @property string|null $zip_code
+ * @property int|null $interest_level
  *
  * @property User $user
  */
@@ -46,6 +47,10 @@ class UserDetails extends \yii\db\ActiveRecord {
     public $branch_id;
     public $company_id;
     public $profile_pic_url;
+    
+    const ACTIVELY_LOOKING = 1;
+    const OPEN_TO_OFFERS = 2;
+    const SEARCH_ON_HOLD = 3;
 
     public static function tableName() {
         return 'user_details';
@@ -61,8 +66,8 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['role_id', 'branch_id', 'company_id'], 'required', 'on' => 'staff'],
             [['branch_id', 'company_id'], 'required', 'on' => 'employer'],
             [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
-            [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
-            [['job_looking_from'], 'safe'],
+            [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at','interest_level'], 'integer'],
+            [['job_looking_from','interest_level'], 'safe'],
             [['work_authorization_comment', 'looking_for', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string'],
@@ -99,7 +104,7 @@ class UserDetails extends \yii\db\ActiveRecord {
         $scenarios['staff'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['employer'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['recruiter'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
-        $scenarios['profile'] = ['first_name', 'last_name', 'email', 'looking_for', 'apt', 'street_no', 'street_address', 'city', 'ssn', 'dob', 'profile_pic', 'created_at', 'updated_at'];
+        $scenarios['profile'] = ['first_name', 'last_name', 'email', 'looking_for', 'apt', 'street_no', 'street_address', 'city', 'ssn', 'dob', 'profile_pic','interest_level', 'created_at', 'updated_at'];
         return $scenarios;
     }
 
@@ -132,6 +137,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'updated_at' => 'Updated At',
             'street_no' => 'Street No.',
             'street_address' => 'Street Address',
+            'interest_level' => 'Interest Level',
             'apt' => 'Suit/Apt',
             'city' => 'City',
             'zip_code' => 'Zip Code',

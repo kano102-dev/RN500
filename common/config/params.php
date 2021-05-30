@@ -25,4 +25,5 @@ return [
     'REFERENCE_TYPE' => [1 => 'Charge RN', 2 => 'RN Manager', 3 => 'DON', 4 => 'ADON', 5 => 'RN Supervisor', 6 => 'Chief Nursing Officer', 7 => 'NP', 8 => 'PA', 9 => 'APRN', 10 => 'MD', 11 => 'Other'],
     'CERTIFICATION_TYPE' => [1 => '(ABMP) Diagnostic Imaging',2 => '(ABMP) Hyperthermia',3 => '(ABMP) Medical Health',4 => '(ABMP) Radiation',5 => '(ABMP) Nuclear Medicine'],
     'DOCUMENT_TYPE' => [0 => 'Resume', 1 => 'Other'],
+    'INTERESTS_LEVEL' => ['' => 'Select Interest Level',   1 => 'Actively Looking', 2 => 'Open To Offers', 3 =>'Search on Hold'],
     ];
