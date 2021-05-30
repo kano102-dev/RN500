@@ -11,6 +11,6 @@ $form = ActiveForm::begin(['id' => 'approval-form']);
 
 <div class="form-group">
     <?= Html::button('Cancel', ['class' => 'btn btn-secondary', 'id' => "close", 'data-dismiss' => "modal"]) ?>
-    <?php echo Html::submitButton('Aprove', ['class' => 'btn btn-primary']) ?>
+    <?php echo Html::submitButton('Approve', ['class' => 'btn btn-primary']) ?>
 </div>
 <?php ActiveForm::end(); ?>
