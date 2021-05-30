@@ -65,7 +65,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $model->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
@@ -80,7 +80,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 <?= $form->field($companyMasterModel, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                                <?= $form->field($companyMasterModel, 'company_email')->textInput(['maxlength' => true, 'placeholder' => 'Email Id'])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
@@ -160,7 +160,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $employer->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
@@ -175,7 +175,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 <?= $form->field($recruiterCompany, 'company_name')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_name')])->label(false); ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($recruiterCompany, 'company_email')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('company_email')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'company_email')->textInput(['maxlength' => true, 'placeholder' => 'Email Id'])->label(false); ?>
                             </div>
                             <div class="formrow">
                                 <?=
@@ -255,21 +255,21 @@ use borales\extensions\phoneInput\PhoneInput;
                                             'template' => '{input}{error}',
                                         ])
                                         ->label(false)
-                                        ->textInput(['placeholder' => $recruiter->getAttributeLabel('email')])
+                                        ->textInput(['placeholder' => 'Email Id'])
                                 ?>
                             </div>
                             <?php echo Html::submitButton('Register', ['class' => 'btn btn-primary btn-block']) ?>
                             <?php \yii\bootstrap4\ActiveForm::end(); ?>
                         </div>
                     </div>
-                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManager->createUrl('auth/login'); ?>">Login Here</a></div>
+                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> Already a Member? <a href="<?= Yii::$app->urlManagerFrontend->createUrl('auth/login'); ?>">Login Here</a></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['auth/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['auth/get-cities']);
 $script = <<< JS
    $(document).on('change','#companymaster-state',function(){
         var state=$(this).val();

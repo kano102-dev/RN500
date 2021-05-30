@@ -105,8 +105,8 @@ class PaymentController extends Controller {
 
 
         $checkout_session = \Stripe\Checkout\Session::create([
-                    'success_url' => Yii::$app->urlManager->createAbsoluteUrl("payment/success") . '?session_id={CHECKOUT_SESSION_ID}',
-                    'cancel_url' => Yii::$app->urlManager->createAbsoluteUrl("payment/cancel"),
+                    'success_url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl("payment/success") . '?session_id={CHECKOUT_SESSION_ID}',
+                    'cancel_url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl("payment/cancel"),
                     'payment_method_types' => ['card'],
                     'mode' => 'payment',
                     'line_items' => [[

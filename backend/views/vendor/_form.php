@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 </div>
 
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['vendor/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['vendor/get-cities']);
 $script = <<< JS
    $(document).on('change','#vendor-state',function(){
         var state=$(this).val();

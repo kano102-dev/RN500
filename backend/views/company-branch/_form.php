@@ -186,7 +186,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['company-branch/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/get-cities']);
 $script = <<< JS
     $(document).on('change','#companybranch-state',function(){
         var state=$(this).val();

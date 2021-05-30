@@ -18,6 +18,10 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 ?>
 <style>
     .browse-jobs li p {line-height: 22px;color: #333;margin: 0;font-weight: 600}
+    .select2-container--krajee .select2-selection--multiple .select2-selection__choice{margin: 5px 0 0 3px;
+                                                                                       padding: 0 15px;}
+    .select2-container--krajee .select2-selection--multiple .select2-selection__choice__remove{margin: -5px 0 0 0px;}
+    .optionlist li span{right: 2px;}
 </style>
 
 <!-- Page Title start -->
@@ -118,7 +122,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                 echo Select2::widget([
                                     'name' => 'location',
                                     'value' => array_keys($selectedLocations),
-                                     'initValueText' => ($selectedLocations),
+                                    'initValueText' => ($selectedLocations),
 //                                     'data' =>$selectedLocations,
 //                                     'showToggleAll' => true,
                                     'hideSearch' => false,
@@ -131,9 +135,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     'pluginOptions' => [
 //                                          'tags' => true,
 //                                            'tokenSeparators' => [',', ' '],
-                                         'tags' => true,
+                                        'tags' => true,
 //                                          'tokenSeparators' => [],
-                                           'multiple' => true,
+                                        'multiple' => true,
                                         'allowClear' => true,
                                         'minimumInputLength' => 1,
                                         'ajax' => [
@@ -242,33 +246,33 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                 <div class="col-md-4 col-sm-4 employee-details">
                                     <h3><a href="#."><?= $model->title ?></a></h3>
                                     <p><?= $model->citiesName ?></p>
-                                    <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
+                                    <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at) == 0 ? "Today" : CommonFunction::dateDiffInDays($model->created_at) . " days ago"; ?></p>
                                     <p>Benefits starts from Day 1</p>
                                 </div>
                                 <div class="col-md-4 col-sm-4 employee-details">
-                                    <p>Estimated Pay: $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                    <p><b>Estimated Pay:</b> $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
                                     <br/>
-                                    <p>Response Time: within a day</p>
+                                    <p><b>Response Time:</b> within a day</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-9 col-sm-9">
                                     <p>&nbsp;</p>
                                     <div class="row">
-                                        <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
-                                        <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Starting Date</b> :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Shift</b> :</span> <?= $model->shift == 1 ? "Morning, Evening, Night, Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                        <div class="col-md-4 col-sm-12"><span><b>Job Type</b> :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-sm-3">
-                                    <div class="listbtn"><a href="<?= Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/view','id' => $model->id]) ?>">View Profile</a></div>
+                                    <div class="listbtn"><a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]) ?>">View Profile</a></div>
                                 </div>
                             </div>
                         </li>
                         <?php
                     }
                     if (count($models) <= 0) {
-                        echo "<h1>No Record Found</h1>";
+                        echo "<h1>No Leads Found</h1>";
                     }
                     ?>
                 </ul>
@@ -289,9 +293,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 $discipline_prams = isset($_GET['discipline']) ? implode(',', $_GET['discipline']) : '';
 $specialty_prams = isset($_GET['speciality']) ? implode(',', $_GET['speciality']) : '';
 $benefits_prams = isset($_GET['benefit']) ? implode(',', $_GET['benefit']) : '';
-$get_discipline_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-discipline']);
-$get_specialty_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-specialty']);
-$get_benefits_url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/get-benefits']);
+$get_discipline_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-discipline']);
+$get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-specialty']);
+$get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 

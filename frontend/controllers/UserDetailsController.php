@@ -178,6 +178,7 @@ class UserDetailsController extends Controller {
     public function actionProfile($id) {
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
+        
         $model->scenario = 'profile';
         $model->updated_at = time();
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
@@ -201,7 +202,7 @@ class UserDetailsController extends Controller {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = './uploads/user-details/profile/';
+            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
 
             if ($document_file) {
                 $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -400,7 +401,7 @@ class UserDetailsController extends Controller {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = './uploads/user-details/license/';
+            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/license/";
 
             if ($document_file) {
                 $model->document = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -463,7 +464,7 @@ class UserDetailsController extends Controller {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = './uploads/user-details/certification/';
+            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/certification/";
 
             if ($document_file) {
                 $model->document = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -523,7 +524,7 @@ class UserDetailsController extends Controller {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = './uploads/user-details/document/';
+            $uploadPath = \Yii::$app->basePath . "/web/uploads/user-details/document/";
 
             if ($document_file) {
                 $model->path = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -541,12 +542,6 @@ class UserDetailsController extends Controller {
                     $model->path = NULL;
                 }
             }
-            
-            
-        echo '<pre>';
-        print_r($model);
-        exit;
-
 
             if ($model->validate()) {
                 if ($model->save()) {
@@ -599,6 +594,8 @@ class UserDetailsController extends Controller {
         $postData = \Yii::$app->request->post();
         $deleteFlag = false;
         $message = '';
+        $uploadPath = '';
+        $file = '';
 
         if ($postData['document'] == 'licenses') {
             $model = Licenses::findOne($id);
@@ -616,11 +613,13 @@ class UserDetailsController extends Controller {
             $uploadPath = './uploads/user-details/document/';
             $file = $model->path;
         }
-
-        if (unlink($uploadPath . $file)) {
-            if ($model->delete()) {
-                Yii::$app->session->setFlash('success', $message . " Updated failed.");
-                $deleteFlag = true;
+        
+        if(file_exists($uploadPath . $file)){
+            if (unlink($uploadPath . $file)) {
+                if ($model->delete()) {
+                    Yii::$app->session->setFlash('success', $message . " Updated failed.");
+                    $deleteFlag = true;
+                }
             }
         }
 
@@ -632,7 +631,6 @@ class UserDetailsController extends Controller {
         $totalPercentage = 100;
 
         $hasCompletedUserDetails = 0;
-        $hasCompletedJobPrefernce = 0;
         $hasCompletedWE = 0;
         $hasCompletedEducation = 0;
         $hasCompletedLicense = 0;
@@ -642,7 +640,6 @@ class UserDetailsController extends Controller {
 
         $userDetails = UserDetails::findOne(['user_id' => \Yii::$app->user->id]);
         $workExperience = WorkExperience::findOne(['user_id' => \Yii::$app->user->id]);
-        $jobPreference = JobPreference::findOne(['user_id' => \Yii::$app->user->id]);
         $education = Education::findOne(['user_id' => \Yii::$app->user->id]);
         $license = Licenses::findOne(['user_id' => \Yii::$app->user->id]);
         $certification = Certifications::findOne(['user_id' => \Yii::$app->user->id]);
@@ -650,31 +647,29 @@ class UserDetailsController extends Controller {
         $reference = References::findOne(['user_id' => \Yii::$app->user->id]);
 
         if (isset($userDetails) && !empty($userDetails)) {
-            $hasCompletedUserDetails = 12.5;
+            $hasCompletedUserDetails = 14;
         }
-        if (isset($jobPreference) && !empty($jobPreference)) {
-            $hasCompletedJobPrefernce = 12.5;
-        }
+        
         if (isset($workExperience) && !empty($workExperience)) {
-            $hasCompletedWE = 12.5;
+            $hasCompletedWE = 14;
         }
         if (isset($education) && !empty($education)) {
-            $hasCompletedEducation = 12.5;
+            $hasCompletedEducation = 14;
         }
         if (isset($license) && !empty($license)) {
-            $hasCompletedLicense = 12.5;
+            $hasCompletedLicense = 14;
         }
         if (isset($certification) && !empty($certification)) {
-            $hasCompletedCertification = 12.5;
+            $hasCompletedCertification = 14;
         }
         if (isset($documents) && !empty($documents)) {
-            $hasCompletedDocuments = 12.5;
+            $hasCompletedDocuments = 14;
         }
         if (isset($reference) && !empty($reference)) {
-            $hasCompletedReference = 12.5;
+            $hasCompletedReference = 14;
         }
 
-        $percentage = ($hasCompletedUserDetails + $hasCompletedJobPrefernce + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
+        $percentage = ($hasCompletedUserDetails + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
 
         echo round($percentage, 0);
     }

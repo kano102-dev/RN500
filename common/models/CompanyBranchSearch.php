@@ -38,7 +38,7 @@ class CompanyBranchSearch extends CompanyBranch {
      * @return ActiveDataProvider
      */
     public function search($params) {
-        $query = CompanyBranch::find()->joinWith(['company','cityRef'])->where(['company_master.status' => 1]);
+        $query = CompanyBranch::find()->joinWith(['company', 'cityRef'])->where(['company_master.status' => 1]);
         if (!CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
             if (CommonFunction::isHoAdmin(\Yii::$app->user->identity->id)) {
                 $query->andWhere(['company_id' => \Yii::$app->user->identity->branch->company_id]);
@@ -48,7 +48,9 @@ class CompanyBranchSearch extends CompanyBranch {
         }
 
         // add conditions that should always apply here
-
+        if ((\Yii::$app->request->get("sort") == Null)) {
+            $query->orderBy(['created_at' => SORT_DESC]);
+        }
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

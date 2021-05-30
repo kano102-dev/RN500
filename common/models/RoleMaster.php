@@ -15,6 +15,7 @@ use Yii;
 class RoleMaster extends \yii\db\ActiveRecord {
 
     const RECRUITER_OWNER = 1;
+    const Employer_OWNER = 5;
 
     /**
      * {@inheritdoc}

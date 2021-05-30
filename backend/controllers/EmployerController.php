@@ -29,7 +29,7 @@ use yii\filters\AccessControl;
  */
 class EmployerController extends Controller {
 
-    public $title = "Employer";
+    public $title = "Employer Company";
     public $activeBreadcrumb, $breadcrumb;
 
     /**
@@ -76,14 +76,14 @@ class EmployerController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['employer/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['employer/index']),
         ];
     }
 
     public function actionIndex() {
         $searchModel = new UserDetailsSearch();
         $dataProvider = $searchModel->searchEmployer(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
@@ -147,6 +147,7 @@ class EmployerController extends Controller {
                             $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
                             if ($company_branch->save()) {
                                 $user = new User();
+                                $user->scenario = "create";
                                 $user->email = $userDetailModel->email;
                                 $user->type = User::TYPE_RECRUITER;
                                 $user->status = User::STATUS_PENDING;
@@ -177,14 +178,13 @@ class EmployerController extends Controller {
                     if ($is_error) {
                         $transaction->commit();
                         Yii::$app->session->setFlash("success", "Recruiter was added successfully.");
+                        return $this->redirect(['index']);
                     } else {
                         $transaction->rollBack();
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
-                } finally {
-                    return $this->redirect(['index']);
                 }
             }
         }
@@ -207,7 +207,7 @@ class EmployerController extends Controller {
     public function actionUpdate($id) {
         $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
-
+        $model->scenario = "create";
         $userDetailModel = isset($model->details) ? $model->details : [];
         $userDetailModel->scenario = 'employer';
         $userDetailModel->email = $model->email;
@@ -226,21 +226,17 @@ class EmployerController extends Controller {
                         $company_branch = CompanyBranch::find()->where(['company_id' => $companyMasterModel->id, 'is_default' => CompanyBranch::IS_DEFAULT_YES])->one();
                         $company_branch->setAttributes($companyMasterModel->getAttributes());
                         if ($company_branch->save()) {
-                            $user = clone $model;
-                            $user->email = $userDetailModel->email;
-                            $user->type = User::TYPE_EMPLOYER;
-                            $user->branch_id = $company_branch->id;
-                            if ($user->save()) {
+                            $model->type = User::TYPE_EMPLOYER;
+                            $model->branch_id = $company_branch->id;
+                            if ($model->save()) {
                                 $userDetailModel->branch_id = $company_branch->id;
                                 $userDetailModel->company_id = $companyMasterModel->id;
                                 $userDetailModel->user_id = $user->id;
                                 if ($userDetailModel->save()) {
                                     $transaction->commit();
                                     Yii::$app->session->setFlash("success", "Employer was updated successfully.");
+                                    return $this->redirect(['view', 'id' => $id]);
                                 } else {
-                                    echo "<pre/>";
-                                    print_r($userDetailModel->getErrors());
-                                    exit;
                                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                                 }
                             }
@@ -248,8 +244,6 @@ class EmployerController extends Controller {
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
-                } finally {
-                    return $this->redirect(['view', 'id' => $id]);
                 }
             }
         }

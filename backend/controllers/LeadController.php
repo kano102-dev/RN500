@@ -44,7 +44,7 @@ class LeadController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['lead/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['lead/index']),
         ];
     }
 
@@ -89,12 +89,11 @@ class LeadController extends Controller {
             'data' => []
         ];
         $i = $start + 1;
-        foreach ($dataProvider->query->all() as $key => $model) {
+        foreach ($dataProvider->query->all() as $key => $model) {            
             $id = $model->id;
 
             $actionDiv = '<a class="change-status"  modal-title="Edit Lead" href="javascript:void(0)" title="Edit lead" url="' . Url::to([Yii::$app->controller->id . '/edit/', 'id' => $model->id]) . '" data-pjax="0"><span class="fa fa-edit"></span></a> &nbsp;';
             $actionDiv .= '<a class="change-status"  modal-title="Approve Lead" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/approve/', 'id' => $model->id]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
-
 
             $response['data'][] = [
                 $i,
@@ -102,6 +101,8 @@ class LeadController extends Controller {
                 $model->title,
                 $model->recruiter_commission_type == 1 ? $model->recruiter_commission . "%" : "$" . $model->recruiter_commission,
                 "$" . $model->jobseeker_payment . "/" . Yii::$app->params['job.payment_type'][$model->payment_type],
+                $model->start_date,
+                $model->end_date,
                 $actionDiv
             ];
             $i++;
@@ -182,7 +183,7 @@ class LeadController extends Controller {
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->updated_by = Yii::$app->user->identity->id;
             if ($model->save(false)) {
-                Yii::$app->session->setFlash("success", "Lead was updated successfully.");
+                Yii::$app->session->setFlash("success", "Lead updated Successfully.");
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong");
             }

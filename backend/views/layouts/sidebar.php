@@ -9,7 +9,7 @@ $action = Yii::$app->controller->action->id;
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="<?= \yii\helpers\Url::home() ?>" class="brand-link">
-        <img src="<?= Yii::$app->urlManager->createUrl('//'); ?>/images/RN500_logo.jpg" alt="RN500" class="brand-image img-circle elevation-3"
+        <img src="<?= Yii::$app->urlManagerAdmin->createUrl('//'); ?>/images/RN500_logo.jpg" alt="RN500" class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">RN500</span>
     </a>
@@ -60,14 +60,14 @@ $action = Yii::$app->controller->action->id;
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id) : false
                     ],
                         [
-                        'label' => 'Recruiter',
+                        'label' => 'Recruiter Company',
                         'url' => ['recruiter/index'],
                         'icon' => 'users',
                         'active' => ($controller == "recruiter"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-view', Yii::$app->user->identity->id) : false
                     ],
                         [
-                        'label' => 'Employer',
+                        'label' => 'Employer Company',
                         'url' => ['employer/index'],
                         'icon' => 'hospital-alt',
                         'active' => ($controller == "employer"),
@@ -121,11 +121,17 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-check',
                         'active' => ($controller == "advertisement")
                     ],
-                        [
+                    [
                         'label' => 'Vendor',
                         'url' => ['/vendor'],
                         'icon' => 'user-check',
                         'active' => ($controller == "vendor")
+                    ],
+                    [
+                        'label' => 'Emergency',
+                        'url' => ['/emergency'],
+                        'icon' => 'user-check',
+                        'active' => ($controller == "emergency")
                     ],
 //                    [
 //                        'label' => 'Starter Pages',

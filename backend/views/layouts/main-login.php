@@ -16,7 +16,7 @@ backend\assets\PluginAsset::register($this)->add(['fontawesome', 'icheck-bootstr
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>RN500</title>
-    <link rel="shortcut icon" href="<?= Yii::$app->urlManager->getBaseUrl() ?>/images/favicon.ico">
+    <link rel="shortcut icon" href="<?= Yii::$app->urlManagerAdmin->getBaseUrl() ?>/images/favicon.ico">
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php $this->registerCsrfMetaTags() ?>
@@ -26,7 +26,7 @@ backend\assets\PluginAsset::register($this)->add(['fontawesome', 'icheck-bootstr
 <?php  $this->beginBody() ?>
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?=Yii::$app->homeUrl?>"><img src="<?= Yii::$app->urlManager->getBaseUrl() ?>/images/RN500_logo.png" alt="RN500" width="50%" height="50%"></a>
+        <a href="<?=Yii::$app->homeUrl?>"><img src="<?= Yii::$app->urlManagerAdmin->getBaseUrl() ?>/images/RN500_logo.png" alt="RN500" width="50%" height="50%"></a>
     </div>
     <!-- /.login-logo -->
 

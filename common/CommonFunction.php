@@ -202,9 +202,24 @@ class CommonFunction {
         return $flag;
     }
 
-    // RETURN TRUE IF LOGGED_IN USER IS HO Admin ELSE FALSE
+    // RETURN BASE PATH OF PROFILE PICTURE FOLDER
     public static function getProfilePictureBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/profile";
+    }
+    
+    // RETURN BASE PATH OF DOCUMENTS FOLDER
+    public static function getDocumentBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/document";
+    }
+    
+    // RETURN BASE PATH OF LICENSES FOLDER
+    public static function getLicensesBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/license";
+    }
+    
+    // RETURN BASE PATH OF LICENSES FOLDER
+    public static function getCertificateBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/certification";
     }
 
 }

@@ -86,6 +86,11 @@ $frontendDir = yii\helpers\Url::base(true);
     </div>
     <div class="row">
         <div class="col-sm-12">
+            <?= $form->field($model, 'issue_by')->textInput(); ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
             <?= $form->field($model, 'compact_states')->checkbox(); ?>
         </div>
     </div>
@@ -112,7 +117,7 @@ $frontendDir = yii\helpers\Url::base(true);
 $DeleteUrl = '';
 
 if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManager->createUrl(['user-details/delete-document?id='. $model->id]);
+    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id='. $model->id]);
 }
 
 $script = <<< JS

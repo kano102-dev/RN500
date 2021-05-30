@@ -344,7 +344,7 @@ use common\CommonFunction;
     </div>
 </div>
 <?php
-$getCitiesUrl = Yii::$app->urlManager->createAbsoluteUrl(['job/get-cities']);
+$getCitiesUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['job/get-cities']);
 $script = <<< JS
     $(document).on('change','#leadmaster-state',function(){
         var state=$(this).val();

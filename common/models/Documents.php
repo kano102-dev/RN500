@@ -29,10 +29,10 @@ class Documents extends \yii\db\ActiveRecord
     {
         return [
             [['document_type','user_id'], 'required'],
-            ['path','required','message' => 'please select document!'],
+//            ['path','required','message' => 'please select document!'],
             [['document_type', 'user_id'], 'integer'],
             [['path'], 'string', 'max' => 255],
-            [['path'], 'file', 'skipOnEmpty' => false, 'extensions'=>['docx', 'pdf', 'doc'], 'checkExtensionByMimeType'=>false]
+//            [['path'], 'file', 'skipOnEmpty' => false, 'extensions'=>['docx', 'pdf', 'doc'], 'checkExtensionByMimeType'=>false]
         ];
     }
 

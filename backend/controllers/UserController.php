@@ -61,7 +61,7 @@ class UserController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['user/get-pending']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['user/index']),
         ];
     }
 
@@ -78,7 +78,7 @@ class UserController extends Controller {
         $request = Yii::$app->getRequest()->post();
         $start = (isset($request['start']) && $request['start'] != '') ? $request['start'] : 0;
         $draw = (isset($request['draw']) && $request['draw'] != '') ? $request['draw'] : 1;
-        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['AP_PAGE_LENGTH'];
+        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['PAGE_LENGTH'];
         $search = isset($request['search']['value']) ? trim($request['search']['value']) : '';
         $column = ( isset($request['order'][0]['column']) && isset($request['columns'][$request['order'][0]['column']]['name'])) ? trim($request['columns'][$request['order'][0]['column']]['name']) : 'created_at';
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
@@ -111,9 +111,9 @@ class UserController extends Controller {
         $i = $start + 1;
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
-            $actionDiv = '';
+            $actionDiv = '<a href="' . Url::to([Yii::$app->controller->id . '/view/', 'id' => $model->user_id]) . '" title="View"><span class="fa fa-eye"></span></a> &nbsp;';
             if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('user-approve', Yii::$app->user->identity->id)) {
-                $actionDiv = '<a class="change-status"  modal-title="Approve User" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_APPROVED]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
+                $actionDiv .= '<a class="change-status"  modal-title="Approve User" href="javascript:void(0)" title="Approve" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_APPROVED]) . '" data-pjax="0"><span class="fa fa-check-circle"></span></a> &nbsp;';
                 $actionDiv .= '<a class="change-status" modal-title="Reject User" href="javascript:void(0)" title="Reject" url="' . Url::to([Yii::$app->controller->id . '/change-status/', 'id' => $model->user_id, 'status' => User::STATUS_REJECTED]) . '" data-pjax="0"><span class="fa fa-times-circle"></span></a>';
             }
             $response['data'][] = [
@@ -135,7 +135,7 @@ class UserController extends Controller {
         $request = Yii::$app->getRequest()->post();
         $start = (isset($request['start']) && $request['start'] != '') ? $request['start'] : 0;
         $draw = (isset($request['draw']) && $request['draw'] != '') ? $request['draw'] : 1;
-        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['AP_PAGE_LENGTH'];
+        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['PAGE_LENGTH'];
         $search = isset($request['search']['value']) ? trim($request['search']['value']) : '';
         $column = ( isset($request['order'][0]['column']) && isset($request['columns'][$request['order'][0]['column']]['name'])) ? trim($request['columns'][$request['order'][0]['column']]['name']) : 'created_at';
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
@@ -169,7 +169,7 @@ class UserController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
-            $actionDiv = '';
+            $actionDiv = '<a href="' . Url::to([Yii::$app->controller->id . '/view/', 'id' => $model->user_id]) . '" title="View"><span class="fa fa-eye"></span></a>';
 
             $response['data'][] = [
                 $i,
@@ -179,6 +179,7 @@ class UserController extends Controller {
                 $model->companyNames,
                 Yii::$app->params['user.types'][$model->user->type],
                 $model->user->comment,
+                $actionDiv,
             ];
             $i++;
         }
@@ -190,7 +191,7 @@ class UserController extends Controller {
         $request = Yii::$app->getRequest()->post();
         $start = (isset($request['start']) && $request['start'] != '') ? $request['start'] : 0;
         $draw = (isset($request['draw']) && $request['draw'] != '') ? $request['draw'] : 1;
-        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['AP_PAGE_LENGTH'];
+        $length = (isset($request['length']) && $request['length'] != '') ? $request['length'] : Yii::$app->params['PAGE_LENGTH'];
         $search = isset($request['search']['value']) ? trim($request['search']['value']) : '';
         $column = ( isset($request['order'][0]['column']) && isset($request['columns'][$request['order'][0]['column']]['name'])) ? trim($request['columns'][$request['order'][0]['column']]['name']) : 'created_at';
         $dir = (isset($request['order'][0]['column']) && isset($request['order'][0]['dir'])) ? $request['order'][0]['dir'] : "DESC";
@@ -224,7 +225,7 @@ class UserController extends Controller {
         foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
-            $actionDiv = '';
+            $actionDiv = '<a href="' . Url::to([Yii::$app->controller->id . '/view/', 'id' => $model->user_id]) . '" title="View"><span class="fa fa-eye"></span></a>';
 
             $response['data'][] = [
                 $i,
@@ -234,6 +235,7 @@ class UserController extends Controller {
                 $model->companyNames,
                 Yii::$app->params['user.types'][$model->user->type],
                 $model->user->comment,
+                $actionDiv,
             ];
             $i++;
         }
@@ -260,6 +262,20 @@ class UserController extends Controller {
             return $this->redirect('index');
         }
         return $this->renderAjax('change-status', ['model' => $model]);
+    }
+
+    public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
+        $model = User::findOne($id);
+
+        $userDetailModel = isset($model->details) ? $model->details : [];
+        $userDetailModel->email = $model->email;
+        $companyMasterModel = isset($model->branch->company) ? $model->branch->company : [];
+        return $this->render('view', [
+                    'model' => $model,
+                    'userDetailModel' => $userDetailModel,
+                    'companyMasterModel' => $companyMasterModel,
+        ]);
     }
 
 }

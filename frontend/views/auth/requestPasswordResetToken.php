@@ -34,12 +34,12 @@ $this->title = 'RN500';
                                 </div>
 
                                 <div class="form-group">
-                                    <?= Html::submitButton('Send', ['class' => 'btn btn-primary']) ?>
+                                    <?= Html::submitButton('Reset Password', ['class' => 'btn btn-primary']) ?>
                                 </div>
 
                                 <?php ActiveForm::end(); ?>
                             </div>
-                            <div class="newuser"><i class="fa fa-lock" aria-hidden="true"></i> <a href="<?= Yii::$app->urlManager->createUrl('/auth/login'); ?>">Click here to login</a></div>
+                            <div class="newuser"><i class="fa fa-lock" aria-hidden="true"></i> <a href="<?= Yii::$app->urlManagerFrontend->createUrl('/auth/login'); ?>">Click here to login</a></div>
                         </div>
                     </div>
                 </div>

@@ -70,7 +70,7 @@ class CompanyBranchController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['company-branch/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/index']),
         ];
     }
 
@@ -129,11 +129,11 @@ class CompanyBranchController extends Controller {
             }
         }
 
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
 
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
@@ -143,7 +143,7 @@ class CompanyBranchController extends Controller {
                 if (empty($companyBranchModel->company_id)) {
                     $companyBranchModel->company_id = Yii::$app->user->identity->branch->company_id;
                 }
-                $companyBranchModel->is_default = CompanyBranch::IS_DEFAULT_YES;
+                $companyBranchModel->is_default = CompanyBranch::IS_DEFAULT_NO;
                 $companyBranchModel->created_at = $companyBranchModel->updated_at = CommonFunction::currentTimestamp();
                 $userDetailModel->created_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
                 if ($companyBranchModel->save()) {
@@ -219,11 +219,11 @@ class CompanyBranchController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
         if ($companyBranchModel->load(Yii::$app->request->post()) && $userDetailModel->load(Yii::$app->request->post())) {
             $is_success = false;

@@ -38,7 +38,7 @@ class SpecialityController extends Controller
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['speciality/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['speciality/index']),
         ];
     }
 

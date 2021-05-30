@@ -21,10 +21,11 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <meta charset="<?= Yii::$app->charset ?>">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="<?= Yii::$app->urlManager->createUrl('//'); ?>/images/favicon.ico">
+        <link rel="shortcut icon" href="<?= Yii::$app->urlManagerAdmin->createUrl('//'); ?>/images/favicon.ico">
         <?php $this->registerCsrfMetaTags() ?>
         <title>RN500</title>
         <link rel="stylesheet" href="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.css">
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <?php $this->head() ?>
     </head>
     <body class="hold-transition sidebar-mini">

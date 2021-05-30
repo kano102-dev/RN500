@@ -7,16 +7,20 @@ use kartik\date\DatePicker;
 $is_otp_sent = $model->is_otp_sent;
 ?>
 <style>
-    .field_icon{
+    .field_icon {
         float: right;
-        margin-top: -24px;
+        margin-top: -27px;
+        margin-right: 10px;
     }
 </style>
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-2">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-6">
                 <div class="userccount">
+                    <h5>Change Password</h5>
                     <div class="formpanel"> 
                         <?php $form = ActiveForm::begin(); ?>
                         <div class="row">
@@ -82,6 +86,8 @@ $is_otp_sent = $model->is_otp_sent;
 
                     </div>
                 </div>
+            </div>
+            <div class="col-md-3">
             </div>
         </div>
     </div>

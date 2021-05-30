@@ -16,7 +16,8 @@ $is_otp_sent = $model->is_otp_sent;
     }
     .field_icon{
         float: right;
-        margin-top: -24px;
+        margin-top: -27px;
+        margin-right:10px;
     }
 </style>
 <div class="listpgWraper">
@@ -24,7 +25,7 @@ $is_otp_sent = $model->is_otp_sent;
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
-                    <h5>User Login</h5>
+                    <h5>User Sign In</h5>
                     <!-- login form -->
                     <div class="formpanel">
                         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form', 'options' => ['autocomplete' => 'off']]) ?>
@@ -36,7 +37,7 @@ $is_otp_sent = $model->is_otp_sent;
                                         'template' => '{input}{error}',
                                     ])
                                     ->label(false)
-                                    ->textInput(['placeholder' => $model->getAttributeLabel('username'), 'readOnly' => $is_otp_sent])
+                                    ->textInput(['placeholder' => 'Email Id', 'readOnly' => $is_otp_sent])
                             ?>
                         </div>
                         <div class="formrow">
@@ -66,13 +67,13 @@ $is_otp_sent = $model->is_otp_sent;
                             ?>
 
                         </div>
-                        <?php echo Html::submitButton('Login', ['class' => 'btn btn-primary btn-block']) ?>
+                        <?php echo Html::submitButton('Sign In', ['class' => 'btn btn-primary btn-block']) ?>
                         <?php \yii\bootstrap4\ActiveForm::end(); ?>
                     </div>
                     <!-- login form  end--> 
                     <!-- sign up form -->
-                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> New User? <a href="<?= Yii::$app->urlManager->createUrl('/auth/register'); ?>">Register Here</a></div>
-                    <div class="newuser"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Forgot Password? <a href="<?= Yii::$app->urlManager->createUrl('/auth/request-password-reset'); ?>">Click Here</a></div>
+                    <div class="newuser"><i class="fa fa-user" aria-hidden="true"></i> New User? <a href="<?= Yii::$app->urlManagerFrontend->createUrl('/auth/register'); ?>">Register Here</a></div>
+                    <div class="newuser"><i class="fa fa-unlock-alt" aria-hidden="true"></i> Forgot Password? <a href="<?= Yii::$app->urlManagerFrontend->createUrl('/auth/request-password-reset'); ?>">Click Here</a></div>
                     <!-- sign up form end--> 
 
                 </div>

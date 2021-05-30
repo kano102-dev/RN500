@@ -74,7 +74,7 @@ class StaffController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManager->createAbsoluteUrl(['staff/index']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['staff/index']),
         ];
     }
 
@@ -116,6 +116,7 @@ class StaffController extends Controller {
     public function actionCreate() {
         $this->activeBreadcrumb = "Create";
         $model = new User();
+        $model->scenario = "create";
         $userDetailModel = new UserDetails();
         $userDetailModel->scenario = 'staff';
 
@@ -127,35 +128,36 @@ class StaffController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
         $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $city = [];
-        if ($userDetailModel->load(Yii::$app->request->post())) {
+        $branchList = [];
+        if ($userDetailModel->load(Yii::$app->request->post()) && $model->load(Yii::$app->request->post())) {
+            $city = ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->state]), 'id', 'city');
+            $branchList = ArrayHelper::map(CompanyBranch::findAll(['company_id' => $userDetailModel->company_id]), 'id', 'branch_name');
             $is_error = 0;
             $userDetailModel->created_at = CommonFunction::currentTimestamp();
             $userDetailModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability'])) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    $user = new User();
-                    $user->email = $userDetailModel->email;
-                    $user->role_id = $userDetailModel->role_id;
-                    $user->status = User::STATUS_APPROVED;
+                    $model->role_id = $userDetailModel->role_id;
+                    $model->status = User::STATUS_APPROVED;
                     if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
-                        $user->branch_id = \Yii::$app->user->identity->branch_id;
+                        $model->branch_id = \Yii::$app->user->identity->branch_id;
                     } else {
-                        $user->branch_id = $userDetailModel->branch_id;
+                        $model->branch_id = $userDetailModel->branch_id;
                     }
-                    $branch = CompanyBranch::findOne(['id' => $user->branch_id]);
-                    $user->type = $branch->company->type == 0 ? User::TYPE_EMPLOYER : User::TYPE_RECRUITER;
-                    $user->is_owner = User::OWNER_NO;
-                    if ($user->save()) {
-                        $userDetailModel->user_id = $user->id;
+                    $branch = CompanyBranch::findOne(['id' => $model->branch_id]);
+                    $model->type = $branch->company->type == 0 ? User::TYPE_EMPLOYER : User::TYPE_RECRUITER;
+                    $model->is_owner = User::OWNER_NO;
+                    if ($model->save()) {
+                        $userDetailModel->user_id = $model->id;
                         $unique_id = CommonFunction::generateRandomString();
                         $details = UserDetails::findOne(['unique_id' => $unique_id]);
                         if (!empty($details)) {
@@ -165,10 +167,10 @@ class StaffController extends Controller {
                         if ($userDetailModel->save()) {
                             $is_error = 1;
                             $resetPasswordModel = new \common\models\PasswordResetRequestForm();
-                            $resetPasswordModel->email = $user->email;
+                            $resetPasswordModel->email = $model->email;
                             $is_welcome_mail = 1;
                             if ($resetPasswordModel->sendEmail($is_welcome_mail)) {
-                                CommonFunction::sendWelcomeMail($user);
+                                CommonFunction::sendWelcomeMail($model);
                                 $is_error = 1;
                             }
                         }
@@ -176,6 +178,7 @@ class StaffController extends Controller {
                     if ($is_error) {
                         $transaction->commit();
                         Yii::$app->session->setFlash("success", "Staff added successfully.");
+                        return $this->redirect(['index']);
                     } else {
                         $transaction->rollBack();
                         Yii::$app->session->setFlash("warning", "Something went wrong.");
@@ -183,14 +186,10 @@ class StaffController extends Controller {
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
-                } finally {
-                    return $this->redirect(['index']);
                 }
             }
         }
-
-
-        return $this->render('_form', [
+        return $this->render('_form', ['model' => $model, 'branchList' => $branchList,
                     'userDetailModel' => $userDetailModel, 'companyList' => $companyList,
                     'states' => $states, 'city' => $city, 'roles' => $roles
         ]);
@@ -206,6 +205,7 @@ class StaffController extends Controller {
     public function actionUpdate($id) {
         $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
+        $model->scenario = "create";
         $userDetailModel = isset($model->details) ? $model->details : [];
         $userDetailModel->scenario = 'staff';
 
@@ -221,43 +221,40 @@ class StaffController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->all(), 'id', function ($data) {
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
                     return $data->role_name . "-" . $data->company->company_name;
                 });
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            $roles = ArrayHelper::map(\common\models\RoleMaster::findAll(['company_id' => \Yii::$app->user->identity->branch->company_id]), 'id', 'role_name');
+            $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
         $branchList = ArrayHelper::map(CompanyBranch::find()->where(['company_id' => $model->branch->company_id])->all(), 'id', 'branch_name');
         $userDetailModel->email = $model->email;
         $states = ArrayHelper::map(States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $city = !empty($userDetailModel->cityRef->state_id) ? ArrayHelper::map(Cities::findAll(['state_id' => $userDetailModel->cityRef->state_id]), 'id', 'city') : [];
         $userDetailModel->state = !empty($userDetailModel->cityRef->state_id) ? $userDetailModel->cityRef->state_id : '';
-        if ($userDetailModel->load(Yii::$app->request->post())) {
+        if ($userDetailModel->load(Yii::$app->request->post()) && $model->load(Yii::$app->request->post())) {
             $userDetailModel->updated_at = CommonFunction::currentTimestamp();
             if ($userDetailModel->validate(['first_name', 'last_name', 'mobile_no', 'profile_pic', 'current_position', 'speciality', 'job_title', 'job_looking_from', 'travel_preference', 'ssn', 'work_authorization', 'work_authorization_comment', 'license_suspended', 'professional_liability'])) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    $user = clone $model;
-                    $user->email = $userDetailModel->email;
-                    $user->role_id = $userDetailModel->role_id;
+                    $model->role_id = $userDetailModel->role_id;
                     if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
-                        $user->branch_id = \Yii::$app->user->identity->branch_id;
+                        $model->branch_id = \Yii::$app->user->identity->branch_id;
                     } else {
-                        $user->branch_id = $userDetailModel->branch_id;
+                        $model->branch_id = $userDetailModel->branch_id;
                     }
-                    if ($user->save()) {
-                        $userDetailModel->user_id = $user->id;
+                    if ($model->save()) {
+                        $userDetailModel->user_id = $model->id;
                         if ($userDetailModel->save()) {
                             $transaction->commit();
                             Yii::$app->session->setFlash("success", "Details updated successfully.");
+                            return $this->redirect(['index']);
                         } else {
                             Yii::$app->session->setFlash("warning", "Something went wrong.");
                         }
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
-                } finally {
-                    return $this->redirect(['index']);
                 }
             }
         }

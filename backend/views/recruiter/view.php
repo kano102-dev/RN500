@@ -28,6 +28,7 @@ $this->params['breadcrumbs'][] = "View";
                         'company_name',
                         'company_email',
                         'company_mobile',
+                        'employer_identification_number',
                         'street_no',
                         'street_address',
                         'apt',
@@ -50,7 +51,7 @@ $this->params['breadcrumbs'][] = "View";
             </div>
 
             <div class="col-6">
-                <h4> User Details </h4>
+                <h4> Owner Details </h4>
                 <?=
                 DetailView::widget([
                     'model' => $userDetailModel,
