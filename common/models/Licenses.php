@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use common\models\User;
+
 /**
  * This is the model class for table "licenses".
  *
@@ -20,38 +21,35 @@ use common\models\User;
  *
  * @property User $user
  */
-class Licenses extends \yii\db\ActiveRecord
-{
+class Licenses extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'licenses';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['license_name', 'expiry_date', 'user_id','issue_by'], 'required'],
-            [['issuing_state', 'compact_states', 'verified', 'user_id'], 'integer'],
-            [['license_name', 'license_number', 'issue_by'], 'string', 'max' => 250],
-            [['document'], 'string', 'max' => 255],
-            [['expiry_date'], 'string', 'max' => 50],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-            [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
-            [['document'], 'file', 'skipOnEmpty' => true, 'extensions'=>['png', 'jpg', 'jpeg'], 'checkExtensionByMimeType'=>false]
+                [['license_name', 'expiry_date', 'user_id', 'issue_by'], 'required'],
+                [['issuing_state', 'compact_states', 'verified', 'user_id'], 'integer'],
+                [['license_name', 'license_number', 'issue_by'], 'string', 'max' => 250],
+                [['document'], 'string', 'max' => 255],
+                [['expiry_date'], 'string', 'max' => 50],
+                [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+                [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+                [['document'], 'file', 'skipOnEmpty' => true, 'extensions' => ['png', 'jpg', 'jpeg'], 'checkExtensionByMimeType' => false]
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'issuing_state' => 'Issuing State',
@@ -71,8 +69,24 @@ class Licenses extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getIssuingStateRef() {
+        return $this->hasOne(Cities::className(), ['id' => 'issuing_state']);
+    }
+
+    public function getStateName() {
+        return isset($this->issuingStateRef->stateRef->state) ? $this->issuingStateRef->stateRef->state : "";
+    }
+
+    public function getCityStateName() {
+        $name = '';
+        if ($this->issuingStateRef) {
+            $name .= $this->issuingStateRef->city . " - " . $this->getStateName();
+        }
+        return $name;
+    }
+
 }
