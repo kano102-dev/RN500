@@ -80,7 +80,7 @@ $(document).on("beforeSubmit", "#add-reference", function () {
             success: function (response){
                 try{
                     if(!response.error){
-                        $("#profile-modal").modal('hide');
+                        $("#commonModal").modal('hide');
                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
                         $(document).on("pjax:success", "#job-seeker", function (event) {
                             $.pjax.reload({'container': '#res-messages', timeout: 2000});

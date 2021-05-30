@@ -48,7 +48,10 @@ class References extends \yii\db\ActiveRecord
             [['first_name', 'last_name', 'email', 'relation'], 'string', 'max' => 250],
 //            [['mobile_no'], 'string', 'max' => 11],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+
             [['first_name','last_name','relation'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['first_name', 'title', 'last_name', 'mobile_no', 'email', 'relation'],'safe']
+
         ];
     }
 

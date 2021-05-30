@@ -20,7 +20,7 @@ $frontendDir = yii\helpers\Url::base(true);
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE']); ?>
+            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE'],['prompt' => 'Select Name']); ?>
         </div>
     </div>
     <div class="row mb-15">
@@ -136,7 +136,6 @@ $script = <<< JS
              processData: false,
              contentType: false,
              success: function (response){
-//                console.log(response);
                  try{
                      if(!response.error){
                          $("#commonModal").modal('hide');

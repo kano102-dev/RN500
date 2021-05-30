@@ -64,12 +64,18 @@ class ProfileController extends Controller {
                 $certification_type[] = ['value' => (string) $value, 'text' => $text];
             }
 
+            $certification_active_startus = [];
+            foreach (Yii::$app->params['CERTIFICATION_ACTIVE_STATUS'] as $value => $text) {
+                $certification_active_startus[] = ['value' => (string) $value, 'text' => $text];
+            }
+
             $data['document_type'] = $documents_type;
             $data['employment_type'] = $employment_type;
             $data['licenses_type'] = $licenses_type;
             $data['certification_type'] = $certification_type;
             $data['references_type'] = $references_type;
             $data['degree_type'] = $degree_type;
+            $data['certification_active_startus'] = $certification_active_startus;
             $code = 200;
             $msg = "success!!";
         } catch (\Exception $exc) {
@@ -256,7 +262,7 @@ class ProfileController extends Controller {
                 $oldProfilePicName = $model->profile_pic;
 
                 // IF PROFILE PICTURE WAS CHANGE/UPDATED 
-                if (isset($_FILES['update_profile_pic']) && !empty($_FILES['update_profile_pic'])) {
+                if (isset($_FILES['update_profile_pic']['name']) && !empty($_FILES['update_profile_pic']['name'])) {
                     // PREVENT FILE UPLOAD SIZE UPTO 2 MB AND TYPE MUST BE OF PNG, JPG
                     $isFileAttached = true;
                     $upoadingFile = $_FILES['update_profile_pic'];
@@ -299,6 +305,7 @@ class ProfileController extends Controller {
                         $model->updated_at = CommonFunction::currentTimestamp();
                         if ($model->update(false)) {
                             $code = 200;
+                            $data = ['token' => $this->token, 'first_name' => $model->first_name, 'last_name' => $model->last_name, 'email' => $this->email, 'profile_image' => !empty($model->profile_pic) ? $model->profile_pic : ''];
                             $msg = "Profile saved successfully.";
                         }
                     } else {
@@ -373,6 +380,10 @@ class ProfileController extends Controller {
       exit;
       }
      *
+     */
+
+    /*
+     * WORK EXPERIENCES APIs START
      */
 
     public function actionWorkExperienceDetail() {
@@ -495,6 +506,10 @@ class ProfileController extends Controller {
         exit;
     }
 
+    /*
+     * EDUCATIONS APIs START
+     */
+
     public function actionEducationDetail() {
         $data = [];
         $code = 202;
@@ -556,9 +571,6 @@ class ProfileController extends Controller {
                     $code = 200;
                     $msg = "Record saved successfully.";
                 } else {
-                    echo "<pre/>";
-                    print_r($model->getErrors());
-                    exit;
                     $code = 205;
                     $msg = "Something went wrong.";
                 }
@@ -612,6 +624,10 @@ class ProfileController extends Controller {
         exit;
     }
 
+    /*
+     * LICENSES APIs START
+     */
+
     public function actionLicensesDetail() {
         $data = [];
         $code = 202;
@@ -621,17 +637,18 @@ class ProfileController extends Controller {
         try {
             $loggedInUserId = $this->user_id;
             if (isset($id) && $id != '') {
-                $model = Licenses::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->asArray()->one();
+                $model = Licenses::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
                 if ($model !== null) {
-                    $data = array_map('strval', $model);
-                    if ($model['expiry_date'] != '') {
-                        $data['expiry_date'] = date("Y-m", strtotime($model['expiry_date']));
-                    }
+                    $data = array_map('strval', $model->getAttributes());
+                    $data['expiry_date'] = ($model->expiry_date != '') ? date("Y-m", strtotime($model['expiry_date'])) : '';
+
+                    $data['license_name_text'] = (isset(Yii::$app->params['LICENSE_TYPE'][$model->license_name])) ? Yii::$app->params['LICENSE_TYPE'][$model->license_name] : '';
+                    $data['issuing_state_name'] = $model->getCityStateName();
 
                     if ($model['document'] != '' && file_exists(CommonFunction::getLicensesBasePath() . "/" . $model['document'])) {
                         $data['document_url'] = Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/license/" . $model['document']]), true);
                     } else {
-                        $data['document_url'] = $model['document'] = "";
+                        $data['document_url'] = $data['document'] = "";
                     }
                     $code = 200;
                     $msg = "success!!";
@@ -654,39 +671,80 @@ class ProfileController extends Controller {
     }
 
     public function actionLicensesSubmit() {
+
         $data = [];
         $code = 202;
         $msg = "Required Data Missing in Request.";
         $request = array_map("trim", Yii::$app->request->post());
         extract($request);
         try {
+            $oldDocument = '';
+            $location = CommonFunction::getLicensesBasePath();
             $loggedInUserId = $this->user_id;
-            $model = new Education();
+            $fileUploadingError = "";
+            $isFileAttached = false;
+            $model = new Licenses();
             $model->user_id = $loggedInUserId;
             if (isset($id) && $id != '') {
-                $model = Education::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                $model = Licenses::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
                 if ($model == null) {
                     $code = 204;
                     $msg = "No record exists with such id.";
                     echo Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
                     exit;
+                } else {
+                    $oldDocument = $model->document;
                 }
             }
-            if (isset($institution) && $institution != '' && isset($year_complete) && $year_complete != '' && isset($degree_name) && $degree_name != '') {
-                $model->setAttributes($request);
-                if ($model->save()) {
-                    $code = 200;
-                    $msg = "Record saved successfully.";
+
+            // IF DOCUMENT WAS UPLOADED
+            if (isset($_FILES['document_file']['name']) && !empty($_FILES['document_file']['name'])) {
+
+                // PREVENT FILE UPLOAD SIZE UPTO 2 MB AND TYPE MUST BE OF PNG, JPG
+                $isFileAttached = true;
+                $upoadingFile = $_FILES['document_file'];
+                $maxsize = 1024 * 1024 * 2; // 2 UPTO MB
+                $acceptable = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (($upoadingFile['size'] >= $maxsize) || ($upoadingFile["size"] == 0)) {
+                    $fileUploadingError = 'File is too large. File must be less than 2 MB.';
+                }
+                if ((!in_array($upoadingFile['type'], $acceptable)) && (!empty($upoadingFile["type"]))) {
+                    $fileUploadingError = 'Invalid file type, only JPG, JPEG and PNG types are accepted.';
+                }
+                $path_parts = pathinfo($upoadingFile["name"]);
+                $extension = (isset($path_parts['extension'])) ? $path_parts['extension'] : "png";
+
+                if (!file_exists($location)) {
+                    FileHelper::createDirectory($location, 0777);
+                }
+
+                $fileName = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $extension;
+                if (!$fileUploadingError && move_uploaded_file($upoadingFile['tmp_name'], $location . "/" . $fileName)) {
+                    $model->document = $fileName;
+                }
+            }
+
+            if (!$fileUploadingError) {
+                if (isset($license_name) && $license_name != "" && isset($expiry_date) && $expiry_date != '' && isset($issue_by) && $issue_by != '') {
+                    $model->license_name = $license_name;
+                    $model->issue_by = $issue_by;
+                    $model->expiry_date = date('Y-m-d', strtotime($expiry_date));
+                    $model->verified = 0;
+                    $model->compact_states = (isset($compact_states) && $compact_states != '') ? $compact_states : 0;
+                    $model->license_number = (isset($license_number) && $license_number != '') ? $license_number : null;
+                    $model->issuing_state = (isset($issuing_state) && $issuing_state != '') ? $issuing_state : 0;
+                    if ($model->save(false)) {
+                        ($oldDocument != '') ? $this->deleteFile("$location/$oldDocument") : '';
+                        $code = 200;
+                        $msg = "Record saved successully.";
+                    }
                 } else {
-                    echo "<pre/>";
-                    print_r($model->getErrors());
-                    exit;
-                    $code = 205;
-                    $msg = "Something went wrong.";
+                    $code = 202;
+                    $msg = "Required Data Missing in Request : license_name, expiry_date or issue_by . ";
                 }
             } else {
-                $code = 201;
-                $msg = "Missing parameters : institution, year_complete, degree_name.";
+                $code = 203;
+                $msg = $fileUploadingError;
             }
         } catch (\Exception $exc) {
             $code = 500;
@@ -696,19 +754,6 @@ class ProfileController extends Controller {
         $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
         echo $response;
         exit;
-    }
-
-    public function deleteFile($absPathWithFilename) {
-        $flag = true;
-        try {
-            if (file_exists($absPathWithFilename)) {
-                $flag = FileHelper::unlink($absPathWithFilename);
-            }
-        } catch (\Exception $ex) {
-            $flag = true;
-        } finally {
-            return $flag;
-        }
     }
 
     public function actionLicensesDelete() {
@@ -745,6 +790,409 @@ class ProfileController extends Controller {
         $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
         echo $response;
         exit;
+    }
+
+    /*
+     * REFERENCES APIs START
+     */
+
+    public function actionReferenceDetail() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = References::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    $data = array_map('strval', $model->getAttributes());
+                    $data['title_name'] = (isset(Yii::$app->params['REFERENCE_TYPE'][$model->title])) ? Yii::$app->params['REFERENCE_TYPE'][$model->title] : '';
+                    $code = 200;
+                    $msg = "success!!";
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionReferenceSubmit() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            $model = new References();
+            $model->user_id = $loggedInUserId;
+            if (isset($id) && $id != '') {
+                $model = References::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model == null) {
+                    $code = 204;
+                    $msg = "No record exists with such id.";
+                    echo Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+                    exit;
+                }
+            }
+            if (isset($first_name) && $first_name != '' && isset($title) && $title != '' && isset($last_name) && $last_name != '' && isset($mobile_no) && $mobile_no != '' && isset($email) && $email != '' && isset($relation) && $relation != '') {
+                $model->setAttributes($request);
+                if ($model->save(false)) {
+                    $code = 200;
+                    $msg = "Record saved successfully.";
+                } else {
+                    $code = 205;
+                    $msg = "Something went wrong.";
+                }
+            } else {
+                $code = 201;
+                $msg = "Missing parameters : first_name, last_name, mobile_no, email, relation or title.";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionReferenceDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = References::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    if ($model->delete()) {
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    /*
+     * DOCUMENT APIs START
+     */
+
+    public function actionDocumentAdd() {
+
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        extract($request);
+        try {
+            $location = CommonFunction::getDocumentBasePath();
+            $loggedInUserId = $this->user_id;
+            $fileUploadingError = "";
+            $model = new Documents();
+            $model->user_id = $loggedInUserId;
+
+            // IF DOCUMENT WAS UPLOADED
+            if (isset($_FILES['document_file']['name']) && !empty($_FILES['document_file']['name'])) {
+
+                // PREVENT FILE UPLOAD SIZE UPTO 2 MB AND TYPE MUST BE OF PNG, JPG
+                $upoadingFile = $_FILES['document_file'];
+                $maxsize = 1024 * 1024 * 2; // 2 UPTO MB
+//                $acceptable = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (($upoadingFile['size'] >= $maxsize) || ($upoadingFile["size"] == 0)) {
+                    $fileUploadingError = 'File is too large. File must be less than 2 MB.';
+                }
+//                if ((!in_array($upoadingFile['type'], $acceptable)) && (!empty($upoadingFile["type"]))) {
+//                    $fileUploadingError = 'Invalid file type, only JPG, JPEG and PNG types are accepted.';
+//                }
+                $path_parts = pathinfo($upoadingFile["name"]);
+                $extension = (isset($path_parts['extension'])) ? $path_parts['extension'] : "png";
+
+                if (!file_exists($location)) {
+                    FileHelper::createDirectory($location, 0777);
+                }
+
+                $fileName = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $extension;
+                if (!$fileUploadingError && move_uploaded_file($upoadingFile['tmp_name'], $location . "/" . $fileName)) {
+                    $model->path = $fileName;
+                    $model->document_type = (isset($document_type) && $document_type) ? $document_type : '0';
+                    if ($model->save(false)) {
+                        $code = 200;
+                        $msg = "Record saved successully.";
+                    }
+                } else {
+                    $code = 203;
+                    $msg = $fileUploadingError;
+                }
+            } else {
+                $code = 202;
+                $msg = "Required Data Missing in Request : document_type or document_file. ";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionDocumentDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = Documents::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    if ($this->deleteFile(CommonFunction::getDocumentBasePath() . "/" . $model->path) && $model->delete()) {
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    /*
+     * CERTIFICATION APIs START
+     */
+
+    public function actionCertificationDetail() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = Certifications::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    $data = array_map('strval', $model->getAttributes());
+                    $data['certificate_name_text'] = (isset(Yii::$app->params['CERTIFICATION_TYPE'][$model->certificate_name])) ? Yii::$app->params['CERTIFICATION_TYPE'][$model->certificate_name] : '';
+                    $data['issuing_state_name'] = $model->getCityStateName();
+                    $data['expiry_date'] = ($model->expiry_date && $model->expiry_date != '1970-01-01' && $model->expiry_date != '0000-00-00') ? date('Y-m', strtotime($model->expiry_date)) : '';
+                    $data['certification_active_status'] = (isset(Yii::$app->params['CERTIFICATION_ACTIVE_STATUS'][$model->certification_active])) ? Yii::$app->params['CERTIFICATION_ACTIVE_STATUS'][$model->certification_active] : '';
+                    if ($model->document != '' && file_exists(CommonFunction::getCertificateBasePath() . "/" . $model->document)) {
+                        $data['document_url'] = Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/certification/" . $model->document]), true);
+                    } else {
+                        $data['document_url'] = $data['document'] = "";
+                    }
+                    $code = 200;
+                    $msg = "success!!";
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionCertificationSubmit() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        extract($request);
+        try {
+            $oldDocument = '';
+            $location = CommonFunction::getCertificateBasePath();
+            $loggedInUserId = $this->user_id;
+            $fileUploadingError = "";
+            $isFileAttached = false;
+            $model = new Certifications();
+            $model->user_id = $loggedInUserId;
+            if (isset($id) && $id != '') {
+                $model = Certifications::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model == null) {
+                    $code = 204;
+                    $msg = "No record exists with such id.";
+                    echo Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+                    exit;
+                } else {
+                    $oldDocument = $model->document;
+                }
+            }
+
+            // IF DOCUMENT WAS UPLOADED
+            if (isset($_FILES['document_file']['name']) && !empty($_FILES['document_file']['name'])) {
+
+                // PREVENT FILE UPLOAD SIZE UPTO 2 MB AND TYPE MUST BE OF PNG, JPG
+                $isFileAttached = true;
+                $upoadingFile = $_FILES['document_file'];
+                $maxsize = 1024 * 1024 * 2; // 2 UPTO MB
+//                $acceptable = ['image/jpeg', 'image/jpg', 'image/png'];
+                if (($upoadingFile['size'] >= $maxsize) || ($upoadingFile["size"] == 0)) {
+                    $fileUploadingError = 'File is too large. File must be less than 2 MB.';
+                }
+//                if ((!in_array($upoadingFile['type'], $acceptable)) && (!empty($upoadingFile["type"]))) {
+//                    $fileUploadingError = 'Invalid file type, only JPG, JPEG and PNG types are accepted.';
+//                }
+                $path_parts = pathinfo($upoadingFile["name"]);
+                $extension = (isset($path_parts['extension'])) ? $path_parts['extension'] : "png";
+
+                if (!file_exists($location)) {
+                    FileHelper::createDirectory($location, 0777);
+                }
+
+                $fileName = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $extension;
+                if (!$fileUploadingError && move_uploaded_file($upoadingFile['tmp_name'], $location . "/" . $fileName)) {
+                    $model->document = $fileName;
+                }
+            }
+
+            if (!$fileUploadingError) {
+                if (isset($certificate_name) && $certificate_name != '' && isset($issue_by) && $issue_by != '') {
+//                $model->setAttributes($request);
+                    $certification_active = isset($certification_active) ? $certification_active : "2";
+                    $expiry_date = isset($expiry_date) ? $expiry_date : "";
+                    $issuing_state = isset($issuing_state) ? $issuing_state : "";
+                    $issue_by = isset($issue_by) ? $issue_by : "";
+
+                    $model->certificate_name = $certificate_name;
+                    $model->certification_active = $certification_active;
+                    $model->expiry_date = ($certification_active == '1' && $expiry_date) ? date('Y-m', strtotime($expiry_date)) : '';
+                    $model->issuing_state = $issuing_state;
+                    $model->issue_by = $issue_by;
+                    if ($model->save(false)) {
+                        ($oldDocument != '') ? $this->deleteFile("$location/$oldDocument") : '';
+                        $code = 200;
+                        $msg = "Record saved successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "Something went wrong.";
+                    }
+                } else {
+                    $code = 201;
+                    $msg = "Missing parameters : certificate_name, issue_by .";
+                }
+            } else {
+                $code = 203;
+                $msg = $fileUploadingError;
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionCertificationDelete() {
+        $data = [];
+        $code = 202;
+        $msg = "Required Data Missing in Request.";
+        $request = Yii::$app->request->post();
+        extract($request);
+        try {
+            $loggedInUserId = $this->user_id;
+            if (isset($id) && $id != '') {
+                $model = Certifications::find()->where(['id' => $id, 'user_id' => $loggedInUserId])->one();
+                if ($model !== null) {
+                    $documentName = $model->document;
+                    if ($model->delete()) {
+                        ($documentName) ? $this->deleteFile(CommonFunction::getCertificateBasePath() . "/" . $documentName) : '';
+                        $code = 200;
+                        $msg = "Record was deleted successfully.";
+                    } else {
+                        $code = 205;
+                        $msg = "something went wrong.";
+                    }
+                } else {
+                    $code = 204;
+                    $msg = "No record exists.";
+                }
+            } else {
+                $code = 204;
+                $msg = "Missing parameter : id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function deleteFile($absPathWithFilename) {
+        $flag = true;
+        try {
+            if (file_exists($absPathWithFilename)) {
+                $flag = FileHelper::unlink($absPathWithFilename);
+            }
+        } catch (\Exception $ex) {
+            $flag = true;
+        } finally {
+            return $flag;
+        }
     }
 
 }

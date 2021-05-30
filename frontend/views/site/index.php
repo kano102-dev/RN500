@@ -1,6 +1,8 @@
 <?php
 /* @var $this yii\web\View */
 
+use common\CommonFunction;
+
 $this->title = 'My Yii Application';
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $backendDir = Yii::$app->assetManager->getPublishedUrl('@backend/');
@@ -25,11 +27,11 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
 <!--<div class="listpgWraper">-->
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
+    <!--    <ol class="carousel-indicators">
+            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#myCarousel" data-slide-to="1"></li>
+            <li data-target="#myCarousel" data-slide-to="2"></li>
+        </ol>-->
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner">
@@ -39,14 +41,14 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
     </div>
 
     <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right"></span>
-        <span class="sr-only">Next</span>
-    </a>
+    <!--    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+            <span class="sr-only">Next</span>
+        </a>-->
 </div>
 <!-- slider End --> 
 
@@ -85,11 +87,17 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                             <?php if (file_exists(Yii::getAlias('@frontend')."/web/uploads/advertisement/" . $value['icon'])) { ?>
                                 <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>">
                             <?php } ?>
-                        <?php } else { ?>
-                            <video width="350" height="250" controls>
-                                <source src="<?= $value['video_link'] ?>">
-                            </video>
-                        <?php } ?>
+                            <?php
+                        } else {
+                            if (isset($value['video_link']) && !empty($value['video_link'])) {
+                                ?>
+                                <video width="350" height="250" controls>
+                                    <source src="<?= $value['video_link'] ?>">
+                                </video>
+                            <?php
+                            }
+                        }
+                        ?>
                         <p><?= $value['name'] ?></p>
                         <p>&nbsp;</p>
                     </div>
@@ -97,7 +105,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                     $i++;
                 }
                 ?>
-            <?php } ?>
+<?php } ?>
         </div>
         <div class="row">
             <div class="col-md-12 text-center" id="viewFTypeMore">
@@ -107,7 +115,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                     <?php if (count($advertisment) > 3) { ?>
                         <a href="#" class="wp_view_more btn btn-info">View More</a>
                     <?php } ?>
-                <?php } ?>
+<?php } ?>
             </div>
         </div>
     </div>
@@ -117,154 +125,52 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
 <div class="section">
     <div class="container"> 
         <div class="col-md-12 col-sm-12"> 
-            <ul class="searchList">
-                <li>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="jobimg"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/200-150x150.jpeg" alt="Job Name" /></div>
-                            <div class="jobinfo">
-                                <h3><a href="#.">Employer Name</a></h3>
-                                <div class="companyName">Staffing Company</div>
-                                <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
-                                <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
+            <ul class="searchList browse-jobs">
+<?php foreach ($leadModels as $model) { ?>
+                    <!-- Candidate -->
+                    <li>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-4">
+                                <div class="jobimg"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Candidate Name" /></div><br/><br/>
+                                <div class="jobinfo">
+                                    <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605;</div>
+                                    <!--<div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>-->
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>Title of Job</p>
-                            <p>City, State</p>
-                            <p>Posted X days ago</p>
-                            <p>Benefits starts from Day 1</p>
-                            <p>Employee Assistance</p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>$XX – XX/hour OR</p>
-                            <p>$XX – XX/weekly</p>
-                            <p>Estimated Pay</p>
-                            <p>Response Time: within a day</p>
-                            <div class="listbtn"><a href="#.">Apply Now</a></div>
-                        </div>
-                    </div>
-                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp</p>
-                </li>
-                <li>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="jobimg"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/200-150x150.jpeg" alt="Job Name" /></div>
-                            <div class="jobinfo">
-                                <h3><a href="#.">Employer Name</a></h3>
-                                <div class="companyName">Staffing Company</div>
-                                <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
-                                <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
+                            <div class="col-md-4 col-sm-4 employee-details">
+                                <h3><a href="#."><?= $model->title ?></a></h3>
+                                <p><?= $model->citiesName ?></p>
+                                <p>Posted <?= CommonFunction::dateDiffInDays($model->created_at); ?> days ago</p>
+                                <p>Benefits starts from Day 1</p>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>Title of Job</p>
-                            <p>City, State</p>
-                            <p>Posted X days ago</p>
-                            <p>Benefits starts from Day 1</p>
-                            <p>Employee Assistance</p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>$XX – XX/hour OR</p>
-                            <p>$XX – XX/weekly</p>
-                            <p>Estimated Pay</p>
-                            <p>Response Time: within a day</p>
-                            <div class="listbtn"><a href="#.">Apply Now</a></div>
-                        </div>
-                    </div>
-                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp</p>
-                </li>
-                <li>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="jobimg"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/200-150x150.jpeg" alt="Job Name" /></div>
-                            <div class="jobinfo">
-                                <h3><a href="#.">Employer Name</a></h3>
-                                <div class="companyName">Staffing Company</div>
-                                <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
-                                <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
+                            <div class="col-md-4 col-sm-4 employee-details">
+                                <p><b>Estimated Pay:</b> $<?= $model->jobseeker_payment ?>/<?= Yii::$app->params['job.payment_type'][$model->payment_type] ?></p>
+                                <br/>
+                                <p><b>Response Time:</b> within a day</p>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>Title of Job</p>
-                            <p>City, State</p>
-                            <p>Posted X days ago</p>
-                            <p>Benefits starts from Day 1</p>
-                            <p>Employee Assistance</p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>$XX – XX/hour OR</p>
-                            <p>$XX – XX/weekly</p>
-                            <p>Estimated Pay</p>
-                            <p>Response Time: within a day</p>
-                            <div class="listbtn"><a href="#.">Apply Now</a></div>
-                        </div>
-                    </div>
-                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp</p>
-                </li>
-                <li>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="jobimg"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/200-150x150.jpeg" alt="Job Name" /></div>
-                            <div class="jobinfo">
-                                <h3><a href="#.">Employer Name</a></h3>
-                                <div class="companyName">Staffing Company</div>
-                                <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
-                                <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
+                        <div class="row">
+                            <div class="col-md-9 col-sm-9">
+                                <p>&nbsp;</p>
+                                <div class="row">
+                                    <div class="col-md-4 col-sm-12"><span><b>Starting Date</b> :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                    <div class="col-md-4 col-sm-12"><span><b>Shift</b> :</span> <?= $model->shift == 1 ? "Morning, Evening, Night, Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                    <div class="col-md-4 col-sm-12"><span><b>Job Type</b> :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                </div>
                             </div>
-                            <div class="clearfix"></div>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>Title of Job</p>
-                            <p>City, State</p>
-                            <p>Posted X days ago</p>
-                            <p>Benefits starts from Day 1</p>
-                            <p>Employee Assistance</p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>$XX – XX/hour OR</p>
-                            <p>$XX – XX/weekly</p>
-                            <p>Estimated Pay</p>
-                            <p>Response Time: within a day</p>
-                            <div class="listbtn"><a href="#.">Apply Now</a></div>
-                        </div>
-                    </div>
-                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp</p>
-                </li>
-                <li>
-                    <div class="row">
-                        <div class="col-md-4 col-sm-4">
-                            <div class="jobimg"><img src="https://admissions.ncsu.edu/wp-content/uploads/sites/19/2020/08/200-150x150.jpeg" alt="Job Name" /></div>
-                            <div class="jobinfo">
-                                <h3><a href="#.">Employer Name</a></h3>
-                                <div class="companyName">Staffing Company</div>
-                                <div class="companyName">5.0 &#x2605;&#x2605;&#x2605;&#x2605;&#x2605; (XXX)</div>
-                                <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
+                            <div class="col-md-3 col-sm-3">
+                                <div class="listbtn"><a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]) ?>">View Profile</a></div>
                             </div>
-                            <div class="clearfix"></div>
                         </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>Title of Job</p>
-                            <p>City, State</p>
-                            <p>Posted X days ago</p>
-                            <p>Benefits starts from Day 1</p>
-                            <p>Employee Assistance</p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 employee-details">
-                            <p>$XX – XX/hour OR</p>
-                            <p>$XX – XX/weekly</p>
-                            <p>Estimated Pay</p>
-                            <p>Response Time: within a day</p>
-                            <div class="listbtn"><a href="#.">Apply Now</a></div>
-                        </div>
-                    </div>
-                    <p><span>Starting Date :</span> Weeks/Months/Year <span>Shift :</span> Travel/Permanent/Temp</p>
-                </li>
+                    </li>
+                    <?php
+                }
+                if (count($leadModels) <= 0) {
+                    echo "<h1>No Leads Found</h1>";
+                }
+                ?>
             </ul>
-
         </div>
     </div>
 </div>

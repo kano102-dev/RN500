@@ -19,6 +19,7 @@ class Controller extends ActiveController {
 
     public $email;
     public $user_id;
+    public $token;
 
     /**
      * check allowed domains and ip addresse for media syndication
@@ -48,6 +49,7 @@ class Controller extends ActiveController {
                                 } else {
                                     $this->user_id = $user->id;
                                     $this->email = $user->email;
+                                    $this->token = $jwtToken;
                                     return parent::beforeAction($action);
                                 }
                             } else {

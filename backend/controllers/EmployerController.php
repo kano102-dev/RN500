@@ -29,7 +29,7 @@ use yii\filters\AccessControl;
  */
 class EmployerController extends Controller {
 
-    public $title = "Employer";
+    public $title = "Employer Company";
     public $activeBreadcrumb, $breadcrumb;
 
     /**
@@ -83,7 +83,7 @@ class EmployerController extends Controller {
     public function actionIndex() {
         $searchModel = new UserDetailsSearch();
         $dataProvider = $searchModel->searchEmployer(Yii::$app->request->queryParams);
-
+        
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,

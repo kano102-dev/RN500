@@ -216,5 +216,10 @@ class CommonFunction {
     public static function getLicensesBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/license";
     }
+    
+    // RETURN BASE PATH OF LICENSES FOLDER
+    public static function getCertificateBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/user-details/certification";
+    }
 
 }

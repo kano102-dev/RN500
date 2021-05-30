@@ -60,14 +60,14 @@ $action = Yii::$app->controller->action->id;
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id) : false
                     ],
                         [
-                        'label' => 'Recruiter',
+                        'label' => 'Recruiter Company',
                         'url' => ['recruiter/index'],
                         'icon' => 'users',
                         'active' => ($controller == "recruiter"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('recruiter-view', Yii::$app->user->identity->id) : false
                     ],
                         [
-                        'label' => 'Employer',
+                        'label' => 'Employer Company',
                         'url' => ['employer/index'],
                         'icon' => 'hospital-alt',
                         'active' => ($controller == "employer"),

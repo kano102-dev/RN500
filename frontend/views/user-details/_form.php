@@ -128,11 +128,11 @@ use common\models\User;
             <?php } ?>
         </div>
 
-        <?php // if (Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) { ?>
+        <?php if (Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) { ?>
             <div class="col-sm-6">
                 <?= $form->field($model, 'interest_level')->dropDownList(Yii::$app->params['INTERESTS_LEVEL']) ?>
             </div>
-        <?php // } ?>
+        <?php } ?>
     </div>
 
     <div class="form-group">
@@ -158,7 +158,7 @@ $(document).on("beforeSubmit", "#user-details", function () {
             success: function (response){
                 try{
                     if(!response.error){
-//                        $("#profile-modal").modal('hide');
+//                        $("#commonModal").modal('hide');
 //                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
 //                        $(document).on("pjax:success", "#job-seeker", function (event) {
 //                            $.pjax.reload({'container': '#res-messages', timeout: 2000});

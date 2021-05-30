@@ -23,6 +23,7 @@ use common\models\Education;
 use common\models\References;
 use common\models\UserDetails;
 use common\models\JobPreference;
+use common\models\LeadMaster;
 use yii\base\DynamicModel;
 
 /**
@@ -35,9 +36,25 @@ class SiteController extends Controller {
      */
     public function behaviors() {
         return [
+//            'access' => [
+//                'class' => AccessControl::className(),
+//                'only' => ['logout', 'signup'],
+//                'rules' => [
+//                    [
+//                        'actions' => ['signup'],
+//                        'allow' => true,
+//                        'roles' => ['?'],
+//                    ],
+//                    [
+//                        'actions' => ['logout'],
+//                        'allow' => true,
+//                        'roles' => ['@'],
+//                    ],
+//                ],
+//            ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','job-seeker'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -49,8 +66,15 @@ class SiteController extends Controller {
                         'allow' => true,
                         'roles' => ['@'],
                     ],
+                    [
+                        'actions' => ['job-seeker'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*'],
+                    ],
                 ],
             ],
+            
+            
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -82,9 +106,12 @@ class SiteController extends Controller {
      */
     public function actionIndex() {
         $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->asArray()->all();
-
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
+        $query->groupBy(['lead_master.id']);
+        $query->orderBy(['lead_master.created_at' => SORT_DESC]);
+        $leadModels = $query->limit(10)->all();
         return $this->render('index', [
-                    'advertisment' => $advertisment
+                    'advertisment' => $advertisment, 'leadModels' => $leadModels
         ]);
     }
 
@@ -300,8 +327,8 @@ class SiteController extends Controller {
 
         return $this->render('contact-us', ['model' => $model]);
     }
-    
-    public function actionAboutUs() { 
+
+    public function actionAboutUs() {
         return $this->render('about-us');
     }
 
