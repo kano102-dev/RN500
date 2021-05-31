@@ -468,6 +468,7 @@ class UserDetailsController extends Controller {
             $deleteFlag = true;
         } else {
             $model = new Certifications();
+            $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
@@ -532,6 +533,7 @@ class UserDetailsController extends Controller {
             $deleteFlag = true;
         } else {
             $model = new Documents();
+            $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
@@ -553,7 +555,7 @@ class UserDetailsController extends Controller {
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->path);
             }
 
-            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
+            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder ."/". $temp_document_file)) {
                 if ($document_upload_flag) {
                     unlink($uploadPath ."/". $temp_document_file);
                 } else {
@@ -564,6 +566,8 @@ class UserDetailsController extends Controller {
                     $model->path = NULL;
                 }
             }
+            
+            
 
             if ($model->validate()) {
                 if ($model->save()) {
