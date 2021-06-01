@@ -906,7 +906,16 @@ CHANGE `expiry_date` `expiry_date` date NOT NULL AFTER `document`;
 ALTER TABLE `licenses`
 CHANGE `license_name` `license_name` int(11) NOT NULL AFTER `issuing_state`;
 
-#  ***********************30-MAY-2021***BY MOHAN********************
+
+ALTER TABLE `advertisement`
+ADD `file_type` int(11) NULL AFTER `active_to`;
+
+ALTER TABLE `advertisement`
+ADD `video_link` varchar(255) COLLATE 'utf8mb4_general_ci' NULL AFTER `link_url`;
+
+
+
+#  ***********************30 / 31 -MAY-2021***BY MOHAN********************
 ALTER TABLE `user_details`
 ADD `interest_level` tinyint NULL COMMENT 'For Job seeker only ' AFTER `professional_liability`;
 
@@ -930,4 +939,4 @@ CREATE TABLE `lead_recruiter_job_seeker_mapping` (
 );
 
 
-#  ***********************30-MAY-2021***BY MOHAN******END***********
+#  ***********************30 / 31 -MAY-2021***BY MOHAN*******END*******************
