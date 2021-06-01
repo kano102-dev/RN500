@@ -21,6 +21,8 @@ use common\models\User;
  * @property string $end_date
  * @property string $organization_name
  * @property string $description
+ * @property string $updated_at
+ * @property string $created_at
  *
  * @property User $user
  */
@@ -39,7 +41,7 @@ class WorkExperience extends \yii\db\ActiveRecord {
     public function rules() {
         return [
                 [['user_id', 'start_date', 'employment_type'], 'required'],
-                [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working'], 'integer'],
+                [['user_id', 'discipline_id', 'specialty', 'employment_type', 'currently_working','created_at','updated_at'], 'integer'],
                 [['start_date', 'end_date', 'city'], 'safe'],
                 [['end_date'], 'required', "message" => "Please enter {attribute}.", 'when' => function($model) {
                     return $model->currently_working == 0;

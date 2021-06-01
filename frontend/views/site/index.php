@@ -6,7 +6,8 @@ use common\CommonFunction;
 $this->title = 'My Yii Application';
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $backendDir = Yii::$app->assetManager->getPublishedUrl('@backend/');
-$frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
+$frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertisement/";
+
 ?>
 <style>
     .employee-details p{margin: 0 !important;font-weight: 600;}
@@ -83,7 +84,7 @@ $frontendDir = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
                 <?php foreach ($advertisment as $key => $value) { ?>
                     <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
                         <?php if (isset($value['icon']) && !empty($value['icon'])) { ?>
-                            <?php if (file_exists($frontendDir . $value['icon'])) { ?>
+                            <?php if (file_exists(Yii::getAlias('@frontend')."/web/uploads/advertisement/" . $value['icon'])) { ?>
                                 <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>">
                             <?php } ?>
                             <?php
