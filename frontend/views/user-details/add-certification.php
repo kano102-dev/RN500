@@ -30,6 +30,29 @@ $frontendDir = yii\helpers\Url::base(true);
         </div>
     </div>
     <div class="row">
+        <div class="col-sm-12 expiry_date" style="display:none;">
+            <?php
+            echo $form->field($model, 'expiry_date')->widget(DatePicker::classname(), [
+                'name' => 'expiry_date',
+                'value' => date('d-M-Y'),
+                'options' => ['placeholder' => 'Enter Year..'],
+                'pluginOptions' => [
+                    'format' => 'mm-yyyy',
+                    'todayHighlight' => true,
+                    'autoclose' => true,
+                    'minViewMode' => 'months',
+                    'startView' => 'year',
+                ],
+                'pluginEvents' => [
+                    "changeDate" => "function(e) {
+
+                            }"
+                ]
+            ]);
+            ?>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'issue_by')->textInput(['maxlength' => true]) ?>
         </div>
@@ -68,27 +91,7 @@ $frontendDir = yii\helpers\Url::base(true);
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12 expiry_date" style="display:none;">
-            <?php
-            echo $form->field($model, 'expiry_date')->widget(DatePicker::classname(), [
-                'name' => 'expiry_date',
-                'value' => date('d-M-Y'),
-                'options' => ['placeholder' => 'Enter Year..'],
-                'pluginOptions' => [
-                    'format' => 'mm-yyyy',
-                    'todayHighlight' => true,
-                    'autoclose' => true,
-                    'minViewMode' => 'months',
-                    'startView' => 'year',
-                ],
-                'pluginEvents' => [
-                    "changeDate" => "function(e) {
-
-                            }"
-                ]
-            ]);
-            ?>
-        </div>
+        
         <div class="col-sm-12">
             <p>&nbsp;</p>
             <?= $form->field($model, 'document')->fileInput() ?>

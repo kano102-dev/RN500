@@ -46,7 +46,7 @@ class Licenses extends \yii\db\ActiveRecord {
             [['expiry_date'], 'string', 'max' => 50],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['license_number'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
-            [['document'], 'file', 'skipOnEmpty' => true, 'extensions'=>['png', 'jpg', 'jpeg'], 'checkExtensionByMimeType'=>false]
+            ['document', 'file', 'extensions' => ['png', 'jpg','jpeg','docx','pdf'], 'maxSize' => 1024 * 1024 * 2],
 
         ];
     }

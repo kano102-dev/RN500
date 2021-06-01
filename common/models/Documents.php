@@ -31,11 +31,19 @@ class Documents extends \yii\db\ActiveRecord
     {
         return [
             [['document_type','user_id'], 'required'],
-//            ['path','required','message' => 'please select document!'],
+           ['path','required','on' => 'create'],
+//            ['path','required','message' => 'please select document!','on' => 'create'],
             [['document_type', 'user_id','created_at','updated_at'], 'integer'],
             [['path'], 'string', 'max' => 255],
+            ['path', 'file', 'extensions' => ['png', 'jpg','jpeg','docx','pdf'], 'maxSize' => 1024 * 1024 * 2],
 //            [['path'], 'file', 'skipOnEmpty' => false, 'extensions'=>['docx', 'pdf', 'doc'], 'checkExtensionByMimeType'=>false]
         ];
+    }
+    
+     public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['document_type','path','user_id','created_at','updated_at',];
+        return $scenarios;
     }
 
     /**
