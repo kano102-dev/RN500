@@ -22,7 +22,8 @@ use common\CommonFunction;
     .iti--allow-dropdown{width: 100%;}
 </style>
 
-<div class="container mb-100 mt-100">
+<div class="listpgWraper">
+    <div class="container">
     <?php
     $form = ActiveForm::begin([
                 "id" => "user-details",
@@ -184,3 +185,4 @@ use common\CommonFunction;
 
 
 
+</div>

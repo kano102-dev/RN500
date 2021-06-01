@@ -18,6 +18,10 @@ $is_otp_sent = $model->is_otp_sent;
         float: right;
         margin-top: -27px;
         margin-right:10px;
+        cursor: pointer;
+        z-index: 999;
+        display: block;
+        position: relative;
     }
 </style>
 <div class="listpgWraper">
