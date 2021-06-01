@@ -872,3 +872,30 @@ CREATE TABLE `emergency` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) NOT NULL
 );
+
+
+#  ***********************30-MAY-2021***BY MOHAN********************
+ALTER TABLE `user_details`
+ADD `interest_level` tinyint NULL COMMENT 'For Job seeker only ' AFTER `professional_liability`;
+
+ALTER TABLE `company_master`
+ADD `is_suspend` tinyint NOT NULL DEFAULT '0' COMMENT '1:Yes, 0:No';
+
+ALTER TABLE `company_branch`
+ADD `email` varchar(100) COLLATE 'latin1_swedish_ci' NULL AFTER `branch_name`;
+
+CREATE TABLE `lead_recruiter_job_seeker_mapping` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `branch_id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `job_seeker_id` int NOT NULL,
+  `comment` varchar(500) NULL,
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:pending, 1:Approve',
+  `updated_at` int NOT NULL,
+  `updated_by` int NOT NULL,
+  FOREIGN KEY (`branch_id`) REFERENCES `company_branch` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`lead_id`) REFERENCES `lead_master` (`id`) ON DELETE CASCADE
+);
+
+
+#  ***********************30-MAY-2021***BY MOHAN******END***********
