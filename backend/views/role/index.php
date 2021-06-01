@@ -28,11 +28,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 $cols = [];
                 array_push($cols, ['class' => 'yii\grid\SerialColumn']);
                 array_push($cols, ['attribute' => 'role_name']);
-                array_push($cols, ['attribute' => 'company_id',
-                    'value' => function ($model) {
-                        return $model->company->company_name;
-                    }
-                ]);
+                if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+                    array_push($cols, ['attribute' => 'company_id',
+                        'value' => function ($model) {
+                            return $model->company->company_name;
+                        }
+                    ]);
+                }
                 array_push($cols, [
                     'attribute' => 'created_at',
                     'value' => function($model) {

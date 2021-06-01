@@ -11,6 +11,8 @@ use Yii;
  * @property int $document_type
  * @property string $path
  * @property int $user_id
+ * @property int $created_at
+ * @property int $updated_at
  */
 class Documents extends \yii\db\ActiveRecord
 {
@@ -30,7 +32,7 @@ class Documents extends \yii\db\ActiveRecord
         return [
             [['document_type','user_id'], 'required'],
 //            ['path','required','message' => 'please select document!'],
-            [['document_type', 'user_id'], 'integer'],
+            [['document_type', 'user_id','created_at','updated_at'], 'integer'],
             [['path'], 'string', 'max' => 255],
 //            [['path'], 'file', 'skipOnEmpty' => false, 'extensions'=>['docx', 'pdf', 'doc'], 'checkExtensionByMimeType'=>false]
         ];

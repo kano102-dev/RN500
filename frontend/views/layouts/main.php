@@ -103,6 +103,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
             });
         </script>
         <!-- Footer start -->
+        <?= $this->render('common-modal') ?>
         <?= $this->render('footer', ['assetDir' => $assetDir]) ?>
         <!-- Footer end --> 
         <?php $this->endBody() ?>

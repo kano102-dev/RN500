@@ -397,7 +397,7 @@ class AuthController extends Controller {
     public function actionLogout() {
         Yii::$app->user->logout();
 //        return $this->goHome();
-        return $this->redirect(['login']);
+        return $this->redirect(['/auth/login']);
     }
 
     public function actionCheckMail() {

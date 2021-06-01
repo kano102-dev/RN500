@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\CommonFunction;
 
 /**
  * This is the model class for table "role_master".
@@ -33,6 +34,9 @@ class RoleMaster extends \yii\db\ActiveRecord {
             [['company_id'], 'safe'],
             [['created_at', 'updated_at'], 'integer'],
             [['role_name'], 'string', 'max' => 250],
+            ['company_id', 'required', 'when' => function ($model) {
+                    return CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
+                }],
         ];
     }
 
