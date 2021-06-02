@@ -154,23 +154,12 @@ class CompanyBranchController extends Controller {
                         $userDetailModel->user_id = $user->id;
                         if ($userDetailModel->save()) {
                             $is_success = true;
-                        echo "<pre/>";
-                        print_r($userDetailModel);
-                        exit;
                             $resetPasswordModel = new PasswordResetRequestForm();
                             $resetPasswordModel->email = $user->email;
                             if ($resetPasswordModel->sendEmail($is_welcome_mail = 1)) {
                                 $is_success = true;
                             }
-                        } else {
-                            echo "<pre/>";
-                            print_r($userDetailModel->getErrors());
-                            exit;
                         }
-                    } else {
-                        echo "<pre/>";
-                        print_r($user->getErrors());
-                        exit;
                     }
                 }
                 if ($is_success) {
@@ -181,9 +170,6 @@ class CompanyBranchController extends Controller {
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
             } catch (\Exception $ex) {
-                echo "<pre/>";
-                print_r($ex);
-                exit;
                 $transaction->rollBack();
             } finally {
 //                return $this->redirect(['index']);
