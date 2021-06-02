@@ -30,6 +30,17 @@ $action = Yii::$app->controller->action->id;
     .top-content p{font-size: 15px;font-weight: 600;color: black;}
     .header-new{position: fixed;left: 0;right: 0;background: white;z-index: 999;}
     .nav-tabs li{margin-right: 5px !important;}
+    #overlay {position: fixed;z-index: 9999;height: 2em;width: 2em;overflow: show;margin: auto;top: 0;left: 0;bottom: 0;right: 0;}
+    #overlay:before {content: '';display: block;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0.3);}
+    #overlay img{position: absolute;z-index: 99;transform: translate(-50%,-50%);}
+    .loading{height: 0;width: 0;padding: 15px;border: 6px solid #fff;border-right-color: #1c4599;border-radius: 22px;z-index: 99;-webkit-animation: rotate 1s infinite linear;}
+    @-webkit-keyframes rotate {
+        /* 100% keyframe for  clockwise. 
+           use 0% instead for anticlockwise */
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
     @media (max-width:767px){
         .top-content{display: none}
     }

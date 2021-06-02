@@ -429,16 +429,22 @@ $frontendDir = yii\helpers\Url::base(true);
 $getProfilePercentageUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/get-profile-percentage']);
 
 $js = <<< JS
-        
+
+$('#commonModal').on('shown.bs.modal', function() { 
+       $('#overlay').hide();
+});   
         
 $(document).on("click", ".editProfile", function() {
+    $('#overlay').show();
     $(".modal-title").text("Profile");
     $("#commonModal").modal('show')
         .find("#modalContent")
         .load($(this).attr('url'));
+        
 });
         
 $(document).on("click", ".work-experience", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Work Experience");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -446,6 +452,7 @@ $(document).on("click", ".work-experience", function() {
 }); 
     
 $(document).on("click", ".AddEducation", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Education");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -453,6 +460,7 @@ $(document).on("click", ".AddEducation", function() {
 }); 
     
 $(document).on("click", ".AddLicence", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Licence");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -460,6 +468,7 @@ $(document).on("click", ".AddLicence", function() {
 });
 
 $(document).on("click", ".AddCertification", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Certification");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -467,6 +476,7 @@ $(document).on("click", ".AddCertification", function() {
 });
     
 $(document).on("click", ".AddDocument", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Document");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -474,6 +484,7 @@ $(document).on("click", ".AddDocument", function() {
 });
     
 $(document).on("click", ".AddReference", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Reference");
     $("#commonModal").modal('show')
         .find("#modalContent")
@@ -481,6 +492,7 @@ $(document).on("click", ".AddReference", function() {
 }); 
     
 $(document).on("click", ".addPreference", function() {
+    $('#overlay').show();    
     $(".modal-title").text("Job Preference");
     $("#commonModal").modal('show')
         .find("#modalContent")
