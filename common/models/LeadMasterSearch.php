@@ -11,6 +11,9 @@ use common\models\LeadMaster;
  */
 class LeadMasterSearch extends LeadMaster {
 
+    public $company_name;
+    public $branch_name;
+
     /**
      * {@inheritdoc}
      */
@@ -19,6 +22,7 @@ class LeadMasterSearch extends LeadMaster {
                 [['id', 'branch_id', 'payment_type', 'job_type', 'shift', 'recruiter_commission', 'recruiter_commission_type', 'recruiter_commission_mode', 'price', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
                 [['title', 'reference_no', 'description', 'start_date', 'end_date', 'comment'], 'safe'],
                 [['jobseeker_payment'], 'number'],
+                [['company_name', 'branch_name'], 'safe'],
         ];
     }
 
@@ -84,7 +88,7 @@ class LeadMasterSearch extends LeadMaster {
     }
 
     public function searchPending($params = []) {
-        $query = LeadMaster::find()->where(['status'=> LeadMaster::STATUS_PENDING]);
+        $query = LeadMaster::find()->where(['status' => LeadMaster::STATUS_PENDING]);
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -100,9 +104,9 @@ class LeadMasterSearch extends LeadMaster {
 
         return $dataProvider;
     }
-    
+
     public function searchApproved($params = []) {
-        $query = LeadMaster::find()->where(['status'=> LeadMaster::STATUS_APPROVED]);
+        $query = LeadMaster::find()->where(['status' => LeadMaster::STATUS_APPROVED]);
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -115,6 +119,44 @@ class LeadMasterSearch extends LeadMaster {
             return $dataProvider;
         }
 
+
+        return $dataProvider;
+    }
+
+    public function searchJobApply($params) {
+        $reference_no = isset($params['ref']) ? $params['ref'] : '';
+//        echo "<pre/>";
+//        print_r($params);
+//        exit;
+
+        $query = CompanyBranch::find()->alias('branch')->select("branch.*, subscribed_companies.company_name")
+                ->innerJoin("( 
+                                SELECT sub.company_id, company.company_name, lead.reference_no FROM company_subscription_payment sub_pay
+                                LEFT JOIN company_subscription sub ON sub.id = sub_pay.subscription_id
+                                LEFT JOIN company_master company ON company.id = sub.company_id
+                                LEFT JOIN lead_master lead ON lead.id = sub_pay.lead_id
+                                WHERE lead.reference_no='$reference_no' AND sub_pay.status=1 AND sub.package_id !=1 AND sub.status=1 AND company.status = 1  AND company.type = " . User::TYPE_RECRUITER . " AND is_suspend = 0 
+                                GROUP BY sub.company_id
+                            ) as subscribed_companies", "subscribed_companies.company_id = branch.company_id");
+
+//        
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        if ($this->branch_name) {
+            $query->andWhere(['LIKE', 'branch.branch_name', $this->branch_name]);
+        }
+
+        if ($this->company_name) {
+            $query->andWhere(['LIKE', 'subscribed_companies.company_name', $this->company_name]);
+        }
 
         return $dataProvider;
     }

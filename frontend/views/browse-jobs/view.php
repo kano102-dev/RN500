@@ -34,7 +34,7 @@ use yii\web\JsExpression;
                     </div>
                 </div>
             </div>
-            <div class="jobButtons"> <a href="#." class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a> </div>
+            <div class="jobButtons"> <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/apply','ref'=>$model->reference_no])?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a> </div>
         </div>
 
         <!-- Job Detail start -->
