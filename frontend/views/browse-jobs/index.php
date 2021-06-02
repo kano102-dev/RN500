@@ -298,7 +298,6 @@ $get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-j
 $get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
-
 $script_new = <<<JS
 getDisciplineRecords();
 getSpecialtyRecords();

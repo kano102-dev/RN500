@@ -19,6 +19,8 @@ use frontend\models\EmployerForm;
 use frontend\models\JobseekerForm;
 use common\models\PasswordResetRequestForm;
 use common\models\ResetPasswordForm;
+use common\models\OtpRequest;
+use yii\helpers\Json;
 
 /**
  * Site controller
@@ -372,6 +374,21 @@ class AuthController extends Controller {
         ]);
     }
 
+    public function actionResendOtp($email) {
+        $user = User::findOne(['email' => $email, 'status' => User::STATUS_APPROVED, 'is_suspend' => 0]);
+        $sent_otp_detail = OtpRequest::find()->where(['user_id' => $user->id, 'is_verified' => OtpRequest::STATUS_NOT_VERIFIED])->orderBy("id desc")->one();
+        if (!empty($sent_otp_detail)) {
+            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $sent_otp_detail->otp])
+                    ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
+                    ->setTo($user->email)
+                    ->setSubject('RN500 Verification Code')
+                    ->send();
+        }
+        $response = Json::encode(['msg' => "Please check your registered email."]);
+        echo $response;
+        exit;
+    }
+
     /**
      * Logout action.
      *
@@ -380,7 +397,7 @@ class AuthController extends Controller {
     public function actionLogout() {
         Yii::$app->user->logout();
 //        return $this->goHome();
-        return $this->redirect(['login']);
+        return $this->redirect(['/auth/login']);
     }
 
     public function actionCheckMail() {

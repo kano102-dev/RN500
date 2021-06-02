@@ -62,11 +62,11 @@ $action = Yii::$app->controller->action->id;
                     <div class="navbar-collapse collapse" id="nav-main">
                         <ul class="nav navbar-nav">
 
-                            <li class="<?= $controller == 'site' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("/"); ?>">Home</a> 
+                            <li class="<?= $controller == 'site' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/"); ?>">Home</a> 
                             </li>
-                            <li class="<?= $controller == 'site' && $action == 'about-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("site/about-us"); ?>">About us</a></li>
-                            <li class="<?= $controller == 'site' && $action == 'contact-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("site/contact-us"); ?>">Contact</a></li>
-                            <li class="<?= $controller == 'browse-jobs' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManager->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
+                            <li class="<?= $controller == 'site' && $action == 'about-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("site/about-us"); ?>">About us</a></li>
+                            <li class="<?= $controller == 'site' && $action == 'contact-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("site/contact-us"); ?>">Contact</a></li>
+                            <li class="<?= $controller == 'browse-jobs' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
 
                             <?php if (CommonFunction::isRecruiter()) { ?>
                                 <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
