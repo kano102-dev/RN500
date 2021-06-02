@@ -12,6 +12,7 @@ use ranamehul20\twak\TwakWidget;
 
 AppAsset::register($this);
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
+Yii::$app->assetManager->publish('@vendor/almasaeed2010/adminlte');
 $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte');
 //$webImageDir = Yii::$app->assetManager->getPublishedUrl('@themes');
 ?>
@@ -24,6 +25,7 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <?php $this->registerCsrfMetaTags() ?>
         <title>RN500</title>
+        <link rel="stylesheet" href="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.css">
         <?php $this->head() ?>
         <!-- Fav Icon -->
         <link rel="shortcut icon" href="<?= $assetDir ?>/images/favicon.ico">
@@ -108,8 +110,9 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         <!-- Footer end --> 
         <?php $this->endBody() ?>
         <?php
-        echo \common\components\FlashmessageWidget::widget();
+//        echo \common\components\FlashmessageWidget::widget();
         ?>
+        <script src="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.js"></script>
 
     </body>
 </html>

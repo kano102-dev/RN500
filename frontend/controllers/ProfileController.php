@@ -78,11 +78,19 @@ class ProfileController extends Controller {
     public function actionIndex() {
         return $this->render('index');
     }
-    
-    public function actionEditProfile() {        
+
+    public function actionEditProfile() {
         return $this->renderAjax('edit-profile');
     }
-    
-    
+
+    // THIS ACTION CAN BE ACCESSIBLE WITHOUT LOGIN
+    public function actionUserSummary($ref) {
+        $model = UserDetails::find()->where(['unique_id' => $ref])->one();
+        if ($model !== null) {
+            echo $userId = $model->user_id;
+        } else {
+            throw new \yii\web\NotFoundHttpException("Oops! Something went wrong");
+        }
+    }
 
 }
