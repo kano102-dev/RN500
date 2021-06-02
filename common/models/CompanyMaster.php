@@ -23,6 +23,7 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  * @property int $created_at
  * @property int $updated_at
  * @property string $reference_no
+ * @property int $is_suspend
  */
 class CompanyMaster extends \yii\db\ActiveRecord {
 
@@ -58,7 +59,8 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['zip_code'], 'string', 'max' => 20],
             [['state', 'type', 'status', 'reference_no', 'employer_identification_number','mobile'], 'safe'],
             [['company_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
-            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field']
+            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field'],
+            [['is_suspend'],'safe']
         ];
     }
 
