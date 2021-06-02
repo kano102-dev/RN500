@@ -4,26 +4,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-use common\CommonFunction;
 
+use common\CommonFunction;
 ?>
 
 <!--Footer-->
 <div class="footerWrap">
     <div class="container">
         <div class="row"> 
-          <!--  About Us -->
+            <!--  About Us -->
             <div class="col-md-3 col-sm-12">
                 <div class="ft-logo"><img src="<?= $assetDir ?>/images/RN500_logo177X53.png" alt="Your alt text here"></div>
                 <p>RN500 LLC is one of the leading staffing service provider in North America. In healthcare industries to meet the staffing requirements in fastest growing market, we have developed advanced technology service solutions which can eliminate gaps between employers and job seekers. We are covering all of the tools which supports healthcare employers and job seekers under one umbrella where they can find all their needs such as all payroll and benefits managements, taxation, accommodation, travel resources, educational programs, financial assistance, credit cards, reward programs, medical and health insurances, etc. Enroll today on RN500.com and make your life easy on current challenging time..</p>
 
-                 <!-- Social Icons -->
+                <!-- Social Icons -->
                 <div class="social"> <a href="#." target="_blank"> <i class="fa fa-facebook-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-twitter-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a> <a href="#." target="_blank"><i class="fa fa-youtube-square" aria-hidden="true"></i></a> </div>
-                 <!-- Social Icons end  -->
+                <!-- Social Icons end  -->
             </div>
             <!-- About us End -->
 
-<!--            Quick Links-->
+            <!--            Quick Links-->
             <div class="col-md-2 col-sm-6">
                 <h5>Quick Links</h5>
                 <!--Quick Links menu Start-->
@@ -58,4 +58,9 @@ use common\CommonFunction;
     <div class="container">
         <div class="bttxt">Copyright &copy; <?= date('Y', strtotime('now')) ?> RN500. All Rights Reserved. <strong>Powered By :<a href="https://tracexpert.com"> Tracexpert</a></strong></div>
     </div>
+</div>
+
+
+<div id="overlay" style="display:none">
+    <div class="loading"></div>
 </div>
