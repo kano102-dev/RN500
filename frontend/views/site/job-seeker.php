@@ -7,6 +7,7 @@
 
 use yii\widgets\Pjax;
 use common\CommonFunction;
+use common\models\UserDetails;
 
 $document_type = [0 => 'Resume', 1 => 'Other'];
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
@@ -54,6 +55,10 @@ $frontendDir = yii\helpers\Url::base(true);
     .mb-10{margin-bottom: 10px;}
     .edit-icon-right a{float: right;margin-right:10px;}
     .edit-icon-right a i{font-size: 20px;color: #000;}
+    .searchList li .interest_level{display: flex;align-items: center;}
+    .searchList li .interest_level .actively_looking{background: #2cd34b;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
+    .searchList li .interest_level .open_to_offers{background: red;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
+    .searchList li .interest_level .search_on_hold{background: #6f74bd;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
     @media (max-width: 425px) {
         .sticky-sidebar{position: relative !important;width: 100% !important;}
         .new-searchList li{text-align: left;}
@@ -108,14 +113,14 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <div class="jobinfo">
                                             <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
                                             <div class="location"><?= Yii::$app->user->identity->email ?></div>
-                                            <!--<div class="location"><?php //  $userDetails->mobile_no     ?></div>-->
+                                            <!--<div class="location"><?php //  $userDetails->mobile_no        ?></div>-->
                                             <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="col-md-4 col-sm-4">
                                         <div class="listbtn">
-                                            <div class="round"><i class="fa fa-file"></i></div>
+                                            <!--<div class="round"><i class="fa fa-file"></i></div>-->
                                         </div>
                                     </div>
                                 </div>
@@ -135,27 +140,38 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <p>Phone</p>
                                         <p>Email</p>
                                         <p>Last 4 of SSN</p>
+                                        <?php if (isset($userDetails->interest_level) && !empty($userDetails->interest_level)) { ?>
+                                            <?php if ($userDetails->interest_level == UserDetails::ACTIVELY_LOOKING) { ?>
+                                        <p class="interest_level"><span class="actively_looking">&nbsp;</span> Actively Looking</p>
+                                            <?php } else if ($userDetails->interest_level == UserDetails::OPEN_TO_OFFERS) { ?>
+                                                <p class="interest_level"><span class="open_to_offers">&nbsp;</span> Open To Offers</p>
+                                            <?php } else { ?>
+                                                <p class="interest_level"><span class="search_on_hold"></span> Search On Hold</p>
+                                            <?php } ?>
+                                        <?php } ?>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
                                 <?php if (isset($userDetails) && !empty($userDetails)) { ?>
-                                <div class="col-md-4 col-sm-6 col-xs-12">
-                                    <div class="jobinfo">
-                                        <h3>&nbsp;</h3>
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <div class="jobinfo">
+                                            <h3>&nbsp;</h3>
+                                        </div>
+                                        <div class="content">
+                                            <p><?= $userDetails->first_name . " " . $userDetails->last_name ?></p>
+                                            <p><?= (isset($userDetails->mobile_no) && !empty($userDetails->mobile_no)) ? $userDetails->mobile_no : "&nbsp;" ?></p>
+                                            <p><?= (isset(Yii::$app->user->identity->email) && !empty(Yii::$app->user->identity->email)) ? Yii::$app->user->identity->email : "&nbsp;" ?></p>
+                                            <p><?= (isset($userDetails->ssn) && !empty($userDetails->ssn)) ? $userDetails->ssn : "&nbsp;" ?></p>
+
+
+                                        </div>
                                     </div>
-                                    <div class="content">
-                                        <p><?= $userDetails->first_name . " " . $userDetails->last_name ?></p>
-                                        <p><?= isset($userDetails->mobile_no) ? $userDetails->mobile_no : "&nbsp;" ?></p>
-                                        <p><?= isset(Yii::$app->user->identity->email) ? Yii::$app->user->identity->email : "&nbsp;" ?></p>
-                                        <p><?= $userDetails->ssn ?></p>
-                                    </div>
-                                </div>
                                 <?php } ?>
                             </div>
                             <div class="row action">
                                 <div class="col-md-12 col-sm-12 col-xs-12 info">
                                     <div class="">
-                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update','id' => Yii::$app->user->id]) ?>" class="editProfile">
+                                        <a href="javascript:void(0);" url="<?= Yii::$app->urlManagerFrontend->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="editProfile">
                                             <p>Update Information</p>
                                             <div class="action-icon">
                                                 <i class="fa fa-angle-right"></i>
