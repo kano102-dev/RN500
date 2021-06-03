@@ -19,6 +19,7 @@ use common\CommonFunction;
  * @property int $is_default 1:yes 0:no
  * @property int $created_at
  * @property int $updated_at
+ * @property string|null $email
  */
 class CompanyBranch extends \yii\db\ActiveRecord {
 
@@ -26,18 +27,23 @@ class CompanyBranch extends \yii\db\ActiveRecord {
     const IS_DEFAULT_NO = '0';
 
     public $state;
-
+    public $company_name;
+    
     public static function tableName() {
         return 'company_branch';
     }
 
     public function rules() {
         return [
-            [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
             [['branch_name'], 'string', 'max' => 200],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
+            ['company_id', 'required', 'when' => function ($model) {
+                    return CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
+                }],
+            [['email'],'safe']
         ];
     }
 

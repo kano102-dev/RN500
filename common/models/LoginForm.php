@@ -56,7 +56,7 @@ class LoginForm extends Model {
                 } else {
                     return true;
                 }
-            }else{
+            } else {
                 $this->addError($attribute, "Your account doesn't verified.More details please contact info@rn500.com");
             }
         }
@@ -87,11 +87,14 @@ class LoginForm extends Model {
         if (!empty($user)) {
             $to_email = $user->email;
             try {
-                return $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
-                        ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
-                        ->setTo($to_email)
-                        ->setSubject('RN500 Verification Code')
-                        ->send();
+                if (\Yii::$app->request->hostName != 'localhost') {
+                    return $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
+                            ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
+                            ->setTo($to_email)
+                            ->setSubject('RN500 Verification Code')
+                            ->send();
+                }
+                return true;
             } catch (\Exception $ex) {
                 return false;
             }

@@ -872,3 +872,71 @@ CREATE TABLE `emergency` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255) NOT NULL
 );
+
+
+# **************NIRAV 30-05-2021 ***********
+
+ALTER TABLE `work_experience`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `education`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `licenses`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `certifications`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `documents`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `references`
+ADD `created_at` int(11) NULL,
+ADD `updated_at` int(11) NULL AFTER `created_at`;
+
+ALTER TABLE `certifications`
+CHANGE `expiry_date` `expiry_date` date NOT NULL AFTER `document`;
+
+ALTER TABLE `licenses`
+CHANGE `license_name` `license_name` int(11) NOT NULL AFTER `issuing_state`;
+
+
+ALTER TABLE `advertisement`
+ADD `file_type` int(11) NULL AFTER `active_to`;
+
+ALTER TABLE `advertisement`
+ADD `video_link` varchar(255) COLLATE 'utf8mb4_general_ci' NULL AFTER `link_url`;
+
+
+
+#  ***********************30 / 31 -MAY-2021***BY MOHAN********************
+ALTER TABLE `user_details`
+ADD `interest_level` tinyint NULL COMMENT 'For Job seeker only ' AFTER `professional_liability`;
+
+ALTER TABLE `company_master`
+ADD `is_suspend` tinyint NOT NULL DEFAULT '0' COMMENT '1:Yes, 0:No';
+
+ALTER TABLE `company_branch`
+ADD `email` varchar(100) COLLATE 'latin1_swedish_ci' NULL AFTER `branch_name`;
+
+CREATE TABLE `lead_recruiter_job_seeker_mapping` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `branch_id` int(11) NOT NULL,
+  `lead_id` int(11) NOT NULL,
+  `job_seeker_id` int NOT NULL,
+  `comment` varchar(500) NULL,
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '0:pending, 1:Approve',
+  `updated_at` int NOT NULL,
+  `updated_by` int NOT NULL,
+  FOREIGN KEY (`branch_id`) REFERENCES `company_branch` (`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`lead_id`) REFERENCES `lead_master` (`id`) ON DELETE CASCADE
+);
+
+
+#  ***********************30 / 31 -MAY-2021***BY MOHAN*******END*******************

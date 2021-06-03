@@ -21,6 +21,8 @@ $is_otp_sent = $model->is_otp_sent;
             <div class="col-md-6">
                 <div class="userccount">
                     <h5>Change Password</h5>
+                    <div class="alert alert-success message" role="alert" style="display:none">
+                    </div>
                     <div class="formpanel"> 
                         <?php $form = ActiveForm::begin(); ?>
                         <div class="row">
@@ -72,11 +74,12 @@ $is_otp_sent = $model->is_otp_sent;
                                             ])
                                             ->label(false)
                                             ->textInput(['placeholder' => 'OTP']);
+                                    echo Html::a('Resend OTP', 'javascript:void(0)', ['id' => 'resend_otp', 'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['auth/resend-otp', 'email' => Yii::$app->user->identity->email])]);
                                 }
                                 ?>
-
                             </div>
                         </div>
+                        <br/>
                         <div class = "form-group">
                             <?= Html::submitButton('Save', ['class' => 'btn btn-success'])
                             ?>
@@ -115,5 +118,17 @@ $script = <<< JS
     var input = $("#changepasswordform-confirm_password");
     input.attr('type') === 'password' ? input.attr('type','text') : input.attr('type','password')
 });
+$(document).on('click', '#resend_otp', function() {
+        var action=$(this).attr('url');
+        $.ajax({
+            url    : action,
+            type   : 'post',
+            success: function (response){
+                var res=JSON.parse(response);
+                $('.message').html(res.msg);        
+                $('.message').css("display","block");        
+            },
+        });
+  });
 JS;
 $this->registerJs($script);

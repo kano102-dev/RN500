@@ -14,6 +14,8 @@ use common\models\User;
  * @property string $year_complete
  * @property string $institution
  * @property string $location
+ * @property string $created_at
+ * @property string $updated_at
  *
  * @property User $user
  */
@@ -32,7 +34,7 @@ class Education extends \yii\db\ActiveRecord {
     public function rules() {
         return [
                 [['user_id', 'degree_name', 'year_complete', 'institution'], 'required'],
-                [['user_id'], 'integer'],
+                [['user_id','created_at','updated_at'], 'integer'],
                 [['degree_name'], 'string', 'max' => 250],
                 [['year_complete'], 'string', 'max' => 50],
                 [['institution', 'location'], 'string', 'max' => 500],

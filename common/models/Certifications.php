@@ -17,6 +17,8 @@ use common\models\User;
  * @property string $issue_by
  * @property int $verified
  * @property int $user_id
+ * @property int $created_at
+ * @property int $updated_at
  *
  * @property User $user
  */
@@ -36,13 +38,22 @@ class Certifications extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['certificate_name', 'user_id'], 'required'],
-            [['issuing_state', 'certification_active', 'verified', 'user_id'], 'integer'],
+            [['certificate_name', 'user_id','issue_by'], 'required'],
+            ['document','required','on' => 'create'],
+            [['issuing_state', 'certification_active', 'verified', 'user_id','created_at','updated_at'], 'integer'],
             [['certificate_name', 'expiry_date'], 'string', 'max' => 250],
             [['document'], 'string', 'max' => 255],
             [['issue_by'], 'string', 'max' => 500],
+            [['issue_by'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            ['document', 'file', 'extensions' => ['png', 'jpg','jpeg','docx','pdf'], 'maxSize' => 1024 * 1024 * 2],
         ];
+    }
+    
+    public function scenarios() {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['certificate_name','certification_active','issue_by','issuing_state','expiry_date','document','user_id','created_at','updated_at'];
+        return $scenarios;
     }
 
     /**

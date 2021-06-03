@@ -51,6 +51,11 @@ use borales\extensions\phoneInput\PhoneInput;
             <?= $form->field($model, 'title')->dropDownList(Yii::$app->params['REFERENCE_TYPE']) ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <?= $form->field($model, 'relation')->textInput() ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -75,7 +80,7 @@ $(document).on("beforeSubmit", "#add-reference", function () {
             success: function (response){
                 try{
                     if(!response.error){
-                        $("#profile-modal").modal('hide');
+                        $("#commonModal").modal('hide');
                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
                         $(document).on("pjax:success", "#job-seeker", function (event) {
                             $.pjax.reload({'container': '#res-messages', timeout: 2000});

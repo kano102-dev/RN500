@@ -19,6 +19,8 @@ use common\models\LeadSpeciality;
 use yii\helpers\Json;
 use yii\web\Response;
 use common\models\Cities;
+use common\models\LeadMasterSearch;
+use common\models\LeadRecruiterJobSeekerMapping;
 
 /**
  * BrowseJobs controller
@@ -32,15 +34,15 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead','view','recruiter-view'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
                 'rules' => [
-                    [
-                        'actions' => ['view'],
+                        [
+                        'actions' => [ 'apply', 'apply-job'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
-                    [
-                        'actions' => ['recruiter-lead','recruiter-view'],
+                        [
+                        'actions' => ['recruiter-lead', 'recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],
@@ -59,41 +61,41 @@ class BrowseJobsController extends Controller {
         $request = \Yii::$app->getRequest()->get();
         $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
-            $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
+            $query->andFilterWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
         if (isset($request['speciality']) && !empty($request['speciality'])) {
-            $query->andWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['speciality'])]);
+            $query->andFilterWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['speciality'])]);
         }
         if (isset($request['benefit']) && !empty($request['benefit'])) {
-            $query->andWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
+            $query->andFilterWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
         }
         if (isset($request['location']) && !empty($request['location'])) {
-            $query->andWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
+            $query->andFilterWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
                 if ($value == 1) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 0]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 100]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 0]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 100]);
                 }
                 if ($value == 2) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 100]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 199]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 100]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 199]);
                 }
                 if ($value == 3) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 199]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 499]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 199]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 499]);
                 }
                 if ($value == 4) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 499]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 499]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 999]);
                 }
                 if ($value == 5) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 999]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 4999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 999]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 4999]);
                 }
                 if ($value == 6) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 4999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 4999]);
                 }
             }
         }
@@ -106,11 +108,11 @@ class BrowseJobsController extends Controller {
         $pages->setPageSize(10);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
         if (isset($request['location']) && !empty($request['location'])) {
-            $selectedLocations= ArrayHelper::map(Cities::find()->where(['IN','id',$request['location']])->all(),'id','city');
-        }else{
-            $selectedLocations= [];
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['IN', 'id', $request['location']])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
         }
-        
+
         return $this->render('index', ['models' => $models, 'pages' => $pages, 'selectedLocations' => $selectedLocations]);
     }
 
@@ -118,41 +120,41 @@ class BrowseJobsController extends Controller {
         $request = \Yii::$app->getRequest()->get();
         $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
-            $query->andWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
+            $query->andFilterWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
         if (isset($request['speciality']) && !empty($request['speciality'])) {
-            $query->andWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['discipline'])]);
+            $query->andFilterWhere(['IN', 'lead_speciality.speciality_id', implode(',', $request['discipline'])]);
         }
         if (isset($request['benefit']) && !empty($request['benefit'])) {
-            $query->andWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
+            $query->andFilterWhere(['IN', 'lead_benefit.benefit_id', implode(',', $request['benefit'])]);
         }
         if (isset($request['location']) && !empty($request['location'])) {
-            $query->andWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
+            $query->andFilterWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
                 if ($value == 1) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 0]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 100]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 0]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 100]);
                 }
                 if ($value == 2) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 100]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 199]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 100]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 199]);
                 }
                 if ($value == 3) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 199]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 499]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 199]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 499]);
                 }
                 if ($value == 4) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 499]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 499]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 999]);
                 }
                 if ($value == 5) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 999]);
-                    $query->andWhere(['<=', 'jobseeker_payment', 4999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 999]);
+                    $query->andFilterWhere(['<=', 'jobseeker_payment', 4999]);
                 }
                 if ($value == 6) {
-                    $query->andWhere(['>=', 'jobseeker_payment', 4999]);
+                    $query->andFilterWhere(['>=', 'jobseeker_payment', 4999]);
                 }
             }
         }
@@ -244,7 +246,7 @@ class BrowseJobsController extends Controller {
         $out = ['results' => ['id' => '', 'name' => '']];
         if (!is_null($q) && !empty($q)) {
             $query = new \yii\db\Query;
-            $query->select(['cities.id', 'CONCAT(city,"-",states.state) as name'])
+            $query->select(['cities.id', 'CONCAT(city,"-",cities.state_code) as name'])
                     ->from('cities')
                     ->innerJoin('states', 'states.id=cities.state_id')
                     ->where(['like', 'cities.city', $q])
@@ -256,7 +258,7 @@ class BrowseJobsController extends Controller {
             $out['pagination'] = ['more' => !empty($data) ? true : false];
         } elseif ($id > 0) {
             $query = new \yii\db\Query;
-            $query->select(['cities.id', 'CONCAT(city,"-",states.state) as name'])
+            $query->select(['cities.id', 'CONCAT(city,"-",cities.state_code) as name'])
                     ->from('cities')
                     ->innerJoin('states', 'states.id=cities.state_id')
                     ->where(['in', 'cities.id', $id])
@@ -272,18 +274,57 @@ class BrowseJobsController extends Controller {
 
     public function actionView($id) {
         $model = LeadMaster::findOne(['id' => $id]);
-        $benefit = LeadBenefit::findAll(['lead_id' => $id]);
-        $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
-        $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
-        return $this->render('view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+        if ($model != null) {
+            $benefit = LeadBenefit::findAll(['lead_id' => $id]);
+            $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
+            $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
+            return $this->render('view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+        } else {
+            throw new \yii\web\NotFoundHttpException("In valid lead");
+        }
     }
-    
+
     public function actionRecruiterView($id) {
         $model = LeadMaster::findOne(['id' => $id]);
         $benefit = LeadBenefit::findAll(['lead_id' => $id]);
         $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
         $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
         return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+    }
+
+    public function actionApply($ref) {
+        $model = LeadMaster::findOne(['reference_no' => $ref]);
+        if ($model != null) {
+            $searchModel = new LeadMasterSearch();
+            $dataProvider = $searchModel->searchJobApply(Yii::$app->request->queryParams);
+            return $this->render('apply', ['model' => $model, 'dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+        } else {
+            throw new \yii\web\NotFoundHttpException("In valid lead");
+        }
+    }
+
+    public function actionApplyJob($lead_id, $branch_id) {
+        $loggedInUserId = Yii::$app->user->identity->id;
+        $model = LeadRecruiterJobSeekerMapping::findOne(['lead_id' => $lead_id, 'branch_id' => $branch_id, 'job_seeker_id' => $loggedInUserId]);
+        if ($model == null) {
+            $model = new LeadRecruiterJobSeekerMapping();
+            $model->lead_id = $lead_id;
+            $model->branch_id = $branch_id;
+            $model->job_seeker_id = $loggedInUserId;
+        }
+        $model->status = LeadRecruiterJobSeekerMapping::STATUS_PENDING;
+        $model->updated_at = CommonFunction::currentTimestamp();
+        $model->updated_by = $loggedInUserId;
+        if ($model->save()) {
+            $mailSent = $model->sendMailToBranch();
+            if ($mailSent['status'] == '1') {
+                Yii::$app->session->setFlash("success", $mailSent['message']);
+            } else {
+                Yii::$app->session->setFlash("warning", $mailSent['message']);
+            }
+        }
+        $ref = LeadMaster::findOne($lead_id)->reference_no;
+        $this->redirect(['apply','ref'=>$ref]);
     }
 
 }

@@ -3,12 +3,14 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\UserDetails */
 /* @var $form yii\widgets\ActiveForm */
 $frontendDir = yii\helpers\Url::base(true);
-
 ?>
 
 <div class="user-details-form">
@@ -49,10 +51,52 @@ $frontendDir = yii\helpers\Url::base(true);
             ]);
             ?>
         </div>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
+            <?= $form->field($model, 'issue_by')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <label class="control-label" for="city">Issuing State</label>
+            <ul class="optionlist">
+                <?php
+                $url = Url::to(['browse-jobs/get-cities']);
+                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
+                echo Select2::widget([
+                    'name' => 'issuing_state',
+                    'options' => [
+                        'id' => 'issuing_state',
+                        'placeholder' => 'Select Location...',
+                        'multiple' => false,
+                        'class' => '',
+                        'value' => isset($model->issuing_state) ? $model->issuing_state : [],
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'ajax' => [
+                            'url' => $url,
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                    ],
+                ]);
+                ?>
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        
+        <div class="col-sm-12">
+            <p>&nbsp;</p>
             <?= $form->field($model, 'document')->fileInput() ?>
             <?php if ($deleteFlag) { ?>
-                <a href="<?= $frontendDir."/uploads/user-details/certification/".$model->document ?>" download><?= $model->document ?></a>
+                <a href="<?= $frontendDir . "/uploads/user-details/certification/" . $model->document ?>" download><?= $model->document ?></a>
                 <p>&nbsp;</p>
             <?php } ?>
         </div>
@@ -91,7 +135,7 @@ $script = <<< JS
 //                console.log(response);
                  try{
                      if(!response.error){
-                         $("#profile-modal").modal('hide');
+                         $("#commonModal").modal('hide');
                          $.pjax.reload({container: "#job-seeker", timeout: 2000});
                          $(document).on("pjax:success", "#job-seeker", function (event) {
                              $.pjax.reload({'container': '#res-messages', timeout: 2000});

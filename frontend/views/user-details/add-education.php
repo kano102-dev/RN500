@@ -77,7 +77,7 @@ use yii\web\JsExpression;
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE']) ?>
+            <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE'],['prompt' => 'Select Degree']) ?>
         </div>
     </div>
 
@@ -105,7 +105,7 @@ $script = <<< JS
                     console.log(response);
                      try{
                          if(!response.error){
-                             $("#profile-modal").modal('hide');
+                             $("#commonModal").modal('hide');
                              $.pjax.reload({container: "#job-seeker", timeout: 2000});
                              $(document).on("pjax:success", "#job-seeker", function (event) {
                                  $.pjax.reload({'container': '#res-messages', timeout: 2000});

@@ -23,6 +23,7 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  * @property int $created_at
  * @property int $updated_at
  * @property string $reference_no
+ * @property int $is_suspend
  */
 class CompanyMaster extends \yii\db\ActiveRecord {
 
@@ -43,8 +44,8 @@ class CompanyMaster extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['company_name', 'company_email', 'street_address', 'city', 'updated_at'], 'required'],
-            ['company_mobile' , 'required', 'message' => 'Mobile No. cannot be blank.'],
-            ['street_no' , 'required', 'message' => 'Street No. cannot be blank.'],
+            ['company_mobile', 'required', 'message' => 'Mobile No. cannot be blank.'],
+            ['street_no', 'required', 'message' => 'Street No. cannot be blank.'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
@@ -56,9 +57,10 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type', 'status', 'reference_no', 'employer_identification_number','mobile'], 'safe'],
+            [['state', 'type', 'status', 'reference_no', 'employer_identification_number', 'mobile'], 'safe'],
             [['company_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
-            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field']
+            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field'],
+            [['is_suspend'], 'safe']
         ];
     }
 
@@ -86,7 +88,11 @@ class CompanyMaster extends \yii\db\ActiveRecord {
     }
 
     public function checkUniqueEIN($attribute) {
-        $checkein = CompanyMaster::findOne(['employer_identification_number' => $this->employer_identification_number]);
+        $query = CompanyMaster::find()->where(['employer_identification_number' => $this->employer_identification_number]);
+        if (isset($this->id) && !empty($this->id)) {
+            $query->andWhere(['!=', 'id', $this->id]);
+        }
+        $checkein = $query->one();
         if (isset($checkein) && !empty($checkein)) {
             $this->addError("employer_identification_number", "Company already registered.");
         }

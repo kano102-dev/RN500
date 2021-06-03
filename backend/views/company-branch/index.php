@@ -17,65 +17,62 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php } ?>
             <div class="table table-responsive">
 
-                <?php Pjax::begin(); ?>
+                <?php
+                Pjax::begin();
+                $cols = [];
+                array_push($cols, ['class' => 'yii\grid\SerialColumn']);
+                if (CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
+                    array_push($cols, [
+                        'attribute' => 'company_id',
+                        'value' => function ($model) {
+                            return $model->company->company_name;
+                        }
+                    ]);
+                }
+                array_push($cols, ['attribute' => 'branch_name']);
+                array_push($cols, [
+                    'attribute' => 'city',
+                    'value' => function($model) {
+                        return !empty($model->cityRef->city) ? $model->cityRef->city : '';
+                    }
+                ]);
+                array_push($cols, [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['style' => 'width:5%;'],
+                    'header' => 'Actions',
+                    'template' => '{view} {update}',
+                    'buttons' => [
+                        //view button
+                        'view' => function ($url, $model) {
+                            if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id)) {
+                                return Html::a('<span class="fa fa-eye"></span>', $url, [
+                                            'data-pjax' => 0,
+                                            'title' => Yii::t('app', 'View'),
+                                            'class' => 'btn btn-primary btn-xs',
+                                ]);
+                            } else {
+                                return '';
+                            }
+                        },
+                        'update' => function ($url, $model) {
+                            if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id)) {
+                                return Html::a('<span class="fa fa-edit"></span>', $url, [
+                                            'data-pjax' => 0,
+                                            'title' => Yii::t('app', 'Update'),
+                                            'class' => 'btn btn-primary btn-xs',
+                                ]);
+                            } else {
+                                return '';
+                            }
+                        },
+                    ],
+                ]);
+                ?>
                 <?=
                 GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-                        [
-                            'attribute' => 'company_id',
-                            'value' => function ($model) {
-                                return $model->company->company_name;
-                            }
-                        ],
-                        'branch_name',
-                        'street_no',
-                        'street_address',
-                        //'suit/apt',
-                        [
-                            'attribute' => 'city',
-                            'value' => function($model) {
-                                return !empty($model->cityRef->city) ? $model->cityRef->city : '';
-                            }
-                        ],
-                        //'zip_code',
-                        //'is_default',
-                        //'created_at',
-                        //'updated_at',
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'contentOptions' => ['style' => 'width:5%;'],
-                            'header' => 'Actions',
-                            'template' => '{view} {update}',
-                            'buttons' => [
-                                //view button
-                                'view' => function ($url, $model) {
-                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-view', Yii::$app->user->identity->id)) {
-                                        return Html::a('<span class="fa fa-eye"></span>', $url, [
-                                                    'data-pjax' => 0,
-                                                    'title' => Yii::t('app', 'View'),
-                                                    'class' => 'btn btn-primary btn-xs',
-                                        ]);
-                                    } else {
-                                        return '';
-                                    }
-                                },
-                                'update' => function ($url, $model) {
-                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-update', Yii::$app->user->identity->id)) {
-                                        return Html::a('<span class="fa fa-edit"></span>', $url, [
-                                                    'data-pjax' => 0,
-                                                    'title' => Yii::t('app', 'Update'),
-                                                    'class' => 'btn btn-primary btn-xs',
-                                        ]);
-                                    } else {
-                                        return '';
-                                    }
-                                },
-                            ],
-                        ],
-                    ],
+                    'columns' => $cols,
                 ]);
                 ?>
 
