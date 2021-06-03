@@ -38,8 +38,10 @@ $lead_id = $model->id;
                             'filterModel' => $searchModel,
                             'columns' => [
                                     ['class' => 'yii\grid\SerialColumn'],
-                                'id',
-                                'branch_name',
+                                [
+                                    'attribute'=>'branch_name',
+                                    'enableSorting'=>false
+                                    ],
                                 'company_name',
                                     [
                                     'class' => 'yii\grid\ActionColumn',
@@ -55,7 +57,7 @@ $lead_id = $model->id;
                                                         'onclick' => "applyToThisbranch('$url')",
                                                         'data-pjax' => 0,
                                                         'title' => Yii::t('app', 'View'),
-                                                        'class' => 'btn apply btn-xs',
+                                                        'class' => 'btn btn-success',
                                             ]);
 //                                            echo "</span>";
                                         }
@@ -80,11 +82,16 @@ $lead_id = $model->id;
 <?php
 $script_new = <<<JS
     function applyToThisbranch(url){
-        $.ajax({
-            method: "POST",
-            url: url,
-        }).done(function( res ) {
         
+        swal("Are you sure, you want to proceed.",{
+            buttons: ["Cancel", "Yes!"],
+        }).then((value) => {
+            if(value){
+                $.ajax({
+                    method: "POST",
+                    url: url,
+                }).done(function( res ) {});
+            }
         });
     }
 JS;
