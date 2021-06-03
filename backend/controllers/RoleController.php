@@ -134,11 +134,7 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
                     ->leftJoin('auth_item_child', 'auth_item.name=auth_item_child.child')
                     ->all();
         } else {
-            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
-                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
-            } else {
-                $companyList = [];
-            }
+            $companyList = [];
             $features = \Yii::$app->db->createCommand('SELECT `auth_item`.`description` AS `desc`, `auth_item`.`name`, `auth_item`.`name` AS `child`, IF(auth_item.name=auth_item_child.parent, "",auth_item_child.parent) as parent FROM  auth_assignment
 inner JOIN `auth_item_child` ON auth_assignment.item_name=auth_item_child.child
 INNER JOIN `auth_item` ON auth_item.name=auth_item_child.child OR auth_item.name=auth_item_child.parent
@@ -154,7 +150,7 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
                 $permissions = explode(',', $_POST['RoleMaster']['permissions']);
                 $model->created_at = time();
                 $model->updated_at = time();
-                if (!empty($model->company_id)) {
+                if (!CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
                     $model->company_id = \Yii::$app->user->identity->branch->company_id;
                 }
                 if ($model->save()) {
@@ -227,35 +223,35 @@ where auth_assignment.user_id=' . \Yii::$app->user->identity->role_id . ' group 
         }
         $tree = $this->parseTree($features, "", $model->id);
         if ($model->load(Yii::$app->request->post())) {
-                $permissions = explode(',', $_POST['RoleMaster']['permissions']);
-                $model->updated_at = time();
-                if ($model->save()) {
-                    $cnt=0;
-                    $auth->revokeAll($model->id);
-                    $error = 1;
-                    foreach ($permissions as $value) {
-                        $access = $auth->getPermission($value);
-                        if ($auth->assign($access, $model->id)) {
-                            $cnt=$cnt+1;
-                            $error = 1;
-                        } else {
-                            print_r($value);
-                            $error = 0;
-                            break;
-                        }
-                    }
-                    if ($error) {
-                        Yii::$app->session->setFlash("success", "Role updated successfully.");
+            $permissions = explode(',', $_POST['RoleMaster']['permissions']);
+            $model->updated_at = time();
+            if ($model->save()) {
+                $cnt = 0;
+                $auth->revokeAll($model->id);
+                $error = 1;
+                foreach ($permissions as $value) {
+                    $access = $auth->getPermission($value);
+                    if ($auth->assign($access, $model->id)) {
+                        $cnt = $cnt + 1;
+                        $error = 1;
                     } else {
-                        $auth->revokeAll($model->id);
-                        Yii::$app->session->setFlash("warning", "Something went wrong.");
+                        print_r($value);
+                        $error = 0;
+                        break;
                     }
+                }
+                if ($error) {
+                    Yii::$app->session->setFlash("success", "Role updated successfully.");
                 } else {
+                    $auth->revokeAll($model->id);
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
-                return $this->redirect(['index']);
+            } else {
+                Yii::$app->session->setFlash("warning", "Something went wrong.");
+            }
+            return $this->redirect(['index']);
         }
- 
+
         return $this->render('_form', [
                     'model' => $model, 'tree' => $tree,
                     'companyList' => $companyList

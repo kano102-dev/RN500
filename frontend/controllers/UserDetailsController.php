@@ -159,9 +159,6 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 
-                echo '<pre>';
-                print_r($model);
-                exit;
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
                     return json_encode(['error' => 0, 'message' => 'User Details Updated successfully.']);
@@ -301,9 +298,10 @@ class UserDetailsController extends Controller {
     public function actionWorkExperience() {
         $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
-
+        $message = '';
         if ($id !== null) {
             $model = WorkExperience::findOne($id);
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->start_date = date('m-Y', strtotime($model->start_date));
             
@@ -315,6 +313,7 @@ class UserDetailsController extends Controller {
             
         } else {
             $model = new WorkExperience();
+            $message = 'Created';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
@@ -335,7 +334,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Work Experience Updated successfully.");
+                    Yii::$app->session->setFlash('success', "Work Experience ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'Work Experience Updated successfully.']);
                 }
             } else {
@@ -354,13 +353,16 @@ class UserDetailsController extends Controller {
     public function actionAddEducation() {
         $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
+         $message = '';
 
         if ($id !== null) {
             $model = Education::findOne($id);
+             $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->year_complete = date('m-Y', strtotime($model->year_complete));
         } else {
             $model = new Education();
+             $message = 'Created';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
@@ -372,7 +374,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Education Details Updated successfully.");
+                    Yii::$app->session->setFlash('success', "Education Details ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'Education Details Updated successfully.']);
                 }
             } else {
@@ -391,16 +393,18 @@ class UserDetailsController extends Controller {
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
+        $message = '';
 
         if ($id !== null) {
             $model = Licenses::findOne($id);
-           
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->expiry_date = date('m-Y', strtotime($model->expiry_date));
             $temp_document_file = isset($model->document) && !empty($model->document) ? $model->document : NULL;
             $deleteFlag = true;
         } else {
             $model = new Licenses();
+            $message = 'Create';
             $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
@@ -439,7 +443,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "License Details Updated successfully.");
+                    Yii::$app->session->setFlash('success', "License Details ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'License Details Updated successfully.']);
                 }
             } else {
@@ -459,15 +463,18 @@ class UserDetailsController extends Controller {
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
+         $message = '';
 
         if ($id !== null) {
             $model = Certifications::findOne($id);
+             $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->expiry_date = date('m-Y', strtotime($model->expiry_date));
             $temp_document_file = isset($model->document) && !empty($model->document) ? $model->document : NULL;
             $deleteFlag = true;
         } else {
             $model = new Certifications();
+             $message = 'Create';
             $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
@@ -505,7 +512,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Certification Details Updated successfully.");
+                    Yii::$app->session->setFlash('success', "Certification Details ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'Certification Details Updated successfully.']);
                 }
             } else {
@@ -525,14 +532,17 @@ class UserDetailsController extends Controller {
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
+         $message = '';
 
         if ($id !== null) {
             $model = Documents::findOne($id);
+             $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $temp_document_file = isset($model->path) && !empty($model->path) ? $model->path : NULL;
             $deleteFlag = true;
         } else {
             $model = new Documents();
+             $message = 'Create';
             $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
@@ -571,7 +581,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Document Updated successfully.");
+                    Yii::$app->session->setFlash('success', "Document ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'Document Updated successfully.']);
                 }
             } else {
@@ -589,12 +599,14 @@ class UserDetailsController extends Controller {
     public function actionAddReference() {
 
         $id = \Yii::$app->request->get('id');
-
+        $message = '';
         if ($id !== null) {
             $model = References::findOne($id);
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
         } else {
             $model = new References();
+            $message = 'Create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
@@ -604,7 +616,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Reference Details Updated successfully.");
+                    Yii::$app->session->setFlash('success', "Reference Details ".$message." successfully.");
                     return json_encode(['error' => 0, 'message' => 'Reference Details Updated successfully.']);
                 }
             } else {

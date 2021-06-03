@@ -45,24 +45,30 @@ use yii\web\JsExpression;
                     <div class="contentbox">
                         <h3>Job Description</h3>
                         <p><?= $model->description ?></p>
-                        <h3>Benifits</h3>
-                        <ul>
-                            <?php foreach ($benefit as $value) { ?>
-                                <li><?= $value->benefit->name ?></li>
-                            <?php } ?>
-                        </ul>
+                        <?php if (isset($benefit) && !empty($benefit)) { ?>
+                            <h3>Benifits</h3>
+                            <ul>
+                                <?php foreach ($benefit as $value) { ?>
+                                    <li><?= $value->benefit->name ?></li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
+                        <?php if (isset($discipline) && !empty($discipline)) { ?>
                         <h3>Discipline</h3>
                         <ul>
                             <?php foreach ($discipline as $value) { ?>
                                 <li><?= $value->discipline->name ?></li>
                             <?php } ?>
                         </ul>
+                        <?php } ?>
+                        <?php if (isset($specialty) && !empty($specialty)) { ?>
                         <h3>Specialty</h3>
                         <ul>
                             <?php foreach ($specialty as $value) { ?>
                                 <li><?= $value->speciality->name ?></li>
                             <?php } ?>
                         </ul>
+                        <?php } ?>
                     </div>
                 </div>
                 <!-- Job Description end --> 
@@ -161,7 +167,7 @@ use yii\web\JsExpression;
                     </div>
                 </div>
             </div>
-           
+
         </div>
     </div>
 </div>
