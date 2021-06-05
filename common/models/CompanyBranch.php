@@ -28,7 +28,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public $state;
     public $company_name;
-    
+
     public static function tableName() {
         return 'company_branch';
     }
@@ -41,9 +41,9 @@ class CompanyBranch extends \yii\db\ActiveRecord {
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
             ['company_id', 'required', 'when' => function ($model) {
-                    return CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
+                    return isset(\Yii::$app->user->identity->id) ? CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id) : false;
                 }],
-            [['email'],'safe']
+            [['email'], 'safe']
         ];
     }
 

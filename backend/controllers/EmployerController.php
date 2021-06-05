@@ -83,7 +83,7 @@ class EmployerController extends Controller {
     public function actionIndex() {
         $searchModel = new UserDetailsSearch();
         $dataProvider = $searchModel->searchEmployer(Yii::$app->request->queryParams);
-        
+
         return $this->render('index', [
                     'searchModel' => $searchModel,
                     'dataProvider' => $dataProvider,
@@ -141,6 +141,7 @@ class EmployerController extends Controller {
                         if ($companySubscription->save()) {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
+                            $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
@@ -224,6 +225,7 @@ class EmployerController extends Controller {
                 try {
                     if ($companyMasterModel->save()) {
                         $company_branch = CompanyBranch::find()->where(['company_id' => $companyMasterModel->id, 'is_default' => CompanyBranch::IS_DEFAULT_YES])->one();
+                        $company_branch->email = $companyMasterModel->company_email;
                         $company_branch->setAttributes($companyMasterModel->getAttributes());
                         if ($company_branch->save()) {
                             $model->type = User::TYPE_EMPLOYER;
@@ -231,7 +233,7 @@ class EmployerController extends Controller {
                             if ($model->save()) {
                                 $userDetailModel->branch_id = $company_branch->id;
                                 $userDetailModel->company_id = $companyMasterModel->id;
-                                $userDetailModel->user_id = $user->id;
+                                $userDetailModel->user_id = $model->id;
                                 if ($userDetailModel->save()) {
                                     $transaction->commit();
                                     Yii::$app->session->setFlash("success", "Employer was updated successfully.");
@@ -244,6 +246,7 @@ class EmployerController extends Controller {
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
+                    Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
             }
         }

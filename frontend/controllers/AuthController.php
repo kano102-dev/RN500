@@ -197,6 +197,7 @@ class AuthController extends Controller {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
                             $company_branch->city = $companyMasterModel->city;
+                            $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
                             $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
@@ -241,6 +242,7 @@ class AuthController extends Controller {
                         }
                     } catch (\Exception $ex) {
                         $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 }
             } else {

@@ -9,15 +9,14 @@ require __DIR__ . '/../../common/config/bootstrap.php';
 require __DIR__ . '/../config/bootstrap.php';
 $configFile = '';
 if ($_SERVER['SERVER_NAME'] == 'rn500.com') {
-    $configFile = 'main.php';
+    $configFile = 'main.php'; //production
 } elseif ($_SERVER['SERVER_NAME'] == 'dev.rn500.com') {
-    $configFile = 'main-stage.php';
+    $configFile = 'main-stage.php'; //Stage(QA)
 } else {
-    $configFile = 'main-local.php';
+    $configFile = 'main-local.php'; //Local
 }
 $config = yii\helpers\ArrayHelper::merge(
                 require __DIR__ . '/../../common/config/' . $configFile,
-                require __DIR__ . '/../config/' . $configFile,
-);
+                require __DIR__ . '/../config/' . $configFile);
 
 (new yii\web\Application($config))->run();

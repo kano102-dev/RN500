@@ -64,7 +64,7 @@ class Documents extends \yii\db\ActiveRecord {
     public function getDocumentUrl() {
         $url = '';
         if ($this->path != '' && file_exists(CommonFunction::getDocumentBasePath() . "/" . $this->path)) {
-            $url = \Yii::$app->urlManager->createAbsoluteUrl((['/uploads/user-details/document/' . $this->path]));
+            $url = \Yii::$app->urlManagerFrontend->createAbsoluteUrl((['/uploads/user-details/document/' . $this->path]));
         }
         return $url;
     }

@@ -100,6 +100,9 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                         <div class="col-6">
                             <?= $form->field($companyMasterModel, 'employer_identification_number')->textInput(['maxlength' => true]); ?>
                         </div>
+                        <div class="col-6">
+                            <?= $form->field($companyMasterModel, 'website_link')->textInput(['maxlength' => true]); ?>
+                        </div>
                     </div>
                 </div>
             </div>
