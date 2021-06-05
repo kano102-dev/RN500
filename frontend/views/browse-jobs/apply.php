@@ -38,11 +38,11 @@ $lead_id = $model->id;
                             'filterModel' => $searchModel,
                             'columns' => [
                                     ['class' => 'yii\grid\SerialColumn'],
-                                [
-                                    'attribute'=>'branch_name',
-                                    'enableSorting'=>false
-                                    ],
                                 'company_name',
+                                    [
+                                    'attribute' => 'branch_name',
+                                    'enableSorting' => false
+                                ],
                                     [
                                     'class' => 'yii\grid\ActionColumn',
                                     'contentOptions' => ['style' => 'width:5%;'],
@@ -83,7 +83,7 @@ $lead_id = $model->id;
 $script_new = <<<JS
     function applyToThisbranch(url){
         
-        swal("Are you sure, you want to proceed.",{
+        swal("Are you sure, you want to apply this job?",{
             buttons: ["Cancel", "Yes!"],
         }).then((value) => {
             if(value){

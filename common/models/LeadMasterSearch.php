@@ -125,21 +125,21 @@ class LeadMasterSearch extends LeadMaster {
 
     public function searchJobApply($params) {
         $reference_no = isset($params['ref']) ? $params['ref'] : '';
-//        echo "<pre/>";
-//        print_r($params);
-//        exit;
 
-        $query = CompanyBranch::find()->alias('branch')->select("branch.*, subscribed_companies.company_name")
-                ->innerJoin("( 
+        $ee = new \yii\db\Expression('IF(subscribed_companies.company_name IS NOT NULL ,subscribed_companies.company_name,`company`.`company_name`) as company_name');
+        $query = CompanyBranch::find()->alias('branch')->select(["branch.*", $ee])->joinWith("company company")
+//        $query = CompanyBranch::find()->alias('branch')->select(['CASE WHEN subscribed_companies.company_name IS NOT NULL THEN subscribed_companies.company_name ELSE company.company_name END  company_name','MAX(sent_on) AS sent_on'])->joinWith("company company")
+                ->leftJoin("( 
                                 SELECT sub.company_id, company.company_name, lead.reference_no FROM company_subscription_payment sub_pay
                                 LEFT JOIN company_subscription sub ON sub.id = sub_pay.subscription_id
                                 LEFT JOIN company_master company ON company.id = sub.company_id
                                 LEFT JOIN lead_master lead ON lead.id = sub_pay.lead_id
-                                WHERE lead.reference_no='$reference_no' AND sub_pay.status=1 AND sub.package_id !=1 AND sub.status=1 AND company.status = 1  AND company.type = " . User::TYPE_RECRUITER . " AND is_suspend = 0 
+                                WHERE lead.reference_no='$reference_no' AND sub_pay.status=1 AND sub.status=1 AND company.status = 1  AND company.type = " . User::TYPE_RECRUITER . " AND is_suspend = 0 
                                 GROUP BY sub.company_id
                             ) as subscribed_companies", "subscribed_companies.company_id = branch.company_id");
 
-//        
+        $query->andWhere("subscribed_companies.company_id IS NOT NULL OR company.id = 1");
+
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -155,7 +155,7 @@ class LeadMasterSearch extends LeadMaster {
         }
 
         if ($this->company_name) {
-            $query->andWhere(['LIKE', 'subscribed_companies.company_name', $this->company_name]);
+            $query->andWhere(['LIKE', "IF(subscribed_companies.company_name IS NOT NULL ,subscribed_companies.company_name,`company`.`company_name`)", $this->company_name]);
         }
 
         return $dataProvider;

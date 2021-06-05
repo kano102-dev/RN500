@@ -97,7 +97,9 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
                 if ($branchEMail != '') {
                     $lead = $this->lead;
                     $job_seeker = $this->jobSeeker;
-                    $status = Yii::$app->mailer->compose('recruite-new-job-application', ['lead' => $lead, 'job_seeker' => $job_seeker])
+                    $urlToSend = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/profile/user-summary', 'ref' => $job_seeker->details->unique_id]);
+                    
+                    $status = Yii::$app->mailer->compose('recruite-new-job-application', ['lead' => $lead, 'job_seeker' => $job_seeker,'urlToSend'=>$urlToSend])
                             ->setFrom([\Yii::$app->params['senderEmail'] => \Yii::$app->params['senderName']])
                             ->setTo($branchEMail)
                             ->setSubject('New Job Appliaction')
