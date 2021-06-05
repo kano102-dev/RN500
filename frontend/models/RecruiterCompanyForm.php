@@ -14,7 +14,7 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  */
 class RecruiterCompanyForm extends CompanyMaster {
 
-    public $state;   
+    public $state;
     public $mobile;
 
     /**
@@ -22,7 +22,7 @@ class RecruiterCompanyForm extends CompanyMaster {
      */
     public function rules() {
         return [
-            [['mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['mobile', 'company_name', 'company_email', 'website_link', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
@@ -34,7 +34,8 @@ class RecruiterCompanyForm extends CompanyMaster {
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
-            [['state', 'type', 'status', 'reference_no', 'employer_identification_number'], 'safe'],
+            [['website_link'], 'url'],
+            [['state', 'type', 'status', 'reference_no', 'employer_identification_number','website_link'], 'safe'],
             [['company_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
             [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field']
         ];
@@ -50,6 +51,7 @@ class RecruiterCompanyForm extends CompanyMaster {
             'company_email' => 'Email',
             'company_mobile' => 'Mobile',
             'employer_identification_number' => 'Employer Indetification Number',
+            'website_link' => 'Website Link',
             'mobile' => 'Mobile',
             'priority' => 'Priority',
             'street_no' => 'Street No',
