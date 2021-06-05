@@ -5,7 +5,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $user common\models\User */
 
-$jobSeekerProfileUser = Yii::$app->urlManager->createAbsoluteUrl(['/profile/user-summary', 'ref' => $job_seeker->details->unique_id]);
+$jobSeekerProfileUser = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/profile/user-summary', 'ref' => $job_seeker->details->unique_id]);
+
 ?>
 <div class="login-otp">
     <br/>

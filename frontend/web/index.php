@@ -17,7 +17,6 @@ if ($_SERVER['SERVER_NAME'] == 'rn500.com') {
 }
 $config = yii\helpers\ArrayHelper::merge(
                 require __DIR__ . '/../../common/config/' . $configFile,
-                require __DIR__ . '/../config/' . $configFile,
-);
+                require __DIR__ . '/../config/' . $configFile);
 
 (new yii\web\Application($config))->run();

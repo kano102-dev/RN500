@@ -43,7 +43,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-            [['company_name', 'company_email', 'street_address', 'city', 'updated_at'], 'required'],
+            [['company_name','website_link', 'company_email', 'street_address', 'city', 'updated_at'], 'required'],
             ['company_mobile', 'required', 'message' => 'Mobile No. cannot be blank.'],
             ['street_no', 'required', 'message' => 'Street No. cannot be blank.'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
@@ -58,6 +58,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
             [['state', 'type', 'status', 'reference_no', 'employer_identification_number', 'mobile'], 'safe'],
+            [['website_link'], 'url'],
             [['company_name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
             [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field'],
             [['is_suspend'], 'safe']
@@ -74,6 +75,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'company_email' => 'Email',
             'company_mobile' => 'Mobile',
             'employer_identification_number' => 'Employer Indetification Number',
+            'website_link' => 'Website Link',
             'mobile' => 'Mobile',
             'priority' => 'Priority',
             'street_no' => 'Street No.',
