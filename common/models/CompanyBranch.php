@@ -35,12 +35,13 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public function rules() {
         return [
-            [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['company_id', 'branch_name', 'street_no', 'street_address', 'city', 'updated_at','zip_code'], 'required'],
             [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
             [['branch_name'], 'string', 'max' => 200],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-            [['zip_code'], 'string', 'max' => 20],
-            [['email'],'safe']
+//            [['zip_code'], 'string', 'max' => 20],
+            [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
+            [['email','branch_name','street_no','street_address','apt','zip_code'],'safe']
         ];
     }
 

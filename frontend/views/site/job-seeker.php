@@ -14,56 +14,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $frontendDir = yii\helpers\Url::base(true);
 ?>
 
-<style>
 
-    .searchList li:hover{box-shadow: 0 5px 11px 0 rgb(0 0 0 / 18%), 0 4px 15px 0 rgb(0 0 0 / 15%);border:none;}
-    .usernavdash li a{display: flex;align-items: center;}
-    .usernavdash .fa-plus{color: #4088ff !important;font-size: 20px !important;top: 3px;}
-    .usernavdash .fa-angle-right{color: #4088ff !important;font-size: 23px !important;font-weight: bold;}
-    .usernavdash i{position: relative;color: #d9e0e8 !important; font-size: 25px !important;}
-    /*.usernavdash i span{position: absolute;left: 7px;color: #000;font-size: 14px;top: 4px;}*/
-    .round{width: 1.5rem;height: 1.5rem;justify-content: center;background: #d9e0e8;border-radius: 100%;font-size: .75rem;margin-right: 1rem;text-align: center;line-height: 23px;}
-    .font-a{position: absolute;right:10px;}
-    .range-content{background: #3ca0d6; padding: 15px;}
-    .range-content .title{font-weight: bold;font-size: 15px;color: #fff;}
-    .range-content .profile-percent{text-align: center;margin-bottom: 15px;}
-    .range-content .profile-percent a{font-weight: bold;font-size: 13px;padding: 5px; background: #263bd6;color: #fff;margin-top: 15px;}
-    .listbtn .round{float:right;float: right;position: absolute;right: 0;top: 0px;width: 2.5rem;height: 2.5rem;line-height: 38px;}
-    .searchList li .companyName a{color: #fff;}
-    .card {padding-left:auto;padding-right:auto;border-radius: 10px;margin-top:15px;box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);-webkit-transition: .25s box-shadow;transition: .25s box-shadow;}
-    .card:focus, .card:hover {box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);}
-    .card-inverse .card-img-overlay {background-color: rgba(51, 51, 51, 0.85);border-color: rgba(51, 51, 51, 0.85);}
-    .card-img-top{margin-top:10px;}
-    .jobinfo .card .card-header, .jobinfo .card .card-footer{display: flex;align-items: center;border-bottom: 1px solid #d4dce0;padding: 20px;}
-    .jobinfo .card .card-header .card-title{margin-bottom: 0;margin-left: 10px;}
-    .jobinfo .card .card-block{padding:20px;border-bottom: 1px solid #d4dce0;}
-    .jobinfo .card .card-header .card-icon{margin-right: 0;height: 35px;width: 35px;line-height: 2;font-size: 17px;background: #3ca0d6;}
-    .jobinfo .card .card-header .card-icon .fa{color:#fff;}
-    .action {padding: 0px 15px 0px 15px;}
-    .action .info{border-top: 1px solid black;    margin: 10px 0px 10px 0px;}
-    .action .info a{text-decoration: none;font-weight: bold;font-size: 20px;display: flex;align-items: center;}
-    .action .info a .action-icon{position: absolute;right:10px;top:5px;}
-    .action .info a .action-icon .fa-angle-right{font-weight: bold;font-size: 30px;}
-    .box-padding{padding:0 !important;}
-    .box-padding .jobinfo{padding:20px 0px 0px 20px;}
-    .box-padding .content{padding:0px 0px 0px 20px;}
-    label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700;}
-    .ui-state-default{display: none;}
-    .ui-widget-header{background: #263bd6;}
-    .sticky-sidebar{position: fixed !important;width: 360px;top: 70px;}
-    .jobinfo h3 a,.jobinfo .card .card-footer .card-title a{text-decoration: none;}
-    .mb-10{margin-bottom: 10px;}
-    .edit-icon-right a{float: right;margin-right:10px;}
-    .edit-icon-right a i{font-size: 20px;color: #000;}
-    .searchList li .interest_level{display: flex;align-items: center;}
-    .searchList li .interest_level .actively_looking{background: #2cd34b;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
-    .searchList li .interest_level .open_to_offers{background: red;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
-    .searchList li .interest_level .search_on_hold{background: #6f74bd;height: 15px;width: 15px;border-radius: 50%;display: block;margin-right: 10px;}
-    @media (max-width: 425px) {
-        .sticky-sidebar{position: relative !important;width: 100% !important;}
-        .new-searchList li{text-align: left;}
-    }
-</style>
 
 <div class="listpgWraper">
     <div class="container">
@@ -113,12 +64,21 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <div class="jobinfo">
                                             <h5><?= $userDetails->first_name . " " . $userDetails->last_name ?></h5>
                                             <div class="location"><?= Yii::$app->user->identity->email ?></div>
-                                            <!--<div class="location"><?php //  $userDetails->mobile_no        ?></div>-->
-                                            <div class="companyName"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
+                                            <?php if (isset($userDetails->interest_level) && !empty($userDetails->interest_level)) { ?>
+                                                <?php if ($userDetails->interest_level == UserDetails::ACTIVELY_LOOKING) { ?>
+                                                    <p class="interest_level actively_looking"> Actively Looking</p>
+                                                <?php } else if ($userDetails->interest_level == UserDetails::OPEN_TO_OFFERS) { ?>
+                                                    <p class="interest_level open_to_offers"> Open To Offers</p>
+                                                <?php } else { ?>
+                                                    <p class="interest_level search_on_hold"> Search On Hold</p>
+                                                <?php } ?>
+                                            <?php } ?>
+                                            
                                         </div>
                                         <div class="clearfix"></div>
                                     </div>
                                     <div class="col-md-4 col-sm-4">
+                                            <div class="companyName pull-right"><a href="#" url="<?= Yii::$app->urlManager->createUrl(['user-details/update', 'id' => Yii::$app->user->id]) ?>" class="btn btn-info editProfile" >Edit</a></div>
                                         <div class="listbtn">
                                             <!--<div class="round"><i class="fa fa-file"></i></div>-->
                                         </div>
@@ -140,15 +100,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <p>Phone</p>
                                         <p>Email</p>
                                         <p>Last 4 of SSN</p>
-                                        <?php if (isset($userDetails->interest_level) && !empty($userDetails->interest_level)) { ?>
-                                            <?php if ($userDetails->interest_level == UserDetails::ACTIVELY_LOOKING) { ?>
-                                        <p class="interest_level"><span class="actively_looking">&nbsp;</span> Actively Looking</p>
-                                            <?php } else if ($userDetails->interest_level == UserDetails::OPEN_TO_OFFERS) { ?>
-                                                <p class="interest_level"><span class="open_to_offers">&nbsp;</span> Open To Offers</p>
-                                            <?php } else { ?>
-                                                <p class="interest_level"><span class="search_on_hold"></span> Search On Hold</p>
-                                            <?php } ?>
-                                        <?php } ?>
+
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>

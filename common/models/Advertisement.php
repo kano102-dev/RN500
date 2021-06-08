@@ -51,7 +51,7 @@ class Advertisement extends \yii\db\ActiveRecord
                 }, 'whenClient' => "function (attribute, value) {
                 return ($('#type_2').is(':checked'));
             }"],            
-            [['active_from', 'active_to', 'created_at', 'updated_at','created_by', 'updated_by','vendor_id'], 'safe'],
+            [['name','link_url','video_link','active_from','description' ,'active_to', 'created_at', 'updated_at','created_by', 'updated_by','vendor_id'], 'safe'],
             [['name', 'icon'], 'string', 'max' => 255],
             [['location_name'], 'string', 'max' => 100],
             [['icon'], 'file', 'extensions'=>['jpg','png','jpeg'], 'checkExtensionByMimeType'=>false,"wrongExtension" => "File type is not compatible. Please upload a PNG or JPG file."],

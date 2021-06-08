@@ -8,6 +8,7 @@ use common\models\CompanyBranch;
 use common\models\CompanyMaster;
 use common\models\CompanySubscription;
 use common\models\CompanySubscriptionPayment;
+use yii\helpers\Html;
 
 class CommonFunction {
 
@@ -200,6 +201,11 @@ class CommonFunction {
             }
         }
         return $flag;
+    }
+    
+    public static function htmlEncodeLabel($str) {
+        $var = Html::encode($str);
+        return str_replace("&amp;", "&", $var);
     }
 
     // RETURN BASE PATH OF PROFILE PICTURE FOLDER

@@ -22,7 +22,7 @@ class RecruiterCompanyForm extends CompanyMaster {
      */
     public function rules() {
         return [
-            [['mobile', 'company_name', 'company_email', 'company_mobile', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['mobile', 'company_name', 'company_email', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
             [['priority', 'city', 'is_master', 'created_at', 'updated_at'], 'integer'],
             [['company_name'], 'string', 'max' => 250],
             [['company_email'], 'email'],
@@ -31,6 +31,7 @@ class RecruiterCompanyForm extends CompanyMaster {
             [['employer_identification_number'], 'checkUniqueEIN'],
             [['company_mobile'], 'string'],
             [['employer_identification_number'], 'required'],
+            ['company_mobile' , 'required', 'message' => 'Mobile No. cannot be blank.'],
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
