@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use borales\extensions\phoneInput\PhoneInputValidator;
 /**
  * This is the model class for table "vendor".
  *
@@ -41,8 +41,13 @@ class Vendor extends \yii\db\ActiveRecord
         return [
             [['company_name', 'email', 'phone', 'street_no', 'street_address', 'city', 'zip_code', 'state'], 'required'],
             ['email','email'],
-            [['phone', 'zip_code', 'state', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            ['phone' , 'required', 'message' => 'Mobile No. cannot be blank.'],
+            [['phone'], PhoneInputValidator::className()],
+            [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
+            [['phone', 'state', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
             [['company_name', 'email', 'street_no', 'street_address', 'apt', 'city'], 'string', 'max' => 255],
+            [['company_name','street_no','street_address','apt'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            [['company_name','street_no','street_address','apt'],'safe']
         ];
     }
 

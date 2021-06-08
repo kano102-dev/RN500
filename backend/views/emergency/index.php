@@ -10,6 +10,7 @@ use yii\widgets\Pjax;
 
 $this->title = 'Emergency';
 $this->params['breadcrumbs'][] = $this->title;
+$status = [0 => 'Inactive', 1 => 'Active'];
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
@@ -28,6 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
                         'name',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($model) use ($status) {
+                                return isset($model->status) ? $status[$model->status] : '';
+                            },
+                            'filter' => \yii\bootstrap\Html::activeDropDownList($searchModel, 'status', ['' => 'All', '0' => 'Inactive', '1' => 'Active'], ['class' => 'form-control'])        
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => 'width:5%;'],

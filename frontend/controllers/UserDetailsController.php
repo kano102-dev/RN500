@@ -335,7 +335,7 @@ class UserDetailsController extends Controller {
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Work Experience ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Work Experience Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'Work Experience '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "Work Experience Updated failed.");
@@ -375,7 +375,7 @@ class UserDetailsController extends Controller {
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Education Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Education Details Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'Education Details '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "Education Details Updated failed.");
@@ -444,7 +444,7 @@ class UserDetailsController extends Controller {
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "License Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'License Details Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'License Details '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "License Details Updated failed.");
@@ -513,7 +513,7 @@ class UserDetailsController extends Controller {
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Certification Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Certification Details Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'Certification Details '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "Certification Details Updated failed.");
@@ -582,7 +582,7 @@ class UserDetailsController extends Controller {
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Document ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Document Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'Document '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "Document Updated failed.");
@@ -612,12 +612,13 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            
             $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "Reference Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Reference Details Updated successfully.']);
+                    return json_encode(['error' => 0, 'message' => 'Reference Details '.$message.' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('success', "Reference Details Updated failed.");
@@ -658,7 +659,7 @@ class UserDetailsController extends Controller {
         if(file_exists($uploadPath . $file)){
             if (unlink($uploadPath . $file)) {
                 if ($model->delete()) {
-                    Yii::$app->session->setFlash('success', $message . " Updated failed.");
+                    Yii::$app->session->setFlash('success', $message . " Deleted failed.");
                     $deleteFlag = true;
                 }
             }

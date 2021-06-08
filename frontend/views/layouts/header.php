@@ -22,6 +22,7 @@ Pjax::end();
 $activeClass = "active";
 $controller = Yii::$app->controller->id;
 $action = Yii::$app->controller->action->id;
+$frontendDir = yii\helpers\Url::base(true);
 ?>
 
 <style>
@@ -75,8 +76,16 @@ $action = Yii::$app->controller->action->id;
                                 <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
 
-                            <?php if (!empty(Yii::$app->user->identity)) { ?>                            
-                                <li class="dropdown userbtn"><a href="javascript:void(0);"><img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" /></a>
+                            <?php if (!empty(Yii::$app->user->identity)) { ?>  
+
+                                <li class="dropdown userbtn">
+                                    <a href="javascript:void(0);">
+                                        <?php if (isset(Yii::$app->user->identity->details->profile_pic) && !empty(Yii::$app->user->identity->details->profile_pic)) { ?>
+                                            <img src="<?= $frontendDir . "/uploads/user-details/profile/" . Yii::$app->user->identity->details->profile_pic ?>" alt="" class="userimg" />
+                                        <?php } else { ?>
+                                            <img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" />
+                                        <?php } ?>    
+                                    </a>
                                     <ul class="dropdown-menu">
                                         <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
                                             <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>

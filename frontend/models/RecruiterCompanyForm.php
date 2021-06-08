@@ -31,6 +31,7 @@ class RecruiterCompanyForm extends CompanyMaster {
             [['employer_identification_number'], 'checkUniqueEIN'],
             [['company_mobile'], 'string'],
             [['employer_identification_number'], 'required'],
+            ['company_mobile' , 'required', 'message' => 'Mobile No. cannot be blank.'],
             [['company_mobile'], PhoneInputValidator::className()],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
             [['zip_code'], 'string', 'max' => 20],
