@@ -19,7 +19,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-    'homeUrl' => 'http://dev.rn500.com',
+    'homeUrl' => '/rn500',
     'components' => [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
@@ -27,7 +27,7 @@ $config = [
         ],
         'request' => [
             'csrfParam' => '_csrf',
-            'baseUrl' => '/',
+            'baseUrl' => '/rn500',
             'csrfCookie' => [
                 'name' => '_csrf',
                 'path' => '/',
@@ -46,10 +46,9 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-       'urlManager' => [
+        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'baseUrl' => '/',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -60,7 +59,6 @@ $config = [
             'class' => 'yii\web\urlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-	    'baseUrl' => 'http://dev.rn500.com',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -71,7 +69,7 @@ $config = [
             'class' => 'yii\web\urlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'baseUrl' => '/admin',
+            'baseUrl' => '/rn500/admin',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -81,7 +79,6 @@ $config = [
     ],
     'params' => $params,
 ];
-
 
 if (!YII_ENV_TEST) {
     // configuration adjustments for 'dev' environment

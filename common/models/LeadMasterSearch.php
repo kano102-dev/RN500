@@ -135,7 +135,7 @@ class LeadMasterSearch extends LeadMaster {
                                 LEFT JOIN company_subscription sub ON sub.id = sub_pay.subscription_id
                                 LEFT JOIN company_master company ON company.id = sub.company_id
                                 LEFT JOIN lead_master lead ON lead.id = sub_pay.lead_id
-                                WHERE lead.reference_no='$reference_no' AND sub_pay.status=1 AND sub.package_id !=1 AND sub.status=1 AND company.status = 1  AND company.type = " . User::TYPE_RECRUITER . " AND is_suspend = 0 
+                                WHERE lead.reference_no='$reference_no' AND sub_pay.status=1 AND sub.status=1 AND company.status = 1  AND company.type = " . User::TYPE_RECRUITER . " AND is_suspend = 0 
                                 GROUP BY sub.company_id
                             ) as subscribed_companies", "subscribed_companies.company_id = branch.company_id");
 

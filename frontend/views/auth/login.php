@@ -30,6 +30,9 @@ $is_otp_sent = $model->is_otp_sent;
             <div class="col-md-6 col-md-offset-3">
                 <div class="userccount">
                     <h5>User Sign In</h5>
+
+                    <div class="alert alert-success message" role="alert" style="display:none">
+                    </div>
                     <!-- login form -->
                     <div class="formpanel">
                         <?php $form = \yii\bootstrap4\ActiveForm::begin(['id' => 'login-form', 'options' => ['autocomplete' => 'off']]) ?>
@@ -67,6 +70,7 @@ $is_otp_sent = $model->is_otp_sent;
                                         ])
                                         ->label(false)
                                         ->textInput(['placeholder' => 'OTP']);
+                                echo Html::a('Resend OTP', 'javascript:void(0)', ['id' => 'resend_otp', 'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['auth/resend-otp', 'email' => $model->username])]);
                             }
                             ?>
 
@@ -102,5 +106,17 @@ $script = <<< JS
           x.type = "password";
         }
     }
+  $(document).on('click', '#resend_otp', function() {
+        var action=$(this).attr('url');
+        $.ajax({
+            url    : action,
+            type   : 'post',
+            success: function (response){
+                var res=JSON.parse(response);
+                $('.message').html(res.msg);        
+                $('.message').css("display","block");        
+            },
+        });
+  });
 JS;
 $this->registerJs($script);

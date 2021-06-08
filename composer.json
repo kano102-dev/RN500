@@ -27,7 +27,8 @@
         "stripe/stripe-php": "^7.77",
         "firebase/php-jwt": "^5.2",
         "php-http/guzzle6-adapter": "^2.0",
-        "ranamehul20/yii2-twakto": "^1.0"
+        "ranamehul20/yii2-twakto": "^1.0",
+        "yiimaker/yii2-social-share": "^2.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

@@ -146,6 +146,7 @@ class RecruiterController extends Controller {
                         if ($companySubscription->save()) {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
+                            $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
@@ -229,6 +230,7 @@ class RecruiterController extends Controller {
                 try {
                     if ($companyMasterModel->save()) {
                         $company_branch = CompanyBranch::find()->where(['company_id' => $companyMasterModel->id, 'is_default' => CompanyBranch::IS_DEFAULT_YES])->one();
+                        $company_branch->email = $companyMasterModel->company_email;
                         $company_branch->setAttributes($companyMasterModel->getAttributes());
                         if ($company_branch->save()) {
                             $model->type = User::TYPE_RECRUITER;

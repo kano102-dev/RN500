@@ -159,6 +159,8 @@ class CommonFunction {
             $subscription = CompanySubscription::find()->where(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->andWhere(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->one();
             if (!empty($subscription)) {
                 return false;
+            } else {
+                return true;
             }
         }
     }
@@ -212,17 +214,17 @@ class CommonFunction {
     public static function getProfilePictureBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/profile";
     }
-    
+
     // RETURN BASE PATH OF DOCUMENTS FOLDER
     public static function getDocumentBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/document";
     }
-    
+
     // RETURN BASE PATH OF LICENSES FOLDER
     public static function getLicensesBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/license";
     }
-    
+
     // RETURN BASE PATH OF LICENSES FOLDER
     public static function getCertificateBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/certification";

@@ -122,11 +122,7 @@ class CompanyBranchController extends Controller {
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
-            if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
-                $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1, 'id' => Yii::$app->user->identity->branch->company_id])->all(), 'id', 'company_name');
-            } else {
-                $companyList = [];
-            }
+            $companyList = [];
         }
 
         $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
@@ -140,7 +136,7 @@ class CompanyBranchController extends Controller {
             $is_success = false;
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                if (empty($companyBranchModel->company_id)) {
+                if (!CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
                     $companyBranchModel->company_id = Yii::$app->user->identity->branch->company_id;
                 }
                 $companyBranchModel->is_default = CompanyBranch::IS_DEFAULT_NO;
@@ -150,7 +146,7 @@ class CompanyBranchController extends Controller {
                     $user = new User();
                     $user->email = $userDetailModel->email;
                     $user->type = $companyBranchModel->company->type == 1 ? User::TYPE_RECRUITER : User::TYPE_EMPLOYER;
-                    $user->status = User::STATUS_PENDING;
+                    $user->status = User::STATUS_APPROVED;
                     $user->branch_id = $companyBranchModel->id;
                     $user->role_id = $userDetailModel->role_id;
                     $user->is_owner = User::OWNER_YES;
@@ -176,7 +172,7 @@ class CompanyBranchController extends Controller {
             } catch (\Exception $ex) {
                 $transaction->rollBack();
             } finally {
-                return $this->redirect(['index']);
+//                return $this->redirect(['index']);
             }
         }
 

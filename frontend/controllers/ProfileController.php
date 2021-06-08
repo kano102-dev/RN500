@@ -4,20 +4,13 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
-use common\models\LoginForm;
-use common\models\User;
 use common\models\UserDetails;
-use common\models\CompanyMaster;
-use common\models\CompanyBranch;
-use yii\helpers\ArrayHelper;
-use common\models\States;
-use common\models\Cities;
-use common\CommonFunction;
-use frontend\models\EmployerForm;
-use frontend\models\JobseekerForm;
-use common\models\PasswordResetRequestForm;
+use common\models\WorkExperience;
+use common\models\Documents;
+use common\models\Licenses;
+use common\models\Certifications;
+use common\models\Education;
+use common\models\References;
 
 /**
  * Site controller
@@ -87,7 +80,16 @@ class ProfileController extends Controller {
     public function actionUserSummary($ref) {
         $model = UserDetails::find()->where(['unique_id' => $ref])->one();
         if ($model !== null) {
-            echo $userId = $model->user_id;
+            $userId = $model->user_id;
+
+            $workExperiences = WorkExperience::find()->where(['user_id' => $userId])->joinWith('discipline')->all();
+            $certifications = Certifications::find()->where(['user_id' => $userId])->all();
+            $documents = Documents::find()->where(['user_id' => $userId])->all();
+            $licenses = Licenses::find()->where(['user_id' => $userId])->all();
+            $educations = Education::find()->where(['user_id' => $userId])->all();
+            $references = References::find()->where(['user_id' => $userId])->all();
+
+            return $this->render('user-summary', ['model' => $model, 'workExperiences' => $workExperiences, 'certifications' => $certifications, 'documents' => $documents, 'licenses' => $licenses, 'educations' => $educations, 'references' => $references]);
         } else {
             throw new \yii\web\NotFoundHttpException("Oops! Something went wrong");
         }

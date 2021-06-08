@@ -25,7 +25,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
     <div class="container">
         <div class="row">
             <div class="col-md-6 col-sm-6">
-                <h1 class="page-heading">Find Your Jobs</h1>
+                <h1 class="page-heading">Find Your Leads</h1>
             </div>
         </div>
     </div>

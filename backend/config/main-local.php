@@ -1,5 +1,4 @@
 <?php
-
 if ($_SERVER['SERVER_NAME'] == 'rn500.com') {
     $params = array_merge(
             require __DIR__ . '/../../common/config/params.php', require __DIR__ . '/params.php'
@@ -15,11 +14,12 @@ if ($_SERVER['SERVER_NAME'] == 'rn500.com') {
 }
 
 $config = [
-    'id' => 'app-frontend',
+    'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
+    'controllerNamespace' => 'backend\controllers',
+    'homeUrl' => '/rn500/admin',
     'bootstrap' => ['log'],
-    'controllerNamespace' => 'frontend\controllers',
-    'homeUrl' => 'http://dev.rn500.com',
+    'modules' => [],
     'components' => [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
@@ -27,12 +27,12 @@ $config = [
         ],
         'request' => [
             'csrfParam' => '_csrf',
-            'baseUrl' => '/',
+            'baseUrl' => '/rn500/admin',
             'csrfCookie' => [
                 'name' => '_csrf',
                 'path' => '/',
             ],
-            'cookieValidationKey' => '0Bmg5F23zy_y_M0TPp6zWqMQYUMLXJ6y',
+            'cookieValidationKey' => '0ZXOYLjsL_iEZCeqIuz0q4tnY69dQxVo',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -46,21 +46,9 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-       'urlManager' => [
+        'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'baseUrl' => '/',
-            'rules' => [
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-            ],
-        ],
-        'urlManagerFrontend' => [
-            'class' => 'yii\web\urlManager',
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
-	    'baseUrl' => 'http://dev.rn500.com',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -71,7 +59,18 @@ $config = [
             'class' => 'yii\web\urlManager',
             'enablePrettyUrl' => true,
             'showScriptName' => false,
-            'baseUrl' => '/admin',
+            'baseUrl' => '/rn500/admin',
+            'rules' => [
+                '<controller:\w+>/<id:\d+>' => '<controller>/view',
+                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
+            ],
+        ],
+        'urlManagerFrontend' => [
+            'class' => 'yii\web\urlManager',
+            'enablePrettyUrl' => true,
+            'showScriptName' => false,
+            'baseUrl' => '/rn500',
             'rules' => [
                 '<controller:\w+>/<id:\d+>' => '<controller>/view',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
@@ -81,7 +80,6 @@ $config = [
     ],
     'params' => $params,
 ];
-
 
 if (!YII_ENV_TEST) {
     // configuration adjustments for 'dev' environment
@@ -95,4 +93,5 @@ if (!YII_ENV_TEST) {
         'class' => 'yii\gii\Module',
     ];
 }
+
 return $config;

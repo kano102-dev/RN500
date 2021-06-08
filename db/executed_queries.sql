@@ -938,5 +938,9 @@ CREATE TABLE `lead_recruiter_job_seeker_mapping` (
   FOREIGN KEY (`lead_id`) REFERENCES `lead_master` (`id`) ON DELETE CASCADE
 );
 
-
 #  ***********************30 / 31 -MAY-2021***BY MOHAN*******END*******************
+#  ***********************05 -JUN-2021***BY MEHUL*******START*******************
+ALTER TABLE `company_master`
+ADD `website_link` varchar(250) NULL AFTER `priority`;
+#  ***********************05 -JUN-2021***BY MEHUL*******END*******************
+

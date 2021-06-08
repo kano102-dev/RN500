@@ -123,8 +123,6 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     'name' => 'location',
                                     'value' => array_keys($selectedLocations),
                                     'initValueText' => ($selectedLocations),
-//                                     'data' =>$selectedLocations,
-//                                     'showToggleAll' => true,
                                     'hideSearch' => false,
                                     'options' => [
                                         'id' => 'select_location',
@@ -133,10 +131,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         'class' => ''
                                     ],
                                     'pluginOptions' => [
-//                                          'tags' => true,
-//                                            'tokenSeparators' => [',', ' '],
                                         'tags' => true,
-//                                          'tokenSeparators' => [],
                                         'multiple' => true,
                                         'allowClear' => true,
                                         'minimumInputLength' => 1,
@@ -298,7 +293,6 @@ $get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-j
 $get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
-
 $script_new = <<<JS
 getDisciplineRecords();
 getSpecialtyRecords();

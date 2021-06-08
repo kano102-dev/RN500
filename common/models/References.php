@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use common\models\User;
 use borales\extensions\phoneInput\PhoneInputValidator;
+
 /**
  * This is the model class for table "references".
  *
@@ -23,54 +24,40 @@ use borales\extensions\phoneInput\PhoneInputValidator;
  *
  * @property User $user
  */
-class References extends \yii\db\ActiveRecord
-{
-//    public $countryCode;
-//    public function behaviors()
-//    {
-//        return [
-//            [
-//                'class' => \borales\extensions\phoneInput\PhoneInputBehavior::className(),
-//                'countryCodeAttribute' => 'countryCode',
-//            ],
-//        ];
-//    }
+
+class References extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'references';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['first_name', 'last_name', 'email', 'user_id','relation'], 'required'],
-            ['mobile_no','required','message' => 'Mobile No. cannot be blank.'],
-            [['title', 'city', 'state', 'user_id','created_at','updated_at'], 'integer'],
-            ['email','email'],
+                [['first_name', 'last_name', 'email', 'user_id', 'relation'], 'required'],
+                ['mobile_no', 'required', 'message' => 'Mobile No. cannot be blank.'],
+                [['title', 'city', 'state', 'user_id', 'created_at', 'updated_at'], 'integer'],
+                ['email', 'email'],
 //            [['mobile_no'], 'match', 'pattern' => '/^([0-9]){10}?$/', 'message' => 'Please enter a valid 10 digit numeric {attribute}.'],
             [['mobile_no'], PhoneInputValidator::className()],
             
             [['first_name', 'last_name', 'email', 'relation'], 'string', 'max' => 250],
             [['mobile_no'], 'string'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
-
-            [['first_name','last_name','relation'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
-            [['first_name', 'title', 'last_name', 'mobile_no', 'email', 'relation'],'safe']
-
+                [['first_name', 'last_name', 'relation'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+                [['first_name', 'title', 'last_name', 'mobile_no', 'email', 'relation'], 'safe']
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'first_name' => 'First Name',
@@ -90,8 +77,24 @@ class References extends \yii\db\ActiveRecord
      *
      * @return \yii\db\ActiveQuery
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function getTitleName() {
+        return $name = ($this->title != '' && isset(Yii::$app->params['REFERENCE_TYPE'][$this->title])) ? Yii::$app->params['REFERENCE_TYPE'][$this->title] : '';
+    }
+
+    public function getName() {
+        $name = '';
+        if ($this->first_name) {
+            $name .= $this->first_name;
+        }
+
+        if ($this->last_name) {
+            $name .= ' ' . $this->last_name;
+        }
+        return $name;
+    }
+
 }
