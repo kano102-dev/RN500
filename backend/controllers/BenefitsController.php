@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\CommonFunction;
 use yii\helpers\Url;
+use yii\filters\AccessControl;
 
 /**
  * BenefitsController implements the CRUD actions for Benefits model.
@@ -23,9 +24,34 @@ class BenefitsController extends Controller
     /**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('benefits-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('benefits-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('benefits-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('benefits-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -34,7 +60,7 @@ class BenefitsController extends Controller
             ],
         ];
     }
-
+    
     public function __construct($id, $module, $config = array()) {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
