@@ -39,7 +39,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             <div class='row'>
                 <div class='col-md-2'>
                     <div class="jobButtons"> 
-                        <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/apply', 'ref' => $model->reference_no]) ?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a>                        
+                        <a href="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply', 'ref' => $model->reference_no]) ?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a>                        
                     </div>
                 </div>
                 <div class='col-md-5'>

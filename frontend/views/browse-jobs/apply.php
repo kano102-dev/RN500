@@ -52,7 +52,7 @@ $lead_id = $model->id;
                                         //view button
                                         'proceed' => function ($url, $model) use ($lead_id) {
 //                                            echo "<span class='jobButtons'>";
-                                            $url = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/apply-job', 'lead_id' => $lead_id, 'branch_id' => $model->id]);
+                                            $url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply-job', 'lead_id' => $lead_id, 'branch_id' => $model->id]);
                                             return Html::a('Proceed', 'javascript:void(0)', [
                                                         'onclick' => "applyToThisbranch('$url')",
                                                         'data-pjax' => 0,
@@ -87,10 +87,13 @@ $script_new = <<<JS
             buttons: ["Cancel", "Yes!"],
         }).then((value) => {
             if(value){
+                $('#overlay').show();
                 $.ajax({
                     method: "POST",
                     url: url,
-                }).done(function( res ) {});
+                }).done(function( res ) {
+                    $('#overlay').hide();
+                });
             }
         });
     }
