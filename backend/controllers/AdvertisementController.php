@@ -124,7 +124,6 @@ class AdvertisementController extends Controller {
 
             if (!empty($icon)) {
                 $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $icon->getExtension();
-                ;
                 $icon->saveAs($folder . $model->icon);
             } else {
                 $model->icon = null;
