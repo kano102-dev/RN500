@@ -944,3 +944,17 @@ ALTER TABLE `company_master`
 ADD `website_link` varchar(250) NULL AFTER `priority`;
 #  ***********************05 -JUN-2021***BY MEHUL*******END*******************
 
+
+
+
+#  ***********************05/06-JUN-2021***BY MOHAN**************************
+ALTER TABLE `work_experience` CHANGE `end_date` `end_date` DATE NULL;
+
+ALTER TABLE `lead_recruiter_job_seeker_mapping`
+CHANGE `comment` `rec_comment` varchar(500) COLLATE 'utf8mb4_general_ci' NULL AFTER `job_seeker_id`,
+CHANGE `status` `rec_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:pending, 1:Approve, 2: pending ' AFTER `rec_comment`,
+ADD `rec_joining_date` date NULL AFTER `rec_status`,
+ADD `employer_comment` varchar(500) NULL AFTER `rec_joining_date`,
+ADD `employer_status` tinyint NOT NULL DEFAULT '0' COMMENT '0:Pending, 1:Approve, 2: Rejected ' AFTER `employer_comment`;
+
+#  ***********************05/06-JUN-2021***BY MOHAN END**************************

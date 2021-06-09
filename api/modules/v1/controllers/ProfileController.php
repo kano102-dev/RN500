@@ -309,7 +309,7 @@ class ProfileController extends Controller {
                         $model->updated_at = CommonFunction::currentTimestamp();
                         if ($model->update(false)) {
                             $code = 200;
-                            $data = ['token' => $this->token, 'first_name' => $model->first_name, 'last_name' => $model->last_name, 'email' => $this->email, 'profile_image' => !empty($model->profile_pic) ? $model->profile_pic : ''];
+                            $data = ['token' => $this->token, 'first_name' => $model->first_name, 'last_name' => $model->last_name, 'email' => $this->email, 'profile_image' => ($model->profile_pic && file_exists(CommonFunction::getProfilePictureBasePath() . "/" . $model->profile_pic)) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/$model->profile_pic"]), true) : ""];
                             $msg = "Profile saved successfully.";
                         }
                     } else {
