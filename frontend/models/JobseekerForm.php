@@ -23,7 +23,7 @@ class JobseekerForm extends \common\models\UserDetails {
      */
     public function rules() {
         return [
-            [['email'], 'email', 'message' => 'Please enter valid email id!'],
+            [['email'], 'email', 'message' => 'Please enter valid email id'],
             [['email'], 'checkUniqueValidation'],
             [['email'], 'required'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe'],

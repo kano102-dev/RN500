@@ -103,6 +103,13 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
                     $("#viewFTypeMore").fadeOut('slow');
                 }
             });
+
+            $(document).bind('ajaxStart', function () {
+                $('#overlay').show();
+            });
+            $(document).bind('ajaxStop', function () {
+                $('#overlay').hide();
+            });
         </script>
         <!-- Footer start -->
         <?= $this->render('common-modal') ?>
@@ -119,17 +126,13 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
 <?php $this->endPage() ?>
 
 <script>
-//    $('#overlay').show();             
-//    $('#overlay').hide();
+    $(document).bind("ajaxStart.mine", function () {
+        $('#overlay').show();
 
+    });
 
-            $(document).bind("ajaxStart.mine", function () {
-                $('#overlay').show();
+    $(document).bind("ajaxStop.mine", function () {
+        $('#overlay').hide();
 
-            });
-
-            $(document).bind("ajaxStop.mine", function () {
-                $('#overlay').hide();
-
-            });
+    });
 </script>

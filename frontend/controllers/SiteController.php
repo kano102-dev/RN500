@@ -25,6 +25,7 @@ use common\models\UserDetails;
 use common\models\JobPreference;
 use common\models\LeadMaster;
 use yii\base\DynamicModel;
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -54,7 +55,7 @@ class SiteController extends Controller {
 //            ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup','job-seeker'],
+                'only' => ['logout', 'signup', 'job-seeker'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -73,8 +74,6 @@ class SiteController extends Controller {
                     ],
                 ],
             ],
-            
-            
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -150,25 +149,30 @@ class SiteController extends Controller {
 
     public function actionJobSeeker() {
 
-        $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
-        $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-        $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
-        $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
 
-        return $this->render('job-seeker', [
-                    'workExperience' => $workExperience,
-                    'certification' => $certification,
-                    'documents' => $documents,
-                    'license' => $license,
-                    'education' => $education,
-                    'references' => $references,
-                    'userDetails' => $userDetails,
-                    'jobPreference' => $jobPreference
-        ]);
+//        if (isset(\Yii::$app->user->identity->id) && isset(\Yii::$app->user->identity->type) && \Yii::$app->user->identity->type == \common\models\User::TYPE_JOB_SEEKER) {
+            $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
+            $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+            $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+            $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+            $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+            $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+            $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
+            $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
+
+            return $this->render('job-seeker', [
+                        'workExperience' => $workExperience,
+                        'certification' => $certification,
+                        'documents' => $documents,
+                        'license' => $license,
+                        'education' => $education,
+                        'references' => $references,
+                        'userDetails' => $userDetails,
+                        'jobPreference' => $jobPreference
+            ]);
+//        } else {
+//            throw new NotFoundHttpException('The requested page does not exist.');
+//        }
     }
 
     /**

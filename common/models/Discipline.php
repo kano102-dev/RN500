@@ -28,9 +28,11 @@ class Discipline extends \yii\db\ActiveRecord {
      */
     public function rules() {
         return [
-                [['name', 'created_at', 'updated_at'], 'required'],
-                [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-                [['name'], 'string', 'max' => 500],
+            [['name', 'created_at', 'updated_at'], 'required'],
+            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['name'], 'string', 'max' => 500],
+            [['name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
+            ['name', 'safe']
         ];
     }
 

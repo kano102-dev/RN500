@@ -17,8 +17,8 @@ class EmergencySearch extends Emergency
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['name'], 'safe'],
+            [['id','status'], 'integer'],
+            [['name','status'], 'safe'],
         ];
     }
 
@@ -59,6 +59,7 @@ class EmergencySearch extends Emergency
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

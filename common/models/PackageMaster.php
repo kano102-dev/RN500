@@ -31,7 +31,7 @@ class PackageMaster extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['title', 'price','status'], 'required'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'safe'],
+            [['title','price','created_at','updated_at', 'created_by', 'updated_by'], 'safe'],
             [['is_default', 'status'], 'integer'],
             [['title'], 'string', 'max' => 250],
         ];

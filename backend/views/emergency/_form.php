@@ -14,6 +14,8 @@ use borales\extensions\phoneInput\PhoneInput;
 $this->title = 'Emergency';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
+
+$status = [0 => 'Inactive', 1 => 'Active'];
 ?>
 
 
@@ -23,8 +25,11 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
         <div class="card ">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $form->field($model, 'status')->dropDownList($status, ['prompt' => 'Select Status']) ?>
                     </div>
                 </div>
 
