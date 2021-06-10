@@ -254,9 +254,9 @@ class UserController extends Controller {
             if ($model->save(false) && $company->save(false)) {
                 if ($model->status == User::STATUS_APPROVED) {
                     CommonFunction::sendWelcomeMail($model);
-                    Yii::$app->session->setFlash("success", "User Approved successfully.");
+                    Yii::$app->session->setFlash("success", "User Request Approved successfully.");
                 }else{
-                    Yii::$app->session->setFlash("success", "User Rejected successfully.");
+                    Yii::$app->session->setFlash("success", "User  Request Rejected successfully.");
                 }
             } else {
                 Yii::$app->session->setFlash("warning", "Something went wrong");

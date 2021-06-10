@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use common\CommonFunction;
-
 ?>
 
 <div class="card card-default color-palette-box">
@@ -13,18 +12,17 @@ use common\CommonFunction;
         <div class="col-12">
             <div class="table table-responsive">
 
-                <?php Pjax::begin(['id' => 'pjax_employer', 'timeout' => false]); ?>
+                <?php Pjax::begin(['id' => 'pjax_jobseeker', 'timeout' => false]); ?>
                 <?=
                 GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn'],
-//                      
                         [
-                            'attribute' => 'companyNames',
+                            'attribute' => 'unique_id',
+                            'label' => 'Reference No.'
                         ],
-                        'branchName',
                         'first_name',
                         'last_name',
                         [
@@ -43,25 +41,14 @@ use common\CommonFunction;
                             'class' => 'yii\grid\ActionColumn',
                             'contentOptions' => ['style' => 'width:5%;'],
                             'header' => 'Actions',
-                            'template' => '{view} {update}',
+                            'template' => '{view}',
                             'buttons' => [
                                 //view button
                                 'view' => function ($url, $model) {
-                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('recruiter-view', Yii::$app->user->identity->id)) {
-                                        return Html::a('<span class="fa fa-eye"></span>', ['employer/view', 'id' => $model->user_id], [
+                                    if (isset(Yii::$app->user->identity)) {
+                                        return Html::a('<span class="fa fa-eye"></span>', ['jobseeker/view', 'ref' => $model->unique_id], [
                                                     'data-pjax' => 0,
                                                     'title' => Yii::t('app', 'View'),
-                                                    'class' => 'btn btn-primary btn-xs',
-                                        ]);
-                                    } else {
-                                        return '';
-                                    }
-                                },
-                                'update' => function ($url, $model) {
-                                    if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('employer-update', Yii::$app->user->identity->id)) {
-                                        return Html::a('<span class="fa fa-edit"></span>', ['employer/update', 'id' => $model->user_id], [
-                                                    'data-pjax' => 0,
-                                                    'title' => Yii::t('app', 'Update'),
                                                     'class' => 'btn btn-primary btn-xs',
                                         ]);
                                     } else {
