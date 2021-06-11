@@ -73,7 +73,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                 <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
                             <?php } ?>
                             <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                <li class="<?= $controller == 'browse-jobs' && $action == 'leads-received' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/leads-received"); ?>">Applications Received</a></li>
+                                <li class="<?= $controller == 'leads-received' && $action == 'leads-received' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("leads-received/index"); ?>">Applications Received</a></li>
                                 <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
 
