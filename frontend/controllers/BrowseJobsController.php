@@ -39,7 +39,7 @@ class BrowseJobsController extends Controller {
                 'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
                 'rules' => [
                         [
-                        'actions' => ['apply', 'apply-job'],
+                        'actions' => ['apply', 'apply-job','view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
