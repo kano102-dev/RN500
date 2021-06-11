@@ -15,7 +15,7 @@ use common\CommonFunction;
         </p>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-6 col-xs-12">
                 <h4> Branch Details </h4>
                 <?=
                 DetailView::widget([
@@ -39,7 +39,7 @@ use common\CommonFunction;
                 ?>
             </div>
 
-            <div class="col-6">
+            <div class="col-6 col-xs-12">
                 <h4> Owner Details </h4>
                 <?=
                 DetailView::widget([

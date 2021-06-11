@@ -66,7 +66,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['role_id', 'branch_id', 'company_id'], 'required', 'on' => 'staff'],
             [['branch_id', 'company_id'], 'required', 'on' => 'employer'],
             [['user_id', 'first_name', 'last_name', 'city', 'updated_at'], 'required'],
-            [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at','interest_level'], 'integer'],
+            [['city', 'user_id', 'job_title', 'travel_preference', 'work_authorization', 'created_at', 'updated_at','interest_level'], 'integer'],
             [['work_authorization_comment', 'looking_for', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string'],
@@ -76,6 +76,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
 //            [['zip_code'], 'string', 'max' => 20],
+            [['ssn'], 'match', 'pattern' => '/^([0-9]){4}?$/', 'message' => 'Please enter a valid 4 digit numeric {attribute}.'],
             [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
             [['first_name', 'last_name', 'email'], 'required', 'on' => 'registration'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
@@ -120,7 +121,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'role_id' => 'Role',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
-            'mobile_no' => 'Mobile No',
+            'mobile_no' => 'Mobile No.',
             'company_id' => 'Company',
             'branch_id' => 'Branch',
             'profile_pic' => 'Profile Pic',
@@ -144,6 +145,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'city' => 'City',
             'zip_code' => 'Zip Code',
             'companyNames' => 'Company Name',
+            'dob' => 'D.O.B'
         ];
     }
 

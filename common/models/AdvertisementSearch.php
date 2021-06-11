@@ -60,18 +60,20 @@ class AdvertisementSearch extends Advertisement {
         $query->andFilterWhere([
             'id' => $this->id,
             'location_display' => $this->location_display,
-            'active_from' => $this->active_from,
-            'active_to' => $this->active_to,
+          
+            'active_from' => isset($this->active_from) && !empty($this->active_from) ? date('Y-m-d', strtotime($this->active_from)) : $this->active_from,
+            'active_to' => isset($this->active_to) && !empty($this->active_to) ? date('Y-m-d', strtotime($this->active_to)) : $this->active_to,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'is_active' => $this->is_active,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
                 ->andFilterWhere(['like', 'description', $this->description])
                 ->andFilterWhere(['like', 'link_url', $this->link_url])
                 ->andFilterWhere(['like', 'icon', $this->icon])
-                ->andFilterWhere(['like', 'location_name', $this->location_name])
-                ->andFilterWhere(['like', 'is_active', $this->is_active]);
+                ->andFilterWhere(['like', 'location_name', $this->location_name]);
+//                ->andFilterWhere(['like', 'is_active', $this->is_active]);
 
         return $dataProvider;
     }

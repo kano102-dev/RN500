@@ -88,6 +88,9 @@ class AdvertisementController extends Controller {
         
         if ($model->load(Yii::$app->request->post())) {
             
+            $model->active_from = date('Y-m-d', strtotime($model->active_from));
+            $model->active_to = date('Y-m-d', strtotime($model->active_to));
+            
             $icon = UploadedFile::getInstance($model, 'icon');
             $folder = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
 
@@ -130,12 +133,15 @@ class AdvertisementController extends Controller {
 
         $temp_document_file = isset($model->icon) && !empty($model->icon) ? $model->icon : NULL;
 
-        $model->active_from = date("Y-m-d", strtotime($model->active_from));
-        $model->active_to = date("Y-m-d", strtotime($model->active_to));
+        $model->active_from = date("d-m-Y", strtotime($model->active_from));
+        $model->active_to = date("d-m-Y", strtotime($model->active_to));
         
         $model->updated_at = CommonFunction::currentTimestamp();
         $model->updated_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
+            
+            $model->active_from = date('Y-m-d', strtotime($model->active_from));
+            $model->active_to = date('Y-m-d', strtotime($model->active_to));
 
             $document_file = UploadedFile::getInstance($model, 'icon');
             

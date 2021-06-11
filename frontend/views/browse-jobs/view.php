@@ -9,6 +9,11 @@ use yii\web\JsExpression;
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 ?>
+
+<style>
+    .social-share {display:flex;margin: 25px 0px;}
+    .social-share li{padding: 0px 5px;}
+</style>
 <!-- Page Title start -->
 <div class="pageTitle">
     <div class="container">

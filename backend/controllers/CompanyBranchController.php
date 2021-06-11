@@ -164,7 +164,7 @@ class CompanyBranchController extends Controller {
                 }
                 if ($is_success) {
                     $transaction->commit();
-                    Yii::$app->session->setFlash("success", "Branch was added successfully.");
+                    Yii::$app->session->setFlash("success", "Branch Added Successfully.");
                 } else {
                     $transaction->rollBack();
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
@@ -230,7 +230,7 @@ class CompanyBranchController extends Controller {
                 $user->email = $userDetailModel->email;
                 if ($companyBranchModel->save() && $userDetailModel->save() && $user->save()) {
                     $transaction->commit();
-                    Yii::$app->session->setFlash("success", "Branch was updated successfully.");
+                    Yii::$app->session->setFlash("success", "Branch Updated Successfully.");
                 } else {
                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
