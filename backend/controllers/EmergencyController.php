@@ -8,18 +8,45 @@ use common\models\EmergencySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\CommonFunction;
 
 /**
  * EmergencyController implements the CRUD actions for Emergency model.
  */
 class EmergencyController extends Controller
 {
-    /**
+/**
      * {@inheritdoc}
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-create', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-update', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-delete', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

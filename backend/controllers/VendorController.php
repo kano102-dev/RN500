@@ -12,6 +12,7 @@ use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use common\CommonFunction;
 use common\models\Cities;
+use yii\filters\AccessControl;
 
 /**
  * VendorController implements the CRUD actions for Vendor model.
@@ -26,6 +27,32 @@ class VendorController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update','delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('create-vendor', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('update-vendor', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('view-vendor', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('delete-vendor', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

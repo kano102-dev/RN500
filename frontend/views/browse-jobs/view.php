@@ -42,22 +42,36 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                 </div>
             </div>
             <div class='row'>
-                <div class='col-md-2'>
-                    <div class="jobButtons"> 
-                        <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/apply', 'ref' => $model->reference_no]) ?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a>                        
+                <?php if (CommonFunction::isJobSeeker()) { ?>
+                    <div class='col-md-2'>
+                        <div class="jobButtons"> 
+                            <a href="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply', 'ref' => $model->reference_no]) ?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a>                        
+                        </div>
                     </div>
-                </div>
-                <div class='col-md-5'>
-                    <?=
-                    \ymaker\social\share\widgets\SocialShare::widget([
-                        'configurator' => 'socialShare',
-                        'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
-                        'title' => $model->title,
-                        'description' => $model->description,
-                        'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
-                    ]);
-                    ?>
-                </div>
+                    <div class='col-md-5'>
+                        <?=
+                        \ymaker\social\share\widgets\SocialShare::widget([
+                            'configurator' => 'socialShare',
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
+                            'title' => $model->title,
+                            'description' => $model->description,
+                            'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
+                        ]);
+                        ?>
+                    </div>
+                <?php } else { ?>
+                    <div class='col-md-12'>
+                        <?=
+                        \ymaker\social\share\widgets\SocialShare::widget([
+                            'configurator' => 'socialShare',
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
+                            'title' => $model->title,
+                            'description' => $model->description,
+                            'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
+                        ]);
+                        ?>
+                    </div>
+                <?php } ?>
             </div>
         </div>
 

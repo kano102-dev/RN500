@@ -21,6 +21,8 @@ use yii\web\Response;
 use common\models\Cities;
 use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
+use common\models\LeadRecruiterJobSeekerMappingSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * BrowseJobs controller
@@ -34,7 +36,7 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'leads-received', 'recruiter-approval-form', 'approval-from-recruiter','view'],
                 'rules' => [
                     [
                         'actions' => ['apply', 'apply-job', 'view'],
@@ -42,7 +44,7 @@ class BrowseJobsController extends Controller {
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
                     [
-                        'actions' => ['recruiter-lead', 'recruiter-view'],
+                        'actions' => ['recruiter-lead', 'recruiter-view', 'leads-received', 'recruiter-approval-form', 'approval-from-recruiter'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],
@@ -306,6 +308,8 @@ class BrowseJobsController extends Controller {
         return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
     }
 
+    /*     * ******** ADDED BY MOHAN*** */
+
     public function actionApply($ref) {
         $model = LeadMaster::findOne(['reference_no' => $ref]);
         if ($model != null) {
@@ -341,4 +345,63 @@ class BrowseJobsController extends Controller {
         $this->redirect(['apply', 'ref' => $ref]);
     }
 
+    public function actionLeadsReceived() {
+        $searchModel = new LeadRecruiterJobSeekerMappingSearch();
+        $searchModel->loggedUserBranchId = (Yii::$app->user->identity->branch_id) ? Yii::$app->user->identity->branch_id : '';
+
+        $dataProviderPending = $searchModel->searchLeadsReceivedPending(Yii::$app->request->queryParams);
+        $dataProviderInprogress = $searchModel->searchLeadsReceivedInprogress(Yii::$app->request->queryParams);
+        $dataProviderSelected = $searchModel->searchLeadsReceivedSelected(Yii::$app->request->queryParams);
+        $dataProviderRejected = $searchModel->searchLeadsReceivedRejected(Yii::$app->request->queryParams);
+        return $this->render('leads-received', [
+                    'searchModel' => $searchModel,
+                    'dataProviderPending' => $dataProviderPending,
+                    'dataProviderInprogress' => $dataProviderInprogress,
+                    'dataProviderSelected' => $dataProviderSelected,
+                    'dataProviderRejected' => $dataProviderRejected
+        ]);
+    }
+
+    public function actionRecruiterApprovalForm($lrj, $status) {
+        $model = LeadRecruiterJobSeekerMapping::findOne($lrj);
+        if ($model != null) {
+            $model->rec_joining_date = ($model->rec_joining_date) ? date('d-M-Y', strtotime($model->rec_joining_date)) : null;
+            $model->scenario = ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) ? 'rec_approve' : 'rec_reject';
+            return $this->renderAjax('_recruiter_approval_form', ['model' => $model, 'status' => $status]);
+        }
+        throw new NotFoundHttpException("In valid action.");
+    }
+
+    public function actionApprovalFromRecruiter($lrj, $status) {
+        $model = LeadRecruiterJobSeekerMapping::findOne($lrj);
+        if ($model != null) {
+            $model->load(Yii::$app->request->post());
+            $model->rec_comment = ($model->rec_comment != '') ? $model->rec_comment : NULL;
+            $model->rec_joining_date = ($model->rec_joining_date != '') ? date("Y-m-d", strtotime($model->rec_joining_date)) : '';
+            $model->rec_status = ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) ? LeadRecruiterJobSeekerMapping::STATUS_APPROVED : LeadRecruiterJobSeekerMapping::STATUS_REJECTED;
+            $model->updated_by = Yii::$app->user->identity->id;
+            $model->updated_at = CommonFunction::currentTimestamp();
+            if ($model->save(false)) {
+                if ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) {
+                    $flashMsg = "Application approved successfully, but there is some issue while sending mail.";
+                    $jobSeekerMailSent = $model->sendMailToJobSeekerAboutRecruiterApproval();
+                    $employerMailSent = $model->sendMailToEmployerAboutRecruiterApproval();
+                    if ($jobSeekerMailSent['status'] == '1' && $employerMailSent['status'] == '1') {
+                        $flashMsg = "Application approved successfully.";
+                    }
+                } else {
+                    $flashMsg = "Application rejected successfully, but there is some issue while sending mail.";
+                    $jobSeekerMailSent = $model->sendMailToJobSeekerAboutRecruiterRejection();
+                    if ($jobSeekerMailSent['status'] == '1' && $jobSeekerMailSent['status'] == '1') {
+                        $flashMsg = "Application rejected successfully.";
+                    }
+                }
+                Yii::$app->session->setFlash("success", $flashMsg);
+                return $this->redirect(['leads-received']);
+            }
+        }
+        throw new NotFoundHttpException("In valid action.");
+    }
+
+    /*     * ** END BY MOHAN*** */
 }

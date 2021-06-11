@@ -1,5 +1,4 @@
 <?php
-
 /* @var $this yii\web\View */
 
 use yii\helpers\Html;
@@ -24,9 +23,26 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="container"> 
         <div class="row">
             <div class="col-md-12 col-sm-12 about-us">
-<!--                <p>Welcome to the new revolutionary world of fishing industries, fishing trips booking engine, products and services, regional fishing information, government controls, pollution free water, help to save environment and grow fishing business.</p>
-                <p>No one was doing until we did. Today, we process over 1 million queries across our platform every month for fishing booking, processing vendor and customers’ requests, helping millions of fishers around the globe to make confident decisions with every queries. RN500 searches hundreds of angler’s information based on your location based and requirements to find the right product and service providers and packages. In over a time, we are constantly growing from a small office of 128 employees in to larger company with global brands of RN500-Fishing for Life.</p>
-                <p>Join us to earn money. Turn your existing infrastructure to start to earn money. We have created great opportunity for everyone to Join as Captain full time, part time or on weekends.</p>-->
+                <p>RN500 is founded by the people who believed they could change the travel nursing industry for better than before with huge revolutionary technology options. This vision, along with culture of honesty, transparency and great customer services, continues to guide our growth. 
+
+                    Simplify the Process: Use your unique skill to make the complex easy. 
+
+                    Own Your Relationships: Engage with others clarity, transparency and care. 
+
+                    Obsess Over the Experience: Distinguish yourself by providing the best possible experience every time. 
+
+                    Defend Our Culture: Embrace and encourage the principles that define our company. 
+
+                    RN500 is one of the leading fastest growing healthcare staffing company. We are inviting you to apply for open positions throughout the United States of America. We make difference your path of success with using our talented, dedicated employees who take care of everything needed from searching of new jobs to closing positions and follow with directional services which every candidate required to settle down in new place. The dedication, honesty and personal service we provide to each of our open positions and client facilities solidifies our commitment to be the best at what we do. 
+
+                    Please go through the RN500 Benefits page to review our strategies, plans for each open positions connected with in benefits of every applicant. 
+
+                    Equal Employment Opportunity Policy Statement
+
+                    RN500 is an Equal Opportunity Employer and prohibits discrimination and harassment of any kind. RN500 is committed to the principal of equal opportunity for all employees and to providing employees with work environment free of discrimination and harassment. It is RN500 policy to provide equal employment opportunities without regard to race, color, religion, or belief, national, social, or ethnic origin, sex (including pregnancy), age, physical, mental or sensory disability, HIV status, sexual orientation, gender identity and/or expression, marital, civil union or domestic partnership status, past or present military services, family medical history or genetic information, family or parental status, or any other status protected by applicable laws. RN500 will not tolerate discrimination or harassment on any of these characteristics. 
+
+                    All employment decisions are based on business needs, job requirements and individual qualifications. 
+                </p>
                 <p>If you have any questions, contact us on: <strong>info@RN500.com</strong></p>
             </div>
         </div>

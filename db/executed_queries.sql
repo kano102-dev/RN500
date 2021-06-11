@@ -944,3 +944,220 @@ ALTER TABLE `company_master`
 ADD `website_link` varchar(250) NULL AFTER `priority`;
 #  ***********************05 -JUN-2021***BY MEHUL*******END*******************
 
+
+
+
+#  ***********************05/06-JUN-2021***BY MOHAN**************************
+ALTER TABLE `work_experience` CHANGE `end_date` `end_date` DATE NULL;
+
+ALTER TABLE `lead_recruiter_job_seeker_mapping`
+CHANGE `comment` `rec_comment` varchar(500) COLLATE 'utf8mb4_general_ci' NULL AFTER `job_seeker_id`,
+CHANGE `status` `rec_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0:pending, 1:Approve, 2: pending ' AFTER `rec_comment`,
+ADD `rec_joining_date` date NULL AFTER `rec_status`,
+ADD `employer_comment` varchar(500) NULL AFTER `rec_joining_date`,
+ADD `employer_status` tinyint NOT NULL DEFAULT '0' COMMENT '0:Pending, 1:Approve, 2: Rejected ' AFTER `employer_comment`;
+
+#  ***********************05/06-JUN-2021***BY MOHAN END**************************
+#  ***********************09-JUN-2021***BY Mehul start**************************
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('Specialty', '1', 'Specialty', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('create', '2', 'Specialty Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('Update', '2', 'Specialty Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('Benefits', '1', 'Benefits', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('Create', '2', 'Benefits Create', NULL, NULL, '1623260412', '1623260412');
+
+
+UPDATE `auth_item` SET `name` = 'specialty' WHERE `name` = 'Specialty' AND `name` = 'Specialty' COLLATE utf8mb4_bin;
+UPDATE `auth_item` SET `name` = 'specialty-update', `description` = 'Update' WHERE `name` = 'Update' AND `name` = 'Update' COLLATE utf8mb4_bin;
+
+
+UPDATE `auth_item` SET `name` = 'specialty-create', `description` = 'Create' WHERE `name` = 'create' AND `name` = 'create' COLLATE utf8mb4_bin;
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('benefits-create', '2', 'Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('benefits-update', '2', 'Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('decipline', '1', 'Decipline', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('decipline-create', '2', 'Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('decipline-update', '2', 'Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('advertisement', '1', 'Advertisement', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('create-vendor', '2', 'Vendor Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('update-vendor', '2', 'Vendor Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('create-advertisement', '2', 'Advertisement Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('update-advertisement', '2', 'Advertisement Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('view-advertisement', '2', 'Advertisement View', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('view-vendor', '2', 'View Vendor', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('emergency', '1', 'Emergency', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('emergency-create', '2', 'Create', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('emergency-update', '2', 'Update', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('emergency-view', '2', 'View', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('specialty-view', '2', 'View', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('benefits-view', '2', 'View', NULL, NULL, '1623260412', '1623260412');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('decipline-view', '2', 'View', NULL, NULL, '1623260412', '1623260412');
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'create-vendor	');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'create-vendor');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'create-advertisement');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'update-advertisement');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'update-vendor');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('ad', '');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'view-advertisement');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('advertisement', 'view-vendor');
+
+
+UPDATE `auth_item` SET `name` = 'benefits' WHERE `name` = 'Benefits' AND `name` = 'Benefits' COLLATE utf8mb4_bin;
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('benefits', 'benefits-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('benefits', 'benefits-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('benefits', 'benefits-view');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('decipline', 'decipline-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('decipline', 'decipline-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('decipline', 'decipline-view');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('emergency', 'emergency-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('emergency', 'emergency-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('emergency', 'emergency-view');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('specialty', 'specialty-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('specialty', 'specialty-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('specialty', 'specialty-create');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('specialty', 'specialty-update');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('specialty', 'specialty-view');
+
+
+UPDATE `auth_item` SET `name` = 'specialty-create' WHERE `name` = 'specialty-create' AND `name` = 'specialty-create' COLLATE utf8mb4_bin;
+UPDATE `auth_item` SET `description` = 'Vendor View' WHERE `name` = 'view-vendor' AND `name` = 'view-vendor' COLLATE utf8mb4_bin;
+
+ALTER TABLE `emergency`
+ADD `status` tinyint NOT NULL DEFAULT '1' COMMENT '1:active 0:in active';
+
+UPDATE `auth_item` SET `description` = 'Discipline' WHERE `name` = 'decipline' AND `name` = 'decipline' COLLATE utf8mb4_bin;
+
+#  ***********************09-JUN-2021***BY Mehul END**************************
