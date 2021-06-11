@@ -24,8 +24,8 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
      */
     public function rules() {
         return [
-                [['branch_id', 'lead_id', 'job_seeker_id', 'rec_comment', 'rec_status ', 'updated_at', 'updated_by', 'rec_joining_date', 'employer_comment', 'employer_status', 'leadTitleWithRef', 'cityName', 'jobSeekerName','rec_joining_date_selected'], 'safe'],
-                [['leadTitleWithRef', 'cityName', 'jobSeekerName','rec_joining_date_selected'], 'trim']
+                [['branch_id', 'lead_id', 'job_seeker_id', 'rec_comment', 'rec_status ', 'updated_at', 'updated_by', 'rec_joining_date', 'employer_comment', 'employer_status', 'leadTitleWithRef', 'cityName', 'jobSeekerName', 'rec_joining_date_selected'], 'safe'],
+                [['leadTitleWithRef', 'cityName', 'jobSeekerName', 'rec_joining_date_selected'], 'trim']
         ];
     }
 
@@ -71,7 +71,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
     }
 
     public function searchLeadsReceivedPending($params) {
-
 
         $query = LeadRecruiterJobSeekerMapping::find()->alias("lrjm")
                 ->joinWith(['lead lead', 'jobSeeker jobseeker'])
@@ -131,7 +130,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
                 ->leftJoin("cities", "cities.id = lead.city")
                 ->leftJoin("user_details ud", "jobseeker.id = ud.user_id");
 
-
         if (CommonFunction::isRecruiter()) {
             $query->andWhere(['AND', ['lrjm.rec_status' => parent::STATUS_APPROVED], ['lrjm.employer_status' => parent::STATUS_PENDING]]);
             $query->andWhere(['lrjm.branch_id' => $this->loggedUserBranchId]);
@@ -141,9 +139,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
             $query->andWhere(['AND', ['lrjm.rec_status' => parent::STATUS_PENDING], ['lrjm.employer_status' => parent::STATUS_PENDING]]);
             $query->andWhere(['lead.branch_id' => $this->loggedUserBranchId]);
         }
-
-
-
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -178,7 +173,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
             $query->andWhere(['like', 'CONCAT(ud.first_name, " ", ud.last_name)', $this->jobSeekerName]);
         }
 
-
         return $dataProvider;
     }
 
@@ -191,15 +185,14 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
 
 
         if (CommonFunction::isRecruiter()) {
-            $query->andWhere(['OR', ['AND', ['lrjm.rec_status' => parent::STATUS_APPROVED], ['lrjm.employer_status' => parent::STATUS_APPROVED]], ['lrjm.employer_status' => parent::STATUS_APPROVED]]);
+            $query->andWhere(['AND', ['lrjm.rec_status' => parent::STATUS_APPROVED], ['lrjm.employer_status' => parent::STATUS_APPROVED]]);
             $query->andWhere(['lrjm.branch_id' => $this->loggedUserBranchId]);
         }
 
         if (CommonFunction::isEmployer()) {
-            $query->andWhere(['OR', ['AND', ['lrjm.rec_status' => parent::STATUS_APPROVED], ['lrjm.employer_status' => parent::STATUS_APPROVED]], ['lrjm.employer_status' => parent::STATUS_APPROVED]]);
+            $query->andWhere(['AND', ['lrjm.rec_status' => parent::STATUS_APPROVED], ['lrjm.employer_status' => parent::STATUS_APPROVED]]);
             $query->andWhere(['lead.branch_id' => $this->loggedUserBranchId]);
         }
-
 
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
@@ -214,7 +207,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
             return $dataProvider;
         }
 
-
         if ($this->leadTitleWithRef) {
             $query->andWhere(['OR',
                     ['like', 'lead.title', $this->leadTitleWithRef],
@@ -228,14 +220,13 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
         }
 
         if ($this->rec_joining_date || $this->rec_joining_date_selected) {
-            $joiningDate =  ($this->rec_joining_date) ? $this->rec_joining_date  : $this->rec_joining_date_selected;
+            $joiningDate = ($this->rec_joining_date) ? $this->rec_joining_date : $this->rec_joining_date_selected;
             $query->andWhere(['like', 'lrjm.rec_joining_date', date('Y-m-d', strtotime($joiningDate))]);
         }
 
         if ($this->jobSeekerName) {
             $query->andWhere(['like', 'CONCAT(ud.first_name, " ", ud.last_name)', $this->jobSeekerName]);
         }
-
 
         return $dataProvider;
     }
@@ -246,9 +237,6 @@ class LeadRecruiterJobSeekerMappingSearch extends LeadRecruiterJobSeekerMapping 
                 ->joinWith(['lead lead', 'jobSeeker jobseeker'])
                 ->leftJoin("cities", "cities.id = lead.city")
                 ->leftJoin("user_details ud", "jobseeker.id = ud.user_id");
-
-
-
 
         if (CommonFunction::isRecruiter()) {
             $query->andWhere(['OR', ['lrjm.rec_status' => parent::STATUS_REJECTED], ['lrjm.employer_status' => parent::STATUS_REJECTED]]);

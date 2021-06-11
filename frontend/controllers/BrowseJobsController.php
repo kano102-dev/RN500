@@ -36,7 +36,7 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'leads-received', 'recruiter-approval-form', 'approval-from-recruiter'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
                 'rules' => [
                         [
                         'actions' => ['apply', 'apply-job'],
@@ -44,9 +44,14 @@ class BrowseJobsController extends Controller {
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
                         [
-                        'actions' => ['recruiter-lead', 'recruiter-view', 'leads-received', 'recruiter-approval-form', 'approval-from-recruiter'],
+                        'actions' => ['recruiter-lead', 'recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
+                    ],
+                        [
+                        'actions' => ['recruiter-view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isEmployer() ? ['@'] : ['*'] : ['*'],
                     ]
                 ],
             ],

@@ -74,7 +74,10 @@ use kartik\date\DatePicker;
                                                 ],
                                                     [
                                                     'attribute' => 'leadTitleWithRef',
-                                                    'format' => 'html',
+                                                    'value' => function($model) {
+                                                        return Html::a($model->leadTitleWithRef, Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/browse-jobs/recruiter-view', 'id' => $model->lead_id]), ['data-pjax' => '0', 'target' => '_blank']);
+                                                    },
+                                                    'format' => 'raw',
                                                     'enableSorting' => false,
                                                     'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
                                                 ],
@@ -163,7 +166,10 @@ use kartik\date\DatePicker;
                                                 ],
                                                     [
                                                     'attribute' => 'leadTitleWithRef',
-                                                    'format' => 'html',
+                                                    'value' => function($model) {
+                                                        return Html::a($model->leadTitleWithRef, Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/browse-jobs/recruiter-view', 'id' => $model->lead_id]), ['data-pjax' => '0', 'target' => '_blank']);
+                                                    },
+                                                    'format' => 'raw',
                                                     'enableSorting' => false,
                                                     'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
                                                 ],
@@ -248,7 +254,10 @@ use kartik\date\DatePicker;
                                                 ],
                                                     [
                                                     'attribute' => 'leadTitleWithRef',
-                                                    'format' => 'html',
+                                                    'value' => function($model) {
+                                                        return Html::a($model->leadTitleWithRef, Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/browse-jobs/recruiter-view', 'id' => $model->lead_id]), ['data-pjax' => '0', 'target' => '_blank']);
+                                                    },
+                                                    'format' => 'raw',
                                                     'enableSorting' => false,
                                                     'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
                                                 ],
@@ -331,7 +340,10 @@ use kartik\date\DatePicker;
                                                 ],
                                                     [
                                                     'attribute' => 'leadTitleWithRef',
-                                                    'format' => 'html',
+                                                    'value' => function($model) {
+                                                        return Html::a($model->leadTitleWithRef, Yii::$app->urlManagerFrontend->createAbsoluteUrl(['/browse-jobs/recruiter-view', 'id' => $model->lead_id]), ['data-pjax' => '0', 'target' => '_blank']);
+                                                    },
+                                                    'format' => 'raw',
                                                     'enableSorting' => false,
                                                     'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
                                                 ],
