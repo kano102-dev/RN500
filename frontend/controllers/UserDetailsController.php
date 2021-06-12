@@ -220,7 +220,7 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('error', "User Details Updated Successfully.");
+                    Yii::$app->session->setFlash('success', "User Details Updated Successfully.");
                     return $this->redirect(['profile', 'id' => $id]);
                 }
             } else {
@@ -338,7 +338,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'Work Experience '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "Work Experience Updated failed.");
+                Yii::$app->session->setFlash('error', "Work Experience Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Work Experience Updated failed.', 'data' => $model->getErrors()]);
             }
         }
@@ -378,7 +378,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'Education Details '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "Education Details Updated failed.");
+                Yii::$app->session->setFlash('error', "Education Details Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Education Details Updated failed.', 'data' => $model->getErrors()]);
             }
         }
@@ -447,7 +447,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'License Details '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "License Details Updated failed.");
+                Yii::$app->session->setFlash('error', "License Details Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'License Details Updated failed.', 'data' => $model->getErrors()]);
             }
         }
@@ -516,7 +516,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'Certification Details '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "Certification Details Updated failed.");
+                Yii::$app->session->setFlash('error', "Certification Details Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Certification Details Updated failed.', 'data' => $model->getErrors()]);
             }
         }
@@ -585,7 +585,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'Document '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "Document Updated failed.");
+                Yii::$app->session->setFlash('error', "Document Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Document Updated failed.', 'data' => $model->getErrors()]);
             }
         }
@@ -621,7 +621,7 @@ class UserDetailsController extends Controller {
                     return json_encode(['error' => 0, 'message' => 'Reference Details '.$message.' successfully.']);
                 }
             } else {
-                Yii::$app->session->setFlash('success', "Reference Details Updated failed.");
+                Yii::$app->session->setFlash('error', "Reference Details Updated failed.");
                 return json_encode(['error' => 0, 'message' => 'Reference Details Updated failed.', 'data' => $model->getErrors()]);
             }
         }

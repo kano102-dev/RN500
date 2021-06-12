@@ -3,13 +3,14 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\AdvertisementSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$location = [0=>'Ahemdabad',1=>'Mumbai'];
-$status = [0=>'No',1=>'Yes'];
+$location = [0 => 'Ahemdabad', 1 => 'Mumbai'];
+$status = [0 => 'No', 1 => 'Yes'];
 
 $this->title = 'Advertisements';
 $this->params['breadcrumbs'][] = $this->title;
@@ -23,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <div class="table table-responsive pt-3">
                 <?php Pjax::begin(); ?>
-                <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
+                <?php // echo $this->render('_search', ['model' => $searchModel]);   ?>
 
                 <?=
                 GridView::widget([
@@ -37,25 +38,66 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'is_active',
                             'value' => function ($model) use ($status) {
-                                return $status[$model->is_active];
+                                return isset($model->is_active) ? $status[$model->is_active] : '';
                             },
+                            'filter' => \yii\bootstrap\Html::activeDropDownList($searchModel, 'is_active', ['' => 'All', '1' => 'Yes', '2' => 'No'], ['class' => 'form-control'])
                         ],
-                        [
-                            'attribute' => 'location_display',
-                            'value' => function ($model) use ($location) {
-                                return $location[$model->location_display];
-                            },
-                        ],
+//                        [
+//                            'attribute' => 'active_from',
+//                            'value' => function ($model) {
+//                                return date("d/m/Y", strtotime($model->active_from));
+//                            },
+//                        ],
                         [
                             'attribute' => 'active_from',
+                            'format' => 'raw',
+//                        'headerOptions' => ['style' => 'width:10%;'],
+                            'filter' => DatePicker::widget([
+                                'model' => $searchModel,
+                                'attribute' => 'active_from',
+                                'options' => ["style" => "cursor:pointer"],
+                                'layout' => '<div class="input-group-prepend"></div>
+                            {picker}
+                            <div class="input-group-append"></div>
+                            {input}
+                            <div class="input-group-append"></div>
+                            {remove}',
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+//                                'startDate' => date(),
+//                                'endDate' => "0d",
+                                    'todayHighlight' => true,
+                                    'format' => 'dd-mm-yyyy',
+                                ]
+                            ]),
                             'value' => function ($model) {
-                                return date("d/m/Y", strtotime($model->active_to));
+                                return date('d/m/Y', strtotime($model->active_from));
                             },
                         ],
                         [
                             'attribute' => 'active_to',
+                            'format' => 'raw',
+//                        'headerOptions' => ['style' => 'width:10%;'],
+                            'filter' => DatePicker::widget([
+                                'model' => $searchModel,
+                                'attribute' => 'active_to',
+                                'options' => ["style" => "cursor:pointer"],
+                                'layout' => '<div class="input-group-prepend"></div>
+                            {picker}
+                            <div class="input-group-append"></div>
+                            {input}
+                            <div class="input-group-append"></div>
+                            {remove}',
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+//                                'startDate' => date(),
+//                                'endDate' => "0d",
+                                    'todayHighlight' => true,
+                                    'format' => 'dd-mm-yyyy',
+                                ]
+                            ]),
                             'value' => function ($model) {
-                                return date("d/m/Y", strtotime($model->active_to));
+                                return date('d/m/Y', strtotime($model->active_to));
                             },
                         ],
                         [

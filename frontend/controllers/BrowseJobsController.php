@@ -36,10 +36,10 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
                 'rules' => [
                         [
-                        'actions' => ['apply', 'apply-job','view'],
+                        'actions' => ['apply', 'apply-job', 'view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
@@ -183,16 +183,22 @@ class BrowseJobsController extends Controller {
         $totalRecord = Discipline::find()->count();
         $lists = ArrayHelper::map(Discipline::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' />";
+
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' />";
+                }
+                $options .= "<label for='desc-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='desc-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
+
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);
         exit;
@@ -207,15 +213,19 @@ class BrowseJobsController extends Controller {
         $totalRecord = Speciality::find()->count();
         $lists = ArrayHelper::map(Speciality::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' />";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' />";
+                }
+                $options .= "<label for='spec-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='spec-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);
@@ -231,15 +241,19 @@ class BrowseJobsController extends Controller {
         $totalRecord = Benefits::find()->count();
         $lists = ArrayHelper::map(Benefits::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
+                }
+                $options .= "<label for='benefit-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='benefit-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);

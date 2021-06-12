@@ -182,6 +182,16 @@ use common\CommonFunction;
                                         'pluginOptions' => [
                                             'autoclose' => true,
                                             'format' => Yii::$app->params['date.format.datepicker.js'],
+                                        ],
+                                        'pluginEvents' => [
+                                            "changeDate" => "function(e) {
+                                                
+                                                $('#leadmaster-end_date').kvDatepicker({
+                                                    autoclose : true,
+                                                    format : 'd-M-yyyy'
+                                                });
+                                                $('#leadmaster-end_date').kvDatepicker('setStartDate', e.date);
+                                            }"
                                         ]
                                     ])->label(false);
                                     ?>
@@ -195,6 +205,15 @@ use common\CommonFunction;
                                         'pluginOptions' => [
                                             'autoclose' => true,
                                             'format' => Yii::$app->params['date.format.datepicker.js'],
+                                        ],
+                                        'pluginEvents' => [
+                                            "changeDate" => "function(e) {
+                                                $('#leadmaster-start_date').kvDatepicker({
+                                                    autoclose : true,
+                                                    format : 'd-M-yyyy'
+                                                });
+                                                $('#leadmaster-start_date').kvDatepicker('setEndDate', e.date);
+                                            }"
                                         ]
                                     ])->label(false);
                                     ?>
