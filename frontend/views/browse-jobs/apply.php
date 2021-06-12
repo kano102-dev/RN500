@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\grid\GridView;
+use common\models\LeadRecruiterJobSeekerMapping;
 
 $lead_id = $model->id;
 ?>
@@ -30,7 +31,6 @@ $lead_id = $model->id;
                 <div class="job-header">
                     <div class="contentbox">
                         <?php Pjax::begin(); ?>
-                        <?php // echo $this->render('_search', ['model' => $searchModel]);   ?>
 
                         <?=
                         GridView::widget([
@@ -51,30 +51,31 @@ $lead_id = $model->id;
                                     'buttons' => [
                                         //view button
                                         'proceed' => function ($url, $model) use ($lead_id) {
-//                                            echo "<span class='jobButtons'>";
-                                            $url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply-job', 'lead_id' => $lead_id, 'branch_id' => $model->id]);
-                                            return Html::a('Proceed', 'javascript:void(0)', [
-                                                        'onclick' => "applyToThisbranch('$url')",
-                                                        'data-pjax' => 0,
-                                                        'title' => Yii::t('app', 'View'),
-                                                        'class' => 'btn btn-success',
-                                            ]);
-//                                            echo "</span>";
+                                            if (!LeadRecruiterJobSeekerMapping::checkAlreadyApplied($lead_id, $model->id, Yii::$app->user->identity->id)) {
+                                                $url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply-job', 'lead_id' => $lead_id, 'branch_id' => $model->id]);
+                                                return Html::a('Proceed', 'javascript:void(0)', [
+                                                            'onclick' => "applyToThisbranch('$url')",
+                                                            'data-pjax' => 0,
+                                                            'title' => Yii::t('app', 'Proceed'),
+                                                            'class' => 'btn btn-success',
+                                                ]);
+                                            } else {
+                                                return Html::a('Applied', 'javascript:void(0)', [
+                                                            'data-pjax' => 0,
+                                                            'title' => Yii::t('app', 'Applied'),
+                                                            'class' => 'btn btn-primary',
+                                                ]);
+                                            }
                                         }
                                     ],
                                 ],
                             ],
                         ]);
                         ?>
-
                         <?php Pjax::end(); ?>
-
                     </div>
                 </div>
-
             </div>
-
-
         </div>
     </div>
 </div>

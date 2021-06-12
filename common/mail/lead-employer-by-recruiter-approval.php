@@ -9,7 +9,7 @@ use yii\helpers\Html;
     <br/>
     <!--<p> Hii <?php // echo $job_seeker->getFullName() ?> </p>--> 
     <p> Hii </p> 
-    <p> New job appliation received from <?php echo $branchName ?>  for position of <b><?php echo $lead->title ?> </b> (Ref. No. :  <?php echo $lead->reference_no ?>). </p> 
+    <p> New job appliation received for position of <b><?php echo $lead->title ?> </b> (Ref. No. :  <?php echo $lead->reference_no ?>). </p> 
 
     <br/><br/>
     Regards,
