@@ -8,7 +8,7 @@ use yii\helpers\Html;
 <div class="login-otp">
     <br/>
     <p> Hii <?php echo $job_seeker->getFullName() ?> </p> 
-    <p> Your application of position <b><?php echo $lead->title ?> </b> (Ref. No. :  <?php echo $lead->reference_no ?>) has been approved by <?php echo $branchName ?> and submitted to employer for approval. </p> 
+    <p> Your application of position <b><?php echo $lead->title ?> </b> (Ref. No. :  <?php echo $lead->reference_no ?>) has been approved by <?php echo $branchName ?>. </p> 
 
     <br/><br/>
     Regards,
