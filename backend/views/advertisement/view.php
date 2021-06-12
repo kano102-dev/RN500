@@ -5,13 +5,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Advertisement */
-
-$location = [0=>'Ahemdabad',1=>'Mumbai'];
 $status = [0=>'No',1=>'Yes'];
-
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Advertisements', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 
@@ -50,21 +44,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            'attribute' => 'location_display',
-                            'value' => function ($model) use ($location) {
-                                return $location[$model->location_display];
-                            },
-                        ],
-                        [
                             'attribute' => 'active_from',
                             'value' => function ($model) {
-                                return date("d/m/Y", strtotime($model->active_to));
+                                return date("m/d/Y", strtotime($model->active_from));
                             },
                         ],
                         [
                             'attribute' => 'active_to',
                             'value' => function ($model) {
-                                return date("d/m/Y", strtotime($model->active_to));
+                                return date("m/d/Y", strtotime($model->active_to));
+                            },
+                        ],
+                        [
+                            'attribute' => 'location',
+                            'value' => function ($model) {
+                                return $model->city->city;
                             },
                         ],
                     ],

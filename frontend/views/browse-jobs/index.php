@@ -118,12 +118,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <ul class="optionlist">
                                 <?php
                                 $url = Url::to(['browse-jobs/get-cities']);
-                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : [];
                                 echo Select2::widget([
                                     'name' => 'location',
                                     'value' => $selectedLocations,
-//                                    'initValueText' => array_values($selectedLocations),
-//                                    'hideSearch' => false,
                                     'options' => [
                                         'id' => 'select_location',
                                         'placeholder' => 'Select Location...',
