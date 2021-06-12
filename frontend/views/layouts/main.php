@@ -117,3 +117,19 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
     </body>
 </html>
 <?php $this->endPage() ?>
+
+<script>
+//    $('#overlay').show();             
+//    $('#overlay').hide();
+
+
+            $(document).bind("ajaxStart.mine", function () {
+                $('#overlay').show();
+
+            });
+
+            $(document).bind("ajaxStop.mine", function () {
+                $('#overlay').hide();
+
+            });
+</script>

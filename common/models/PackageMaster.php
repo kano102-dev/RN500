@@ -31,7 +31,8 @@ class PackageMaster extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['title', 'price','status'], 'required'],
-            [['created_at', 'updated_at', 'created_by', 'updated_by'], 'safe'],
+//            ['title','uniqueName'],
+            [['title','price','created_at','updated_at', 'created_by', 'updated_by'], 'safe'],
             [['is_default', 'status'], 'integer'],
             [['title'], 'string', 'max' => 250],
         ];
@@ -49,5 +50,19 @@ class PackageMaster extends \yii\db\ActiveRecord {
             'status' => 'Status',
         ];
     }
+    
+//    public function uniqueName($attribute, $params) {
+//        $name = [];
+//        if ($this->isNewRecord) {
+//            $name = self::find()->where(['title' => $this->title])->one();
+//        } else {
+//            $name = self::find()->where(['title' => $this->title])->andWhere(['<>', 'id', $this->id])->one();  
+//        }
+//        if (!empty($name)) {
+//            return $this->addError($attribute, $this->getAttributeLabel('title') . " already exists.");
+//        }else{
+//            return true;
+//        }
+//    }
 
 }

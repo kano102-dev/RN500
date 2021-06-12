@@ -5,15 +5,17 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\select2\Select2;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Advertisement */
 /* @var $form yii\widgets\ActiveForm */
 $location = [1 => 'Home Page'];
-$status = [0 => 'No', 1 => 'Yes'];
+$status = [1 => 'Yes', 2 => 'No'];
 ?>
 
-<div class="advertisement-form">
+<div class="card card-default color-palette-box">
+    <div class="card-body">
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="card">
@@ -48,28 +50,68 @@ $status = [0 => 'No', 1 => 'Yes'];
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    <?= $form->field($model, 'active_from')->textInput(["type" => "date"]) ?>
+                    <?php
+                    echo $form->field($model, 'active_from')->widget(DatePicker::classname(), [
+                        'name' => 'active_from',
+                        'value' => date('d-M-Y'),
+                        'options' => ['placeholder' => 'Enter Start Date'],
+                        'pluginOptions' => [
+                            'format' => 'dd-mm-yyyy',
+                            'todayHighlight' => true,
+                            'autoclose' => true,
+                            'startDate' => date('d-m-Y'),
+                            'minDate' => "0"
+                        ],
+                        'pluginEvents' => [
+                            "changeDate" => "function(e) {
+                                $('#advertisement-active_to').kvDatepicker({
+                                                    autoclose : true,
+                                                    format : 'dd-mm-yyyy'
+                                                });
+                                                $('#advertisement-active_to').kvDatepicker('setStartDate', e.date);
+                            }"
+                        ]
+                    ]);
+                    ?>
                 </div>
                 <div class="col-md-6 custom-time-data-picker">
-                    <?= $form->field($model, 'active_to')->textInput(["type" => "date"]) ?>
+                    <?php
+                    echo $form->field($model, 'active_to')->widget(DatePicker::classname(), [
+                        'name' => 'active_to',
+                        'value' => date('d-M-Y'),
+                        'options' => ['placeholder' => 'Enter End Date'],
+                        'pluginOptions' => [
+                            'format' => 'dd-mm-yyyy',
+                            'todayHighlight' => true,
+                            'autoclose' => true,
+                            'minDate' => "0"
+                        ],
+                        'pluginEvents' => [
+                            "changeDate" => "function(e) {
+                                
+                                $('#advertisement-active_from').kvDatepicker({
+                                                    autoclose : true,
+                                                    format : 'dd-mm-yyyy',
+                                                    minDate : '0'
+                                                });
+                                                $('#advertisement-active_from').kvDatepicker('setEndDate', e.date);
+                            }"
+                        ]
+                    ]);
+                    ?>
                 </div>
             </div>
-            <div class="row">
 
-                <div class="col-md-6 custom-time-data-picker">
-                    <?php echo $form->field($model, 'location_display')->dropDownList($location, ['prompt' => 'Select Display Location']) ?>
-                </div>   
-                <div class="col-lg-6">
-                    <?php echo $form->field($model, 'is_active')->dropDownList($status, ['prompt' => 'Select Status']) ?>
-                </div>
-            </div>
 
             <div class="row">
                 <div class="col-lg-6">
-
+                        <?php echo $form->field($model, 'is_active')->dropDownList($status) ?>
+                    </div>
+                <div class="col-lg-6">
+                    
 
                     <?=
-                    $form->field($model, 'file_type')->radioList([1 => 'Image', 2 => 'Video Link'], [
+                    $form->field($model, 'file_type')->radioList([1 => 'Image', 2 => 'Youtube Url'], [
                         'item' => function($index, $label, $name, $checked, $value) {
 
                             return "<label>
@@ -103,7 +145,7 @@ $status = [0 => 'No', 1 => 'Yes'];
     <?php ActiveForm::end(); ?>
 
 </div>
-
+</div>
 <?php
 $script = <<< JS
     

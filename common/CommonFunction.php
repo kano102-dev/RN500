@@ -8,6 +8,9 @@ use common\models\CompanyBranch;
 use common\models\CompanyMaster;
 use common\models\CompanySubscription;
 use common\models\CompanySubscriptionPayment;
+use yii\helpers\Html;
+use common\models\LeadMaster;
+use common\models\LeadRecruiterJobSeekerMapping;
 
 class CommonFunction {
 
@@ -158,6 +161,8 @@ class CommonFunction {
             $subscription = CompanySubscription::find()->where(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->andWhere(['>=', 'start_date', date('Y-m-d', strtotime('now'))])->one();
             if (!empty($subscription)) {
                 return false;
+            } else {
+                return true;
             }
         }
     }
@@ -202,24 +207,48 @@ class CommonFunction {
         return $flag;
     }
 
+    public static function htmlEncodeLabel($str) {
+        $var = Html::encode($str);
+        return str_replace("&amp;", "&", $var);
+    }
+
     // RETURN BASE PATH OF PROFILE PICTURE FOLDER
     public static function getProfilePictureBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/profile";
     }
-    
+
     // RETURN BASE PATH OF DOCUMENTS FOLDER
     public static function getDocumentBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/document";
     }
-    
+
     // RETURN BASE PATH OF LICENSES FOLDER
     public static function getLicensesBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/license";
     }
-    
+
     // RETURN BASE PATH OF LICENSES FOLDER
     public static function getCertificateBasePath() {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/certification";
+    }
+
+    /*
+     * lead_master TABLE's branch_id WILL BE CONSIDERED AS EMPLOYER BRANCH OR LEAD POSTED BRANCH
+     * 
+     */
+
+    public static function isLeadAppliedBranchAndPostedBranchSame($leadId, $appliedBranchId) {
+        $flag = false;
+        try {
+            $leadMaster = LeadMaster::findOne($leadId);
+            if ($leadMaster !== null) {
+                $flag = (string) $leadMaster->branch_id == (string) $appliedBranchId;
+            }
+        } catch (\Exception $ex) {
+            $flag = false;
+        } finally {
+            return $flag;
+        }
     }
 
 }

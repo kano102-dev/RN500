@@ -14,6 +14,7 @@ use frontend\models\JobseekerForm;
 use common\models\UserDetails;
 use common\models\PasswordResetRequestForm;
 use common\CommonFunction;
+use yii\helpers\Url;
 
 /**
  * Company Controller API
@@ -40,7 +41,13 @@ class AuthController extends Controller {
                             $jwtToken = $this->generateJWTtoken($user);
                             $code = 200;
                             $msg = "You have successfully Logged In!";
-                            $data = ['token' => $jwtToken, 'first_name' => $user->details->first_name, 'last_name' => $user->details->last_name, 'email' => $user->email, 'profile_image' => !empty($user->details->profile_pic) ? $user->details->profile_pic : ''];
+                            $data = [
+                                'token' => $jwtToken, 
+                                'first_name' => $user->details->first_name, 
+                                'last_name' => $user->details->last_name, 
+                                'email' => $user->email, 
+                                'profile_image' => (isset($user->details->profile_pic) && !empty($user->details->profile_pic) && file_exists(CommonFunction::getProfilePictureBasePath() . "/" . $user->details->profile_pic) ) ? Url::to(Yii::$app->urlManagerFrontend->createUrl(["/uploads/user-details/profile/".$user->details->profile_pic]), true) : ''
+                                ];
                         } else {
                             $code = 202;
                             $msg = "Invalid OTP.";

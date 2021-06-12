@@ -131,11 +131,11 @@ class AuthController extends Controller {
                     $transaction = Yii::$app->db->beginTransaction();
                     try {
                         $companyMasterModel->reference_no = $companyMasterModel->getUniqueReferenceNumber();
-                        $companyMasterModel->mobile = $companyMasterModel->company_mobile;
                         $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
+                            $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
@@ -181,6 +181,7 @@ class AuthController extends Controller {
                         }
                     } catch (\Exception $ex) {
                         $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 }
             } elseif (isset($_POST['type']) && Yii::$app->request->post('type') === 'recruiter') {
@@ -197,6 +198,7 @@ class AuthController extends Controller {
                             $company_branch = new CompanyBranch();
                             $company_branch->branch_name = "HO";
                             $company_branch->city = $companyMasterModel->city;
+                            $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->company_id = $companyMasterModel->id;
                             $company_branch->setAttributes($companyMasterModel->getAttributes());
                             $company_branch->is_default = CompanyBranch::IS_DEFAULT_YES;
@@ -241,6 +243,7 @@ class AuthController extends Controller {
                         }
                     } catch (\Exception $ex) {
                         $transaction->rollBack();
+                        Yii::$app->session->setFlash("warning", "Something went wrong.");
                     }
                 }
             } else {
@@ -313,7 +316,7 @@ class AuthController extends Controller {
             $user->password = Yii::$app->security->generatePasswordHash($model->new_password);
             $user->original_password = trim($model->new_password);
             if ($user->save()) {
-                Yii::$app->session->setFlash('success', "Password changed successfully");
+                Yii::$app->session->setFlash('success', "Password Changed Successfully.");
                 Yii::$app->user->logout();
                 return $this->goHome();
             } else {

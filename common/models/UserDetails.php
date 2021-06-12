@@ -62,22 +62,25 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function rules() {
         return [
             [['email'], 'email'],
-            [['street_no', 'street_address', 'role_id'], 'required'],
+            [['street_no', 'street_address', 'role_id','zip_code'], 'required'],
             [['role_id', 'branch_id', 'company_id'], 'required', 'on' => 'staff'],
             [['branch_id', 'company_id'], 'required', 'on' => 'employer'],
-            [['user_id', 'first_name', 'last_name', 'mobile_no', 'city', 'updated_at'], 'required'],
-            [['city', 'user_id', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at','interest_level'], 'integer'],
-            [['job_looking_from','interest_level'], 'safe'],
+            [['user_id', 'first_name', 'last_name', 'city', 'updated_at'], 'required'],
+            [['city', 'user_id', 'job_title', 'travel_preference', 'work_authorization', 'created_at', 'updated_at','interest_level'], 'integer'],
             [['work_authorization_comment', 'looking_for', 'license_suspended', 'professional_liability', 'unique_id'], 'string'],
             [['first_name', 'last_name'], 'string', 'max' => 50],
             [['mobile_no'], 'string'],
             [['mobile_no'], PhoneInputValidator::className()],
+            ['mobile_no' , 'required', 'message' => 'Mobile No. cannot be blank.'],
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-            [['zip_code'], 'string', 'max' => 20],
+//            [['zip_code'], 'string', 'max' => 20],
+            [['ssn'], 'match', 'pattern' => '/^([0-9]){4}?$/', 'message' => 'Please enter a valid 4 digit numeric {attribute}.'],
+            [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
             [['first_name', 'last_name', 'email'], 'required', 'on' => 'registration'],
             [['created_at', 'updated_at', 'unique_id', 'user_id'], 'safe', 'on' => 'registration'],
+            [['job_looking_from','interest_level','first_name','last_name','email','mobile_no','street_no','street_address','apt','zip_code'], 'safe'],
             [['company_id'], 'required', 'when' => function ($model) {
                     return CommonFunction::isHoAdmin(\Yii::$app->user->identity->id) || CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
                 }, 'on' => 'staff'
@@ -118,7 +121,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'role_id' => 'Role',
             'first_name' => 'First Name',
             'last_name' => 'Last Name',
-            'mobile_no' => 'Mobile No',
+            'mobile_no' => 'Mobile No.',
             'company_id' => 'Company',
             'branch_id' => 'Branch',
             'profile_pic' => 'Profile Pic',
@@ -142,6 +145,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             'city' => 'City',
             'zip_code' => 'Zip Code',
             'companyNames' => 'Company Name',
+            'dob' => 'D.O.B'
         ];
     }
 

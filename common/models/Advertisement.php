@@ -37,7 +37,7 @@ class Advertisement extends \yii\db\ActiveRecord
     {
         return [
             [['description', 'is_active','video_link','link_url'], 'string'],
-            [['is_active', 'location_display','vendor_id'], 'required'],
+            [['is_active','vendor_id','name','link_url','active_from'], 'required'],
             [['location_display','file_type'], 'integer'],
             [['description','name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
 //            [['link_url','video_link'], 'match', 'pattern' => '/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/', 'message' => 'Please Enter Valid Url For {attribute} field'],
@@ -51,7 +51,7 @@ class Advertisement extends \yii\db\ActiveRecord
                 }, 'whenClient' => "function (attribute, value) {
                 return ($('#type_2').is(':checked'));
             }"],            
-            [['active_from', 'active_to', 'created_at', 'updated_at','created_by', 'updated_by','vendor_id'], 'safe'],
+            [['name','link_url','video_link','active_from','description' ,'active_to', 'created_at', 'updated_at','created_by', 'updated_by','vendor_id'], 'safe'],
             [['name', 'icon'], 'string', 'max' => 255],
             [['location_name'], 'string', 'max' => 100],
             [['icon'], 'file', 'extensions'=>['jpg','png','jpeg'], 'checkExtensionByMimeType'=>false,"wrongExtension" => "File type is not compatible. Please upload a PNG or JPG file."],

@@ -31,7 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         'name',
                         'description:ntext',
                         'link_url:url',
-                        'icon',
+                        [
+                            'attribute' => 'video_link',
+                            'value' => function ($model) {
+                                return (isset($model->video_link) && !empty($model->video_link)) ? $model->video_link : "-";
+                            },
+                        ],
+                        [
+                            'attribute' => 'icon',
+                            'value' => function ($model) {
+                                return (isset($model->icon) && !empty($model->icon)) ? $model->icon : "-";
+                            },
+                        ],
                         [
                             'attribute' => 'is_active',
                             'value' => function ($model) use ($status) {

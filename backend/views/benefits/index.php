@@ -3,6 +3,7 @@
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
+use common\CommonFunction;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\BenefitsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -26,7 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'filterModel' => $searchModel,
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
-                            'name',
+//                            'name',
+                            [
+                                'attribute' => 'name',
+                                'value' => function($model){
+                                    return CommonFunction::htmlEncodeLabel($model->name);
+                                }
+                            ],
                             [
                                 'class' => 'yii\grid\ActionColumn',
                                 'contentOptions' => ['style' => 'width:5%;'],

@@ -61,24 +61,30 @@ class PaymentController extends Controller {
         $lead_id = base64_decode($id);
         $payment_id = '';
         $session = Yii::$app->session;
-        $model = LeadMaster::findOne(['id' => $lead_id]);
 
-        $amount_cents = $model->price * 100;
+        $subscriptionModel = CompanySubscription::find()->innerJoin('company_subscription_payment', ['company_subscription_payment.subscription_id' => 'company_subscription.id'])->where(['company_id' => \common\CommonFunction::getLoggedInUserCompanyId(), 'company_subscription_payment.lead_id' => $lead_id])->one();
+        if (empty($subscriptionModel)) {
+            $model = LeadMaster::findOne(['id' => $lead_id]);
 
-        $subscription = new CompanySubscription();
-        $subscription->company_id = \common\CommonFunction::getLoggedInUserCompanyId();
-        $subscription->package_id = \common\models\PackageMaster::PAY_AS_A_GO;
-        $subscription->created_at = \common\CommonFunction::currentTimestamp();
-        $subscription->updated_at = \common\CommonFunction::currentTimestamp();
-        if ($subscription->save()) {
-            $paymentModel = new CompanySubscriptionPayment();
-            $paymentModel->subscription_id = $subscription->id;
-            $paymentModel->amount = $model->price;
-            $paymentModel->lead_id = $lead_id;
-            $paymentModel->status = CompanySubscriptionPayment::STATUS_PENDING;
-            $paymentModel->created_at = $paymentModel->updated_at = \common\CommonFunction::currentTimestamp();
-            if ($paymentModel->save()) {
-                $payment_id = $paymentModel->id;
+            $amount_cents = $model->price * 100;
+
+            $subscription = new CompanySubscription();
+            $subscription->company_id = \common\CommonFunction::getLoggedInUserCompanyId();
+            $subscription->package_id = \common\models\PackageMaster::PAY_AS_A_GO;
+            $subscription->created_at = \common\CommonFunction::currentTimestamp();
+            $subscription->updated_at = \common\CommonFunction::currentTimestamp();
+            if ($subscription->save()) {
+                $paymentModel = new CompanySubscriptionPayment();
+                $paymentModel->subscription_id = $subscription->id;
+                $paymentModel->amount = $model->price;
+                $paymentModel->lead_id = $lead_id;
+                $paymentModel->status = CompanySubscriptionPayment::STATUS_PENDING;
+                $paymentModel->created_at = $paymentModel->updated_at = \common\CommonFunction::currentTimestamp();
+                if ($paymentModel->save()) {
+                    $payment_id = $paymentModel->id;
+                } else {
+                    $flag = false;
+                }
             } else {
                 $flag = false;
             }
@@ -114,7 +120,7 @@ class PaymentController extends Controller {
                     'currency' => 'usd',
                     'quantity' => 1,
                     'name' => Yii::$app->user->identity->details->companyNames,
-                    ]]
+                        ]]
         ]);
 
         echo json_encode(['checkoutSessionId' => $checkout_session['id']]);

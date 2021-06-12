@@ -6,7 +6,14 @@ use kartik\date\DatePicker;
 use common\CommonFunction;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+
+$assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 ?>
+
+<style>
+    .social-share {display:flex;margin: 25px 0px;}
+    .social-share li{padding: 0px 5px;}
+</style>
 <!-- Page Title start -->
 <div class="pageTitle">
     <div class="container">
@@ -34,7 +41,38 @@ use yii\web\JsExpression;
                     </div>
                 </div>
             </div>
-            <div class="jobButtons"> <a href="<?php echo Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/apply','ref'=>$model->reference_no])?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a> </div>
+            <div class='row'>
+                <?php if (CommonFunction::isJobSeeker()) { ?>
+                    <div class='col-md-2'>
+                        <div class="jobButtons"> 
+                            <a href="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply', 'ref' => $model->reference_no]) ?>" class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a>                        
+                        </div>
+                    </div>
+                    <div class='col-md-5'>
+                        <?=
+                        \ymaker\social\share\widgets\SocialShare::widget([
+                            'configurator' => 'socialShare',
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
+                            'title' => $model->title,
+                            'description' => $model->description,
+                            'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
+                        ]);
+                        ?>
+                    </div>
+                <?php } else { ?>
+                    <div class='col-md-12'>
+                        <?=
+                        \ymaker\social\share\widgets\SocialShare::widget([
+                            'configurator' => 'socialShare',
+                            'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
+                            'title' => $model->title,
+                            'description' => $model->description,
+                            'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
+                        ]);
+                        ?>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
 
         <!-- Job Detail start -->
@@ -54,20 +92,20 @@ use yii\web\JsExpression;
                             </ul>
                         <?php } ?>
                         <?php if (isset($discipline) && !empty($discipline)) { ?>
-                        <h3>Discipline</h3>
-                        <ul>
-                            <?php foreach ($discipline as $value) { ?>
-                                <li><?= $value->discipline->name ?></li>
-                            <?php } ?>
-                        </ul>
+                            <h3>Discipline</h3>
+                            <ul>
+                                <?php foreach ($discipline as $value) { ?>
+                                    <li><?= $value->discipline->name ?></li>
+                                <?php } ?>
+                            </ul>
                         <?php } ?>
                         <?php if (isset($specialty) && !empty($specialty)) { ?>
-                        <h3>Specialty</h3>
-                        <ul>
-                            <?php foreach ($specialty as $value) { ?>
-                                <li><?= $value->speciality->name ?></li>
-                            <?php } ?>
-                        </ul>
+                            <h3>Specialty</h3>
+                            <ul>
+                                <?php foreach ($specialty as $value) { ?>
+                                    <li><?= $value->speciality->name ?></li>
+                                <?php } ?>
+                            </ul>
                         <?php } ?>
                     </div>
                 </div>

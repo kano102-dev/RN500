@@ -14,6 +14,7 @@ use yii\helpers\FileHelper;
 use common\models\Vendor;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 
 /**
  * AdvertisementController implements the CRUD actions for Advertisement model.
@@ -28,6 +29,32 @@ class AdvertisementController extends Controller {
      */
     public function behaviors() {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'create'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('create-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'update'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('update-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('view-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                    [
+                        'actions' => ['index', 'delete'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('delete-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -85,9 +112,13 @@ class AdvertisementController extends Controller {
         $model->created_at = CommonFunction::currentTimestamp();
         $model->updated_at = CommonFunction::currentTimestamp();
         $model->created_by = \Yii::$app->user->id;
-        
+
         if ($model->load(Yii::$app->request->post())) {
-            
+
+
+            $model->active_from = date('Y-m-d', strtotime($model->active_from));
+            $model->active_to = date('Y-m-d', strtotime($model->active_to));
+
             $icon = UploadedFile::getInstance($model, 'icon');
             $folder = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
 
@@ -96,7 +127,7 @@ class AdvertisementController extends Controller {
             }
 
             if (!empty($icon)) {
-                $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $icon->getExtension();;
+                $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $icon->getExtension();
                 $icon->saveAs($folder . $model->icon);
             } else {
                 $model->icon = null;
@@ -130,27 +161,30 @@ class AdvertisementController extends Controller {
 
         $temp_document_file = isset($model->icon) && !empty($model->icon) ? $model->icon : NULL;
 
-        $model->active_from = date("Y-m-d", strtotime($model->active_from));
-        $model->active_to = date("Y-m-d", strtotime($model->active_to));
-        
+        $model->active_from = date("d-m-Y", strtotime($model->active_from));
+        $model->active_to = date("d-m-Y", strtotime($model->active_to));
+
         $model->updated_at = CommonFunction::currentTimestamp();
         $model->updated_by = \Yii::$app->user->id;
         if ($model->load(Yii::$app->request->post())) {
 
+            $model->active_from = date('Y-m-d', strtotime($model->active_from));
+            $model->active_to = date('Y-m-d', strtotime($model->active_to));
+
             $document_file = UploadedFile::getInstance($model, 'icon');
-            
+
             $folder = \Yii::getAlias('@frontend') . "/web/uploads/advertisement/";
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
-            
-            $uploadPath = \Yii::getAlias('@frontend').'/web/uploads/advertisement/';
-            
+
+            $uploadPath = \Yii::getAlias('@frontend') . '/web/uploads/advertisement/';
+
             if ($document_file) {
                 $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->icon);
             }
-            
+
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
                     unlink($uploadPath . $temp_document_file);

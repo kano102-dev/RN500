@@ -21,6 +21,8 @@ use yii\web\Response;
 use common\models\Cities;
 use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
+use common\models\LeadRecruiterJobSeekerMappingSearch;
+use yii\web\NotFoundHttpException;
 
 /**
  * BrowseJobs controller
@@ -34,10 +36,10 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
                 'rules' => [
                         [
-                        'actions' => [ 'apply', 'apply-job'],
+                        'actions' => ['apply', 'apply-job', 'view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
@@ -46,6 +48,11 @@ class BrowseJobsController extends Controller {
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],
+                        [
+                        'actions' => ['recruiter-view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isEmployer() ? ['@'] : ['*'] : ['*'],
+                    ]
                 ],
             ],
 //            'verbs' => [
@@ -176,16 +183,22 @@ class BrowseJobsController extends Controller {
         $totalRecord = Discipline::find()->count();
         $lists = ArrayHelper::map(Discipline::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' />";
+
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='discipline[]' value='$key' id='desc-$key' />";
+                }
+                $options .= "<label for='desc-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='desc-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
+
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);
         exit;
@@ -200,15 +213,19 @@ class BrowseJobsController extends Controller {
         $totalRecord = Speciality::find()->count();
         $lists = ArrayHelper::map(Speciality::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' />";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='speciality[]' value='$key' id='spec-$key' />";
+                }
+                $options .= "<label for='spec-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='spec-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);
@@ -224,15 +241,19 @@ class BrowseJobsController extends Controller {
         $totalRecord = Benefits::find()->count();
         $lists = ArrayHelper::map(Benefits::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
         $options = "";
-        foreach ($lists as $key => $list) {
-            $options .= "<li>";
-            if (in_array($key, $filter)) {
-                $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' checked />";
-            } else {
-                $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
+                }
+                $options .= "<label for='benefit-$key'></label>" . $list;
+                $options .= "</li>";
             }
-            $options .= "<label for='benefit-$key'></label>" . $list;
-            $options .= "</li>";
+        } else {
+            $options .= "<li>-</li>";
         }
         $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
         echo Json::encode($response);
@@ -292,6 +313,8 @@ class BrowseJobsController extends Controller {
         return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
     }
 
+    /*     * ******** ADDED BY MOHAN*** */
+
     public function actionApply($ref) {
         $model = LeadMaster::findOne(['reference_no' => $ref]);
         if ($model != null) {
@@ -299,7 +322,7 @@ class BrowseJobsController extends Controller {
             $dataProvider = $searchModel->searchJobApply(Yii::$app->request->queryParams);
             return $this->render('apply', ['model' => $model, 'dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
         } else {
-            throw new \yii\web\NotFoundHttpException("In valid lead");
+            throw new NotFoundHttpException("In valid lead");
         }
     }
 
@@ -311,20 +334,94 @@ class BrowseJobsController extends Controller {
             $model->lead_id = $lead_id;
             $model->branch_id = $branch_id;
             $model->job_seeker_id = $loggedInUserId;
-        }
-        $model->status = LeadRecruiterJobSeekerMapping::STATUS_PENDING;
-        $model->updated_at = CommonFunction::currentTimestamp();
-        $model->updated_by = $loggedInUserId;
-        if ($model->save()) {
-            $mailSent = $model->sendMailToBranch();
-            if ($mailSent['status'] == '1') {
-                Yii::$app->session->setFlash("success", $mailSent['message']);
-            } else {
-                Yii::$app->session->setFlash("warning", $mailSent['message']);
+            $model->status = LeadRecruiterJobSeekerMapping::STATUS_PENDING;
+            $model->updated_at = CommonFunction::currentTimestamp();
+            $model->updated_by = $loggedInUserId;
+            if ($model->save()) {
+                $mailSent = $model->sendMailToBranch();
+                if ($mailSent['status'] == '1') {
+                    Yii::$app->session->setFlash("success", $mailSent['message']);
+                } else {
+                    Yii::$app->session->setFlash("warning", $mailSent['message']);
+                }
             }
+            $ref = LeadMaster::findOne($lead_id)->reference_no;
+        } else {
+            Yii::$app->session->setFlash("warning", "You have already applied to this branch");
         }
         $ref = LeadMaster::findOne($lead_id)->reference_no;
-        $this->redirect(['apply','ref'=>$ref]);
+        $this->redirect(['apply', 'ref' => $ref]);
     }
 
+//    public function actionLeadsReceived() {
+//        $searchModel = new LeadRecruiterJobSeekerMappingSearch();
+//        $searchModel->loggedUserBranchId = (Yii::$app->user->identity->branch_id) ? Yii::$app->user->identity->branch_id : '';
+//
+//        $dataProviderPending = $searchModel->searchLeadsReceivedPending(Yii::$app->request->queryParams);
+//        $dataProviderInprogress = $searchModel->searchLeadsReceivedInprogress(Yii::$app->request->queryParams);
+//        $dataProviderSelected = $searchModel->searchLeadsReceivedSelected(Yii::$app->request->queryParams);
+//        $dataProviderRejected = $searchModel->searchLeadsReceivedRejected(Yii::$app->request->queryParams);
+//        return $this->render('leads-received', [
+//                    'searchModel' => $searchModel,
+//                    'dataProviderPending' => $dataProviderPending,
+//                    'dataProviderInprogress' => $dataProviderInprogress,
+//                    'dataProviderSelected' => $dataProviderSelected,
+//                    'dataProviderRejected' => $dataProviderRejected
+//        ]);
+//    }
+//    public function actionRecruiterApprovalForm($lrj, $status) {
+//        $model = LeadRecruiterJobSeekerMapping::findOne($lrj);
+//        if ($model != null) {
+//            $model->rec_joining_date = ($model->rec_joining_date) ? date('d-M-Y', strtotime($model->rec_joining_date)) : null;
+//            $model->scenario = ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) ? 'rec_approve' : 'rec_reject';
+//            return $this->renderAjax('_recruiter_approval_form', ['model' => $model, 'status' => $status]);
+//        }
+//        throw new NotFoundHttpException("In valid action.");
+//    }
+//    public function actionApprovalFromRecruiter($lrj, $status) {
+//        $model = LeadRecruiterJobSeekerMapping::findOne($lrj);
+//        if ($model != null) {
+//            $model->load(Yii::$app->request->post());
+//            $model->rec_comment = ($model->rec_comment != '') ? $model->rec_comment : NULL;
+//            $model->rec_joining_date = ($model->rec_joining_date != '') ? date("Y-m-d", strtotime($model->rec_joining_date)) : '';
+//            $model->rec_status = ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) ? LeadRecruiterJobSeekerMapping::STATUS_APPROVED : LeadRecruiterJobSeekerMapping::STATUS_REJECTED;
+//            $model->updated_by = Yii::$app->user->identity->id;
+//            $model->updated_at = CommonFunction::currentTimestamp();
+//            if ($model->save(false)) {
+//                if ($status == LeadRecruiterJobSeekerMapping::STATUS_APPROVED) {
+//                    $flashMsgType = "warning";
+//                    $flashMsg = "Application approved successfully, but there is some issue while sending mail.";
+//                    $jobSeekerMailSent = $model->sendMailToJobSeekerAboutRecruiterApproval();
+//
+//                    if (CommonFunction::isLeadAppliedBranchAndPostedBranchSame($model->lead_id, $model->branch_id)) {
+//                        $model->employer_status = LeadRecruiterJobSeekerMapping::STATUS_APPROVED;
+//                        $model->save(false);
+//                        if ($jobSeekerMailSent['status'] == '1') {
+//                            $flashMsg = "Application approved successfully.";
+//                            $flashMsgType = "success";
+//                        }
+//                    } else {
+//                        $employerMailSent = $model->sendMailToEmployerAboutRecruiterApproval();
+//                        if ($jobSeekerMailSent['status'] == '1' && $employerMailSent['status'] == '1') {
+//                            $flashMsg = "Application approved successfully.";
+//                            $flashMsgType = "success";
+//                        }
+//                    }
+//                } else {
+//                    $flashMsg = "Application rejected successfully, but there is some issue while sending mail.";
+//                    $jobSeekerMailSent = $model->sendMailToJobSeekerAboutRecruiterRejection();
+//
+//                    if ($jobSeekerMailSent['status'] == '1' && $jobSeekerMailSent['status'] == '1') {
+//                        $flashMsg = "Application rejected successfully.";
+//                        $flashMsgType = "success";
+//                    }
+//                }
+//                Yii::$app->session->setFlash($flashMsgType, $flashMsg);
+//                return $this->redirect(['leads-received']);
+//            }
+//        }
+//        throw new NotFoundHttpException("In valid action.");
+//    }
+
+    /*     * ** END BY MOHAN*** */
 }

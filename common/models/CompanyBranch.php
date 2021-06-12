@@ -28,22 +28,23 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public $state;
     public $company_name;
-    
+
     public static function tableName() {
         return 'company_branch';
     }
 
     public function rules() {
         return [
-            [['branch_name', 'street_no', 'street_address', 'city', 'updated_at'], 'required'],
+            [['branch_name', 'street_no', 'street_address', 'city', 'updated_at', 'zip_code'], 'required'],
             [['company_id', 'city', 'is_default', 'created_at', 'updated_at'], 'integer'],
             [['branch_name'], 'string', 'max' => 200],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
-            [['zip_code'], 'string', 'max' => 20],
+//            [['zip_code'], 'string', 'max' => 20],
+            [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
             ['company_id', 'required', 'when' => function ($model) {
-                    return CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id);
+                    return isset(\Yii::$app->user->identity->id) ? CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id) : false;
                 }],
-            [['email'],'safe']
+            [['email', 'branch_name', 'street_no', 'street_address', 'apt', 'zip_code'], 'safe']
         ];
     }
 
@@ -55,7 +56,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
             'id' => 'ID',
             'company_id' => 'Company',
             'branch_name' => 'Branch Name',
-            'street_no' => 'Street No',
+            'street_no' => 'Street No.',
             'street_address' => 'Street Address',
             'apt' => 'Suit/apt',
             'city' => 'City',
