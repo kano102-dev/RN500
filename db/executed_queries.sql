@@ -1161,3 +1161,11 @@ ADD `status` tinyint NOT NULL DEFAULT '1' COMMENT '1:active 0:in active';
 UPDATE `auth_item` SET `description` = 'Discipline' WHERE `name` = 'decipline' AND `name` = 'decipline' COLLATE utf8mb4_bin;
 
 #  ***********************09-JUN-2021***BY Mehul END**************************
+
+#  ***********************12-JUN-2021***BY Nirav**************************
+
+ALTER TABLE `advertisement`
+CHANGE `active_from` `active_from` date NULL AFTER `location_display`,
+CHANGE `active_to` `active_to` date NULL AFTER `active_from`;
+
+#  ***********************12-JUN-2021***BY Nirav END**************************
