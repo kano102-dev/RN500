@@ -28,6 +28,7 @@ class CompanyBranch extends \yii\db\ActiveRecord {
 
     public $state;
     public $company_name;
+    public $is_already_applied;
 
     public static function tableName() {
         return 'company_branch';
