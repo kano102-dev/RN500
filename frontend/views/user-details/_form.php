@@ -113,7 +113,7 @@ use common\models\User;
                     'format' => 'dd-mm-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
-                    'startDate' => date('d-m-Y'),
+//                    'startDate' => date('d-m-Y'),
                 ]
             ]);
             ?>

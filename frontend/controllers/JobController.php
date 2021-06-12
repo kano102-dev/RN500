@@ -98,7 +98,7 @@ class JobController extends Controller {
                         }
                     }
                     $transaction->commit();
-                    Yii::$app->session->setFlash("success", "Job was posted successfully.");
+                    Yii::$app->session->setFlash("success", "Job Posted Successfully.");
                 }
             } catch (\Exception $ex) {
                 Yii::$app->session->setFlash("success", "Job was posted successfully.");

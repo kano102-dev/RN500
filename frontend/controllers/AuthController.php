@@ -316,7 +316,7 @@ class AuthController extends Controller {
             $user->password = Yii::$app->security->generatePasswordHash($model->new_password);
             $user->original_password = trim($model->new_password);
             if ($user->save()) {
-                Yii::$app->session->setFlash('success', "Password changed successfully");
+                Yii::$app->session->setFlash('success', "Password Changed Successfully.");
                 Yii::$app->user->logout();
                 return $this->goHome();
             } else {

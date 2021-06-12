@@ -37,7 +37,7 @@ class Advertisement extends \yii\db\ActiveRecord
     {
         return [
             [['description', 'is_active','video_link','link_url'], 'string'],
-            [['is_active', 'location_display','vendor_id'], 'required'],
+            [['is_active','vendor_id','name','link_url','active_from'], 'required'],
             [['location_display','file_type'], 'integer'],
             [['description','name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
 //            [['link_url','video_link'], 'match', 'pattern' => '/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/', 'message' => 'Please Enter Valid Url For {attribute} field'],

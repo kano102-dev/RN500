@@ -18,6 +18,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 ?>
 <style>
     .browse-jobs li p {line-height: 22px;color: #333;margin: 0;font-weight: 600}
+    .mb-10{margin-bottom: 10px;}
 </style>
 
 <!-- Page Title start -->
@@ -262,9 +263,9 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     <div class="col-md-9 col-sm-9">
                                         <p>&nbsp;</p>
                                         <div class="row">
-                                            <div class="col-md-4 col-sm-12"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
-                                            <div class="col-md-4 col-sm-12"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
-                                            <div class="col-md-4 col-sm-12"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
+                                            <div class="col-md-4 col-sm-12 mb-10"><span>Starting Date :</span> <?= date('m-d-Y', strtotime($model->start_date)); ?></div>
+                                            <div class="col-md-4 col-sm-12 mb-10"><span>Shift :</span> <?= $model->shift == 1 ? "Morning,Evening,Night,Flatulate" : Yii::$app->params['job.shift'][$model->shift] ?></div>
+                                            <div class="col-md-4 col-sm-12 mb-10"><span>Job Type :</span> <?= Yii::$app->params['job.type'][$model->job_type] ?></div>
                                         </div><br/>
 
                                     </div>
