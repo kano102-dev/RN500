@@ -134,7 +134,7 @@ class AuthController extends Controller {
                         $companyMasterModel->created_at = $companyMasterModel->updated_at = CommonFunction::currentTimestamp();
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
-                            $company_branch->branch_name = "HO";
+                            $company_branch->branch_name = "Head Office";
                             $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
@@ -196,7 +196,7 @@ class AuthController extends Controller {
                         $companyMasterModel = clone $recruiterCompany;
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
-                            $company_branch->branch_name = "HO";
+                            $company_branch->branch_name = "Head Office";
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->company_id = $companyMasterModel->id;

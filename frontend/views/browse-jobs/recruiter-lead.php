@@ -271,7 +271,7 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     </div>
                                     <div class="col-md-3 col-sm-3">
                                         <div class="listbtn">
-                                            <?php if (!CommonFunction::isExpired() && in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1) { ?>
+                                            <?php if (!CommonFunction::isExpired() || in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1 || $model->branch->company_id == CommonFunction::getLoggedInUserCompanyId()) { ?>
                                                 <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
                                             <?php } else { ?>
                                                 <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>

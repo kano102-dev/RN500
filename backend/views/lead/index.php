@@ -139,6 +139,8 @@ getPendingRecords();
                 {"name": "title"},
                 {"name": "recruiter_commission"},
                 {"name": "jobseeker_payment"},
+                {"name": "start_date"},
+                {"name": "end_date"},
             ],
             "bDestroy": true,
         });

@@ -84,7 +84,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <?php if (isset(Yii::$app->user->identity->details->profile_pic) && !empty(Yii::$app->user->identity->details->profile_pic)) { ?>
                                             <img src="<?= $frontendDir . "/uploads/user-details/profile/" . Yii::$app->user->identity->details->profile_pic ?>" alt="" class="userimg" />
                                         <?php } else { ?>
-                                            <img src="<?= $assetDir ?>/images/candidates/01.jpg" alt="" class="userimg" />
+                                            <img src="<?= $assetDir ?>/images/profile.png" alt="" class="userimg" />
                                         <?php } ?>    
                                     </a>
                                     <ul class="dropdown-menu">

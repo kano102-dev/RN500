@@ -97,42 +97,42 @@ $action = Yii::$app->controller->action->id;
                     [
                         'label' => 'Benefits',
                         'url' => ['/benefits'],
-                        'icon' => 'user-check',
+                        'icon' => 'box',
                         'active' => ($controller == "benefits"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('benefits-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('benefits-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('benefits-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('benefits-view', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Specialty',
                         'url' => ['/speciality'],
-                        'icon' => 'user-check',
+                        'icon' => 'user-tag',
                         'active' => ($controller == "speciality"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('specialty-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('specialty-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('specialty-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('specialty-view', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Discipline',
                         'url' => ['/discipline'],
-                        'icon' => 'user-check',
+                        'icon' => 'user-nurse',
                         'active' => ($controller == "discipline"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('decipline-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('decipline-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('decipline-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('decipline-view', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Advertisement',
                         'url' => ['/advertisement'],
-                        'icon' => 'user-check',
+                        'icon' => 'ad',
                         'active' => ($controller == "advertisement"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('create-advertisement', Yii::$app->user->identity->id) || CommonFunction::checkAccess('update-advertisement', Yii::$app->user->identity->id) || CommonFunction::checkAccess('delete-advertisement', Yii::$app->user->identity->id) || CommonFunction::checkAccess('view-advertisement', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Vendor',
                         'url' => ['/vendor'],
-                        'icon' => 'user-check',
+                        'icon' => 'user-tie',
                         'active' => ($controller == "vendor"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('create-vendor', Yii::$app->user->identity->id) || CommonFunction::checkAccess('update-vendor', Yii::$app->user->identity->id) || CommonFunction::checkAccess('delete-vendor', Yii::$app->user->identity->id) || CommonFunction::checkAccess('view-vendor', Yii::$app->user->identity->id) : false
                     ],
                     [
                         'label' => 'Emergency',
                         'url' => ['/emergency'],
-                        'icon' => 'user-check',
+                        'icon' => 'h-square',
                         'active' => ($controller == "emergency"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-view', Yii::$app->user->identity->id) : false
                     ],
