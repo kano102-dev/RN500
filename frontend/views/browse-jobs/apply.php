@@ -51,7 +51,7 @@ $lead_id = $model->id;
                                     'buttons' => [
                                         //view button
                                         'proceed' => function ($url, $model) use ($lead_id) {
-                                            if (!LeadRecruiterJobSeekerMapping::checkAlreadyApplied($lead_id, $model->id, Yii::$app->user->identity->id)) {
+                                            if (!$model->is_already_applied) {
                                                 $url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/apply-job', 'lead_id' => $lead_id, 'branch_id' => $model->id]);
                                                 return Html::a('Proceed', 'javascript:void(0)', [
                                                             'onclick' => "applyToThisbranch('$url')",

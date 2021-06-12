@@ -319,7 +319,8 @@ class BrowseJobsController extends Controller {
         $model = LeadMaster::findOne(['reference_no' => $ref]);
         if ($model != null) {
             $searchModel = new LeadMasterSearch();
-            $dataProvider = $searchModel->searchJobApply(Yii::$app->request->queryParams);
+            $searchModel->loggedInUserId = Yii::$app->user->identity->id;
+            $dataProvider = $searchModel->searchJobApplicableBranchList(Yii::$app->request->queryParams);
             return $this->render('apply', ['model' => $model, 'dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
         } else {
             throw new NotFoundHttpException("In valid lead");
@@ -334,15 +335,14 @@ class BrowseJobsController extends Controller {
             $model->lead_id = $lead_id;
             $model->branch_id = $branch_id;
             $model->job_seeker_id = $loggedInUserId;
-            $model->status = LeadRecruiterJobSeekerMapping::STATUS_PENDING;
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->updated_by = $loggedInUserId;
             if ($model->save()) {
                 $mailSent = $model->sendMailToBranch();
                 if ($mailSent['status'] == '1') {
-                    Yii::$app->session->setFlash("success", $mailSent['message']);
+                    Yii::$app->session->setFlash("success", "Job applied successfully.");
                 } else {
-                    Yii::$app->session->setFlash("warning", $mailSent['message']);
+                    Yii::$app->session->setFlash("warning", "Job applied successfully, but there was a issue while sending the mail.");
                 }
             }
             $ref = LeadMaster::findOne($lead_id)->reference_no;
