@@ -1,6 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+
+$profile = Yii::$app->urlManagerAdmin->createAbsoluteUrl('/images/profile.png');
+if (isset(Yii::$app->user->identity->details->profile_pic) && !empty(Yii::$app->user->identity->details->profile_pic)) {
+    $profile = Yii::$app->urlManagerFrontend->createAbsoluteUrl('/uploads/user-details/profile/' . Yii::$app->user->identity->details->profile_pic);
+}
 ?>
 <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -98,13 +103,13 @@ use yii\helpers\Html;
                 </li>-->
         <li class="nav-item dropdown user-menu">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="user-image img-circle elevation-2" alt="User Image">
+                <img src="<?= $profile ?>" class="user-image img-circle elevation-2" alt="User Image">
                 <span class="d-none d-md-inline"><?= isset(Yii::$app->user->identity) ? Yii::$app->user->identity->getFullName() : '' ?></span>
             </a>
             <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <!-- User image -->
                 <li class="user-header bg-primary">
-                    <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+                    <img src="<?= $profile ?>" class="img-circle elevation-2" alt="User Image">
 
                     <p>
                         <?= isset(Yii::$app->user->identity) ? Yii::$app->user->identity->getFullName() : '' ?>

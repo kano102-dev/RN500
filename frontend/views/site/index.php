@@ -6,8 +6,7 @@ use common\CommonFunction;
 $this->title = 'My Yii Application';
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $backendDir = Yii::$app->assetManager->getPublishedUrl('@backend/');
-$frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertisement/";
-
+$frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertisement/";
 ?>
 <style>
     .employee-details p{margin: 0 !important;font-weight: 600;}
@@ -84,8 +83,8 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                 <?php foreach ($advertisment as $key => $value) { ?>
                     <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
                         <?php if (isset($value['icon']) && !empty($value['icon'])) { ?>
-                            <?php if (file_exists(Yii::getAlias('@frontend')."/web/uploads/advertisement/" . $value['icon'])) { ?>
-                                <img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>">
+                            <?php if (file_exists(Yii::getAlias('@frontend') . "/web/uploads/advertisement/" . $value['icon'])) { ?>
+                                <a href="<?= $value['link_url'] ?>" target="_blank"><img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>"></a>
                             <?php } ?>
                             <?php
                         } else {
@@ -94,7 +93,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                                 <video width="350" height="250" controls>
                                     <source src="<?= $value['video_link'] ?>">
                                 </video>
-                            <?php
+                                <?php
                             }
                         }
                         ?>
@@ -105,7 +104,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                     $i++;
                 }
                 ?>
-<?php } ?>
+            <?php } ?>
         </div>
         <div class="row">
             <div class="col-md-12 text-center" id="viewFTypeMore">
@@ -115,7 +114,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
                     <?php if (count($advertisment) > 3) { ?>
                         <a href="#" class="wp_view_more btn btn-info">View More</a>
                     <?php } ?>
-<?php } ?>
+                <?php } ?>
             </div>
         </div>
     </div>
@@ -126,7 +125,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl()."/uploads/advertiseme
     <div class="container"> 
         <div class="col-md-12 col-sm-12"> 
             <ul class="searchList browse-jobs">
-<?php foreach ($leadModels as $model) { ?>
+                <?php foreach ($leadModels as $model) { ?>
                     <!-- Candidate -->
                     <li>
                         <div class="row">

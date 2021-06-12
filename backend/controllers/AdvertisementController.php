@@ -15,6 +15,9 @@ use common\models\Vendor;
 use yii\helpers\ArrayHelper;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
+use yii\web\Response;
+use common\models\Cities;
 
 /**
  * AdvertisementController implements the CRUD actions for Advertisement model.
@@ -31,15 +34,15 @@ class AdvertisementController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'view', 'create', 'update', 'delete'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'get-cities'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'create'],
+                        'actions' => ['index', 'create', 'get-cities'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('create-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
                     [
-                        'actions' => ['index', 'update'],
+                        'actions' => ['index', 'update', 'get-cities'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('update-advertisement', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
                     ],
@@ -68,7 +71,7 @@ class AdvertisementController extends Controller {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [
             'Home' => Url::base(true),
-            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['advertisements/']),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['advertisement/index']),
         ];
     }
 
@@ -93,6 +96,7 @@ class AdvertisementController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "View Details";
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
@@ -112,7 +116,11 @@ class AdvertisementController extends Controller {
         $model->created_at = CommonFunction::currentTimestamp();
         $model->updated_at = CommonFunction::currentTimestamp();
         $model->created_by = \Yii::$app->user->id;
-
+        if (isset($model->location) && !empty($model->location)) {
+            $data = ArrayHelper::map(Cities::find()->where(['id' => $model->location])->all(), 'id', 'city');
+        } else {
+            $data = [];
+        }
         if ($model->load(Yii::$app->request->post())) {
 
 
@@ -141,9 +149,9 @@ class AdvertisementController extends Controller {
             return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->render('_form', [
                     'model' => $model,
-                    'vendor' => $vendor
+                    'vendor' => $vendor, 'data' => $data,
         ]);
     }
 
@@ -166,6 +174,11 @@ class AdvertisementController extends Controller {
 
         $model->updated_at = CommonFunction::currentTimestamp();
         $model->updated_by = \Yii::$app->user->id;
+        if (isset($model->location) && !empty($model->location)) {
+            $data = ArrayHelper::map(Cities::find()->where(['id' => $model->location])->all(), 'id', 'city');
+        } else {
+            $data = [];
+        }
         if ($model->load(Yii::$app->request->post())) {
 
             $model->active_from = date('Y-m-d', strtotime($model->active_from));
@@ -177,14 +190,12 @@ class AdvertisementController extends Controller {
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
-
+            $document_upload_flag = false;
             $uploadPath = \Yii::getAlias('@frontend') . '/web/uploads/advertisement/';
-
-            if ($document_file) {
+            if (!empty($document_file)) {
                 $model->icon = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->icon);
             }
-
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
                     unlink($uploadPath . $temp_document_file);
@@ -201,9 +212,9 @@ class AdvertisementController extends Controller {
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', [
+        return $this->render('_form', [
                     'model' => $model,
-                    'vendor' => $vendor
+                    'vendor' => $vendor, 'data' => $data
         ]);
     }
 
@@ -218,6 +229,39 @@ class AdvertisementController extends Controller {
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionGetCities($page, $q = null, $id = null) {
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'name' => '']];
+        if (!is_null($q) && !empty($q)) {
+            $query = new \yii\db\Query;
+            $query->select(['cities.id', 'CONCAT(city,"-",cities.state_code) as text'])
+                    ->from('cities')
+                    ->innerJoin('states', 'states.id=cities.state_id')
+                    ->where(['like', 'cities.city', $q])
+                    ->offset($offset)
+                    ->limit($limit);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+            $out['pagination'] = ['more' => !empty($data) ? true : false];
+        } elseif ($id > 0) {
+            $query = new \yii\db\Query;
+            $query->select(['cities.id', 'CONCAT(city,"-",cities.state_code) as name'])
+                    ->from('cities')
+                    ->innerJoin('states', 'states.id=cities.state_id')
+                    ->where(['in', 'cities.id', $id])
+                    ->offset($offset)
+                    ->limit($limit);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+            $out['pagination'] = ['more' => !empty($data) ? true : false];
+        }
+        return $out;
     }
 
     /**
