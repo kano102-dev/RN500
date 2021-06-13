@@ -139,14 +139,14 @@ $script = <<< JS
                  try{
                      if(!response.error){
                          $("#commonModal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                         $.pjax.reload({container: "#job-seeker", 'timeout': false});
                          $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                             $.pjax.reload({'container': '#res-messages', 'timeout': false});
                          });
                          getProfilePercentage();
                      }
                  }catch(e){
-                     $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                     $.pjax.reload({'container': '#res-messages', 'timeout': false});
                  }
              },
              error  : function () 

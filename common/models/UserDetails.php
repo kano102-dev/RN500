@@ -178,6 +178,10 @@ class UserDetails extends \yii\db\ActiveRecord {
     public function getCompanyNames() {
         return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
     }
+    
+    public function getCompany() {
+        return $this->hasOne(CompanyMaster::className(), ['id' => "company_id"]);
+    }
 
     public function getCompanyEmail() {
         return isset($this->branch->company->company_email) ? $this->branch->company->company_email : "";

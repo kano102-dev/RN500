@@ -72,7 +72,8 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         <input type="checkbox" name="shift[]" value="1" id="shift-1" />
                                     <?php } ?>
                                     <label for="shift-1"></label>
-                                    All</li>
+                                    All
+                                </li>
                                 <li>
                                     <?php if (in_array(2, $shift_prams)) { ?>
                                         <input type="checkbox" name="shift[]" value="2" id="shift-2" checked />
@@ -118,31 +119,26 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <ul class="optionlist">
                                 <?php
                                 $url = Url::to(['browse-jobs/get-cities']);
-                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : [];
                                 echo Select2::widget([
                                     'name' => 'location',
-                                    'value' => array_keys($selectedLocations),
-                                    'initValueText' => ($selectedLocations),
-                                    'hideSearch' => false,
+                                    'value' => $selectedLocations,
                                     'options' => [
                                         'id' => 'select_location',
                                         'placeholder' => 'Select Location...',
                                         'multiple' => true,
-                                        'class' => ''
                                     ],
                                     'pluginOptions' => [
-                                        'tags' => true,
-                                        'multiple' => true,
                                         'allowClear' => true,
                                         'minimumInputLength' => 1,
                                         'ajax' => [
                                             'url' => $url,
                                             'dataType' => 'json',
-                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                                            'cache' => true,
                                         ],
-                                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
                                     ],
                                 ]);
                                 ?>

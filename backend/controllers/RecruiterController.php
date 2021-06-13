@@ -145,7 +145,7 @@ class RecruiterController extends Controller {
                         $companySubscription->created_at = $companySubscription->updated_at = CommonFunction::currentTimestamp();
                         if ($companySubscription->save()) {
                             $company_branch = new CompanyBranch();
-                            $company_branch->branch_name = "HO";
+                            $company_branch->branch_name = "Head Office";
                             $company_branch->email = $companyMasterModel->company_email;
                             $company_branch->city = $companyMasterModel->city;
                             $company_branch->company_id = $companyMasterModel->id;
@@ -188,6 +188,7 @@ class RecruiterController extends Controller {
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
+                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
             }
         }
@@ -250,6 +251,7 @@ class RecruiterController extends Controller {
                     }
                 } catch (\Exception $ex) {
                     $transaction->rollBack();
+                     Yii::$app->session->setFlash("warning", "Something went wrong.");
                 }
             }
         }

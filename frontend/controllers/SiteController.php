@@ -319,6 +319,7 @@ class SiteController extends Controller {
         $model = new DynamicModel(['name', 'email', 'subject', 'message']);
 
         $model->addRule(['name', 'email', 'subject', 'message'], 'string')
+//                ->addRule(['name', 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'])
                 ->addRule(['name', 'email', 'subject', 'message'], 'required')
                 ->addRule('email', 'email');
 

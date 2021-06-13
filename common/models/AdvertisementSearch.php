@@ -16,8 +16,8 @@ class AdvertisementSearch extends Advertisement {
      */
     public function rules() {
         return [
-            [['id', 'location_display'], 'integer'],
-            [['name', 'description', 'link_url', 'icon', 'location_name', 'is_active', 'active_from', 'active_to', 'created_at', 'updated_at'], 'safe'],
+            [['id'], 'integer'],
+            [['name', 'description', 'link_url', 'icon', 'location', 'is_active', 'active_from', 'active_to', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -59,8 +59,6 @@ class AdvertisementSearch extends Advertisement {
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'location_display' => $this->location_display,
-          
             'active_from' => isset($this->active_from) && !empty($this->active_from) ? date('Y-m-d', strtotime($this->active_from)) : $this->active_from,
             'active_to' => isset($this->active_to) && !empty($this->active_to) ? date('Y-m-d', strtotime($this->active_to)) : $this->active_to,
             'created_at' => $this->created_at,
@@ -72,7 +70,7 @@ class AdvertisementSearch extends Advertisement {
                 ->andFilterWhere(['like', 'description', $this->description])
                 ->andFilterWhere(['like', 'link_url', $this->link_url])
                 ->andFilterWhere(['like', 'icon', $this->icon])
-                ->andFilterWhere(['like', 'location_name', $this->location_name]);
+                ->andFilterWhere(['like', 'location', $this->location]);
 //                ->andFilterWhere(['like', 'is_active', $this->is_active]);
 
         return $dataProvider;

@@ -71,7 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]),
                             'value' => function ($model) {
-                                return date('d/m/Y', strtotime($model->active_from));
+                                return date('M-d-Y', strtotime($model->active_from));
                             },
                         ],
                         [
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]),
                             'value' => function ($model) {
-                                return date('d/m/Y', strtotime($model->active_to));
+                                return date('M-d-Y', strtotime($model->active_to));
                             },
                         ],
                         [

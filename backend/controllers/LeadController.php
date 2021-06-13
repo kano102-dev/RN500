@@ -89,7 +89,7 @@ class LeadController extends Controller {
             'data' => []
         ];
         $i = $start + 1;
-        foreach ($dataProvider->query->all() as $key => $model) {            
+        foreach ($dataProvider->query->all() as $key => $model) {
             $id = $model->id;
 
             $actionDiv = '<a class="change-status"  modal-title="Edit Lead" href="javascript:void(0)" title="Edit lead" url="' . Url::to([Yii::$app->controller->id . '/edit/', 'id' => $model->id]) . '" data-pjax="0"><span class="fa fa-edit"></span></a> &nbsp;';
@@ -149,6 +149,8 @@ class LeadController extends Controller {
                 $model->title,
                 $model->recruiter_commission_type == 1 ? $model->recruiter_commission . "%" : "$" . $model->recruiter_commission,
                 "$" . $model->jobseeker_payment . "/" . Yii::$app->params['job.payment_type'][$model->payment_type],
+                $model->start_date,
+                $model->end_date,
             ];
             $i++;
         }

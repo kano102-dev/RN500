@@ -13,6 +13,7 @@ class LeadMasterSearch extends LeadMaster {
 
     public $company_name;
     public $branch_name;
+    public $loggedInUserId;
 
     /**
      * {@inheritdoc}
@@ -123,12 +124,24 @@ class LeadMasterSearch extends LeadMaster {
         return $dataProvider;
     }
 
-    public function searchJobApply($params) {
-        $reference_no = isset($params['ref']) ? $params['ref'] : '';
+    public function searchJobApplicableBranchList($params) {
+        $reference_no = isset($params['ref']) ? trim($params['ref']) : '';
+        $job_seeker_id = $this->loggedInUserId;
 
-        $ee = new \yii\db\Expression('IF(subscribed_companies.company_name IS NOT NULL ,subscribed_companies.company_name,`company`.`company_name`) as company_name');
-        $query = CompanyBranch::find()->alias('branch')->select(["branch.*", $ee])->joinWith("company company")
-//        $query = CompanyBranch::find()->alias('branch')->select(['CASE WHEN subscribed_companies.company_name IS NOT NULL THEN subscribed_companies.company_name ELSE company.company_name END  company_name','MAX(sent_on) AS sent_on'])->joinWith("company company")
+        $company_name = new \yii\db\Expression('IF(subscribed_companies.company_name IS NOT NULL ,subscribed_companies.company_name,`company`.`company_name`) as company_name');
+        $is_already_applied = new \yii\db\Expression('IF(lrjm.id IS NOT NULL ,"1","0") as is_already_applied ');
+        $query = CompanyBranch::find()->alias('branch')->select([
+                    "branch.id as id",
+                    "branch.id as branch_id",
+                    "branch.branch_name as branch_name",
+                    "lead_m.id as lead_id",
+                    "branch.company_id as company_id",
+                    $company_name,
+                    $is_already_applied
+                ])
+                ->joinWith("company company")
+                ->leftJoin("lead_master lead_m", "lead_m.reference_no = '$reference_no'")
+                ->leftJoin("lead_recruiter_job_seeker_mapping lrjm", "lrjm.branch_id = branch.id AND  lrjm.lead_id = lead_m.id AND lrjm.job_seeker_id ='$job_seeker_id' ")
                 ->leftJoin("( 
                                 SELECT sub.company_id, company.company_name, lead.reference_no FROM company_subscription_payment sub_pay
                                 LEFT JOIN company_subscription sub ON sub.id = sub_pay.subscription_id

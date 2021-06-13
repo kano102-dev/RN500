@@ -6,6 +6,8 @@ use kartik\date\DatePicker;
 use common\CommonFunction;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+
+$assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 ?>
 
 <style>
@@ -38,7 +40,19 @@ use yii\web\JsExpression;
                     </div>
                 </div>
             </div>
-            <div class="jobButtons"> <a href="#." class="btn apply"><i class="fa fa-paper-plane" aria-hidden="true"></i> Apply Now</a> </div>
+            <div class="row">
+                <div class='col-md-12'>
+                    <?=
+                    \ymaker\social\share\widgets\SocialShare::widget([
+                        'configurator' => 'socialShare',
+                        'url' => Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/view', 'id' => $model->id]),
+                        'title' => $model->title,
+                        'description' => $model->description,
+                        'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
+                    ]);
+                    ?>
+                </div>
+            </div>
         </div>
 
         <!-- Job Detail start -->
@@ -49,24 +63,30 @@ use yii\web\JsExpression;
                     <div class="contentbox">
                         <h3>Job Description</h3>
                         <p class="description"><?= $model->description ?></p>
-                        <h3>Benifits</h3>
-                        <ul>
-                            <?php foreach ($benefit as $value) { ?>
-                                <li><?= $value->benefit->name ?></li>
-                            <?php } ?>
-                        </ul>
-                        <h3>Discipline</h3>
-                        <ul>
-                            <?php foreach ($discipline as $value) { ?>
-                                <li><?= $value->discipline->name ?></li>
-                            <?php } ?>
-                        </ul>
-                        <h3>Specialty</h3>
-                        <ul>
-                            <?php foreach ($specialty as $value) { ?>
-                                <li><?= $value->speciality->name ?></li>
-                            <?php } ?>
-                        </ul>
+                        <?php if (!empty($benefit)) { ?>
+                            <h3>Benifits</h3>
+                            <ul>
+                                <?php foreach ($benefit as $value) { ?>
+                                    <li><?= $value->benefit->name ?></li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
+                        <?php if (!empty($discipline)) { ?>
+                            <h3>Discipline</h3>
+                            <ul>
+                                <?php foreach ($discipline as $value) { ?>
+                                    <li><?= $value->discipline->name ?></li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
+                        <?php if (!empty($specialty)) { ?>
+                            <h3>Specialty</h3>
+                            <ul>
+                                <?php foreach ($specialty as $value) { ?>
+                                    <li><?= $value->speciality->name ?></li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
                     </div>
                 </div>
                 <!-- Job Description end --> 
