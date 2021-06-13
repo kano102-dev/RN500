@@ -232,6 +232,10 @@ class CommonFunction {
         return Yii::getAlias('@frontend') . "/web/uploads/user-details/certification";
     }
 
+    public static function getAdvertisementBasePath() {
+        return Yii::getAlias('@frontend') . "/web/uploads/advertisement";
+    }
+
     /*
      * lead_master TABLE's branch_id WILL BE CONSIDERED AS EMPLOYER BRANCH OR LEAD POSTED BRANCH
      * 

@@ -109,7 +109,7 @@ class ChangePasswordForm extends Model {
         $user = $this->_user;
         if ($otp = $this->otp) {
             $sent_otp_detail = OtpRequest::find()->where(['user_id' => $user->id, 'is_verified' => OtpRequest::STATUS_NOT_VERIFIED, 'otp' => $otp])->orderBy("id desc")->one();
-            if (!empty($sent_otp_detail) || $otp == '111111') {
+            if (!empty($sent_otp_detail) || $otp == '123456') {
                 if (!empty($sent_otp_detail)) {
 
                     $sent_otp_detail->is_verified = OtpRequest::STATUS_VERIFIED;
