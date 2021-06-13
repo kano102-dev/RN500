@@ -59,19 +59,17 @@ $frontendDir = yii\helpers\Url::base(true);
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <label class="control-label" for="city">Issuing State</label>
+            <label class="control-label" for="issuing_state">Issuing State</label>
             <ul class="optionlist">
-                <?php
+                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'issuing_state',
+                    'value' => $selectedLocations,
                     'options' => [
-                        'id' => 'issuing_state',
-                        'placeholder' => 'Select Location...',
+                        'id' => 'select_city',
+                        'placeholder' => 'Select City...',
                         'multiple' => false,
-                        'class' => '',
-                        'value' => isset($model->issuing_state) ? $model->issuing_state : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -79,11 +77,12 @@ $frontendDir = yii\helpers\Url::base(true);
                         'ajax' => [
                             'url' => $url,
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                            'cache' => true,
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
                     ],
                 ]);
                 

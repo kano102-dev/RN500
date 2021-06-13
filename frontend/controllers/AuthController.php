@@ -193,6 +193,7 @@ class AuthController extends Controller {
                         $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
                         $recruiterCompany->created_at = $recruiterCompany->updated_at = CommonFunction::currentTimestamp();
                         $recruiterCompany->company_mobile = $recruiterCompany->mobile;
+                        $recruiterCompany->type = 1;
                         $companyMasterModel = clone $recruiterCompany;
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
