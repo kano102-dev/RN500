@@ -352,6 +352,13 @@ class BrowseJobsController extends Controller {
         $ref = LeadMaster::findOne($lead_id)->reference_no;
         $this->redirect(['apply', 'ref' => $ref]);
     }
+    
+    public function actionTrackMyApplication() {
+        $searchModel = new LeadRecruiterJobSeekerMappingSearch();
+        $searchModel->loggedInUserId = Yii::$app->user->identity->id;
+        $dataProvider = $searchModel->searchMyApplication(Yii::$app->request->queryParams);
+        return $this->render('track-my-application', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+    }
 
 //    public function actionLeadsReceived() {
 //        $searchModel = new LeadRecruiterJobSeekerMappingSearch();

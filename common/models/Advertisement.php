@@ -21,9 +21,10 @@ use Yii;
  */
 class Advertisement extends \yii\db\ActiveRecord {
 
-    /**
-     * {@inheritdoc}
-     */
+    
+    const FILE_TYPE_IMAGE = 1;
+    const FILE_TYPE_YOUTUBE_LINK = 2;
+    
     public static function tableName() {
         return 'advertisement';
     }

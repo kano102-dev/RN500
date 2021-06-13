@@ -28,4 +28,5 @@ return [
     'INTERESTS_LEVEL' => [1 => 'Actively Looking', 2 => 'Open To Offers', 3 =>'Search on Hold'],
     'CERTIFICATION_ACTIVE_STATUS' => [1 => 'Yes', 2 => 'No'],
     'PAGE_LENGTH' => 10,
+    'ADS_FILE_TYPE'=> [1 => 'Image', 2 => 'Youtube Url']
 ];
