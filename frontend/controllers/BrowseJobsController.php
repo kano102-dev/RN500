@@ -23,6 +23,7 @@ use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
 use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
+use common\models\Emergency;
 
 /**
  * BrowseJobs controller
@@ -232,6 +233,7 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
+    
 
     public function actionGetBenefits() {
         $request = Yii::$app->getRequest()->post();
@@ -251,6 +253,34 @@ class BrowseJobsController extends Controller {
                     $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
                 }
                 $options .= "<label for='benefit-$key'></label>" . $list;
+                $options .= "</li>";
+            }
+        } else {
+            $options .= "<li>-</li>";
+        }
+        $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
+        echo Json::encode($response);
+        exit;
+    }
+    
+    public function actionGetEmergency() {
+        $request = Yii::$app->getRequest()->post();
+        $page = isset($request['page']) ? $request['page'] : 0;
+        $filter = isset($request['filter']) && !empty($request['filter']) ? explode(',', $request['filter']) : [];
+        $offset = isset($page) && !empty($page) ? $page : 0;
+        $limit = 10;
+        $totalRecord = Emergency::find()->count();
+        $lists = ArrayHelper::map(Emergency::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
+        $options = "";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' />";
+                }
+                $options .= "<label for='spec-$key'></label>" . $list;
                 $options .= "</li>";
             }
         } else {
