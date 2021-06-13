@@ -9,6 +9,9 @@ use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
 use common\models\LeadMaster;
 use common\CommonFunction;
+use common\models\LeadRecruiterJobSeekerMappingSearch;
+use yii\db\Expression;
+use common\models\LeadRating;
 
 /**
  * Company Controller API
@@ -114,6 +117,100 @@ class JobApplyController extends Controller {
                 $data = [];
                 $code = 201;
                 $msg = "Required Data Missing in Request : reference_no, branch_id";
+            }
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionTrackMyApplications() {
+        $data = [];
+        $code = 201;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        try {
+            $paging = (isset($request['page']) && $request['page'] != '' && $request['page'] != 0) ? $request['page'] : 1;
+            $search = (isset($request['filter']) && !empty($request['filter'])) ? $request['filter'] : '';
+
+            $leadList = [];
+
+            $searchModel = new LeadRecruiterJobSeekerMappingSearch();
+            $searchModel->loggedInUserId = $this->user_id;
+            $dataProvider = $searchModel->searchMyApplication([]);
+
+//            $searchModel = new LeadMasterSearch();
+//            $searchModel->loggedInUserId = $this->user_id;
+//            $dataProvider = $searchModel->searchJobApplicableBranchList(['ref' => $reference_no]);
+            $query = $dataProvider->query;
+
+            if ($search != '') {
+                $query->andWhere(['OR',
+                        ['like', 'lead.title', $search],
+                        ['like', 'lead.reference_no', $search],
+                        ['like', new Expression('CONCAT(lead.title, " (", lead.reference_no, ")")'), $search],
+                        ['like', 'recruiter_company.company_name', $search],
+                        ['like', 'recruiter_branch.branch_name', $search],
+                        ['like', new Expression('CONCAT(recruiter_company.company_name, " ( ", recruiter_branch.branch_name, " ) ")'), $search],
+                        ['like', 'cities.city', $search]
+                ]);
+            }
+
+            $total_pages = (ceil($query->count() / Yii::$app->params['API_PAGINATION_RECORD_LIMIT'])) ? ceil($query->count() / Yii::$app->params['API_PAGINATION_RECORD_LIMIT']) : 1;
+            if ($paging <= $total_pages) {
+                $query->offset(($paging - 1) * Yii::$app->params['API_PAGINATION_RECORD_LIMIT'])->limit(Yii::$app->params['API_PAGINATION_RECORD_LIMIT']);
+                $lists = $query->all();
+                foreach ($lists as $model) {
+                    $leadList[] = ['lead_id' => (string) $model->lead_id, 'leadTitleWithRef' => (string) $model->leadTitleWithRef, 'cityName' => $model->cityName, 'recruiterComapnyWithBranch' => $model->recruiterComapnyWithBranch, 'statusText' => $model->statusText, 'rating' => $model->rating];
+                }
+            }
+            $code = 200;
+            $msg = "Success";
+            $data = $leadList;
+        } catch (\Exception $exc) {
+            $code = 500;
+            $msg = "Internal server error";
+            $data = ['message' => $exc->getMessage(), 'line' => $exc->getLine(), 'file' => $exc->getFile()];
+        }
+        $response = Json::encode(['code' => $code, 'msg' => $msg, "data" => $data]);
+        echo $response;
+        exit;
+    }
+
+    public function actionSetRating() {
+        $data = [];
+        $code = 201;
+        $msg = "Required Data Missing in Request.";
+        $request = array_map("trim", Yii::$app->request->post());
+        try {
+            $lead_id = (isset($request['lead_id']) && !empty($request['lead_id'])) ? $request['lead_id'] : '';
+            $rating = (isset($request['rating']) && !empty($request['rating'])) ? $request['rating'] : '';
+
+            if ($lead_id != '' && $rating != '') {
+                $lead = LeadMaster::find()->where($lead_id)->one();
+                if ($lead != null) {
+                    $model = new LeadRating();
+                    $isSaved = $model->saveRating($this->user_id, $lead_id, $rating);
+                    if ($isSaved == true) {
+                        $code = 200;
+                        $msg = "Rating was given successfully.";
+                        $data = [];
+                    } else {
+                        echo json_encode(['code' => 201, 'errors' => $isSaved]);
+                    }
+                } else {
+                    $code = 205;
+                    $msg = "Someting went wrong.";
+                    $data = [];
+                }
+            } else {
+                $data = [];
+                $code = 201;
+                $msg = "Required Data Missing in Request : lead_id , rating";
             }
         } catch (\Exception $exc) {
             $code = 500;
