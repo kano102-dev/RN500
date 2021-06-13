@@ -3,7 +3,11 @@
 use yii\helpers\Html;
 use yii\bootstrap4\ActiveForm;
 ?>
-
+<style>
+    @media (max-width:767px){
+        .mt-10{margin-top: 10px;}
+    }
+</style>
 <div class="listpgWraper">
     <div class="container">
         <div class="row">
@@ -42,7 +46,7 @@ use yii\bootstrap4\ActiveForm;
                 </div>
             </div>
             <div class="col-md-8">
-                <div class="wp_cont_right">
+                <div class="wp_cont_right mt-10">
                     <h3>RN500</h3>
                     <p>3100, North Ocean Dr, Fort Lauderdale, FL 33308. USA. </p>
                     <p>Phone: +1 123 – 456 – 7890</p>

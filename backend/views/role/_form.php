@@ -94,7 +94,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
         ?>
         <div class="row">
             <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
-                <div class="col-6">
+                <div class="col-md-6 col-sm-12">
                     <?=
                     $form->field($model, 'company_id')->widget(Select2::classname(), [
                         'data' => $companyList,
@@ -106,12 +106,12 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                     ?>
                 </div>
             <?php } ?>
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <?= $form->field($model, 'role_name')->textInput(['maxlength' => true]) ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <h3>Permissions</h3>
                 <?=
                 \wbraganca\fancytree\FancytreeWidget::widget([

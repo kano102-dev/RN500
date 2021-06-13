@@ -139,7 +139,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public function getCitiesName() {
         $names = "";
         if (isset($this->cities) && !empty($this->cities)) {
-            $names = $this->cities->city . "-" . $this->cities->state_code;
+            $names = $this->cities->city . "-" . $this->cities->stateRef->state;
         }
         return $names;
     }

@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
     <div class="card-body">
         <?php $form = ActiveForm::begin(); ?>
 
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Branch Detail</h3>
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                 <div class="card-body">
                     <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-md-12 col-sm-12">
                                 <?=
                                 $form->field($companyBranchModel, 'company_id')->widget(Select2::classname(), [
                                     'data' => $companyList,
@@ -38,23 +38,23 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         </div>
                     <?php } ?>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($companyBranchModel, 'branch_name')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($companyBranchModel, 'street_no')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($companyBranchModel, 'street_address')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($companyBranchModel, 'apt')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($companyBranchModel, 'state')->widget(Select2::classname(), [
                                 'data' => $states,
@@ -65,7 +65,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                             ]);
                             ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($companyBranchModel, 'city')->widget(Select2::classname(), [
                                 'data' => $branch_cities,
@@ -78,8 +78,8 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
-                            <?= $form->field($companyBranchModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        <div class="col-md-6 col-sm-12">
+                            <?= $form->field($companyBranchModel, 'zip_code')->textInput(['maxlength' => 5]) ?>
                         </div>
                     </div>
 
@@ -94,19 +94,19 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'first_name')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'last_name')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'mobile_no')->widget(PhoneInput::className(), [
                                 'jsOptions' => [
@@ -118,19 +118,19 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'street_no')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'street_address')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'apt')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'state')->widget(Select2::classname(), [
                                 'data' => $states,
@@ -144,7 +144,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                     </div>
                     <div class="row">
 
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
                                 'data' => $owner_cities,
@@ -155,12 +155,12 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                             ]);
                             ?>
                         </div>
-                        <div class="col-6">
-                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        <div class="col-md-6 col-sm-12">
+                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => 5]) ?>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
                                 'data' => $roles,

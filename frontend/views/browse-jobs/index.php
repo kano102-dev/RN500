@@ -72,7 +72,8 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         <input type="checkbox" name="shift[]" value="1" id="shift-1" />
                                     <?php } ?>
                                     <label for="shift-1"></label>
-                                    All</li>
+                                    All
+                                </li>
                                 <li>
                                     <?php if (in_array(2, $shift_prams)) { ?>
                                         <input type="checkbox" name="shift[]" value="2" id="shift-2" checked />
