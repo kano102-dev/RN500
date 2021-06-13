@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => 5]) ?>
                         </div>
                         <div class="col-6">
                             <?= $form->field($companyMasterModel, 'priority')->dropDownList([1 => 'High', 2 => 'Modrate', 3 => 'Semi Modrate', 4 => 'Low'], ['prompt' => 'Select']) ?>
@@ -183,7 +183,7 @@ $this->params['breadcrumbs'][] = $companyMasterModel->isNewRecord ? "Create" : "
                             ?>
                         </div>
                         <div class="col-6">
-                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => 5]) ?>
                         </div>
                     </div>
                 </div>

@@ -24,17 +24,17 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
             <div class="card-body">
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?= $form->field($model, 'company_name')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
 
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?=
                         $form->field($model, 'phone')->widget(PhoneInput::className(), [
                             'jsOptions' => [
@@ -43,23 +43,23 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                         ]);
                         ?>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?= $form->field($model, 'street_no')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
 
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?= $form->field($model, 'street_address')->textInput(['maxlength' => true]) ?>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?= $form->field($model, 'apt')->textInput(['maxlength' => true]) ?>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?=
                         $form->field($model, 'state')->widget(Select2::classname(), [
                             'data' => $states,
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                         ]);
                         ?>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6 col-sm-12">
                         <?=
                         $form->field($model, 'city')->widget(Select2::classname(), [
                             'data' => [],
@@ -83,8 +83,8 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-6">
-                        <?= $form->field($model, 'zip_code')->textInput(['maxlength' => true]) ?>
+                    <div class="col-md-6 col-sm-12">
+                        <?= $form->field($model, 'zip_code')->textInput(['maxlength' => 5]) ?>
                     </div>
                 </div>
                 <div class="form-group text">

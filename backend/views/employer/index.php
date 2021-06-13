@@ -10,7 +10,7 @@ use common\CommonFunction;
 <div class="card card-default color-palette-box">
     <div class="card-body">
 
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
             <div class="table table-responsive">
 
                 <?php Pjax::begin(['id' => 'pjax_employer', 'timeout' => false]); ?>

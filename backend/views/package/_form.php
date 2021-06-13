@@ -15,15 +15,15 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
         <?php $form = ActiveForm::begin(); ?>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
             </div>
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
             </div>
         </div>
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <?= $form->field($model, 'status')->dropDownList([1 => 'Active', 2 => 'Inactive'], ['prompt' => 'Select']) ?>
             </div>
         </div>

@@ -12,14 +12,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="card card-default color-palette-box">
     <div class="card-body">
 
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
             <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('recruiter-create', Yii::$app->user->identity->id)) { ?>
-                <?= Html::a('Add Recruiter Company', ['create'], ['class' => 'btn btn-primary float-right']) ?>
+                <?= Html::a('Add Recruiter Company', ['create'], ['class' => 'btn btn-primary float-right mb-4']) ?>
             <?php } ?>
 
-
+            
             <div class="table table-responsive">
-
                 <?php Pjax::begin(['id' => 'pjax_recruiter', 'timeout' => false]); ?>
                 <?=
                 GridView::widget([
