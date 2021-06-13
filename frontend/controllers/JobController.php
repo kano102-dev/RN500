@@ -101,7 +101,7 @@ class JobController extends Controller {
                     Yii::$app->session->setFlash("success", "Job Posted Successfully.");
                 }
             } catch (\Exception $ex) {
-                Yii::$app->session->setFlash("success", "Job was posted successfully.");
+                Yii::$app->session->setFlash("warning", "Something went wrong.");
                 $transaction->rollBack();
             } finally {
                 return $this->redirect(['post']);
