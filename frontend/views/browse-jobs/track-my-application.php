@@ -6,6 +6,10 @@ use yii\helpers\Html;
 use yii\widgets\Pjax;
 use yii\grid\GridView;
 use common\models\LeadRecruiterJobSeekerMapping;
+use kartik\icons\FontAwesomeAsset;
+use kartik\rating\StarRating;
+
+FontAwesomeAsset::register($this);
 ?>
 <!-- Page Title start -->
 <div class="pageTitle">
@@ -58,6 +62,36 @@ use common\models\LeadRecruiterJobSeekerMapping;
                                     'filter' => Html::activeDropDownList($searchModel, 'statusText', LeadRecruiterJobSeekerMapping::getStatusList(), ['prompt' => 'All', 'class' => 'form-control']),
                                     'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
                                 ],
+                                    [
+                                    'attribute' => 'rating',
+                                    'format' => 'raw',
+                                    'enableSorting' => false,
+//                                    'filter' => \kartik\rating\StarRating::widget(['model' => $searchModel, 'attribute' => 'rating',
+//                                        'pluginOptions' => [
+//                                            'theme' => 'krajee-uni',
+//                                            'filledStar' => '&#x2605;',
+//                                            'emptyStar' => '&#x2606;'
+//                                ]]),
+                                    'value' => function($model) {
+                            
+                                        return StarRating::widget([
+                                                    'name' => 'rating',
+                                                    'value' => $model->rating,
+                                                    'pluginOptions' => [
+                                                        'filledStar' => '&#x2605;',
+                                                        'emptyStar' => '&#x2606;',
+                                                        'showCaption' => false,
+                                                        'showClear' => false
+                                                    ],
+                                                    'pluginEvents' => [
+                                                        'rating:change' => "function(event, value, caption) {
+                                                                setRatingTo('$model->lead_id',value);
+                                                        }",
+                                                    ],
+                                        ]);
+                                    },
+                                    'filterInputOptions' => ['autocomplete' => 'off', 'class' => 'form-control'],
+                                ],
 //                                    [
 //                                    'class' => 'yii\grid\ActionColumn',
 //                                    'contentOptions' => ['style' => 'width:5%;'],
@@ -96,23 +130,17 @@ use common\models\LeadRecruiterJobSeekerMapping;
 </div>
 
 <?php
+$addRatingUrl = Yii::$app->urlManager->createAbsoluteUrl(['browse-jobs/set-rating']);
 $script_new = <<<JS
-    function applyToThisbranch(url){
-        
-        swal("Are you sure, you want to apply this job?",{
-            buttons: ["Cancel", "Yes!"],
-        }).then((value) => {
-            if(value){
-                $('#overlay').show();
-                $.ajax({
-                    method: "POST",
-                    url: url,
-                }).done(function( res ) {
-                    $('#overlay').hide();
-                });
-            }
+    function setRatingTo(leadId,rating){
+        $.ajax({
+            method: "POST",
+            url: '$addRatingUrl',
+            data: {leadId:leadId, rating: rating}
+        }).done(function( res ) {
+            $.pjax.reload({container:'#pjx_my_application', timeout:false, async:false})
         });
     }
 JS;
-$this->registerJS($script_new, 3);
+$this->registerJS($script_new, 1);
 ?>

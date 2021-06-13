@@ -23,6 +23,7 @@ use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
 use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
+use common\models\LeadRating;
 
 /**
  * BrowseJobs controller
@@ -352,12 +353,25 @@ class BrowseJobsController extends Controller {
         $ref = LeadMaster::findOne($lead_id)->reference_no;
         $this->redirect(['apply', 'ref' => $ref]);
     }
-    
+
     public function actionTrackMyApplication() {
         $searchModel = new LeadRecruiterJobSeekerMappingSearch();
         $searchModel->loggedInUserId = Yii::$app->user->identity->id;
         $dataProvider = $searchModel->searchMyApplication(Yii::$app->request->queryParams);
         return $this->render('track-my-application', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+    }
+
+    public function actionSetRating() {
+        $postedData = Yii::$app->request->post();
+        if (!empty($postedData) && isset($postedData['leadId']) && $postedData['leadId'] != '' && isset($postedData['rating']) && $postedData['rating'] != '') {
+            $model = new LeadRating();
+            $isSaved = $model->saveRating(Yii::$app->user->identity->id, $postedData['leadId'], $postedData['rating']);
+            if ($isSaved == true) {
+                echo json_encode(['code' => 200]);
+            } else {
+                echo json_encode(['code' => 201, 'errors' => $isSaved]);
+            }
+        }
     }
 
 //    public function actionLeadsReceived() {

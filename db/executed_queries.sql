@@ -1175,9 +1175,10 @@ CHANGE `file_type` `file_type` tinyint NULL COMMENT '1:image 2:youtube link' AFT
 CREATE TABLE `lead_rating` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `lead_id` int NOT NULL,
-  `rating` tinyint NOT NULL,
+  `rating` float NOT NULL,
   `user_id` int(11) NOT NULL COMMENT 'Job seeker ID',
   `created_at` int NOT NULL,
+  `updated_at` int NOT NULL,
   FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 );
 #  ***********************13-JUN-2021***BY Mohan END**************************

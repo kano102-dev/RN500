@@ -29,6 +29,7 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
     const STATUS_REJECTED = 2;
     const STATUS_INPROGRESS = 3; // ADD FOR CONCEPTUALIZATION ONLY, WE DIDN'T STORE IN DB
 
+    public $rating;
     /**
      * {@inheritdoc}
      */
@@ -119,7 +120,7 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
         $title = '';
         if (isset($this->lead) && !empty($this->lead)) {
             $lead = $this->lead;
-            $title = $lead->title . " (  <b style='font-weight:600'> " . $lead->reference_no . " </b> ) ";
+            $title = $lead->title . " (" . $lead->reference_no . ") ";
         }
         return $title;
     }
@@ -172,6 +173,10 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
         $getStatusList = self::getStatusList();
         return (isset($getStatusList[$status]) && $getStatusList[$status]) ? $getStatusList[$status] : '';
     }
+    
+//     public static function getRating() {
+//        return 0;
+//    }
 
     /**
      *  SENDS MAIL TO RECRUITER BRANCH
