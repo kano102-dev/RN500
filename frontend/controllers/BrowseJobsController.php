@@ -165,7 +165,8 @@ class BrowseJobsController extends Controller {
                 }
             }
         }
-        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id']);
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id','lead_master.id']);
+
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);

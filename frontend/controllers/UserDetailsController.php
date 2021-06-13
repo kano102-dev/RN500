@@ -125,7 +125,7 @@ class UserDetailsController extends Controller {
         $model->scenario = 'profile';
         $model->updated_at = CommonFunction::currentTimestamp();
         if (isset($model->dob) && !empty($model->dob)) {
-            $model->dob = date('d-m-Y', strtotime($model->dob));
+            $model->dob = date('M-d-Y', strtotime($model->dob));
         } else {
             $model->dob = date('d-m-Y');
         }
@@ -189,7 +189,7 @@ class UserDetailsController extends Controller {
         $companyDetail = CompanyMaster::findOne(['id' => CommonFunction::getLoggedInUserCompanyId()]);
 
         if (isset($model->dob) && !empty($model->dob)) {
-            $model->dob = date('d-m-Y', strtotime($model->dob));
+            $model->dob = date('M-d-Y', strtotime($model->dob));
         }
 
         if ($model->load(Yii::$app->request->post())) {
@@ -225,6 +225,10 @@ class UserDetailsController extends Controller {
                     return $this->redirect(['profile', 'id' => $id]);
                 }
             } else {
+
+                echo "<pre>";
+                print_r($model->getErrors());
+                exit;
                 Yii::$app->session->setFlash('error', "User Details Updated failed.");
                 return $this->redirect(['profile', 'id' => $id]);
             }
@@ -729,8 +733,11 @@ class UserDetailsController extends Controller {
             $hasCompletedReference = 14;
         }
 
-        $percentage = ($hasCompletedUserDetails + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
-
+        if (isset($workExperience) && !empty($workExperience) && isset($userDetails) && !empty($userDetails) && isset($education) && !empty($education) && isset($license) && !empty($license) && isset($certification) && !empty($certification) && isset($documents) && !empty($documents) && isset($reference) && !empty($reference)) {
+            $percentage = 100;
+        } else {
+            $percentage = ($hasCompletedUserDetails + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
+        }
         echo round($percentage, 0);
     }
 

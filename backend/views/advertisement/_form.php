@@ -22,7 +22,7 @@ $url = Url::to(['advertisement/get-cities']);
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
 
                         <?=
                         $form->field($model, 'vendor_id')->widget(Select2::classname(), [
@@ -34,30 +34,30 @@ $url = Url::to(['advertisement/get-cities']);
                         ]);
                         ?>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
 
                         <?php echo $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
 
                         <?php echo $form->field($model, 'link_url')->label('Website Url'); ?>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
                         <?php echo $form->field($model, 'description')->textarea(['rows' => '2']) ?>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
                         <?php
                         echo $form->field($model, 'active_from')->widget(DatePicker::classname(), [
                             'name' => 'active_from',
                             'value' => date('d-M-Y'),
                             'options' => ['placeholder' => 'Enter Start Date'],
                             'pluginOptions' => [
-                                'format' => 'dd-mm-yyyy',
+                               'format' => 'M-d-yyyy',
                                 'todayHighlight' => true,
                                 'autoclose' => true,
                                 'startDate' => date('d-m-Y'),
@@ -67,7 +67,7 @@ $url = Url::to(['advertisement/get-cities']);
                                 "changeDate" => "function(e) {
                                 $('#advertisement-active_to').kvDatepicker({
                                                     autoclose : true,
-                                                    format : 'dd-mm-yyyy'
+                                                    format : 'M-d-yyyy',
                                                 });
                                                 $('#advertisement-active_to').kvDatepicker('setStartDate', e.date);
                             }"
@@ -75,14 +75,14 @@ $url = Url::to(['advertisement/get-cities']);
                         ]);
                         ?>
                     </div>
-                    <div class="col-md-6 custom-time-data-picker">
+                    <div class="col-md-6 col-sm-12 custom-time-data-picker">
                         <?php
                         echo $form->field($model, 'active_to')->widget(DatePicker::classname(), [
                             'name' => 'active_to',
                             'value' => date('d-M-Y'),
                             'options' => ['placeholder' => 'Enter End Date'],
                             'pluginOptions' => [
-                                'format' => 'dd-mm-yyyy',
+                                'format' => 'M-d-yyyy',
                                 'todayHighlight' => true,
                                 'autoclose' => true,
                                 'minDate' => "0"
@@ -92,7 +92,7 @@ $url = Url::to(['advertisement/get-cities']);
                                 
                                 $('#advertisement-active_from').kvDatepicker({
                                                     autoclose : true,
-                                                    format : 'dd-mm-yyyy',
+                                                    format : 'M-d-yyyy',
                                                     minDate : '0'
                                                 });
                                                 $('#advertisement-active_from').kvDatepicker('setEndDate', e.date);
@@ -105,10 +105,10 @@ $url = Url::to(['advertisement/get-cities']);
 
 
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
                         <?php echo $form->field($model, 'is_active')->dropDownList($status) ?>
                     </div>
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
                         <?php
                         echo $form->field($model, 'location')->widget(Select2::classname(), [
                             'data' => $data,
@@ -134,7 +134,7 @@ $url = Url::to(['advertisement/get-cities']);
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-md-6 col-sm-12">
 
 
                         <?=

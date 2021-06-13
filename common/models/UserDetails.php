@@ -75,6 +75,7 @@ class UserDetails extends \yii\db\ActiveRecord {
             [['profile_pic', 'current_position', 'speciality', 'work experience'], 'string', 'max' => 250],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['street_no', 'street_address', 'apt'], 'string', 'max' => 255],
+            [['street_no'], 'match', 'pattern' => '/^[0-9 ]*$/', 'message' => 'Only number allowed for {attribute} field'],
 //            [['zip_code'], 'string', 'max' => 20],
             [['ssn'], 'match', 'pattern' => '/^([0-9]){4}?$/', 'message' => 'Please enter a valid 4 digit numeric {attribute}.'],
             [['zip_code'], 'match', 'pattern' => '/^([0-9]){5}?$/', 'message' => 'Please enter a valid 5 digit numeric {attribute}.'],
@@ -107,7 +108,7 @@ class UserDetails extends \yii\db\ActiveRecord {
         $scenarios['staff'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['employer'] = ['branch_id', 'company_id', 'type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
         $scenarios['recruiter'] = ['type', 'city', 'state', 'created_at', 'updated_at', 'user_id', 'unique_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability'];
-        $scenarios['profile'] = ['first_name', 'last_name', 'email', 'looking_for', 'apt', 'street_no', 'street_address', 'city', 'ssn', 'dob', 'profile_pic','interest_level', 'created_at', 'updated_at'];
+        $scenarios['profile'] = ['first_name', 'last_name', 'email', 'looking_for', 'apt', 'street_no', 'street_address', 'city', 'ssn', 'dob', 'profile_pic','interest_level', 'created_at', 'updated_at','mobile_no'];
         return $scenarios;
     }
 
@@ -177,6 +178,10 @@ class UserDetails extends \yii\db\ActiveRecord {
 
     public function getCompanyNames() {
         return isset($this->branch->company->company_name) ? $this->branch->company->company_name : "";
+    }
+    
+    public function getCompany() {
+        return $this->hasOne(CompanyMaster::className(), ['id' => "company_id"]);
     }
 
     public function getCompanyEmail() {

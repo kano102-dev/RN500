@@ -79,7 +79,7 @@ $frontendDir = yii\helpers\Url::base(true);
 
                             <?php if (!empty(Yii::$app->user->identity)) { ?>  
 
-                                <li class="dropdown userbtn">
+                                <li class="dropdown userbtn new-dropdown-menu">
                                     <a href="javascript:void(0);">
                                         <?php if (isset(Yii::$app->user->identity->details->profile_pic) && !empty(Yii::$app->user->identity->details->profile_pic)) { ?>
                                             <img src="<?= $frontendDir . "/uploads/user-details/profile/" . Yii::$app->user->identity->details->profile_pic ?>" alt="" class="userimg" />
