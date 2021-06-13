@@ -16,17 +16,6 @@ $action = Yii::$app->controller->action->id;
 
     <!-- Sidebar -->
     <div class="sidebar">
-        <!-- Sidebar user panel (optional) -->
-        <!--        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="<?= $assetDir ?>/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block"></a>
-                    </div>
-                </div>-->
-
-        <!-- Sidebar Menu -->
         <nav class="mt-2">
 
             <?php
@@ -79,6 +68,13 @@ $action = Yii::$app->controller->action->id;
                         'icon' => 'user-friends',
                         'active' => ($controller == "staff"),
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('user-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('user-view', Yii::$app->user->identity->id) : false
+                    ],
+                    [
+                        'label' => 'Jobseeker',
+                        'url' => ['jobseeker/index'],
+                        'icon' => 'user-md',
+                        'active' => ($controller == "jobseeker"),
+                        'visible' => isset(Yii::$app->user->identity) ? true : false
                     ],
                     [
                         'label' => 'User Approval',
