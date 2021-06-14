@@ -14,7 +14,9 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $frontendDir = yii\helpers\Url::base(true);
 ?>
 
-
+<style>
+    .ui-slider .ui-slider-range{background: #273bd6;}
+</style>
 
 <div class="listpgWraper">
     <div class="container">
@@ -31,15 +33,15 @@ $frontendDir = yii\helpers\Url::base(true);
                     </div>
 
                     <ul class="usernavdash">
-                        <li class="active"><a href="#update-account"><div class="round">1</div> Update account <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#job-search"><div class="round">2</div> Job Search<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
-                        <li><a href="#about-you"><div class="round">3</div> About You <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#work-experience"><div class="round">4</div> Work experience <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#education"><div class="round">5</div> Education <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#license"><div class="round">6</div> License <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#certifications"><div class="round">7</div> Certifications <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#documents"><div class="round">8</div> Documents <span class="round font-a"><i class="fa fa-plus"></i></span></a></li>
-                        <li><a href="#references"><div class="round">9</div> References<span class="round font-a"><i class="fa fa-plus"></i></span> </a></li>
+                        <li class="active"><a href="#update-account"><div class="round">1</div> Update account <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#job-search"><div class="round">2</div> Job Search<span class="round font-a"><i class="fa fa-angle-right"></i></span> </a></li>
+                        <li><a href="#about-you"><div class="round">3</div> About You <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#work-experience"><div class="round">4</div> Work experience <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#education"><div class="round">5</div> Education <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#license"><div class="round">6</div> License <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#certifications"><div class="round">7</div> Certifications <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#documents"><div class="round">8</div> Documents <span class="round font-a"><i class="fa fa-angle-right"></i></span></a></li>
+                        <li><a href="#references"><div class="round">9</div> References<span class="round font-a"><i class="fa fa-angle-right"></i></span> </a></li>
                     </ul>
                 </div>
             </div>
