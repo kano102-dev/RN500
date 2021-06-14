@@ -25,6 +25,7 @@ use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
 use common\models\Emergency;
 use common\models\LeadRating;
+use common\models\ReferralMaster;
 
 /**
  * BrowseJobs controller
@@ -38,10 +39,10 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
                 'rules' => [
                         [
-                        'actions' => ['apply', 'apply-job', 'view'],
+                        'actions' => ['apply', 'apply-job'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
@@ -346,6 +347,21 @@ class BrowseJobsController extends Controller {
     }
 
     /*     * ******** ADDED BY MOHAN*** */
+    
+    public function actionReferToFriend($lead_id) {
+        $model = new ReferralMaster();
+        $model->lead_id = $lead_id;
+        return $this->renderAjax("_refer_form",['model'=>$model]);
+    }
+    public function actionReferToFriendPost($lead_id) {
+        $model = new ReferralMaster();
+        $model->lead_id = $lead_id;
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->sendReferralMail()) {
+            Yii::$app->session->setFlash("success", "Referral mail sent successfully.");
+            echo json_encode(['code' => 200]);
+            exit;
+        }
+    }
 
     public function actionApply($ref) {
         $model = LeadMaster::findOne(['reference_no' => $ref]);

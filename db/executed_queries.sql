@@ -1194,3 +1194,21 @@ CREATE TABLE `lead_rating` (
 );
 #  ***********************13-JUN-2021***BY Mohan END**************************
 
+
+#  ***********************14-JUN-2021***BY Mohan **************************
+CREATE TABLE `referral_master` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `from_name` varchar(255) NOT NULL,
+  `from_email` varchar(255) NOT NULL,
+  `description` varchar(1000) NULL,
+  `to_name` varchar(255) NOT NULL,
+  `to_email` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP
+);
+
+ALTER TABLE `referral_master`
+ADD `lead_id` int(11) NOT NULL AFTER `id`,
+CHANGE `created_at` `created_at` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP AFTER `to_email`,
+ADD FOREIGN KEY (`lead_id`) REFERENCES `lead_master` (`id`);
+#  ***********************14-JUN-2021***BY Mohan End**************************
+
