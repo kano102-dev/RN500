@@ -60,7 +60,20 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionIndex() {
-        return $this->render('index');
+        $counts = [];
+        $counts['recruiter'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_RECRUITER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
+        $counts['employer'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_EMPLOYER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
+        $counts['jobseeker'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_EMPLOYER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
+        $counts['lead'] = \common\models\LeadMaster::find()->where(['status' => \common\models\LeadMaster::STATUS_APPROVED])->count();
+        $counts['branch'] = \common\models\CompanyBranch::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->count();
+        $staff = \common\models\User::find()->joinWith(['branch'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->andWhere(['!=', 'is_owner', 1]);
+        if (\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
+            $staff->andWhere(['company_master.id' => \Yii::$app->user->identity->branch->company_id]);
+        } else {
+            $staff->andWhere(['branch_id' => \Yii::$app->user->identity->branch_id]);
+        }
+        $counts['staff'] = $staff->count();
+        return $this->render('index', ['counts' => $counts]);
     }
 
     /**
@@ -185,7 +198,6 @@ class SiteController extends Controller {
 //            $resetPasswordModel->email = "ranamehulj@gmail.com";
 //            $is_welcome_mail=1;
 //            echo $resetPasswordModel->sendEmail($is_welcome_mail);exit;
-            
 //            $sent = \Yii::$app->mailer->compose('login-otp', ['otp' => $otp])
 //                    ->setFrom([$to_email => 'Test Mail'])
 //                    ->setTo("dxffn3@kjjit.eu")

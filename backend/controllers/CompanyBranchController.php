@@ -118,16 +118,14 @@ class CompanyBranchController extends Controller {
         $this->activeBreadcrumb = "Create";
         $companyBranchModel = new CompanyBranch();
         $userDetailModel = new UserDetails();
-        $branch_cities = $owner_cities = [];
+        $branch_cities = $owner_cities = $roles = [];
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $companyList = ArrayHelper::map(\common\models\CompanyMaster::find()->where(['status' => 1])->all(), 'id', 'company_name');
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
             $companyList = [];
         }
 
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
-                    return $data->role_name . "-" . $data->company->company_name;
-                });
+        $roles = [];
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
             $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
@@ -203,6 +201,7 @@ class CompanyBranchController extends Controller {
         }
         $userDetailModel = $user->details;
         $userDetailModel->email = $user->email;
+        $userDetailModel->role_id = $user->role_id;
         $userDetailModel->state = isset($userDetailModel->cityRef->state_id) ? $userDetailModel->cityRef->state_id : '';
 
         $branch_cities = ArrayHelper::map(Cities::findAll(['state_id' => $companyBranchModel->state]), 'id', 'city');
@@ -215,9 +214,7 @@ class CompanyBranchController extends Controller {
                 $companyList = [];
             }
         }
-        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', function ($data) {
-                    return $data->role_name . "-" . $data->company->company_name;
-                });
+        $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->andWhere(['company_id' => $companyBranchModel->company_id])->all(), 'id', 'role_name');
         if (!\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) {
             $roles = ArrayHelper::map(\common\models\RoleMaster::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->andWhere(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->all(), 'id', 'role_name');
         }
@@ -228,6 +225,7 @@ class CompanyBranchController extends Controller {
 
                 $companyBranchModel->updated_at = $userDetailModel->updated_at = CommonFunction::currentTimestamp();
                 $user->email = $userDetailModel->email;
+                $user->role_id = $userDetailModel->role_id;
                 if ($companyBranchModel->save() && $userDetailModel->save() && $user->save()) {
                     $transaction->commit();
                     Yii::$app->session->setFlash("success", "Branch Updated Successfully.");
@@ -236,6 +234,7 @@ class CompanyBranchController extends Controller {
                 }
             } catch (\Exception $ex) {
                 $transaction->rollBack();
+                Yii::$app->session->setFlash("warning", "Something went wrong.");
             } finally {
                 return $this->redirect(['view', 'id' => $companyBranchModel->id]);
             }
@@ -256,6 +255,18 @@ class CompanyBranchController extends Controller {
         if (!empty($cities)) {
             foreach ($cities as $key => $city) {
                 $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
+    }
+
+    public function actionGetRoles($id) {
+        $roles = ArrayHelper::map(RoleMaster::find()->where(['NOT IN', 'id', [\common\models\RoleMaster::RECRUITER_OWNER, \common\models\RoleMaster::Employer_OWNER]])->andWhere(['company_id' => $id])->all(), 'id', 'role_name');
+        $options = '';
+        if (!empty($roles)) {
+            foreach ($roles as $key => $role) {
+                $options .= "<option value=$key>$role</option>";
             }
         }
         echo $options;

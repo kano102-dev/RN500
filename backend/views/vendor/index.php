@@ -13,9 +13,9 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
 
-            <?= Html::a('Create Vendor', ['create'], ['class' => 'btn btn-success float-right']) ?>
+            <?= Html::a('Create Vendor', ['create'], ['class' => 'btn btn-primary float-right']) ?>
 
             <div class="table table-responsive pt-3">
                 <?php Pjax::begin(); ?>

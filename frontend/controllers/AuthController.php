@@ -193,6 +193,7 @@ class AuthController extends Controller {
                         $recruiterCompany->reference_no = $recruiterCompany->getUniqueReferenceNumber();
                         $recruiterCompany->created_at = $recruiterCompany->updated_at = CommonFunction::currentTimestamp();
                         $recruiterCompany->company_mobile = $recruiterCompany->mobile;
+                        $recruiterCompany->type = 1;
                         $companyMasterModel = clone $recruiterCompany;
                         if ($companyMasterModel->save()) {
                             $company_branch = new CompanyBranch();
@@ -309,15 +310,14 @@ class AuthController extends Controller {
     }
 
     public function actionChangePassword() {
-        $this->layout = 'main-form';
         $model = new \frontend\models\ChangePasswordForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->sendOTP() && $model->OTPVerified()) {
             $user = User::findIdentity(Yii::$app->user->identity->id);
             $user->password = Yii::$app->security->generatePasswordHash($model->new_password);
             $user->original_password = trim($model->new_password);
             if ($user->save()) {
-                Yii::$app->session->setFlash('success', "Password Changed Successfully.");
                 Yii::$app->user->logout();
+                Yii::$app->session->setFlash('success', "Password Changed Successfully.");
                 return $this->goHome();
             } else {
                 Yii::$app->session->setFlash('error', "Something went wrong");

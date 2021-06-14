@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = "View";
         </p>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <h4> Company Details </h4>
                 <?=
                 DetailView::widget([
@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = "View";
                 ?>
             </div>
 
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <h4> Owner Details </h4>
                 <?=
                 DetailView::widget([

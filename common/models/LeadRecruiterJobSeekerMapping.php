@@ -27,10 +27,13 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
     const STATUS_PENDING = 0;
     const STATUS_APPROVED = 1;
     const STATUS_REJECTED = 2;
+    const STATUS_INPROGRESS = 3; // ADD FOR CONCEPTUALIZATION ONLY, WE DIDN'T STORE IN DB
 
+    public $rating;
     /**
      * {@inheritdoc}
      */
+
     public static function tableName() {
         return 'lead_recruiter_job_seeker_mapping';
     }
@@ -73,6 +76,8 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
             'leadTitleWithRef' => 'Lead',
             'jobSeekerName' => 'Job Seeker',
             'cityName' => 'City',
+            'recruiterComapnyWithBranch' => 'Recruiter Comapny',
+            'statusText' => 'Status',
         ];
     }
 
@@ -115,7 +120,7 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
         $title = '';
         if (isset($this->lead) && !empty($this->lead)) {
             $lead = $this->lead;
-            $title = $lead->title . " (  <b style='font-weight:600'> " . $lead->reference_no . " </b> ) ";
+            $title = $lead->title . " (" . $lead->reference_no . ") ";
         }
         return $title;
     }
@@ -131,11 +136,47 @@ class LeadRecruiterJobSeekerMapping extends \yii\db\ActiveRecord {
 
     public function getCityName() {
         $name = '';
-        if(isset($this->lead) && isset($this->lead->cities)){
-            $name =  $this->lead->cities->city;
+        if (isset($this->lead) && isset($this->lead->cities)) {
+            $name = $this->lead->cities->city;
         }
         return $name;
     }
+
+    public function getRecruiterComapnyWithBranch() {
+        $recruiterCompanyName = '';
+        if (isset($this->branch) && !empty($this->branch)) {
+            $branch = $this->branch;
+            $company = (isset($branch->company) && !empty($branch->company)) ? $branch->company : '';
+            $recruiterCompanyName = $company->company_name . " ( " . $branch->branch_name . " )";
+        }
+        return $recruiterCompanyName;
+    }
+
+    public function getOverAllStatus() {
+        $status = self::STATUS_INPROGRESS;
+        if ($this->rec_status == self::STATUS_PENDING && $this->employer_status == self::STATUS_PENDING) {
+            $status = self::STATUS_PENDING;
+        } else if ($this->rec_status == self::STATUS_APPROVED && $this->employer_status == self::STATUS_APPROVED) {
+            $status = self::STATUS_APPROVED;
+        } else if ($this->rec_status == self::STATUS_REJECTED || $this->employer_status == self::STATUS_REJECTED) {
+            $status = self::STATUS_REJECTED;
+        }
+        return $status;
+    }
+
+    public static function getStatusList() {
+        return [self::STATUS_PENDING => 'Pending', self::STATUS_APPROVED => 'Approved', self::STATUS_REJECTED => 'Rejected', self::STATUS_INPROGRESS => 'In Progress'];
+    }
+
+    public function getStatusText() {
+        $status = $this->getOverAllStatus();
+        $getStatusList = self::getStatusList();
+        return (isset($getStatusList[$status]) && $getStatusList[$status]) ? $getStatusList[$status] : '';
+    }
+    
+//     public static function getRating() {
+//        return 0;
+//    }
 
     /**
      *  SENDS MAIL TO RECRUITER BRANCH

@@ -37,22 +37,6 @@ class SiteController extends Controller {
      */
     public function behaviors() {
         return [
-//            'access' => [
-//                'class' => AccessControl::className(),
-//                'only' => ['logout', 'signup'],
-//                'rules' => [
-//                    [
-//                        'actions' => ['signup'],
-//                        'allow' => true,
-//                        'roles' => ['?'],
-//                    ],
-//                    [
-//                        'actions' => ['logout'],
-//                        'allow' => true,
-//                        'roles' => ['@'],
-//                    ],
-//                ],
-//            ],
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'signup', 'job-seeker'],
@@ -104,7 +88,8 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->asArray()->all();
+        $today = date('Y-m-d', strtotime('now'));
+        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere(['and', "active_from>=$today", "active_to<=$today"])->asArray()->all();
         $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         $query->groupBy(['lead_master.id']);
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);
@@ -151,25 +136,25 @@ class SiteController extends Controller {
 
 
 //        if (isset(\Yii::$app->user->identity->id) && isset(\Yii::$app->user->identity->type) && \Yii::$app->user->identity->type == \common\models\User::TYPE_JOB_SEEKER) {
-            $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
-            $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-            $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-            $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-            $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-            $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
-            $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
-            $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
+        $workExperience = WorkExperience::find()->where(['user_id' => Yii::$app->user->id])->joinWith('discipline')->asArray()->all();
+        $certification = Certifications::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $documents = Documents::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $license = Licenses::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $education = Education::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $references = References::find()->where(['user_id' => Yii::$app->user->id])->asArray()->all();
+        $userDetails = UserDetails::findOne(['user_id' => Yii::$app->user->id]);
+        $jobPreference = JobPreference::find()->where(['user_id' => Yii::$app->user->id])->all();
 
-            return $this->render('job-seeker', [
-                        'workExperience' => $workExperience,
-                        'certification' => $certification,
-                        'documents' => $documents,
-                        'license' => $license,
-                        'education' => $education,
-                        'references' => $references,
-                        'userDetails' => $userDetails,
-                        'jobPreference' => $jobPreference
-            ]);
+        return $this->render('job-seeker', [
+                    'workExperience' => $workExperience,
+                    'certification' => $certification,
+                    'documents' => $documents,
+                    'license' => $license,
+                    'education' => $education,
+                    'references' => $references,
+                    'userDetails' => $userDetails,
+                    'jobPreference' => $jobPreference
+        ]);
 //        } else {
 //            throw new NotFoundHttpException('The requested page does not exist.');
 //        }
@@ -319,6 +304,7 @@ class SiteController extends Controller {
         $model = new DynamicModel(['name', 'email', 'subject', 'message']);
 
         $model->addRule(['name', 'email', 'subject', 'message'], 'string')
+//                ->addRule(['name', 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'])
                 ->addRule(['name', 'email', 'subject', 'message'], 'required')
                 ->addRule('email', 'email');
 

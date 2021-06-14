@@ -37,7 +37,7 @@ class PackageMasterSearch extends PackageMaster {
      * @return ActiveDataProvider
      */
     public function search($params) {
-        $query = PackageMaster::find();
+        $query = PackageMaster::find()->where(['!=', 'id', PackageMaster::PAY_AS_A_GO]);
 
         // add conditions that should always apply here
         if ((\Yii::$app->request->get("sort") == Null)) {

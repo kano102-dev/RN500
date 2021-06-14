@@ -20,7 +20,7 @@ $frontendDir = yii\helpers\Url::base(true);
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE'],['prompt' => 'Select Name']); ?>
+            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE'], ['prompt' => 'Select Name']); ?>
         </div>
     </div>
     <div class="row mb-15">
@@ -29,15 +29,14 @@ $frontendDir = yii\helpers\Url::base(true);
             <ul class="optionlist">
                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'issuing_state',
+                    'value' => isset($model->location) && !empty($model->location) ? $model->location : '',
+                    'data' => $selectedLocations,
                     'options' => [
-                        'id' => 'issuing_state',
-                        'placeholder' => 'Select location...',
+                        'id' => 'select_city',
+                        'placeholder' => 'Select City...',
                         'multiple' => false,
-                        'class' => '',
-//                        'value' => isset($model->city) ? $model->city : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -45,11 +44,18 @@ $frontendDir = yii\helpers\Url::base(true);
                         'ajax' => [
                             'url' => $url,
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                            'cache' => true,
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -99,7 +105,7 @@ $frontendDir = yii\helpers\Url::base(true);
             <?= $form->field($model, 'document')->fileInput() ?>
 
             <?php if ($deleteFlag) { ?>
-            <a href="<?= $frontendDir."/uploads/user-details/license/".$model->document ?>" download><?= $model->document ?></a>
+                <a href="<?= $frontendDir . "/uploads/user-details/license/" . $model->document ?>" download><?= $model->document ?></a>
             <?php } ?>
 
         </div>
@@ -117,7 +123,7 @@ $frontendDir = yii\helpers\Url::base(true);
 $DeleteUrl = '';
 
 if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id='. $model->id]);
+    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id=' . $model->id]);
 }
 
 $script = <<< JS
@@ -139,14 +145,14 @@ $script = <<< JS
                  try{
                      if(!response.error){
                          $("#commonModal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
+                         $.pjax.reload({container: "#job-seeker", 'timeout': false});
                          $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                             $.pjax.reload({'container': '#res-messages', 'timeout': false});
                          });
                          getProfilePercentage();
                      }
                  }catch(e){
-                     $.pjax.reload({'container': '#res-messages', timeout: 2000});
+                     $.pjax.reload({'container': '#res-messages', 'timeout': false});
                  }
              },
              error  : function () 

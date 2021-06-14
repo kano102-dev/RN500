@@ -23,6 +23,7 @@ use yii\helpers\FileHelper;
 use common\models\CompanyBranch;
 use common\models\CompanyMaster;
 use common\CommonFunction;
+use common\models\Cities;
 
 /**
  * UserDetailsController implements the CRUD actions for UserDetails model.
@@ -124,15 +125,19 @@ class UserDetailsController extends Controller {
         $model->scenario = 'profile';
         $model->updated_at = CommonFunction::currentTimestamp();
         if (isset($model->dob) && !empty($model->dob)) {
-            $model->dob = date('d-m-Y', strtotime($model->dob));
+            $model->dob = date('M-d-Y', strtotime($model->dob));
         } else {
             $model->dob = date('d-m-Y');
+        }
+        if (isset($model->city) && !empty($model->city)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->city])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
         }
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
         $document_upload_flag = '';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-//            $model->city = isset($postData['city']) ? $postData['city'] : '';
-            $model->city = '1';
+            $model->city = isset($_POST['city']) && !empty($_POST['city']) ? $_POST['city'] : '';
             $model->dob = date('Y-m-d', strtotime($model->dob));
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
@@ -158,7 +163,7 @@ class UserDetailsController extends Controller {
             }
 
             if ($model->validate()) {
-                
+
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', "User Details Updated successfully.");
                     return json_encode(['error' => 0, 'message' => 'User Details Updated successfully.']);
@@ -172,14 +177,14 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('update', [
-                    'model' => $model,
+                    'model' => $model, 'selectedLocations' => $selectedLocations
         ]);
     }
 
     public function actionProfile($id) {
         $postData = Yii::$app->request->post();
         $model = UserDetails::findOne(['user_id' => $id]);
-        
+
         $model->scenario = 'profile';
         $model->updated_at = CommonFunction::currentTimestamp();
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
@@ -188,12 +193,17 @@ class UserDetailsController extends Controller {
         $companyDetail = CompanyMaster::findOne(['id' => CommonFunction::getLoggedInUserCompanyId()]);
 
         if (isset($model->dob) && !empty($model->dob)) {
-            $model->dob = date('d-m-Y', strtotime($model->dob));
+            $model->dob = date('M-d-Y', strtotime($model->dob));
         }
 
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $city = ArrayHelper::map(Cities::findAll(['state_id' => $model->state]), 'id', 'city');
+        if (isset($model->city) && !empty($model->city)) {
+            $model->state = $model->cityRef->state_id;
+            $states = ArrayHelper::map(\common\models\States::find()->where(['id' => $model->cityRef->state_id])->all(), 'id', 'state');
+            $city = ArrayHelper::map(Cities::findAll(['state_id' => $model->cityRef->state_id]), 'id', 'city');
+        }
         if ($model->load(Yii::$app->request->post())) {
-//            $model->city = isset($postData['city']) ? $postData['city'] : '';
-            $model->city = '1';
             $model->dob = date('Y-m-d', strtotime($model->dob));
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
@@ -212,7 +222,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath ."/". $temp_document_file);
+                    unlink($uploadPath . "/" . $temp_document_file);
                 } else {
                     $model->profile_pic = $temp_document_file;
                 }
@@ -224,6 +234,10 @@ class UserDetailsController extends Controller {
                     return $this->redirect(['profile', 'id' => $id]);
                 }
             } else {
+
+                echo "<pre>";
+                print_r($model->getErrors());
+                exit;
                 Yii::$app->session->setFlash('error', "User Details Updated failed.");
                 return $this->redirect(['profile', 'id' => $id]);
             }
@@ -232,8 +246,20 @@ class UserDetailsController extends Controller {
         return $this->render('profile', [
                     'model' => $model,
                     'companyDetail' => $companyDetail,
-                    'branch' => $branch
+                    'branch' => $branch, 'states' => $states, 'city' => $city
         ]);
+    }
+
+    public function actionGetCities($id) {
+        $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $id])->all(), 'id', 'city');
+        $options = '';
+        if (!empty($cities)) {
+            foreach ($cities as $key => $city) {
+                $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
     }
 
     /**
@@ -304,20 +330,23 @@ class UserDetailsController extends Controller {
             $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->start_date = date('m-Y', strtotime($model->start_date));
-            
-            if($model->currently_working != '1'){
+
+            if ($model->currently_working != '1') {
                 $model->end_date = date('m-Y', strtotime($model->end_date));
             } else {
                 $model->end_date = null;
             }
-            
         } else {
             $model = new WorkExperience();
             $message = 'Created';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
-
+        if (isset($model->city) && !empty($model->city)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->city])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
         $speciality = ArrayHelper::map(Speciality::find()->all(), 'id', 'name');
         $discipline = ArrayHelper::map(Discipline::find()->all(), 'id', 'name');
 
@@ -325,17 +354,17 @@ class UserDetailsController extends Controller {
 
             $model->user_id = \Yii::$app->user->id;
             $model->start_date = date('Y-m-d', strtotime("01-" . $model->start_date));
-            
-            if($model->currently_working != '1'){
+
+            if ($model->currently_working != '1') {
                 $model->end_date = date('Y-m-d', strtotime("01-" . $model->end_date));
             }
-            
+
             $model->city = $postData['city'];
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Work Experience ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Work Experience '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "Work Experience " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Work Experience ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "Work Experience Updated failed.");
@@ -345,7 +374,7 @@ class UserDetailsController extends Controller {
 
         return $this->renderAjax('work-experience', [
                     'model' => $model,
-                    'discipline' => $discipline,
+                    'discipline' => $discipline, 'selectedLocations' => $selectedLocations,
                     'speciality' => $speciality,
         ]);
     }
@@ -353,20 +382,25 @@ class UserDetailsController extends Controller {
     public function actionAddEducation() {
         $postData = Yii::$app->request->post();
         $id = \Yii::$app->request->get('id');
-         $message = '';
+        $message = '';
 
         if ($id !== null) {
             $model = Education::findOne($id);
-             $message = 'Updated';
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->year_complete = date('m-Y', strtotime($model->year_complete));
         } else {
             $model = new Education();
-             $message = 'Created';
+            $message = 'Created';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
 
+        if (isset($model->location) && !empty($model->location)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->location])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
             $model->year_complete = date('Y-m-d', strtotime("01-" . $model->year_complete));
@@ -374,8 +408,8 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Education Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Education Details '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "Education Details " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Education Details ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "Education Details Updated failed.");
@@ -384,7 +418,7 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('add-education', [
-                    'model' => $model
+                    'model' => $model, 'selectedLocations' => $selectedLocations,
         ]);
     }
 
@@ -409,7 +443,11 @@ class UserDetailsController extends Controller {
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
-
+        if (isset($model->issuing_state) && !empty($model->issuing_state)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->issuing_state])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
@@ -430,7 +468,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath ."/". $temp_document_file);
+                    unlink($uploadPath . "/" . $temp_document_file);
                 } else {
                     $model->document = $temp_document_file;
                 }
@@ -443,8 +481,8 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "License Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'License Details '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "License Details " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'License Details ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "License Details Updated failed.");
@@ -453,7 +491,7 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('add-licence', [
-                    'model' => $model,
+                    'model' => $model, 'selectedLocations' => $selectedLocations,
                     'deleteFlag' => $deleteFlag
         ]);
     }
@@ -463,26 +501,32 @@ class UserDetailsController extends Controller {
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
-         $message = '';
+        $message = '';
 
         if ($id !== null) {
             $model = Certifications::findOne($id);
-             $message = 'Updated';
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $model->expiry_date = date('m-Y', strtotime($model->expiry_date));
             $temp_document_file = isset($model->document) && !empty($model->document) ? $model->document : NULL;
             $deleteFlag = true;
         } else {
             $model = new Certifications();
-             $message = 'Create';
+            $message = 'Create';
             $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
 
+        if (isset($model->issuing_state) && !empty($model->issuing_state)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->issuing_state])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
+            $model->issuing_state = $_POST['issuing_state'];
 
             $document_file = UploadedFile::getInstance($model, 'document');
 
@@ -512,8 +556,8 @@ class UserDetailsController extends Controller {
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Certification Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Certification Details '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "Certification Details " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Certification Details ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "Certification Details Updated failed.");
@@ -523,7 +567,7 @@ class UserDetailsController extends Controller {
 
         return $this->renderAjax('add-certification', [
                     'model' => $model,
-                    'deleteFlag' => $deleteFlag
+                    'deleteFlag' => $deleteFlag, 'selectedLocations' => $selectedLocations
         ]);
     }
 
@@ -532,22 +576,22 @@ class UserDetailsController extends Controller {
         $id = \Yii::$app->request->get('id');
         $deleteFlag = false;
         $document_upload_flag = '';
-         $message = '';
+        $message = '';
 
         if ($id !== null) {
             $model = Documents::findOne($id);
-             $message = 'Updated';
+            $message = 'Updated';
             $model->updated_at = CommonFunction::currentTimestamp();
             $temp_document_file = isset($model->path) && !empty($model->path) ? $model->path : NULL;
             $deleteFlag = true;
         } else {
             $model = new Documents();
-             $message = 'Create';
+            $message = 'Create';
             $model->scenario = 'create';
             $model->created_at = CommonFunction::currentTimestamp();
             $model->updated_at = CommonFunction::currentTimestamp();
         }
-        
+
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
 
@@ -565,9 +609,9 @@ class UserDetailsController extends Controller {
                 $document_upload_flag = $document_file->saveAs($uploadPath . '/' . $model->path);
             }
 
-            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder ."/". $temp_document_file)) {
+            if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . "/" . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath ."/". $temp_document_file);
+                    unlink($uploadPath . "/" . $temp_document_file);
                 } else {
                     $model->path = $temp_document_file;
                 }
@@ -576,13 +620,13 @@ class UserDetailsController extends Controller {
                     $model->path = NULL;
                 }
             }
-            
-            
+
+
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Document ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Document '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "Document " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Document ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "Document Updated failed.");
@@ -612,13 +656,13 @@ class UserDetailsController extends Controller {
         }
 
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            
+
             $model->user_id = \Yii::$app->user->id;
 
             if ($model->validate()) {
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', "Reference Details ".$message." successfully.");
-                    return json_encode(['error' => 0, 'message' => 'Reference Details '.$message.' successfully.']);
+                    Yii::$app->session->setFlash('success', "Reference Details " . $message . " successfully.");
+                    return json_encode(['error' => 0, 'message' => 'Reference Details ' . $message . ' successfully.']);
                 }
             } else {
                 Yii::$app->session->setFlash('error', "Reference Details Updated failed.");
@@ -655,8 +699,8 @@ class UserDetailsController extends Controller {
             $uploadPath = './uploads/user-details/document/';
             $file = $model->path;
         }
-        
-        if(file_exists($uploadPath . $file)){
+
+        if (file_exists($uploadPath . $file)) {
             if (unlink($uploadPath . $file)) {
                 if ($model->delete()) {
                     Yii::$app->session->setFlash('success', $message . " Deleted failed.");
@@ -691,7 +735,7 @@ class UserDetailsController extends Controller {
         if (isset($userDetails) && !empty($userDetails)) {
             $hasCompletedUserDetails = 14;
         }
-        
+
         if (isset($workExperience) && !empty($workExperience)) {
             $hasCompletedWE = 14;
         }
@@ -711,8 +755,11 @@ class UserDetailsController extends Controller {
             $hasCompletedReference = 14;
         }
 
-        $percentage = ($hasCompletedUserDetails + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
-
+        if (isset($workExperience) && !empty($workExperience) && isset($userDetails) && !empty($userDetails) && isset($education) && !empty($education) && isset($license) && !empty($license) && isset($certification) && !empty($certification) && isset($documents) && !empty($documents) && isset($reference) && !empty($reference)) {
+            $percentage = 100;
+        } else {
+            $percentage = ($hasCompletedUserDetails + $hasCompletedWE + $hasCompletedEducation + $hasCompletedLicense + $hasCompletedCertification + $hasCompletedDocuments + $hasCompletedReference) * $totalPercentage / 100;
+        }
         echo round($percentage, 0);
     }
 

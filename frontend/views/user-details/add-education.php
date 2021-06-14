@@ -1,19 +1,21 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-
 ?>
 <style>
     .mb-15{margin-bottom: 15px;}
 </style>
 <div class="user-details-form">
-<?php $form = ActiveForm::begin([
-    'id' => 'add-education-new'
-]); ?>
+    <?php
+    $form = ActiveForm::begin([
+                'id' => 'add-education-new'
+    ]);
+    ?>
     <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
@@ -25,15 +27,14 @@ use yii\web\JsExpression;
             <ul class="optionlist">
                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'location',
+                    'value' => isset($model->location) && !empty($model->location) ? $model->location : '',
+                    'data' => $selectedLocations,
                     'options' => [
-                        'id' => 'location',
-                        'placeholder' => 'Select location...',
+                        'id' => 'select_city',
+                        'placeholder' => 'Select City...',
                         'multiple' => false,
-                        'class' => '',
-//                        'value' => isset($model->city) ? $model->city : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -41,11 +42,18 @@ use yii\web\JsExpression;
                         'ajax' => [
                             'url' => $url,
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                            'cache' => true,
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -77,7 +85,7 @@ use yii\web\JsExpression;
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE'],['prompt' => 'Select Degree']) ?>
+            <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE'], ['prompt' => 'Select Degree']) ?>
         </div>
     </div>
 

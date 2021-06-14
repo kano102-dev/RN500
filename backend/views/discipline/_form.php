@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
         <?php $form = ActiveForm::begin();?>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
             <?=$form->field($model, 'name')->textInput(['maxlength' => true])?>
             </div>
         </div>

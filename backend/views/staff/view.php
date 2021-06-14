@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = "View";
         </p>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12 col-sm-12">
                 <?=
                 DetailView::widget([
                     'model' => $userDetailModel,

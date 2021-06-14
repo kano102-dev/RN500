@@ -37,7 +37,7 @@ class CompanySubscriptionPayment extends \yii\db\ActiveRecord
         return [
             [['subscription_id', 'amount', 'created_at', 'updated_at'], 'required'],
             [['subscription_id', 'amount', 'lead_id', 'created_at', 'updated_at'], 'integer'],
-            [['payment_response','customer_transaction_id','status'], 'safe'],
+            [['payment_response','customer_transaction_id','status','is_free'], 'safe'],
         ];
     }
 

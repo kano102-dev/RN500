@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'active_from',
                             'format' => 'raw',
-//                        'headerOptions' => ['style' => 'width:10%;'],
+                        'headerOptions' => ['style' => 'width:15%;'],
                             'filter' => DatePicker::widget([
                                 'model' => $searchModel,
                                 'attribute' => 'active_from',
@@ -71,13 +71,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]),
                             'value' => function ($model) {
-                                return date('d/m/Y', strtotime($model->active_from));
+                                return date('M-d-Y', strtotime($model->active_from));
                             },
                         ],
                         [
                             'attribute' => 'active_to',
                             'format' => 'raw',
-//                        'headerOptions' => ['style' => 'width:10%;'],
+                        'headerOptions' => ['style' => 'width:15%;'],
                             'filter' => DatePicker::widget([
                                 'model' => $searchModel,
                                 'attribute' => 'active_to',
@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]
                             ]),
                             'value' => function ($model) {
-                                return date('d/m/Y', strtotime($model->active_to));
+                                return date('M-d-Y', strtotime($model->active_to));
                             },
                         ],
                         [

@@ -15,9 +15,11 @@ use yii\web\JsExpression;
     .mb-15{margin-bottom: 15px;}
 </style>
 <div class="user-details-form">
-    <?php $form = ActiveForm::begin([
-        "id" => "work-experience-new",
-    ]); ?>
+    <?php
+    $form = ActiveForm::begin([
+                "id" => "work-experience-new",
+    ]);
+    ?>
     <div class="row">
         <div class="col-sm-12">
             <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
@@ -113,14 +115,14 @@ use yii\web\JsExpression;
             <ul class="optionlist">
                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'city',
+                    'value' => isset($model->city) && !empty($model->city) ? $model->city : '',
+                    'data' => $selectedLocations,
                     'options' => [
-                        'id' => 'city',
+                        'id' => 'select_city',
                         'placeholder' => 'Select City...',
                         'multiple' => false,
-                        'class' => '',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -128,11 +130,19 @@ use yii\web\JsExpression;
                         'ajax' => [
                             'url' => $url,
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                            'cache' => true,
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                console.log(location);
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -150,7 +160,7 @@ use yii\web\JsExpression;
 </div>
 
 <?php
-$currently_working = isset($model->currently_working) ? $model->currently_working : ''; 
+$currently_working = isset($model->currently_working) ? $model->currently_working : '';
 
 $script = <<< JS
   var currently_working = '$currently_working';

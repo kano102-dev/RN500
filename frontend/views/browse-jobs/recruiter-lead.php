@@ -115,16 +115,13 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <ul class="optionlist">
                                 <?php
                                 $url = Url::to(['browse-jobs/get-cities']);
-                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                                 echo Select2::widget([
                                     'name' => 'location',
-//                                    'value' => isset($_GET['location']) ? $_GET['location'] : [],
-//                                    'data' => isset($data) && !empty($data) ? $data : [],
+                                    'value' => $selectedLocations,
                                     'options' => [
                                         'id' => 'select_location',
                                         'placeholder' => 'Select Location...',
                                         'multiple' => true,
-                                        'class' => ''
                                     ],
                                     'pluginOptions' => [
                                         'allowClear' => true,
@@ -132,11 +129,18 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         'ajax' => [
                                             'url' => $url,
                                             'dataType' => 'json',
-                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                                            'cache' => true,
                                         ],
-                                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                                     ],
                                 ]);
                                 ?>
@@ -271,8 +275,8 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                     </div>
                                     <div class="col-md-3 col-sm-3">
                                         <div class="listbtn">
-                                            <?php if (!CommonFunction::isExpired() || in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1 || $model->branch->company_id == CommonFunction::getLoggedInUserCompanyId()) { ?>
-                                                <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Profile</a>
+                                            <?php if (!CommonFunction::isExpired() || in_array($model->id, CommonFunction::getAllPurchasedLead()) || CommonFunction::getLoggedInUserCompanyId() == 1 || (isset($model->branch->company_id) && $model->branch->company_id == CommonFunction::getLoggedInUserCompanyId())) { ?>
+                                                <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/recruiter-view', 'id' => $model->id]) ?>">View Details</a>
                                             <?php } else { ?>
                                                 <?php if (CommonFunction::isVisibleLead($model->approved_at)) { ?>
                                                     <a href="<?= Yii::$app->urlManagerFrontend->createAbsoluteUrl(['payment/index', 'id' => $model->id]) ?>">Buy Now <?= "$" . $model->price ?></a>

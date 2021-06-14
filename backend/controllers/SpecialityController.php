@@ -92,6 +92,7 @@ class SpecialityController extends Controller
      */
     public function actionView($id)
     {
+        $this->activeBreadcrumb = "Detail View";
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -136,6 +137,8 @@ class SpecialityController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->activeBreadcrumb = "Update";
+        
         $model = $this->findModel($id);
 
         $model->updated_at = CommonFunction::currentTimestamp();
