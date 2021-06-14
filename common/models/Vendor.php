@@ -61,7 +61,7 @@ class Vendor extends \yii\db\ActiveRecord
             'company_name' => 'Company Name',
             'email' => 'Email',
             'phone' => 'Phone',
-            'street_no' => 'Street No',
+            'street_no' => 'Street No.',
             'street_address' => 'Street Address',
             'apt' => 'Apt',
             'city' => 'City',

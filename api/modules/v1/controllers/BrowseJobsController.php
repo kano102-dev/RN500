@@ -231,6 +231,8 @@ class BrowseJobsController extends Controller {
                     }
                 }
             }
+            $query->groupBy(['lead_master.id']);
+            $query->orderBy(['lead_master.created_at' => SORT_DESC]);
             $leadList = [];
             $total_pages = (ceil($query->count() / Yii::$app->params['API_PAGINATION_RECORD_LIMIT'])) ? ceil($query->count() / Yii::$app->params['API_PAGINATION_RECORD_LIMIT']) : 1;
             if ($paging <= $total_pages) {

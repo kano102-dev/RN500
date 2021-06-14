@@ -76,6 +76,7 @@ use common\CommonFunction;
                 ?>
             </div>
         </div>
+        
         <div class="row">
             <div class="col-sm-6">
                 <?=

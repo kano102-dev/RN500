@@ -3502,7 +3502,7 @@ Large Mobile Screen
     .navbar-toggle{background:#ccc;}
     .navbar-toggle .icon-bar{background:#fff;}
     .navbar-nav li.postjob, .navbar-nav li.jobseeker{margin-bottom:10px;}
-    .dropdown-menu {
+    .new-dropdown-menu .dropdown-menu {
         position: static;
         float: none;
         width: 100%;

@@ -23,6 +23,8 @@ use common\models\LeadMasterSearch;
 use common\models\LeadRecruiterJobSeekerMapping;
 use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
+use common\models\Emergency;
+use common\models\LeadRating;
 
 /**
  * BrowseJobs controller
@@ -165,7 +167,8 @@ class BrowseJobsController extends Controller {
                 }
             }
         }
-        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id']);
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id','lead_master.id']);
+
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
@@ -236,6 +239,7 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
+    
 
     public function actionGetBenefits() {
         $request = Yii::$app->getRequest()->post();
@@ -255,6 +259,34 @@ class BrowseJobsController extends Controller {
                     $options .= "<input type='checkbox' name='benefit[]' value='$key' id='benefit-$key' />";
                 }
                 $options .= "<label for='benefit-$key'></label>" . $list;
+                $options .= "</li>";
+            }
+        } else {
+            $options .= "<li>-</li>";
+        }
+        $response = ['options' => $options, 'totalPage' => $totalRecord, 'offset' => count($lists)];
+        echo Json::encode($response);
+        exit;
+    }
+    
+    public function actionGetEmergency() {
+        $request = Yii::$app->getRequest()->post();
+        $page = isset($request['page']) ? $request['page'] : 0;
+        $filter = isset($request['filter']) && !empty($request['filter']) ? explode(',', $request['filter']) : [];
+        $offset = isset($page) && !empty($page) ? $page : 0;
+        $limit = 10;
+        $totalRecord = Emergency::find()->count();
+        $lists = ArrayHelper::map(Emergency::find()->limit($limit)->offset($offset)->all(), 'id', 'name');
+        $options = "";
+        if (isset($lists) && !empty($lists)) {
+            foreach ($lists as $key => $list) {
+                $options .= "<li>";
+                if (in_array($key, $filter)) {
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' checked />";
+                } else {
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' />";
+                }
+                $options .= "<label for='spec-$key'></label>" . $list;
                 $options .= "</li>";
             }
         } else {
@@ -356,6 +388,26 @@ class BrowseJobsController extends Controller {
         }
         $ref = LeadMaster::findOne($lead_id)->reference_no;
         $this->redirect(['apply', 'ref' => $ref]);
+    }
+
+    public function actionTrackMyApplication() {
+        $searchModel = new LeadRecruiterJobSeekerMappingSearch();
+        $searchModel->loggedInUserId = Yii::$app->user->identity->id;
+        $dataProvider = $searchModel->searchMyApplication(Yii::$app->request->queryParams);
+        return $this->render('track-my-application', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel]);
+    }
+
+    public function actionSetRating() {
+        $postedData = Yii::$app->request->post();
+        if (!empty($postedData) && isset($postedData['leadId']) && $postedData['leadId'] != '' && isset($postedData['rating']) && $postedData['rating'] != '') {
+            $model = new LeadRating();
+            $isSaved = $model->saveRating(Yii::$app->user->identity->id, $postedData['leadId'], $postedData['rating']);
+            if ($isSaved == true) {
+                echo json_encode(['code' => 200]);
+            } else {
+                echo json_encode(['code' => 201, 'errors' => $isSaved]);
+            }
+        }
     }
 
 //    public function actionLeadsReceived() {

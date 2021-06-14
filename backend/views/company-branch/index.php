@@ -11,7 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
             <?php if (isset(Yii::$app->user->identity) && CommonFunction::checkAccess('branch-create', Yii::$app->user->identity->id)) { ?>
                 <?= Html::a('Create Branch', ['create'], ['class' => 'btn btn-primary float-right']) ?>
             <?php } ?>

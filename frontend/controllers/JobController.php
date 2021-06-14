@@ -49,7 +49,6 @@ class JobController extends Controller {
     }
 
     public function actionPost() {
-        $this->layout = "main-form";
         $model = new LeadMaster();
         $model->reference_no = $model->getUniqueReferenceNumber();
         $model->branch_id = CommonFunction::getLoggedInUserBranchId();

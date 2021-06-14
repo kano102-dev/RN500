@@ -60,6 +60,13 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 
                             </ul>
                         </div>
+                        
+                        <div class="widget" id="emergency-widget">
+                            <h4 class="widget-title">Emergency</h4>
+                            <ul class="optionlist" id="optionlist-emergency">
+
+                            </ul>
+                        </div>
 
                         <!-- Jobs By Shift -->
                         <div class="widget">
@@ -72,7 +79,8 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         <input type="checkbox" name="shift[]" value="1" id="shift-1" />
                                     <?php } ?>
                                     <label for="shift-1"></label>
-                                    All</li>
+                                    All
+                                </li>
                                 <li>
                                     <?php if (in_array(2, $shift_prams)) { ?>
                                         <input type="checkbox" name="shift[]" value="2" id="shift-2" checked />
@@ -289,15 +297,18 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
 $discipline_prams = isset($_GET['discipline']) ? implode(',', $_GET['discipline']) : '';
 $specialty_prams = isset($_GET['speciality']) ? implode(',', $_GET['speciality']) : '';
 $benefits_prams = isset($_GET['benefit']) ? implode(',', $_GET['benefit']) : '';
+$emergency_prams = isset($_GET['emergency']) ? implode(',', $_GET['emergency']) : '';
 $get_discipline_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-discipline']);
 $get_specialty_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-specialty']);
 $get_benefits_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-benefits']);
+$get_emergency_url = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/get-emergency']);
 $csrfParam = Yii::$app->request->csrfParam;
 $csrfToken = Yii::$app->request->getCsrfToken();
 $script_new = <<<JS
 getDisciplineRecords();
 getSpecialtyRecords();
 getBenefitsRecords();
+getEmergencyRecords();
         
     function getDisciplineRecords(pageno=0) {
         let params='$discipline_prams';
@@ -343,6 +354,31 @@ getBenefitsRecords();
                     let nextPage=parseInt(data.offset);
                     if(data.options != ''){
                         $("#speciality-widget").append("<a href='javascript:void(0)' id='speciality-viewmore' onClick='getSpecialtyRecords("+availabel+")'>View More</a>") 
+                    }
+               }
+            }
+        });
+    }
+        
+    function getEmergencyRecords(pageno=0) {
+        let params='$emergency_prams';
+        let availabel=pageno;
+        $.post("$get_emergency_url", {"$csrfParam":"$csrfToken",page: pageno,filter:params}, function(result){
+             let data=JSON.parse(result);
+            availabel+=data.offset;
+            if(data.offset==0){
+                $("#optionlist-emergency").html(data.options)
+                let nextPage=parseInt(data.offset);
+                if(data.options != ''){
+                    $("#emergency-widget").append("<a href='javascript:void(0)' id='speciality-viewmore' onClick='getSpecialtyRecords("+nextPage+")'>View More</a>")
+                }
+            }else{
+               $("#optionlist-emergency").append(data.options);
+               $("#emergency-viewmore").remove();
+               if(availabel<data.totalPage){
+                    let nextPage=parseInt(data.offset);
+                    if(data.options != ''){
+                        $("#emergency-widget").append("<a href='javascript:void(0)' id='emergency-viewmore' onClick='getEmergencyRecords("+availabel+")'>View More</a>") 
                     }
                }
             }

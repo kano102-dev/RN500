@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
         <?php $form = ActiveForm::begin(['id' => 'form_staff_signup', 'options' => []]); ?>
 
 
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
 
             <div class="card card-primary">
                 <div class="card-header">
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                 <div class="card-body">
                     <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id) || \common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) { ?>
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-md-6 col-sm-12">
                                 <?=
                                 $form->field($userDetailModel, 'company_id')->widget(Select2::classname(), [
                                     'data' => $companyList,
@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                                 ]);
                                 ?>
                             </div>
-                            <div class="col-6">
+                            <div class="col-md-6 col-sm-12">
                                 <?=
                                 $form->field($userDetailModel, 'branch_id')->widget(Select2::classname(), [
                                     'data' => $branchList,
@@ -52,19 +52,19 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                     <?php } ?>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'first_name')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'last_name')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'mobile_no')->widget(PhoneInput::className(), [
                                 'jsOptions' => [
@@ -76,19 +76,19 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'street_no')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'street_address')->textInput(['maxlength' => true]) ?>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?= $form->field($userDetailModel, 'apt')->textInput(['maxlength' => true]) ?>
                         </div>
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'state')->widget(Select2::classname(), [
                                 'data' => $states,
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                     </div>
                     <div class="row">
 
-                        <div class="col-6">
+                        <div class="col-md-6 col-sm-12">
                             <?=
                             $form->field($userDetailModel, 'city')->widget(Select2::classname(), [
                                 'data' => $city,
@@ -113,12 +113,11 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                             ]);
                             ?>
                         </div>
-                        <div class="col-6">
-                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => true]) ?>
+                        <div class="col-md-6 col-sm-12">
+                            <?= $form->field($userDetailModel, 'zip_code')->textInput(['maxlength' => 5]) ?>
                         </div>
                     </div>
                     <div class="row">
-
                         <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
                             <div class="col-6">
                                 <?=

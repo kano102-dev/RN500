@@ -104,7 +104,7 @@ use common\models\User;
         <?php if (isset(Yii::$app->user->id) && !empty(Yii::$app->user->id)) { ?>
             <?php if (Yii::$app->user->identity->type == User::TYPE_JOB_SEEKER) { ?>
                 <div class="col-sm-6">
-                    <?= $form->field($model, 'ssn')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'ssn')->textInput(['maxlength' => 4]) ?>
                 </div>
             <?php } ?>
         <?php } ?>
@@ -116,9 +116,10 @@ use common\models\User;
 //                'value' => date('d-m-Y'),
 //                'options' => ['placeholder' => 'Enter DOB..'],
                 'pluginOptions' => [
-                    'format' => 'dd-mm-yyyy',
+                    'format' => 'M-d-yyyy',
                     'todayHighlight' => true,
                     'autoclose' => true,
+                    'endDate' => "-0d"
 //                    'startDate' => date('d-m-Y'),
                 ]
             ]);
