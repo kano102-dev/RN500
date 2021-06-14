@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'active_from',
                             'format' => 'raw',
-//                        'headerOptions' => ['style' => 'width:10%;'],
+                        'headerOptions' => ['style' => 'width:15%;'],
                             'filter' => DatePicker::widget([
                                 'model' => $searchModel,
                                 'attribute' => 'active_from',
@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'active_to',
                             'format' => 'raw',
-//                        'headerOptions' => ['style' => 'width:10%;'],
+                        'headerOptions' => ['style' => 'width:15%;'],
                             'filter' => DatePicker::widget([
                                 'model' => $searchModel,
                                 'attribute' => 'active_to',

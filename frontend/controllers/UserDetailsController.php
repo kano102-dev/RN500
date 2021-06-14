@@ -129,11 +129,16 @@ class UserDetailsController extends Controller {
         } else {
             $model->dob = date('d-m-Y');
         }
+        
+        if (isset($model->city) && !empty($model->city)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->city])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
+        
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
         $document_upload_flag = '';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-//            $model->city = isset($postData['city']) ? $postData['city'] : '';
-            $model->city = '1';
             $model->dob = date('Y-m-d', strtotime($model->dob));
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
@@ -174,6 +179,7 @@ class UserDetailsController extends Controller {
 
         return $this->renderAjax('update', [
                     'model' => $model,
+                    'selectedLocations' => $selectedLocations
         ]);
     }
 
