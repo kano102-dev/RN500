@@ -20,7 +20,7 @@ $frontendDir = yii\helpers\Url::base(true);
     ?>
     <div class="row">
         <div class="col-sm-12">
-            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE'],['prompt' => 'Select Name']); ?>
+            <?= $form->field($model, 'license_name')->dropDownList(Yii::$app->params['LICENSE_TYPE'], ['prompt' => 'Select Name']); ?>
         </div>
     </div>
     <div class="row mb-15">
@@ -31,11 +31,12 @@ $frontendDir = yii\helpers\Url::base(true);
                 $url = Url::to(['browse-jobs/get-cities']);
                 echo Select2::widget([
                     'name' => 'issuing_state',
-                    'value' => $selectedLocations,
+                    'value' => isset($model->location) && !empty($model->location) ? $model->location : '',
+                    'data' => $selectedLocations,
                     'options' => [
                         'id' => 'select_city',
                         'placeholder' => 'Select City...',
-                        'multiple' => true,
+                        'multiple' => false,
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -48,7 +49,13 @@ $frontendDir = yii\helpers\Url::base(true);
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
                         'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -98,7 +105,7 @@ $frontendDir = yii\helpers\Url::base(true);
             <?= $form->field($model, 'document')->fileInput() ?>
 
             <?php if ($deleteFlag) { ?>
-            <a href="<?= $frontendDir."/uploads/user-details/license/".$model->document ?>" download><?= $model->document ?></a>
+                <a href="<?= $frontendDir . "/uploads/user-details/license/" . $model->document ?>" download><?= $model->document ?></a>
             <?php } ?>
 
         </div>
@@ -116,7 +123,7 @@ $frontendDir = yii\helpers\Url::base(true);
 $DeleteUrl = '';
 
 if ($deleteFlag) {
-    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id='. $model->id]);
+    $DeleteUrl = Yii::$app->urlManagerFrontend->createUrl(['user-details/delete-document?id=' . $model->id]);
 }
 
 $script = <<< JS

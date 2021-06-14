@@ -67,15 +67,15 @@ use common\models\User;
             <ul class="optionlist">
                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'city',
+                    'value' => isset($model->city) && !empty($model->city) ? $model->city : '',
+                    'data' => $selectedLocations,
                     'options' => [
                         'id' => 'city',
                         'placeholder' => 'Select Location...',
                         'multiple' => false,
                         'class' => '',
-                        'value' => isset($model->city) ? $model->city : [],
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -87,7 +87,13 @@ use common\models\User;
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                         'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>

@@ -74,10 +74,10 @@ $action = Yii::$app->controller->action->id;
                         'url' => ['jobseeker/index'],
                         'icon' => 'user-md',
                         'active' => ($controller == "jobseeker"),
-                        'visible' => isset(Yii::$app->user->identity) ? true : false
+                        'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('jobseeker-view', Yii::$app->user->identity->id) : false
                     ],
                     [
-                        'label' => 'User Approval',
+                        'label' => 'Company Approval',
                         'url' => ['user/index'],
                         'icon' => 'user-check',
                         'active' => ($controller == "user"),

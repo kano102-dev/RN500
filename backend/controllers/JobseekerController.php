@@ -38,6 +38,31 @@ class JobseekerController extends Controller {
     public $title = "Jobseeker";
     public $activeBreadcrumb, $breadcrumb;
 
+    /**
+     * {@inheritdoc}
+     */
+    public function behaviors() {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index', 'view'],
+                'rules' => [
+                    [
+                        'actions' => ['index', 'view'],
+                        'allow' => true,
+                        'roles' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('jobseeker-view', Yii::$app->user->identity->id) ? ['@'] : ['*'] : ['*'],
+                    ],
+                ]
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
+
     public function __construct($id, $module, $config = array()) {
         parent::__construct($id, $module, $config);
         $this->breadcrumb = [

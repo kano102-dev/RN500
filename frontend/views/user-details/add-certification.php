@@ -61,11 +61,12 @@ $frontendDir = yii\helpers\Url::base(true);
         <div class="col-sm-12">
             <label class="control-label" for="issuing_state">Issuing State</label>
             <ul class="optionlist">
-                 <?php
+                <?php
                 $url = Url::to(['browse-jobs/get-cities']);
                 echo Select2::widget([
                     'name' => 'issuing_state',
-                    'value' => $selectedLocations,
+                    'value' => isset($model->issuing_state) && !empty($model->issuing_state) ? $model->issuing_state : '',
+                    'data' => $selectedLocations,
                     'options' => [
                         'id' => 'select_city',
                         'placeholder' => 'Select City...',
@@ -82,7 +83,14 @@ $frontendDir = yii\helpers\Url::base(true);
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
                         'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                console.log(location);
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -90,7 +98,7 @@ $frontendDir = yii\helpers\Url::base(true);
         </div>
     </div>
     <div class="row">
-        
+
         <div class="col-sm-12">
             <p>&nbsp;</p>
             <?= $form->field($model, 'document')->fileInput() ?>

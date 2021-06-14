@@ -11,6 +11,7 @@ use borales\extensions\phoneInput\PhoneInput;
 $this->title = 'Branch';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "Update";
+$disable = $companyBranchModel->is_default;
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
@@ -30,7 +31,8 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                                     'data' => $companyList,
                                     'options' => ['placeholder' => 'Select a Company'],
                                     'pluginOptions' => [
-                                        'allowClear' => true
+                                        'allowClear' => true,
+                                        'disabled' => $disable,
                                     ],
                                 ]);
                                 ?>
@@ -160,17 +162,31 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
-                            <?=
-                            $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
-                                'data' => $roles,
-                                'options' => ['placeholder' => 'Select a Role'],
-                                'pluginOptions' => [
-                                    'allowClear' => true
-                                ],
-                            ]);
-                            ?>
-                        </div>
+                        <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                    'data' => $roles,
+                                    'options' => ['placeholder' => 'Select a Role'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        <?php } else { ?>
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                    'data' => $roles,
+                                    'options' => ['placeholder' => 'Select a Role'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        <?php } ?>
                     </div>
 
 
@@ -187,6 +203,7 @@ $this->params['breadcrumbs'][] = $companyBranchModel->isNewRecord ? "Create" : "
 </div>
 <?php
 $getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/get-cities']);
+$getRolesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/get-roles']);
 $script = <<< JS
     $(document).on('change','#companybranch-state',function(){
         var state=$(this).val();
@@ -219,6 +236,23 @@ $script = <<< JS
         }else{
             $('#userdetails-city').html("");
             $('#userdetails-city').val("");
+        }
+    });
+        
+    $(document).on('change','#companybranch-company_id',function(){
+        var cid=$(this).val();
+        if(cid){
+            $.ajax({
+                method: 'GET',
+                url: '$getRolesUrl',
+                data: {'id':cid},
+                success: function (response) {
+                    $('#userdetails-role_id').html(response);
+                }
+            });
+        }else{
+            $('#userdetails-role_id').html("");
+            $('#userdetails-role_id').val("");
         }
     });
 JS;

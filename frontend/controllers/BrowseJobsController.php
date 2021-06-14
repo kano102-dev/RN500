@@ -38,17 +38,17 @@ class BrowseJobsController extends Controller {
                 'class' => AccessControl::className(),
                 'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
                 'rules' => [
-                        [
+                    [
                         'actions' => ['apply', 'apply-job', 'view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
-                        [
+                    [
                         'actions' => ['recruiter-lead', 'recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],
-                        [
+                    [
                         'actions' => ['recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isEmployer() ? ['@'] : ['*'] : ['*'],
@@ -171,7 +171,12 @@ class BrowseJobsController extends Controller {
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
         $pages->setPageSize(10);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render('recruiter-lead', ['models' => $models, 'pages' => $pages]);
+        if (isset($request['location']) && !empty($request['location'])) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['IN', 'id', $request['location']])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
+        return $this->render('recruiter-lead', ['models' => $models, 'pages' => $pages, 'selectedLocations' => $selectedLocations]);
     }
 
     public function actionGetDiscipline() {

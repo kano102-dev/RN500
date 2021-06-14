@@ -129,11 +129,15 @@ class UserDetailsController extends Controller {
         } else {
             $model->dob = date('d-m-Y');
         }
+        if (isset($model->city) && !empty($model->city)) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['id' => $model->city])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
         $temp_document_file = isset($model->profile_pic) && !empty($model->profile_pic) ? $model->profile_pic : NULL;
         $document_upload_flag = '';
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-//            $model->city = isset($postData['city']) ? $postData['city'] : '';
-            $model->city = '1';
+            $model->city = isset($_POST['city']) && !empty($_POST['city']) ? $_POST['city'] : '';
             $model->dob = date('Y-m-d', strtotime($model->dob));
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
@@ -173,7 +177,7 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('update', [
-                    'model' => $model,
+                    'model' => $model, 'selectedLocations' => $selectedLocations
         ]);
     }
 
@@ -192,9 +196,14 @@ class UserDetailsController extends Controller {
             $model->dob = date('d-m-Y', strtotime($model->dob));
         }
 
+        $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
+        $city = ArrayHelper::map(Cities::findAll(['state_id' => $model->state]), 'id', 'city');
+        if (isset($model->city) && !empty($model->city)) {
+            $model->state = $model->cityRef->state_id;
+            $states = ArrayHelper::map(\common\models\States::find()->where(['id' => $model->cityRef->state_id])->all(), 'id', 'state');
+            $city = ArrayHelper::map(Cities::findAll(['state_id' => $model->cityRef->state_id]), 'id', 'city');
+        }
         if ($model->load(Yii::$app->request->post())) {
-//            $model->city = isset($postData['city']) ? $postData['city'] : '';
-            $model->city = '1';
             $model->dob = date('Y-m-d', strtotime($model->dob));
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
@@ -233,8 +242,20 @@ class UserDetailsController extends Controller {
         return $this->render('profile', [
                     'model' => $model,
                     'companyDetail' => $companyDetail,
-                    'branch' => $branch
+                    'branch' => $branch, 'states' => $states, 'city' => $city
         ]);
+    }
+
+    public function actionGetCities($id) {
+        $cities = ArrayHelper::map(Cities::find()->where(['state_id' => $id])->all(), 'id', 'city');
+        $options = '';
+        if (!empty($cities)) {
+            foreach ($cities as $key => $city) {
+                $options .= "<option value=$key>$city</option>";
+            }
+        }
+        echo $options;
+        exit;
     }
 
     /**
@@ -501,6 +522,7 @@ class UserDetailsController extends Controller {
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->user_id = \Yii::$app->user->id;
             $model->expiry_date = date('Y-m-d', strtotime("01-" . $model->expiry_date));
+            $model->issuing_state = $_POST['issuing_state'];
 
             $document_file = UploadedFile::getInstance($model, 'document');
 
