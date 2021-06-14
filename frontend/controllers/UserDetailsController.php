@@ -177,7 +177,12 @@ class UserDetailsController extends Controller {
         }
 
         return $this->renderAjax('update', [
+<<<<<<< HEAD
                     'model' => $model, 'selectedLocations' => $selectedLocations
+=======
+                    'model' => $model,
+                    'selectedLocations' => $selectedLocations
+>>>>>>> 15e19520eb7050976b9537ebf0664e566a97a797
         ]);
     }
 

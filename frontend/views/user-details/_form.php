@@ -83,7 +83,8 @@ use common\models\User;
                         'ajax' => [
                             'url' => $url,
                             'dataType' => 'json',
-                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                            'cache' => true,
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
                         'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),

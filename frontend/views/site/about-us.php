@@ -7,7 +7,11 @@ $this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
-    .about-us p{font-size: 17px;margin-bottom: 10px;}
+    .about-us p{font-size: 18px;
+    margin-bottom: 35px;
+    text-align: justify;}
+    .about-us p a{text-decoration: none;font-weight: bold;}
+    
 </style>
 <div class="pageTitle">
     <div class="container">
@@ -29,7 +33,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     Own Your Relationships: Engage with others clarity, transparency and care. 
 
-                    Obsess Over the Experience: Distinguish yourself by providing the best possible experience every time. 
+                    Obsess Over the Experience: Distinguish yourself by providing the best possible experience every time. </p>
+                <p>
 
                     Defend Our Culture: Embrace and encourage the principles that define our company. 
 
@@ -39,11 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     Equal Employment Opportunity Policy Statement
 
-                    RN500 is an Equal Opportunity Employer and prohibits discrimination and harassment of any kind. RN500 is committed to the principal of equal opportunity for all employees and to providing employees with work environment free of discrimination and harassment. It is RN500 policy to provide equal employment opportunities without regard to race, color, religion, or belief, national, social, or ethnic origin, sex (including pregnancy), age, physical, mental or sensory disability, HIV status, sexual orientation, gender identity and/or expression, marital, civil union or domestic partnership status, past or present military services, family medical history or genetic information, family or parental status, or any other status protected by applicable laws. RN500 will not tolerate discrimination or harassment on any of these characteristics. 
+                    RN500 is an Equal Opportunity Employer and prohibits discrimination and harassment of any kind. </p>
+                    
+                    <p>RN500 is committed to the principal of equal opportunity for all employees and to providing employees with work environment free of discrimination and harassment. It is RN500 policy to provide equal employment opportunities without regard to race, color, religion, or belief, national, social, or ethnic origin, sex (including pregnancy), age, physical, mental or sensory disability, HIV status, sexual orientation, gender identity and/or expression, marital, civil union or domestic partnership status, past or present military services, family medical history or genetic information, family or parental status, or any other status protected by applicable laws. RN500 will not tolerate discrimination or harassment on any of these characteristics. 
 
                     All employment decisions are based on business needs, job requirements and individual qualifications. 
                 </p>
-                <p>If you have any questions, contact us on: <strong>info@RN500.com</strong></p>
+                <p>If you have any questions, contact us on: <a href="mailto:info@RN500.com">info@RN500.com</a></p>
             </div>
         </div>
     </div>

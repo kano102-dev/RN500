@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\CommonFunction;
+use yii\helpers\Url;
 
 /**
  * EmergencyController implements the CRUD actions for Emergency model.
@@ -19,6 +20,10 @@ class EmergencyController extends Controller
 /**
      * {@inheritdoc}
      */
+    
+    public $title = "Emergency";
+    public $activeBreadcrumb, $breadcrumb;
+    
     public function behaviors() {
         return [
             'access' => [
@@ -55,6 +60,14 @@ class EmergencyController extends Controller
             ],
         ];
     }
+    
+    public function __construct($id, $module, $config = array()) {
+        parent::__construct($id, $module, $config);
+        $this->breadcrumb = [
+            'Home' => Url::base(true),
+            $this->title => Yii::$app->urlManagerAdmin->createAbsoluteUrl(['emergency/index']),
+        ];
+    }
 
     /**
      * Lists all Emergency models.
@@ -79,6 +92,7 @@ class EmergencyController extends Controller
      */
     public function actionView($id)
     {
+        $this->activeBreadcrumb = "Detail View";
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -91,6 +105,7 @@ class EmergencyController extends Controller
      */
     public function actionCreate()
     {
+        $this->activeBreadcrumb = "Create";
         $model = new Emergency();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -116,6 +131,7 @@ class EmergencyController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->activeBreadcrumb = "Update";
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
