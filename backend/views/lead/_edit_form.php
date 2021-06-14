@@ -9,7 +9,7 @@ $form = ActiveForm::begin(['id' => 'edit-lead-form',
         ]);
 ?>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 col-sm-12">
         <div class="formrow">
             <?php
             echo $form->field($model, 'title', [
@@ -26,7 +26,7 @@ $form = ActiveForm::begin(['id' => 'edit-lead-form',
 
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-12">
         <div class="formrow">
             <?php
             echo $form->field($model, 'start_date')->widget(DatePicker::classname(), [
@@ -39,7 +39,7 @@ $form = ActiveForm::begin(['id' => 'edit-lead-form',
             ?>
         </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 col-sm-12">
         <div class="formrow">
             <?php
             echo $form->field($model, 'end_date')->widget(DatePicker::classname(), [
@@ -55,7 +55,7 @@ $form = ActiveForm::begin(['id' => 'edit-lead-form',
 </div>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12 col-sm-12">
         <div class="formrow">
             <?php
             echo $form->field($model, 'description', [

@@ -92,6 +92,7 @@ class BenefitsController extends Controller
      */
     public function actionView($id)
     {
+        $this->activeBreadcrumb = "Detail View";
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

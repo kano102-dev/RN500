@@ -17,9 +17,9 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 
 
 <div class="card card-default color-palette-box">
-    <div class="card-body">
+    <!--<div class="card-body">-->
         <?php $form = ActiveForm::begin(); ?>
-        <div class="card ">
+       
 
             <div class="card-body">
 
@@ -91,9 +91,9 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
                     <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
                 </div>
             </div>
-        </div>
+        
         <?php ActiveForm::end(); ?>
-    </div>
+    <!--</div>-->
 </div>
 
 <?php

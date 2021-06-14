@@ -17,7 +17,7 @@ $status = [0=>'No',1=>'Yes'];
         </p>
 
         <div class="row">
-            <div class="col-6">
+            <div class="col-md-12 col-sm-12">
                 <?=
                 DetailView::widget([
                     'model' => $model,

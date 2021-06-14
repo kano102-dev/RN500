@@ -96,7 +96,7 @@ class AdvertisementController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
-        $this->activeBreadcrumb = "View Details";
+        $this->activeBreadcrumb = "Detail View";
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);

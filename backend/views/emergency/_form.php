@@ -18,27 +18,23 @@ $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
 $status = [0 => 'Inactive', 1 => 'Active'];
 ?>
 
-
 <div class="card card-default color-palette-box">
     <div class="card-body">
-        <?php $form = ActiveForm::begin(); ?>
-        <div class="card ">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?php echo $form->field($model, 'status')->dropDownList($status, ['prompt' => 'Select Status']) ?>
-                    </div>
-                </div>
+        <?php $form = ActiveForm::begin();?>
 
-                <div class="form-group text">
-                    <?= Html::submitButton('Save', ['class' => 'btn btn-primary']) ?>
-                </div>
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <?php echo $form->field($model, 'status')->dropDownList($status, ['prompt' => 'Select Status']) ?>
             </div>
         </div>
-        <?php ActiveForm::end(); ?>
+        <div class="form-group">
+            <?=Html::submitButton('Save', ['class' => 'btn btn-primary'])?>
+        </div>
+
+        <?php ActiveForm::end();?>
     </div>
 </div>
 

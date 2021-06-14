@@ -54,6 +54,8 @@ label {display: inline-block;max-width: 100%;margin-bottom: 5px;font-weight: 700
 .searchList li .interest_level.actively_looking{color: #2cd34b;font-weight: bold;}
 .searchList li .interest_level.open_to_offers{color: red;font-weight: bold;}
 .searchList li .interest_level.search_on_hold{color: #6f74bd;font-weight: bold;}
+.pageTitle h1 {font-size: 50px;font-weight: 600;text-shadow: 0 0 3px #ff0000, 0 0 5px #007fff;}
+.searchList span{font-weight:bold;}
 @media (max-width: 425px) {
     .sticky-sidebar{position: relative !important;width: 100% !important;}
     .new-searchList li{text-align: left;}

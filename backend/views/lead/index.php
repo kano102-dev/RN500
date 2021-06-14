@@ -15,11 +15,11 @@
 <div class="card card-default color-palette-box">
     <div class="card-body">
 
-        <div class="col-12">
+        <div class="col-md-12 col-sm-12">
             <section id="tabs" class="project-tab">
                 <div class="container">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-sm-12">
                             <nav>
                                 <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                                     <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#pending" role="tab" onclick="getPendingRecords()" aria-controls="nav-home" aria-selected="true">Approval Pending</a>
