@@ -118,18 +118,31 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
                         </div>
                     </div>
                     <div class="row">
-
-                        <div class="col-md-6 col-sm-12">
-                            <?=
-                            $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
-                                'data' => $roles,
-                                'options' => ['placeholder' => 'Select a Role'],
-                                'pluginOptions' => [
-                                    'allowClear' => true
-                                ],
-                            ]);
-                            ?>
-                        </div>
+                        <?php if (\common\CommonFunction::isMasterAdmin(Yii::$app->user->identity->id)) { ?>
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                    'data' => $roles,
+                                    'options' => ['placeholder' => 'Select a Role'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        <?php } else { ?>
+                            <div class="col-6">
+                                <?=
+                                $form->field($userDetailModel, 'role_id')->widget(Select2::classname(), [
+                                    'data' => $roles,
+                                    'options' => ['placeholder' => 'Select a Role'],
+                                    'pluginOptions' => [
+                                        'allowClear' => true
+                                    ],
+                                ]);
+                                ?>
+                            </div>
+                        <?php } ?>
                     </div>
                 </div>
             </div>
@@ -151,6 +164,7 @@ $this->params['breadcrumbs'][] = $userDetailModel->isNewRecord ? "Create" : "Upd
 <?php
 $getCitiesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['staff/get-cities']);
 $getBranchUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['staff/get-branches']);
+$getRolesUrl = Yii::$app->urlManagerAdmin->createAbsoluteUrl(['company-branch/get-roles']);
 $script = <<< JS
    $(document).on('change','#userdetails-state',function(){
         var state=$(this).val();
@@ -174,5 +188,21 @@ $script = <<< JS
                 }
         });
    });
+        $(document).on('change','#userdetails-company_id',function(){
+        var cid=$(this).val();
+        if(cid){
+            $.ajax({
+                method: 'GET',
+                url: '$getRolesUrl',
+                data: {'id':cid},
+                success: function (response) {
+                    $('#userdetails-role_id').html(response);
+                }
+            });
+        }else{
+            $('#userdetails-role_id').html("");
+            $('#userdetails-role_id').val("");
+        }
+    });
 JS;
 $this->registerJs($script);

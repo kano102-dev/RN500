@@ -145,7 +145,13 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         ],
                                         'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
                                         'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
-                                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
+                                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                                     ],
                                 ]);
                                 ?>

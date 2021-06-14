@@ -1180,8 +1180,6 @@ ALTER TABLE `advertisement`
 CHANGE `file_type` `file_type` tinyint NULL COMMENT '1:image 2:youtube link' AFTER `active_to`;
 #  ***********************12-JUN-2021***BY Mehul END**************************
 
-
-
 #  ***********************13-JUN-2021***BY Mohan START**************************
 CREATE TABLE `lead_rating` (
   `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -1194,3 +1192,21 @@ CREATE TABLE `lead_rating` (
 );
 #  ***********************13-JUN-2021***BY Mohan END**************************
 
+#  ***********************14-JUN-2021***BY Mehul START**************************
+UPDATE `auth_item` SET `description` = 'Company Approval' WHERE `name` = 'user-approve' AND `name` = 'user-approve' COLLATE utf8mb4_bin;
+UPDATE `auth_item` SET `description` = 'View Company Approval Request' WHERE `name` = 'user-request-view' AND `name` = 'user-request-view' COLLATE utf8mb4_bin;
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('jobseeker', '1', 'Jobseeker', NULL, NULL, '1623685711', '1623685711');
+
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`)
+VALUES ('jobseeker-view', '2', 'View', NULL, NULL, '1623685711', '1623685711');
+
+
+INSERT INTO `auth_item_child` (`parent`, `child`)
+VALUES ('jobseeker', 'jobseeker-view');
+
+ALTER TABLE `company_subscription_payment`
+ADD `is_free` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `status`;
+#  ***********************14-JUN-2021***BY Mehul END**************************

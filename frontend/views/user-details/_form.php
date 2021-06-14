@@ -69,11 +69,13 @@ use common\models\User;
                 $url = Url::to(['browse-jobs/get-cities']);
                 echo Select2::widget([
                     'name' => 'city',
-                    'value' => $selectedLocations,
+                    'value' => isset($model->city) && !empty($model->city) ? $model->city : '',
+                    'data' => $selectedLocations,
                     'options' => [
-                        'id' => 'select_city',
-                        'placeholder' => 'Select City...',
-                        'multiple' => true,
+                        'id' => 'city',
+                        'placeholder' => 'Select Location...',
+                        'multiple' => false,
+                        'class' => '',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -84,9 +86,15 @@ use common\models\User;
                             'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
                             'cache' => true,
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
-                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
