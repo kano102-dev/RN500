@@ -58,7 +58,7 @@
 
                 <div class="info-box-content">
                     <span class="info-box-text">Branch</span>
-                    <span class="info-box-number"><?= isset($counts['lead']) && !empty($counts['lead']) ? $counts['lead'] : 0 ?></span>
+                    <span class="info-box-number"><?= isset($counts['branch']) && !empty($counts['branch']) ? $counts['branch'] : 0 ?></span>
                 </div>
                 <!-- /.info-box-content -->
             </div>

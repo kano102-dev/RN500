@@ -25,6 +25,7 @@ use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
 use common\models\Emergency;
 use common\models\LeadRating;
+use common\models\LeadEmergency;
 
 /**
  * BrowseJobs controller
@@ -68,7 +69,7 @@ class BrowseJobsController extends Controller {
 
     public function actionIndex() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch', 'emergency'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andFilterWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
@@ -80,6 +81,9 @@ class BrowseJobsController extends Controller {
         }
         if (isset($request['location']) && !empty($request['location'])) {
             $query->andFilterWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
+        }
+        if (isset($request['emergency']) && !empty($request['emergency'])) {
+            $query->andFilterWhere(['IN', 'lead_emergency.emergency_id', implode(',', $request['emergency'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
@@ -127,7 +131,7 @@ class BrowseJobsController extends Controller {
 
     public function actionRecruiterLead() {
         $request = \Yii::$app->getRequest()->get();
-        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
+        $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch', 'emergency'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         if (isset($request['discipline']) && !empty($request['discipline'])) {
             $query->andFilterWhere(['IN', 'lead_discipline.discipline_id', implode(',', $request['discipline'])]);
         }
@@ -139,6 +143,9 @@ class BrowseJobsController extends Controller {
         }
         if (isset($request['location']) && !empty($request['location'])) {
             $query->andFilterWhere(['IN', 'lead_master.city', implode(',', $request['location'])]);
+        }
+        if (isset($request['emergency']) && !empty($request['emergency'])) {
+            $query->andFilterWhere(['IN', 'lead_emergency.emergency_id', implode(',', $request['emergency'])]);
         }
         if (isset($request['salary']) && !empty($request['salary'])) {
             foreach ($request['salary'] as $value) {
@@ -167,7 +174,7 @@ class BrowseJobsController extends Controller {
                 }
             }
         }
-        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id','lead_master.id']);
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id', 'lead_master.id']);
 
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
@@ -239,7 +246,6 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
-    
 
     public function actionGetBenefits() {
         $request = Yii::$app->getRequest()->post();
@@ -268,7 +274,7 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
-    
+
     public function actionGetEmergency() {
         $request = Yii::$app->getRequest()->post();
         $page = isset($request['page']) ? $request['page'] : 0;
@@ -282,11 +288,11 @@ class BrowseJobsController extends Controller {
             foreach ($lists as $key => $list) {
                 $options .= "<li>";
                 if (in_array($key, $filter)) {
-                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' checked />";
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='eme-$key' checked />";
                 } else {
-                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='spec-$key' />";
+                    $options .= "<input type='checkbox' name='emergency[]' value='$key' id='eme-$key' />";
                 }
-                $options .= "<label for='spec-$key'></label>" . $list;
+                $options .= "<label for='eme-$key'></label>" . $list;
                 $options .= "</li>";
             }
         } else {
@@ -332,11 +338,14 @@ class BrowseJobsController extends Controller {
 
     public function actionView($id) {
         $model = LeadMaster::findOne(['id' => $id]);
+        $today = date('Y-m-d');
+        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere(['location' => $model->city])->andWhere("'$today' BETWEEN active_from AND active_to")->asArray()->all();
         if ($model != null) {
             $benefit = LeadBenefit::findAll(['lead_id' => $id]);
             $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
             $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
-            return $this->render('view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+            $emergency = LeadEmergency::findAll(['lead_id' => $id]);
+            return $this->render('view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline, 'emergency' => $emergency, 'advertisment' => $advertisment]);
         } else {
             throw new \yii\web\NotFoundHttpException("In valid lead");
         }
@@ -344,10 +353,13 @@ class BrowseJobsController extends Controller {
 
     public function actionRecruiterView($id) {
         $model = LeadMaster::findOne(['id' => $id]);
+        $today = date('Y-m-d');
+        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere(['location' => $model->city])->andWhere("'$today' BETWEEN active_from AND active_to")->asArray()->all();
         $benefit = LeadBenefit::findAll(['lead_id' => $id]);
         $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
         $discipline = LeadDiscipline::findAll(['lead_id' => $id]);
-        return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline]);
+        $emergency = LeadEmergency::findAll(['lead_id' => $id]);
+        return $this->render('recruiter-view', ['model' => $model, 'benefit' => $benefit, 'specialty' => $specialty, 'discipline' => $discipline, 'emergency' => $emergency, 'advertisment' => $advertisment]);
     }
 
     /*     * ******** ADDED BY MOHAN*** */

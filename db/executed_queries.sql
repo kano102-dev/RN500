@@ -1209,4 +1209,10 @@ VALUES ('jobseeker', 'jobseeker-view');
 
 ALTER TABLE `company_subscription_payment`
 ADD `is_free` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1:yes 0:no' AFTER `status`;
+
+CREATE TABLE `lead_emergency` (
+  `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `lead_id` int NOT NULL,
+  `emergency_id` int NOT NULL
+);
 #  ***********************14-JUN-2021***BY Mehul END**************************
