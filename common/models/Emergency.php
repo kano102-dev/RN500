@@ -10,38 +10,49 @@ use Yii;
  * @property int $id
  * @property string $name
  */
-class Emergency extends \yii\db\ActiveRecord
-{
+class Emergency extends \yii\db\ActiveRecord {
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'emergency';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['name'], 'required'],
             [['name'], 'match', 'pattern' => '/^[a-zA-Z0-9 ]*$/', 'message' => 'Only number and alphabets allowed for {attribute} field'],
             [['name'], 'string', 'max' => 255],
             [['status'], 'integer'],
-            [['name','status'],'safe']
+            [['name', 'status'], 'safe']
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'name' => 'Name',
         ];
     }
+
+    public static function getAllEmergency() {
+        return self::find()->all();
+    }
+
+    /**
+     * Gets query for [[LeadEmergency]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLeadEmergency() {
+        return $this->hasMany(LeadEmergency::className(), ['emergency_id' => 'id']);
+    }
+
 }

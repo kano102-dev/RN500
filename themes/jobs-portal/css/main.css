@@ -1129,7 +1129,7 @@ a.wit-btn {
            == App Box css==
 *************************************************/
 .appwraper {
-    background: url(../images/app-bg.jpg) no-repeat top;
+    background-color:skyblue;
     background-size: cover;
     padding-top: 70px;
     background-attachment: fixed;
@@ -3405,6 +3405,9 @@ blockquote:after {
 @media screen and (max-width: 990px) {
     body {
         font-size: 16px;
+    }
+    #android{
+        margin-top: -43px !important;
     }
     .navbar-default {float:none;}
     .three-plan li {

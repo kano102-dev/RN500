@@ -8,12 +8,15 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
+$frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertisement/";
 ?>
 
 <style>
     /*.social-share {display:flex;margin: 25px 0px;}*/
     .social-share li{padding: 0px 5px;}
     .social-share {padding:20px 0px 20px 25px}
+    .job-header .contentbox p{text-align: justify !important;}
+
 </style>
 <!-- Page Title start -->
 <div class="pageTitle">
@@ -110,75 +113,17 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                                 <?php } ?>
                             </ul>
                         <?php } ?>
+                        <?php if (isset($emergency) && !empty($emergency)) { ?>
+                            <h3>Emergency</h3>
+                            <ul>
+                                <?php foreach ($emergency as $value) { ?>
+                                    <li><?= $value->emergency->name ?></li>
+                                <?php } ?>
+                            </ul>
+                        <?php } ?>
                     </div>
                 </div>
                 <!-- Job Description end --> 
-
-                <!-- related jobs start -->
-                <!--                <div class="relatedJobs">
-                                    <h3>Related Jobs</h3>
-                                    <ul class="searchList">
-                                         Job start 
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-8 col-sm-8">
-                                                    <div class="jobimg"><img src="images/jobs/jobimg.jpg" alt="Job Name"></div>
-                                                    <div class="jobinfo">
-                                                        <h3><a href="#.">Technical Database Engineer</a></h3>
-                                                        <div class="companyName"><a href="#.">Datebase Management Company</a></div>
-                                                        <div class="location"><label class="fulltime">Full Time</label>   - <span>New York</span></div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-4">
-                                                    <div class="listbtn"><a href="#.">Apply Now</a></div>
-                                                </div>
-                                            </div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce venenatis arcu est. Phasellus vel dignissim tellus. Aenean fermentum fermentum convallis.</p>
-                                        </li>
-                                         Job end  
-                
-                                         Job start 
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-8 col-sm-8">
-                                                    <div class="jobimg"><img src="images/jobs/jobimg.jpg" alt="Job Name"></div>
-                                                    <div class="jobinfo">
-                                                        <h3><a href="#.">Technical Database Engineer</a></h3>
-                                                        <div class="companyName"><a href="#.">Datebase Management Company</a></div>
-                                                        <div class="location"><label class="partTime">Part Time</label>   - <span>New York</span></div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-4">
-                                                    <div class="listbtn"><a href="#.">Apply Now</a></div>
-                                                </div>
-                                            </div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce venenatis arcu est. Phasellus vel dignissim tellus. Aenean fermentum fermentum convallis.</p>
-                                        </li>
-                                         Job end  
-                
-                                         Job start 
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-8 col-sm-8">
-                                                    <div class="jobimg"><img src="images/jobs/jobimg.jpg" alt="Job Name"></div>
-                                                    <div class="jobinfo">
-                                                        <h3><a href="#.">Technical Database Engineer</a></h3>
-                                                        <div class="companyName"><a href="#.">Datebase Management Company</a></div>
-                                                        <div class="location"><label class="freelance">Freelance</label>   - <span>New York</span></div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                                <div class="col-md-4 col-sm-4">
-                                                    <div class="listbtn"><a href="#.">Apply Now</a></div>
-                                                </div>
-                                            </div>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce venenatis arcu est. Phasellus vel dignissim tellus. Aenean fermentum fermentum convallis.</p>
-                                        </li>
-                                         Job end 
-                                    </ul>
-                                </div>-->
             </div>
             <!-- related jobs end -->
 
@@ -210,23 +155,73 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
             </div>
 
         </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- How it Works start -->
+                <div class="section howitwrap">
+                    <div class="container"> 
+                        <div class="row">
+                            <?php
+                            $i = 0;
+                            if (isset($advertisment) && !empty($advertisment)) {
+                                ?>
+                                <?php foreach ($advertisment as $key => $value) { ?>
+                                    <div class="col-md-4 col-sm-6 col-xl-12 moreFTypeBox blogFTypeBox" <?php if ($i >= 3) { ?> style="display:none;" <?php } ?>>
+                                        <?php if (isset($value['icon']) && !empty($value['icon'])) { ?>
+                                            <?php if (file_exists(Yii::getAlias('@frontend') . "/web/uploads/advertisement/" . $value['icon'])) { ?>
+                                                <a href="<?= $value['link_url'] ?>" target="_blank"><img height="250px" width="350px" src="<?= $frontendDir . $value['icon'] ?>"></a>
+                                            <?php } ?>
+                                            <?php
+                                        } else {
+                                            if (isset($value['video_link']) && !empty($value['video_link'])) {
+                                                ?>
+                                                <video width="350" height="250" controls>
+                                                    <source src="<?= $value['video_link'] ?>">
+                                                </video>
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                        <p><?= $value['name'] ?></p>
+                                        <p>&nbsp;</p>
+                                    </div>
+                                    <?php
+                                    $i++;
+                                }
+                                ?>
+                            <?php } ?>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-center" id="viewFTypeMore">
+                                <p>&nbsp;</p>
+
+                                <?php if (isset($advertisment) && !empty($advertisment)) { ?>
+                                    <?php if (count($advertisment) > 3) { ?>
+                                        <a href="#" class="wp_view_more btn btn-info">View More</a>
+                                    <?php } ?>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- How it Works Ends --> 
+            </div>
+        </div>
     </div>
 </div>
 
-
 <?php
 $script_new = <<<JS
-    
     $(document).on("click", ".refer-to-friend", function() {
         $("#commonModal").find(".modal-title").text($(this).attr('modal-title'));
         $("#commonModal").modal('show').find("#modalContent").load($(this).attr('data-url'));
-        
+
     });
-    
+
     function reload(id){
-            $.pjax.reload({container:'#'+id, timeout:false, async:false});
+        $.pjax.reload({container:'#'+id, timeout:false, async:false});
     }
- 
 JS;
 $this->registerJS($script_new, 3);
 ?>
+

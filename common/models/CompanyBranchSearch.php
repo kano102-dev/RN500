@@ -40,11 +40,7 @@ class CompanyBranchSearch extends CompanyBranch {
     public function search($params) {
         $query = CompanyBranch::find()->joinWith(['company', 'cityRef'])->where(['company_master.status' => 1]);
         if (!CommonFunction::isMasterAdmin(\Yii::$app->user->identity->id)) {
-            if (CommonFunction::isHoAdmin(\Yii::$app->user->identity->id)) {
-                $query->andWhere(['company_id' => \Yii::$app->user->identity->branch->company_id]);
-            } else {
-                $query->andWhere(['company_branch.id' => \Yii::$app->user->identity->branch_id]);
-            }
+            $query->andWhere(['company_id' => \Yii::$app->user->identity->branch->company_id]);
         }
 
         // add conditions that should always apply here

@@ -119,6 +119,19 @@ use common\CommonFunction;
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
+                                    echo $form->field($model, 'emergency')->widget(Select2::classname(), [
+                                        'data' => $emergencyList,
+                                        'options' => ['placeholder' => $model->getAttributeLabel('emergency'), 'multiple' => true],
+                                        'pluginOptions' => [
+                                            'allowClear' => true
+                                        ],
+                                    ])->label(false);
+                                    ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="formrow">
+                                    <?php
                                     echo $form->field($model, 'jobseeker_payment', [
                                                 'options' => ['class' => 'form-group has-feedback'],
                                                 'inputTemplate' => '{input}',
@@ -129,6 +142,8 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -142,9 +157,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -158,6 +170,9 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -171,9 +186,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -197,6 +209,9 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -219,9 +234,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -235,6 +247,9 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -248,9 +263,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -264,6 +276,9 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -277,9 +292,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -293,6 +305,9 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -306,8 +321,6 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
@@ -321,6 +334,8 @@ use common\CommonFunction;
                                     ?>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="formrow">
                                     <?php
