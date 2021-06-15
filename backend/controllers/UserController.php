@@ -27,7 +27,7 @@ use yii\filters\AccessControl;
  */
 class UserController extends Controller {
 
-    public $title = "User Approval";
+    public $title = "Company Approval";
     public $activeBreadcrumb, $breadcrumb;
 
     public function behaviors() {

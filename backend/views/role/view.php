@@ -97,7 +97,7 @@ $this->params['breadcrumbs'][] = "View";
         </p>
 
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-12 col-sm-12">
                 <h4> Role Details </h4>
                 <?=
                 DetailView::widget([
@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = "View";
                 ])
                 ?>
             </div>
-            <div class="col-6">
+            <div class="col-md-6 col-sm-12">
                 <h4> Permissions </h4>
                 <?=
                 \wbraganca\fancytree\FancytreeWidget::widget([

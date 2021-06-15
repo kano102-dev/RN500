@@ -89,7 +89,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                     </a>
                                     <ul class="dropdown-menu">
                                         <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                            <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a></li>
+                                            <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Admin Panel</a></li>
                                         <?php } ?>
                                         <li class="<?= $controller == 'site' && $action == 'job-seeker' ? $activeClass : '' ?>"><a href="<?= CommonFunction::isJobSeeker() ? Yii::$app->urlManagerFrontend->createUrl("/site/job-seeker/") : Yii::$app->urlManagerFrontend->createUrl(["user-details/profile", 'id' => Yii::$app->user->identity->id]); ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
                                         <li class="<?= $controller == 'auth' && $action == 'change-password' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/change-password"); ?>"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</a></li>

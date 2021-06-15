@@ -115,16 +115,13 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                             <ul class="optionlist">
                                 <?php
                                 $url = Url::to(['browse-jobs/get-cities']);
-                                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                                 echo Select2::widget([
                                     'name' => 'location',
-//                                    'value' => isset($_GET['location']) ? $_GET['location'] : [],
-//                                    'data' => isset($data) && !empty($data) ? $data : [],
+                                    'value' => $selectedLocations,
                                     'options' => [
                                         'id' => 'select_location',
                                         'placeholder' => 'Select Location...',
                                         'multiple' => true,
-                                        'class' => ''
                                     ],
                                     'pluginOptions' => [
                                         'allowClear' => true,
@@ -132,11 +129,18 @@ $shift_prams = isset($_GET['shift']) ? $_GET['shift'] : [];
                                         'ajax' => [
                                             'url' => $url,
                                             'dataType' => 'json',
-                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }')
+                                            'data' => new JsExpression('function(params) {return {q:params.term, page:params.page || 1}; }'),
+                                            'cache' => true,
                                         ],
-                                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                                        'templateResult' => new JsExpression('function(location) { console.log(location);return location.name; }'),
-                                        'templateSelection' => new JsExpression('function (location) {return location.name; }'),
+                                        'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
+                                        'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
+                                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                                     ],
                                 ]);
                                 ?>

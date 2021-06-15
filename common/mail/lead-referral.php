@@ -11,7 +11,7 @@ use yii\helpers\Html;
 <br/>
 
 
-<p> You are invited by <b> <?php echo $model->from_name ?></b> ( <?php echo $model->from_email ?>) to review / apply following job. </p>
+<p> You are invited by <b> <?php echo $model->from_name ?></b> ( <?php echo $model->from_email ?>) to review or apply following job. </p>
 <br/>
 
 <p><a href="<?php echo $referralLink ?>" target="_blank" > Click here </a> to view the job details </p>

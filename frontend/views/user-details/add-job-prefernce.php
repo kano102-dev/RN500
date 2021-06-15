@@ -31,7 +31,6 @@ use yii\web\JsExpression;
             <ul class="optionlist">
                 <?php
                 $url = Url::to(['browse-jobs/get-cities']);
-                $location = isset($_GET['location']) ? implode(',', $_GET['location']) : 0;
                 echo Select2::widget([
                     'name' => 'location',
                     'options' => [

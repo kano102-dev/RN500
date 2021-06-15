@@ -68,7 +68,7 @@ $actionUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refe
 $script_new = <<<JS
         
 $(document).ready(function() {
-    $(document).on('submit','form#referral_form',function(e){
+    $(document).off('submit').on('submit','form#referral_form',function(e){
         e.preventDefault();
         e.returnValue = false;
         var form = $(this);

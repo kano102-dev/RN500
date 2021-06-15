@@ -16,7 +16,7 @@ $status = [0 => 'Inactive', 1 => 'Active'];
     <div class="card-body">
         <div class="col-12">
 
-            <?= Html::a('Create Emergency', ['create'], ['class' => 'btn btn-success float-right']) ?>
+            <?= Html::a('Create Emergency', ['create'], ['class' => 'btn btn-primary float-right']) ?>
 
             <div class="table table-responsive pt-3">
                 <?php Pjax::begin(); ?>

@@ -51,12 +51,12 @@ class ReferralMaster extends \yii\db\ActiveRecord {
     public function attributeLabels() {
         return [
             'id' => 'ID',
-            'lead_id' => 'Lead ID',
-            'from_name' => 'From Name',
-            'from_email' => 'From Email',
+            'lead_id' => 'Lead',
+            'from_name' => 'Sender Name',
+            'from_email' => 'Sender Email',
             'description' => 'Description',
-            'to_name' => 'To Name',
-            'to_email' => 'To Email',
+            'to_name' => 'Recipient Name',
+            'to_email' => 'Recipient Email',
             'created_at' => 'Created At',
         ];
     }
@@ -77,7 +77,7 @@ class ReferralMaster extends \yii\db\ActiveRecord {
             $status = Yii::$app->mailer->compose('lead-referral', ['model' => $this, 'referralLink' => $referralLink])
                     ->setFrom([$this->from_email => $this->from_name])
                     ->setTo($this->to_email)
-                    ->setSubject('Invite to apply the Job')
+                    ->setSubject('Invited to apply the Job')
                     ->send();
             if ($status) {
                 $this->created_at = date('Y-m-d h:i:s', CommonFunction::currentTimestamp());

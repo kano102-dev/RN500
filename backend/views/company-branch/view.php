@@ -3,7 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\CommonFunction;
-
 ?>
 <div class="card card-default color-palette-box">
     <div class="card-body">
@@ -15,7 +14,7 @@ use common\CommonFunction;
         </p>
 
         <div class="row">
-            <div class="col-6 col-xs-12">
+            <div class="col-md-6 col-sm-12">
                 <h4> Branch Details </h4>
                 <?=
                 DetailView::widget([
@@ -39,7 +38,7 @@ use common\CommonFunction;
                 ?>
             </div>
 
-            <div class="col-6 col-xs-12">
+            <div class="col-md-6 col-sm-12">
                 <h4> Owner Details </h4>
                 <?=
                 DetailView::widget([
@@ -49,6 +48,10 @@ use common\CommonFunction;
                         'last_name',
                         'email',
                         'mobile_no',
+                        [
+                            'attribute' => 'role_id',
+                            'value' => isset($userDetailModel->user->role) ? $userDetailModel->user->role->role_name : '',
+                        ],
                         'street_no',
                         'street_address',
                         'apt',

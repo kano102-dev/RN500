@@ -91,6 +91,7 @@ class VendorController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
+        $this->activeBreadcrumb = "Detail View";
         $model = $this->findModel($id);
         
         $cities = ArrayHelper::map(Cities::find()->all(), 'id', 'city');

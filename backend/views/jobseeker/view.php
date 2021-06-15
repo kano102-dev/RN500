@@ -1,3 +1,11 @@
+<?php
+use common\CommonFunction;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\Pjax;
+use yii\grid\GridView;
+
+?>
 <style>
     .detail-view th{
         font-weight: bold;
@@ -6,7 +14,7 @@
 <div class="card card-default color-palette-box">
     <div class="card-body">    
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 col-sm-12">
                 <table id="user-summary-basic" class="table table-striped table-bordered detail-view">
                     <tbody>
                         <tr><th style="width: 50%">Name </th><td> <?php echo $model->first_name . ' ' . $model->last_name ?> </td></tr>

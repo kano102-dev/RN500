@@ -70,6 +70,23 @@ class JobController extends Controller {
                 $model->created_by = $model->updated_by = Yii::$app->user->identity->id;
                 if ($model->validate() && $model->save()) {
                     $lead_id = $model->id;
+                    if (CommonFunction::isRecruiter()) {
+                        $subscription = new \common\models\CompanySubscription();
+                        $subscription->company_id = CommonFunction::getLoggedInUserCompanyId();
+                        $subscription->package_id = \common\models\PackageMaster::PAY_AS_A_GO;
+                        $subscription->status = 1;
+                        $subscription->created_at = $subscription->updated_at = CommonFunction::currentTimestamp();
+                        if ($subscription->save()) {
+                            $paymentModel = new \common\models\CompanySubscriptionPayment();
+                            $paymentModel->subscription_id = $subscription->id;
+                            $paymentModel->amount = 0;
+                            $paymentModel->lead_id = $lead_id;
+                            $paymentModel->status = 1;
+                            $paymentModel->is_free = 1;
+                            $paymentModel->created_at = $paymentModel->updated_at = CommonFunction::currentTimestamp();
+                            $paymentModel->save();
+                        }
+                    }
                     if (isset($model->disciplines) && !empty($model->disciplines)) {
                         foreach ($model->disciplines as $key => $discipline_id) {
                             $leadDiscipline = new LeadDiscipline();

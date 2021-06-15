@@ -168,14 +168,19 @@ class BrowseJobsController extends Controller {
                 }
             }
         }
-        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id','lead_master.id']);
+        $query->groupBy(['lead_benefit.lead_id', 'lead_discipline.lead_id', 'lead_speciality.lead_id', 'lead_master.id']);
 
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);
         $countQuery = clone $query;
         $pages = new \yii\data\Pagination(['totalCount' => $countQuery->count()]);
         $pages->setPageSize(10);
         $models = $query->offset($pages->offset)->limit($pages->limit)->all();
-        return $this->render('recruiter-lead', ['models' => $models, 'pages' => $pages]);
+        if (isset($request['location']) && !empty($request['location'])) {
+            $selectedLocations = ArrayHelper::map(Cities::find()->where(['IN', 'id', $request['location']])->all(), 'id', 'city');
+        } else {
+            $selectedLocations = [];
+        }
+        return $this->render('recruiter-lead', ['models' => $models, 'pages' => $pages, 'selectedLocations' => $selectedLocations]);
     }
 
     public function actionGetDiscipline() {
@@ -235,7 +240,6 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
-    
 
     public function actionGetBenefits() {
         $request = Yii::$app->getRequest()->post();
@@ -264,7 +268,7 @@ class BrowseJobsController extends Controller {
         echo Json::encode($response);
         exit;
     }
-    
+
     public function actionGetEmergency() {
         $request = Yii::$app->getRequest()->post();
         $page = isset($request['page']) ? $request['page'] : 0;
@@ -328,7 +332,7 @@ class BrowseJobsController extends Controller {
 
     public function actionView($id) {
 //        $model = LeadMaster::findOne(['id' => $id]);
-        $model = LeadMaster::find()->where(['OR',['id' => $id],['reference_no'=>$id]])->one();
+        $model = LeadMaster::find()->where(['OR', ['id' => $id], ['reference_no' => $id]])->one();
         if ($model != null) {
             $benefit = LeadBenefit::findAll(['lead_id' => $id]);
             $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
@@ -348,15 +352,22 @@ class BrowseJobsController extends Controller {
     }
 
     /*     * ******** ADDED BY MOHAN*** */
-    
+
     public function actionReferToFriend($lead_id) {
         $model = new ReferralMaster();
         $model->lead_id = $lead_id;
-        return $this->renderAjax("_refer_form",['model'=>$model]);
+        if(isset(Yii::$app->user->identity->id)){
+            $model->from_name = Yii::$app->user->identity->getFullName();
+            $model->from_email = Yii::$app->user->identity->email;
+            
+        }
+        return $this->renderAjax("_refer_form", ['model' => $model]);
     }
+
     public function actionReferToFriendPost($lead_id) {
         $model = new ReferralMaster();
         $model->lead_id = $lead_id;
+        
         if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->sendReferralMail()) {
             Yii::$app->session->setFlash("success", "Referral mail sent successfully.");
             echo json_encode(['code' => 200]);

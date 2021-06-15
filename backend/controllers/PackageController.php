@@ -89,7 +89,7 @@ class PackageController extends Controller {
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id) {
-        $this->activeBreadcrumb = "Detail View";
+        $this->activeBreadcrumb = "View";
         return $this->render('view', [
                     'model' => $this->findModel($id),
         ]);
