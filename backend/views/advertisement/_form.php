@@ -11,7 +11,6 @@ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model common\models\Advertisement */
 /* @var $form yii\widgets\ActiveForm */
-$status = [1 => 'Yes', 2 => 'No'];
 $url = Url::to(['advertisement/get-cities']);
 ?>
 
@@ -106,7 +105,7 @@ $url = Url::to(['advertisement/get-cities']);
 
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <?php echo $form->field($model, 'is_active')->dropDownList($status) ?>
+                        <?php echo $form->field($model, 'is_active')->dropDownList(Yii::$app->params['ADVERTISMENT_IS_ACTIVE_STATUS']) ?>
                     </div>
                     <div class="col-md-6 col-sm-12">
                         <?php
