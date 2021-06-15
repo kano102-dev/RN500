@@ -25,7 +25,9 @@ use common\models\LeadRecruiterJobSeekerMappingSearch;
 use yii\web\NotFoundHttpException;
 use common\models\Emergency;
 use common\models\LeadRating;
+use common\models\ReferralMaster;
 use common\models\LeadEmergency;
+
 
 /**
  * BrowseJobs controller
@@ -39,19 +41,19 @@ class BrowseJobsController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job', 'view'],
+                'only' => ['recruiter-lead', 'recruiter-view', 'apply', 'apply-job'],
                 'rules' => [
-                    [
-                        'actions' => ['apply', 'apply-job', 'view'],
+                        [
+                        'actions' => ['apply', 'apply-job'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? ['@'] : ['*']
                     ],
-                    [
+                        [
                         'actions' => ['recruiter-lead', 'recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isRecruiter() ? ['@'] : ['*'] : ['*'],
                     ],
-                    [
+                        [
                         'actions' => ['recruiter-view'],
                         'allow' => true,
                         'roles' => isset(Yii::$app->user->identity) ? CommonFunction::isEmployer() ? ['@'] : ['*'] : ['*'],
@@ -337,9 +339,13 @@ class BrowseJobsController extends Controller {
     }
 
     public function actionView($id) {
-        $model = LeadMaster::findOne(['id' => $id]);
+
+
+//        $model = LeadMaster::findOne(['id' => $id]);
+        $model = LeadMaster::find()->where(['OR', ['id' => $id], ['reference_no' => $id]])->one();
         $today = date('Y-m-d');
         $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere(['location' => $model->city])->andWhere("'$today' BETWEEN active_from AND active_to")->asArray()->all();
+
         if ($model != null) {
             $benefit = LeadBenefit::findAll(['lead_id' => $id]);
             $specialty = LeadSpeciality::findAll(['lead_id' => $id]);
@@ -363,6 +369,28 @@ class BrowseJobsController extends Controller {
     }
 
     /*     * ******** ADDED BY MOHAN*** */
+
+    public function actionReferToFriend($lead_id) {
+        $model = new ReferralMaster();
+        $model->lead_id = $lead_id;
+        if(isset(Yii::$app->user->identity->id)){
+            $model->from_name = Yii::$app->user->identity->getFullName();
+            $model->from_email = Yii::$app->user->identity->email;
+            
+        }
+        return $this->renderAjax("_refer_form", ['model' => $model]);
+    }
+
+    public function actionReferToFriendPost($lead_id) {
+        $model = new ReferralMaster();
+        $model->lead_id = $lead_id;
+        
+        if (Yii::$app->request->isPost && $model->load(Yii::$app->request->post()) && $model->sendReferralMail()) {
+            Yii::$app->session->setFlash("success", "Referral mail sent successfully.");
+            echo json_encode(['code' => 200]);
+            exit;
+        }
+    }
 
     public function actionApply($ref) {
         $model = LeadMaster::findOne(['reference_no' => $ref]);

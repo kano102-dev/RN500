@@ -12,9 +12,11 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertise
 ?>
 
 <style>
-    .social-share {display:flex;margin: 25px 0px;}
+    /*.social-share {display:flex;margin: 25px 0px;}*/
     .social-share li{padding: 0px 5px;}
+    .social-share {padding:20px 0px 20px 25px}
     .job-header .contentbox p{text-align: justify !important;}
+
 </style>
 <!-- Page Title start -->
 <div class="pageTitle">
@@ -60,6 +62,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertise
                             'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
                         ]);
                         ?>
+                        <a href="javascript:void(0)" data-url="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refer-to-friend', 'lead_id' => $model->id]) ?>" class="refer-to-friend" modal-title="Refer To Friend"><i class="fa fa-share-alt-square" aria-hidden="true" style="font-size: 27px;"></i></a>
                     </div>
                 <?php } else { ?>
                     <div class='col-md-12'>
@@ -72,6 +75,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertise
                             'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
                         ]);
                         ?>
+                        <a href="javascript:void(0)" data-url="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refer-to-friend', 'lead_id' => $model->id]) ?>" class="refer-to-friend" modal-title="Refer To Friend"><i class="fa fa-share-alt-square" aria-hidden="true" style="font-size: 27px;"></i></a>
                     </div>
                 <?php } ?>
             </div>
@@ -205,4 +209,19 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertise
         </div>
     </div>
 </div>
+
+<?php
+$script_new = <<<JS
+    $(document).on("click", ".refer-to-friend", function() {
+        $("#commonModal").find(".modal-title").text($(this).attr('modal-title'));
+        $("#commonModal").modal('show').find("#modalContent").load($(this).attr('data-url'));
+
+    });
+
+    function reload(id){
+        $.pjax.reload({container:'#'+id, timeout:false, async:false});
+    }
+JS;
+$this->registerJS($script_new, 3);
+?>
 
