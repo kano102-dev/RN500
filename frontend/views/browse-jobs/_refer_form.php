@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
-use common\models\LeadRecruiterJobSeekerMapping;
-use common\CommonFunction;
 
 $actionUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refer-to-friend-post', 'lead_id' => $model->lead_id]);
 ?>
@@ -46,10 +44,6 @@ $actionUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refe
                 </div>
             </div>
 
-
-
-
-
             <div class="row">
                 <div class="col-md-12 mb-3">
                     <?php echo Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>                        
@@ -58,6 +52,7 @@ $actionUrl = Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refe
             </div>
 
             <?php ActiveForm::end(); ?>
+
         </div>
     </div>
 </div>

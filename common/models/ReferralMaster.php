@@ -70,6 +70,15 @@ class ReferralMaster extends \yii\db\ActiveRecord {
         return $this->hasOne(LeadMaster::className(), ['id' => 'lead_id']);
     }
 
+    public function getLeadTitleWithRef() {
+        $title = '';
+        if (isset($this->lead) && !empty($this->lead)) {
+            $lead = $this->lead;
+            $title = $lead->title . " (" . $lead->reference_no . ") ";
+        }
+        return $title;
+    }
+
     public function sendReferralMail() {
 
         try {
