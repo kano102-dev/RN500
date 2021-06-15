@@ -63,7 +63,7 @@ class SiteController extends Controller {
         $counts = [];
         $counts['recruiter'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_RECRUITER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
         $counts['employer'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_EMPLOYER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
-        $counts['jobseeker'] = \common\models\User::find()->where(['type' => \common\models\User::TYPE_EMPLOYER, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
+        $counts['jobseeker'] = \common\models\User::find()->where(['type' => 3, 'is_suspend' => 0, 'status' => \common\models\User::STATUS_APPROVED])->count();
         $counts['lead'] = \common\models\LeadMaster::find()->where(['status' => \common\models\LeadMaster::STATUS_APPROVED])->count();
         $counts['branch'] = \common\models\CompanyBranch::find()->where(['company_id' => \Yii::$app->user->identity->branch->company_id])->count();
         $staff = \common\models\User::find()->joinWith(['branch'])->innerJoin('company_master', 'company_master.id=company_branch.company_id')->andWhere(['!=', 'is_owner', 1]);

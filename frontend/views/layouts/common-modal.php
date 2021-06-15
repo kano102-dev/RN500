@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h3 class="modal-title" id="commonModalHeader"></h3>
+                <h5 class="modal-title" id="commonModalHeader"></h5>
             </div>
             <div class="modal-body">
                 <div id='modalContent'></div>

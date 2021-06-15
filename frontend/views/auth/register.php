@@ -129,7 +129,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => true, 'placeholder' => $companyMasterModel->getAttributeLabel('zip_code')])->label(false); ?>
+                                <?= $form->field($companyMasterModel, 'zip_code')->textInput(['maxlength' => 5, 'placeholder' => $companyMasterModel->getAttributeLabel('zip_code')])->label(false); ?>
                             </div>
                             <div><h3>Company Owner Details</h3></div>
                             <hr/>
@@ -227,7 +227,7 @@ use borales\extensions\phoneInput\PhoneInput;
                                 ?>
                             </div>
                             <div class="formrow">
-                                <?= $form->field($recruiterCompany, 'zip_code')->textInput(['maxlength' => true, 'placeholder' => $recruiterCompany->getAttributeLabel('zip_code')])->label(false); ?>
+                                <?= $form->field($recruiterCompany, 'zip_code')->textInput(['maxlength' => 5, 'placeholder' => $recruiterCompany->getAttributeLabel('zip_code')])->label(false); ?>
                             </div>
                             <div><h3>Company Owner Details</h3></div>
                             <hr/>

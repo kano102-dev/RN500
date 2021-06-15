@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = "View";
                         [
                             'attribute' => 'city',
                             'value' => function ($model) {
-                                return isset($model->cityRef->city) ? $model->cityRef->city . "-" . $model->cityRef->stateRef->state : '';
+                                return isset($model->cityRef->city) && isset($model->cityRef->state_code) ? $model->cityRef->city . "-" . $model->cityRef->state_code : '';
                             }
                         ],
                         'zip_code',
