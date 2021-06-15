@@ -1,3 +1,11 @@
+<?php
+use common\CommonFunction;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\widgets\Pjax;
+use yii\grid\GridView;
+
+?>
 <style>
     .detail-view th{
         font-weight: bold;

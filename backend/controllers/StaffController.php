@@ -148,6 +148,8 @@ class StaffController extends Controller {
                     $model->status = User::STATUS_APPROVED;
                     if (!\common\CommonFunction::isHoAdmin(Yii::$app->user->identity->id)) {
                         $model->branch_id = \Yii::$app->user->identity->branch_id;
+                        $userDetailModel->branch_id = CommonFunction::getLoggedInUserBranchId();
+                        $userDetailModel->company_id = CommonFunction::getLoggedInUserCompanyId();
                     } else {
                         $model->branch_id = $userDetailModel->branch_id;
                     }
@@ -171,7 +173,7 @@ class StaffController extends Controller {
                                 CommonFunction::sendWelcomeMail($model);
                                 $is_error = 1;
                             }
-                        }
+                        } 
                     }
                     if ($is_error) {
                         $transaction->commit();
