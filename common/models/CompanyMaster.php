@@ -74,7 +74,7 @@ class CompanyMaster extends \yii\db\ActiveRecord {
             'id' => 'ID',
             'company_name' => 'Name',
             'company_email' => 'Email',
-            'company_mobile' => 'Mobile',
+            'company_mobile' => 'Mobile No.',
             'employer_identification_number' => 'Employer Indetification Number',
             'website_link' => 'Website Link',
             'mobile' => 'Mobile',
