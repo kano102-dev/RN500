@@ -18,7 +18,7 @@ use yii\web\JsExpression;
     ?>
     <div class="row">
         <div class="col-sm-12">
-<?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'institution')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     <div class="row mb-15">
@@ -29,11 +29,12 @@ use yii\web\JsExpression;
                 $url = Url::to(['browse-jobs/get-cities']);
                 echo Select2::widget([
                     'name' => 'location',
-                    'value' => $selectedLocations,
+                    'value' => isset($model->location) && !empty($model->location) ? $model->location : '',
+                    'data' => $selectedLocations,
                     'options' => [
                         'id' => 'select_city',
                         'placeholder' => 'Select City...',
-                        'multiple' => true,
+                        'multiple' => false,
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -46,7 +47,13 @@ use yii\web\JsExpression;
                         ],
                         'escapeMarkup' => new JsExpression('function (markup) {return markup; }'),
                         'templateResult' => new JsExpression('function(location) {return "<b>"+location.name+"</b>"; }'),
-                        'templateSelection' => new JsExpression('function (location) {return location.text; }'),
+                        'templateSelection' => new JsExpression('function (location) {
+                                if(location.selected==true){
+                                    return location.text; 
+                                }else{
+                                    return location.name;
+                                }
+                            }'),
                     ],
                 ]);
                 ?>
@@ -78,15 +85,15 @@ use yii\web\JsExpression;
     </div>
     <div class="row">
         <div class="col-sm-12">
-<?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE'], ['prompt' => 'Select Degree']) ?>
+            <?= $form->field($model, 'degree_name')->dropDownList(Yii::$app->params['DEGREE_TYPE'], ['prompt' => 'Select Degree']) ?>
         </div>
     </div>
 
     <div class="form-group">
-    <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
-<?php ActiveForm::end(); ?>
+    <?php ActiveForm::end(); ?>
 
 </div>
 

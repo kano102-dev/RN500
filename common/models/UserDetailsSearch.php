@@ -24,7 +24,7 @@ class UserDetailsSearch extends UserDetails {
     public function rules() {
         return [
 //            [['id', 'user_id', 'city', 'job_title', 'travel_preference', 'ssn', 'work_authorization', 'created_at', 'updated_at'], 'integer'],
-            [['user_type','unique_id', 'city', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability', 'branchName', 'companyNames'], 'safe'],
+            [['user_type', 'unique_id', 'city', 'role_id', 'email', 'first_name', 'last_name', 'mobile_no', 'street_no', 'street_address', 'apt', 'zip_code', 'profile_pic', 'current_position', 'speciality', 'work experience', 'job_looking_from', 'work_authorization_comment', 'license_suspended', 'professional_liability', 'branchName', 'companyNames'], 'safe'],
         ];
     }
 
@@ -390,7 +390,7 @@ class UserDetailsSearch extends UserDetails {
     }
 
     public function searchApproved($params = []) {
-        $query = UserDetails::find()->joinWith(['user', 'branch'])->where(['user.status' => User::STATUS_APPROVED]);
+        $query = UserDetails::find()->joinWith(['user', 'branch'])->where(['user.status' => User::STATUS_APPROVED, 'company_branch.is_default' => 1]);
 
         // add conditions that should always apply here
 
@@ -439,7 +439,7 @@ class UserDetailsSearch extends UserDetails {
     }
 
     public function searchRejected($params = []) {
-        $query = UserDetails::find()->joinWith(['user', 'branch'])->where(['user.status' => User::STATUS_REJECTED]);
+        $query = UserDetails::find()->joinWith(['user', 'branch'])->where(['user.status' => User::STATUS_REJECTED, 'company_branch.is_default' => 1]);
 
         // add conditions that should always apply here
 
