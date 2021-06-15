@@ -327,7 +327,8 @@ class BrowseJobsController extends Controller {
     }
 
     public function actionView($id) {
-        $model = LeadMaster::findOne(['id' => $id]);
+//        $model = LeadMaster::findOne(['id' => $id]);
+        $model = LeadMaster::find()->where(['OR',['id' => $id],['reference_no'=>$id]])->one();
         if ($model != null) {
             $benefit = LeadBenefit::findAll(['lead_id' => $id]);
             $specialty = LeadSpeciality::findAll(['lead_id' => $id]);

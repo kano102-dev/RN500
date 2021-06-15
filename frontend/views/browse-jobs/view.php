@@ -59,6 +59,7 @@ $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
                             'imageUrl' => "$assetDir/images/RN500_logo177X53.png",
                         ]);
                         ?>
+                        <a href="javascript:void(0)" data-url="<?php echo Yii::$app->urlManagerFrontend->createAbsoluteUrl(['browse-jobs/refer-to-friend', 'lead_id' => $model->id]) ?>" class="refer-to-friend" modal-title="Refer To Friend"><i class="fa fa-share-alt-square" aria-hidden="true" style="font-size: 27px;"></i></a>
                     </div>
                 <?php } else { ?>
                     <div class='col-md-12'>
