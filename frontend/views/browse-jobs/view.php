@@ -14,6 +14,7 @@ $frontendDir = Yii::$app->urlManagerFrontend->getBaseUrl() . "/uploads/advertise
 <style>
     .social-share {display:flex;margin: 25px 0px;}
     .social-share li{padding: 0px 5px;}
+    .job-header .contentbox p{text-align: justify !important;}
 </style>
 <!-- Page Title start -->
 <div class="pageTitle">

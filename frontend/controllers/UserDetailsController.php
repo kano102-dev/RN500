@@ -208,12 +208,12 @@ class UserDetailsController extends Controller {
 
             $document_file = UploadedFile::getInstance($model, 'profile_pic');
 
-            $folder = CommonFunction::getProfilePictureBasePath();
+            $folder = \Yii::$app->basePath . "/web/uploads/user-details/profile/";
             if (!file_exists($folder)) {
                 FileHelper::createDirectory($folder, 0777);
             }
 
-            $uploadPath = CommonFunction::getProfilePictureBasePath();
+            $uploadPath = './uploads/user-details/profile/';
 
             if ($document_file) {
                 $model->profile_pic = time() . "_" . Yii::$app->security->generateRandomString(10) . "." . $document_file->getExtension();
@@ -222,7 +222,7 @@ class UserDetailsController extends Controller {
 
             if (isset($temp_document_file) && !empty($temp_document_file) && file_exists($folder . $temp_document_file)) {
                 if ($document_upload_flag) {
-                    unlink($uploadPath . "/" . $temp_document_file);
+                    unlink($uploadPath . $temp_document_file);
                 } else {
                     $model->profile_pic = $temp_document_file;
                 }

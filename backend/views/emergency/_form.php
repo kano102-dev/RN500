@@ -14,8 +14,6 @@ use borales\extensions\phoneInput\PhoneInput;
 $this->title = 'Emergency';
 $this->params['breadcrumbs'][] = ['label' => $this->title, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $model->isNewRecord ? "Create" : "Update";
-
-$status = [0 => 'Inactive', 1 => 'Active'];
 ?>
 
 <div class="card card-default color-palette-box">
@@ -27,7 +25,7 @@ $status = [0 => 'Inactive', 1 => 'Active'];
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
             </div>
             <div class="col-md-6 col-sm-12">
-                <?php echo $form->field($model, 'status')->dropDownList($status, ['prompt' => 'Select Status']) ?>
+                <?php echo $form->field($model, 'status')->dropDownList(Yii::$app->params['EMERGENCY_IS_ACTIVE_STATUS'], ['prompt' => 'Select Status']) ?>
             </div>
         </div>
         <div class="form-group">
