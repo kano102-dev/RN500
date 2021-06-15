@@ -88,8 +88,8 @@ class SiteController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $today = date('Y-m-d', strtotime('now'));
-        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere(['and', "active_from>=$today", "active_to<=$today"])->asArray()->all();
+        $today = date('Y-m-d');
+        $advertisment = \common\models\Advertisement::find()->where(['is_active' => '1'])->andWhere("'$today' BETWEEN active_from AND active_to")->asArray()->all();
         $query = LeadMaster::find()->joinWith(['benefits', 'disciplines', 'specialty', 'branch'])->where(['lead_master.status' => LeadMaster::STATUS_APPROVED]);
         $query->groupBy(['lead_master.id']);
         $query->orderBy(['lead_master.created_at' => SORT_DESC]);

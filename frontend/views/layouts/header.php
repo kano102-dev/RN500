@@ -68,13 +68,24 @@ $frontendDir = yii\helpers\Url::base(true);
                             </li>
                             <li class="<?= $controller == 'site' && $action == 'about-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("site/about-us"); ?>">About us</a></li>
                             <li class="<?= $controller == 'site' && $action == 'contact-us' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("site/contact-us"); ?>">Contact</a></li>
+                            <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
+                                <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>">Admin Panel</a></li>
+                            <?php } ?>
                             <li class="<?= $controller == 'browse-jobs' && $action == 'index' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs"); ?>">Browse Jobs</a></li>
-
-                            <?php if (CommonFunction::isRecruiter()) { ?>
-                                <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
+                            <?php if (isset(Yii::$app->user->identity)) { ?>
+                                <li class="dropdown  <?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : $controller == 'leads-received' && $action == 'index' ? $activeClass : '' ?>"><a href="#.">Leads <span class="caret"></span></a> 
+                                    <!-- dropdown start -->
+                                    <ul class="dropdown-menu">
+                                        <?php if (CommonFunction::isRecruiter()) { ?>
+                                            <li class="<?= $controller == 'browse-jobs' && $action == 'recruiter-lead' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("browse-jobs/recruiter-lead"); ?>">Recruiter Leads</a></li>
+                                        <?php } ?>
+                                        <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
+                                            <li class="<?= $controller == 'leads-received' && $action == 'leads-received' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("leads-received/index"); ?>">Applications Received</a></li>
+                                        <?php } ?>
+                                    </ul>
+                                </li>
                             <?php } ?>
                             <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                <li class="<?= $controller == 'leads-received' && $action == 'leads-received' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("leads-received/index"); ?>">Applications Received</a></li>
                                 <li class="<?= $controller == 'job' && $action == 'post' ? $activeClass : '' ?> postjob"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("job/post"); ?>">Post a job</a></li>
                             <?php } ?>
 
@@ -86,12 +97,9 @@ $frontendDir = yii\helpers\Url::base(true);
                                             <img src="<?= $frontendDir . "/uploads/user-details/profile/" . Yii::$app->user->identity->details->profile_pic ?>" alt="" class="userimg" />
                                         <?php } else { ?>
                                             <img src="<?= $assetDir ?>/images/profile.png" alt="" class="userimg" />
-                                        <?php } ?>    
+                                        <?php } ?>  
                                     </a>
                                     <ul class="dropdown-menu">
-                                        <?php if (CommonFunction::isEmployer() || CommonFunction::isRecruiter()) { ?>
-                                            <li><a href="<?= Yii::$app->urlManagerAdmin->createUrl('site/') ?>"><i class="fa fa-tachometer" aria-hidden="true"></i> Admin Panel</a></li>
-                                        <?php } ?>
                                         <li class="<?= $controller == 'site' && $action == 'job-seeker' ? $activeClass : '' ?>"><a href="<?= CommonFunction::isJobSeeker() ? Yii::$app->urlManagerFrontend->createUrl("/site/job-seeker/") : Yii::$app->urlManagerFrontend->createUrl(["user-details/profile", 'id' => Yii::$app->user->identity->id]); ?>"><i class="fa fa-user" aria-hidden="true"></i> Profile</a></li>
                                         <li class="<?= $controller == 'auth' && $action == 'change-password' ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/change-password"); ?>"><i class="fa fa-lock" aria-hidden="true"></i> Change Password</a></li>
                                         <?php if (CommonFunction::isJobSeeker()) { ?>

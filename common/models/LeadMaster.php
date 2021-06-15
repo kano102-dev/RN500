@@ -35,6 +35,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     public $disciplines;
     public $benefits;
     public $specialies;
+    public $emergency;
     public $state;
 
     const STATUS_PENDING = 0;
@@ -64,7 +65,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
 //            [['street_no'], 'match', 'pattern' => '/^([0-9])?$/', 'message' => 'Please enter a digit numeric for {attribute}.'],
             [['comment', 'visible_to'], 'safe', 'on' => 'approve'],
             [['price'], 'required', 'on' => 'approve'],
-            [['approved_at', 'branch_id','state' ,'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date'], 'safe'],
+            [['approved_at', 'branch_id','state' ,'comment', 'disciplines', 'benefits', 'specialies', 'end_date', 'start_date','emergency'], 'safe'],
         ];
     }
 
@@ -75,7 +76,7 @@ class LeadMaster extends \yii\db\ActiveRecord {
     }
 
     /**
-     * {@inheritdoc}
+     * {@inhxeritdoc}
      */
     public function attributeLabels() {
         return [
@@ -126,6 +127,10 @@ class LeadMaster extends \yii\db\ActiveRecord {
 
     public function getSpecialty() {
         return $this->hasMany(LeadSpeciality::className(), ['lead_id' => 'id']);
+    }
+    
+    public function getEmergency() {
+        return $this->hasMany(LeadEmergency::className(), ['lead_id' => 'id']);
     }
 
     public function getBranch() {
