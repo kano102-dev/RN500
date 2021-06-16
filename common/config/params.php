@@ -29,5 +29,6 @@ return [
     'PAGE_LENGTH' => 10,
     'ADS_FILE_TYPE'=> [1 => 'Image', 2 => 'Youtube Url'],
     'ADVERTISMENT_IS_ACTIVE_STATUS' => [1 => 'Yes', 2 => 'No'],
-    'EMERGENCY_IS_ACTIVE_STATUS' => [0 => 'Inactive', 1 => 'Active']
+    'EMERGENCY_IS_ACTIVE_STATUS' => [0 => 'Inactive', 1 => 'Active'],
+    'JOB_SEEKER_DOCUMENT_TYPE' => [0 => 'Resume', 1 => 'Other'],
 ];

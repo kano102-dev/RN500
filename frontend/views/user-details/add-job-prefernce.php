@@ -91,10 +91,13 @@ $(document).on("beforeSubmit", "#add-job-preference", function () {
                  try{
                      if(!response.error){
                          $("#profile-modal").modal('hide');
-                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                         $(document).on("pjax:success", "#job-seeker", function (event) {
-                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
-                         });
+                         $.pjax.reload({container: "#job-seeker", timeout: false, async:false});
+                         $.pjax.reload({'container': '#res-messages', timeout: false, async:false});
+        
+//                         $.pjax.reload({container: "#job-seeker", timeout: 2000});
+//                         $(document).on("pjax:success", "#job-seeker", function (event) {
+//                             $.pjax.reload({'container': '#res-messages', timeout: 2000});
+//                         });
                          getProfilePercentage();
                      }
                  }catch(e){
