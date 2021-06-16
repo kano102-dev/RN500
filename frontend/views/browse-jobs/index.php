@@ -370,7 +370,7 @@ getEmergencyRecords();
                 $("#optionlist-emergency").html(data.options)
                 let nextPage=parseInt(data.offset);
                 if(data.options != ''){
-                    $("#emergency-widget").append("<a href='javascript:void(0)' id='speciality-viewmore' onClick='getSpecialtyRecords("+nextPage+")'>View More</a>")
+                    $("#emergency-widget").append("<a href='javascript:void(0)' id='emergency-viewmore' onClick='getEmergencyRecords("+nextPage+")'>View More</a>")
                 }
             }else{
                $("#optionlist-emergency").append(data.options);

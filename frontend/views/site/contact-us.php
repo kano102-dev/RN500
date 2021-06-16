@@ -52,7 +52,7 @@ use yii\bootstrap4\ActiveForm;
                     <p>Phone: +1 123 – 456 – 7890</p>
                     <p>Email : <a href="mailto:info@RN500.com">info@RN500.com</a></p><br/>
                 </div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3345.2557187294674!2d-96.71805198481168!3d33.02339278089834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864c18fac042213b%3A0x5f0bc25bf162dadc!2s1700%20Alma%20Dr%20%23200%2C%20Plano%2C%20TX%2075075!5e0!3m2!1sen!2sus!4v1608812203114!5m2!1sen!2sus" width="100%" class="wp_cont_map" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3580.8662982361125!2d-80.10120853501806!3d26.168483483453706!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88d901fe31a55947%3A0x86cafcd957a8660e!2s3100%20N%20Ocean%20Blvd%2C%20Fort%20Lauderdale%2C%20FL%2033308%2C%20USA!5e0!3m2!1sen!2sin!4v1623780628609!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </div>

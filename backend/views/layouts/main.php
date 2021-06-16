@@ -62,6 +62,8 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         ?>
 
         <script src="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.js"></script>
+        
+<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     </body>
 </html>
 <?php $this->endPage() ?>

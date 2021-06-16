@@ -17,6 +17,8 @@ use common\models\LeadDiscipline;
 use common\models\LeadBenefit;
 use common\models\LeadSpeciality;
 use common\models\Cities;
+use common\models\Emergency;
+use common\models\LeadEmergency;
 
 /**
  * Site controller
@@ -55,6 +57,7 @@ class JobController extends Controller {
         $disciplineList = ArrayHelper::map(Discipline::getAllDiscipline(), 'id', 'name');
         $benefitList = ArrayHelper::map(Benefits::getAllBenefits(), 'id', 'name');
         $specialiesList = ArrayHelper::map(Speciality::getAllSpecialities(), 'id', 'name');
+        $emergencyList = ArrayHelper::map(Emergency::getAllEmergency(), 'id', 'name');
         $branchList = ArrayHelper::map(CompanyBranch::getAllBranchesOfLoggedInUser(), 'id', 'branch_name');
         $states = ArrayHelper::map(\common\models\States::find()->where(['country_id' => 226])->all(), 'id', 'state');
         $cities = [];
@@ -113,6 +116,16 @@ class JobController extends Controller {
                             $leadSpeciality->save();
                         }
                     }
+                    
+                    if (isset($model->emergency) && !empty($model->emergency)) {
+                        foreach ($model->emergency as $key => $emergency_id) {
+                            $leadEmergency = new LeadEmergency();
+                            $leadEmergency->lead_id = $lead_id;
+                            $leadEmergency->emergency_id = $emergency_id;
+                            $leadEmergency->save();
+                        }
+                    }
+                    
                     $transaction->commit();
                     Yii::$app->session->setFlash("success", "Job Posted Successfully.");
                 }
@@ -126,7 +139,7 @@ class JobController extends Controller {
         return $this->render('post', [
                     'model' => $model,
                     'disciplinesList' => $disciplineList,
-                    'benefitList' => $benefitList,
+                    'benefitList' => $benefitList, 'emergencyList' => $emergencyList,
                     'specialiesList' => $specialiesList, 'cities' => $cities,
                     'branchList' => $branchList, 'states' => $states,
         ]);
