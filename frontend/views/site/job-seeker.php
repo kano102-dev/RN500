@@ -9,7 +9,6 @@ use yii\widgets\Pjax;
 use common\CommonFunction;
 use common\models\UserDetails;
 
-$document_type = [0 => 'Resume', 1 => 'Other'];
 $assetDir = Yii::$app->assetManager->getPublishedUrl('@themes/jobs-portal');
 $frontendDir = yii\helpers\Url::base(true);
 ?>
@@ -68,11 +67,11 @@ $frontendDir = yii\helpers\Url::base(true);
                                             <div class="location"><?= Yii::$app->user->identity->email ?></div>
                                             <?php if (isset($userDetails->interest_level) && !empty($userDetails->interest_level)) { ?>
                                                 <?php if ($userDetails->interest_level == UserDetails::ACTIVELY_LOOKING) { ?>
-                                                    <p class="interest_level actively_looking"> Actively Looking</p>
+                                                    <p class="interest_level search_on_hold"> Actively Looking</p>
                                                 <?php } else if ($userDetails->interest_level == UserDetails::OPEN_TO_OFFERS) { ?>
-                                                    <p class="interest_level open_to_offers"> Open To Offers</p>
+                                                    <p class="interest_level  actively_looking"> Open To Offers</p>
                                                 <?php } else { ?>
-                                                    <p class="interest_level search_on_hold"> Search On Hold</p>
+                                                    <p class="interest_level  open_to_offers"> Search On Hold</p>
                                                 <?php } ?>
                                             <?php } ?>
                                             
@@ -312,7 +311,7 @@ $frontendDir = yii\helpers\Url::base(true);
                                             <div class="content">
                                                 <div class="row">
                                                     <div class="col-sm-8 col-xs-9">
-                                                        <h4><?= $document_type[$value['document_type']] ?></h4>
+                                                        <h4><?= Yii::$app->params['JOB_SEEKER_DOCUMENT_TYPE'][$value['document_type']] ?></h4>
 
                                                         <?php if (file_exists(CommonFunction::getDocumentBasePath() . "/" . $value['path'])) { ?>
                                                             <p><?= $value['path'] ?></p>
