@@ -6,6 +6,7 @@ use yii\helpers\Html;
 use backend\assets\FontAwesomeAsset;
 use backend\assets\AdminLteAsset;
 use backend\assets\AppAsset;
+use yii\helpers\Url;
 
 AdminLteAsset::register($this);
 FontAwesomeAsset::register($this);
@@ -63,7 +64,6 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
 
         <script src="<?php echo $assetThemeDir ?>/plugins/toastr/toastr.min.js"></script>
         
-<script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
     </body>
 </html>
 <?php $this->endPage() ?>
@@ -75,3 +75,17 @@ $assetThemeDir = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010
         padding: 10px !important;
     }
 </style>
+
+<div id="loaderContainer" style="display:none">
+    <img src="<?php echo Url::to(['/images/backend-loader.gif'], true) ?>" width="50px">
+</div>
+
+<script>
+    $(document).bind("ajaxStart.mine", function () {
+        $('#loaderContainer').show();
+
+    });
+    $(document).bind("ajaxStop.mine", function () {
+        $('#loaderContainer').hide();
+    });
+</script>

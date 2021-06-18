@@ -70,7 +70,6 @@ $(document).ready(function() {
         if (form.find('.has-error').length > 0) { 
             return false;
         } else {
-        
             var ajaxRequest= $.post(form.attr('action'), form.serialize(), function(data) {
             console.log('****data***',data);
             }).always(function() {
