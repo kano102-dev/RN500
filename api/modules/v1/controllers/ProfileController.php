@@ -69,6 +69,11 @@ class ProfileController extends Controller {
                 $certification_active_startus[] = ['value' => (string) $value, 'text' => $text];
             }
 
+            $interest_levels = [];
+            foreach (Yii::$app->params['INTERESTS_LEVEL'] as $value => $text) {
+                $interest_levels[] = ['value' => (string) $value, 'text' => $text];
+            }
+
             $data['document_type'] = $documents_type;
             $data['employment_type'] = $employment_type;
             $data['licenses_type'] = $licenses_type;
@@ -76,6 +81,7 @@ class ProfileController extends Controller {
             $data['references_type'] = $references_type;
             $data['degree_type'] = $degree_type;
             $data['certification_active_startus'] = $certification_active_startus;
+            $data['interest_levels'] = $interest_levels;
             $code = 200;
             $msg = "success!!";
         } catch (\Exception $exc) {
@@ -107,7 +113,7 @@ class ProfileController extends Controller {
                 $aboutYou['email'] = (isset($model->user->email) && $model->user->email != "") ? $model->user->email : "";
                 $aboutYou['mobile_no'] = ($model->mobile_no) ? $model->mobile_no : "";
                 $aboutYou['ssn'] = ($model->ssn) ? (string) $model->ssn : "";
-                $aboutYou['interest_level'] =  ($model->interest_level) ? (string) $model->interest_level : '';
+                $aboutYou['interest_level'] = ($model->interest_level) ? (string) $model->interest_level : '';
                 $aboutYou['interest_level_text'] = (isset(Yii::$app->params['INTERESTS_LEVEL'][$model->interest_level])) ? Yii::$app->params['INTERESTS_LEVEL'][$model->interest_level] : '';
                 $aboutYou['profile_pic'] = ($model->profile_pic) ? $model->profile_pic : "";
                 $aboutYou['profile_pic_url'] = ($model->profile_pic_url) ? $model->profile_pic_url : "";
@@ -229,7 +235,7 @@ class ProfileController extends Controller {
                 $data['city_name'] = $model->getCityStateName();
                 $data['ssn'] = ($model->ssn) ? (string) $model->ssn : "";
                 $data['dob'] = ($model->dob) ? $model->dob : "";
-                $data['interest_level'] =  ($model->interest_level) ? (string) $model->interest_level : '';
+                $data['interest_level'] = ($model->interest_level) ? (string) $model->interest_level : '';
                 $data['interest_level_text'] = (isset(Yii::$app->params['INTERESTS_LEVEL'][$model->interest_level])) ? Yii::$app->params['INTERESTS_LEVEL'][$model->interest_level] : '';
                 $data['profile_pic'] = ($model->profile_pic) ? $model->profile_pic : "";
                 $data['profile_pic_url'] = ($model->profile_pic_url) ? $model->profile_pic_url : "";
@@ -294,7 +300,7 @@ class ProfileController extends Controller {
                 }
 
                 if (!$fileUploadingError) {
-                    if ($first_name != "" && $last_name != "" && $street_no && $street_address) {
+                    if ($first_name != "" && $last_name != "" && $street_no != "" && $street_address != "" && $mobile_no != "") {
                         $model->first_name = ($first_name != '') ? $first_name : null;
                         $model->last_name = ($last_name != '') ? $last_name : null;
                         $model->mobile_no = ($mobile_no != '') ? $mobile_no : null;
@@ -314,7 +320,7 @@ class ProfileController extends Controller {
                         }
                     } else {
                         $code = 202;
-                        $msg = "Required Data Missing in Request : first_name, last_name, street_no or street_name";
+                        $msg = "Required Data Missing in Request : first_name, last_name, street_no, street_name or mobile_no";
                     }
                 } else {
                     $code = 203;
@@ -449,7 +455,7 @@ class ProfileController extends Controller {
                     exit;
                 }
             }
-            if (isset($discipline_id) && $discipline_id != '' && isset($specialty) && $specialty != '' && isset($employment_type) && $employment_type != '' && isset($start_date) && $start_date != '' && isset($end_date)) {
+            if (isset($title) && $title != '' && isset($discipline_id) && $discipline_id != '' && isset($specialty) && $specialty != '' && isset($employment_type) && $employment_type != '' && isset($start_date) && $start_date != '' && isset($end_date)) {
                 $model->setAttributes($request);
                 $model->start_date = date('Y-m-d', strtotime($start_date));
                 $model->end_date = (isset($currently_working) && $currently_working == "1" ) ? null : ($end_date) ? date('Y-m-d', strtotime($end_date)) : null;
@@ -462,7 +468,7 @@ class ProfileController extends Controller {
                 }
             } else {
                 $code = 201;
-                $msg = "Missing parameters : discipline_id, specialty, employment_type, start_date or end_date ";
+                $msg = "Missing parameters : title, discipline_id, specialty, employment_type, start_date or end_date ";
             }
         } catch (\Exception $exc) {
             $code = 500;
@@ -930,7 +936,7 @@ class ProfileController extends Controller {
             $model->user_id = $loggedInUserId;
 
             // IF DOCUMENT WAS UPLOADED
-            if (isset($_FILES['document_file']['name']) && !empty($_FILES['document_file']['name'])) {
+            if (isset($_FILES['document_file']['name']) && !empty($_FILES['document_file']['name']) && isset($document_type) && $document_type) {
 
                 // PREVENT FILE UPLOAD SIZE UPTO 2 MB AND TYPE MUST BE OF PNG, JPG
                 $upoadingFile = $_FILES['document_file'];

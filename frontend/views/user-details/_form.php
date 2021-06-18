@@ -167,10 +167,13 @@ $(document).on("beforeSubmit", "#user-details", function () {
                 try{
                     if(!response.error){
                         $("#commonModal").modal('hide');
-                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
-                        $(document).on("pjax:success", "#job-seeker", function (event) {
-                            $.pjax.reload({'container': '#res-messages', timeout: false});
-                        });
+        
+                        $.pjax.reload({container: "#job-seeker", timeout: false, async:false});
+                        $.pjax.reload({'container': '#res-messages', timeout: false, async:false});    
+//                        $.pjax.reload({container: "#job-seeker", timeout: 2000});
+//                        $(document).on("pjax:success", "#job-seeker", function (event) {
+//                            $.pjax.reload({'container': '#res-messages', timeout: false});
+//                        });
                         getProfilePercentage();
                     }
                 }catch(e){

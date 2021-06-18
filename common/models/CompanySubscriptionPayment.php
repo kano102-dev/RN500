@@ -15,37 +15,37 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class CompanySubscriptionPayment extends \yii\db\ActiveRecord
-{
-    const STATUS_PENDING=0;
-    const STATUS_SUCCESS=1;
-    const STATUS_Fail=2;
-    
+class CompanySubscriptionPayment extends \yii\db\ActiveRecord {
+
+    const STATUS_PENDING = 0;
+    const STATUS_SUCCESS = 1;
+    const STATUS_Fail = 2;
+//  FOR IS FREE
+    const IS_FREE_YES = 1;
+    const IS_FREE_NO = 0;
+
     /**
      * {@inheritdoc}
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'company_subscription_payment';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
+    public function rules() {
         return [
-            [['subscription_id', 'amount', 'created_at', 'updated_at'], 'required'],
-            [['subscription_id', 'amount', 'lead_id', 'created_at', 'updated_at'], 'integer'],
-            [['payment_response','customer_transaction_id','status','is_free'], 'safe'],
+                [['subscription_id', 'amount', 'created_at', 'updated_at'], 'required'],
+                [['subscription_id', 'amount', 'lead_id', 'created_at', 'updated_at'], 'integer'],
+                [['payment_response', 'customer_transaction_id', 'status', 'is_free'], 'safe'],
         ];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
             'subscription_id' => 'Subscription ID',
@@ -58,4 +58,5 @@ class CompanySubscriptionPayment extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
         ];
     }
+
 }
