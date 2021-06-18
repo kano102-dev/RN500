@@ -133,12 +133,25 @@ $action = Yii::$app->controller->action->id;
                         'visible' => isset(Yii::$app->user->identity) ? CommonFunction::checkAccess('emergency-create', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-update', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-delete', Yii::$app->user->identity->id) || CommonFunction::checkAccess('emergency-view', Yii::$app->user->identity->id) : false
                     ],
                         [
-                        'label' => 'Report-Lead Referral',
-                        'url' => ['/report/lead-referral'],
+                        'label' => 'Report',
                         'icon' => 'book',
-                        'active' => ($controller == "reports"),
-                        'visible' => (isset(Yii::$app->user->id)) ? true : false
-                            
+                        'active' => ($controller == "report"),
+                        'items' => [
+                                [
+                                'label' => 'Lead Referral',
+                                'url' => ['/report/lead-referral'],
+                                'icon' => 'book',
+                                'active' => ($controller == "report" && $action == "lead-referral"),
+                                'visible' => (isset(Yii::$app->user->id)) ? true : false
+                            ],
+                                [
+                                'label' => 'Payment Report',
+                                'url' => ['/report/payment'],
+                                'icon' => 'book',
+                                'active' => ($controller == "report" && $action == "payment"),
+                                'visible' => (isset(Yii::$app->user->id)) ? true : false
+                            ]
+                        ]
                     ],
                 ],
             ]);

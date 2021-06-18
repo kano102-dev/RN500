@@ -13,10 +13,10 @@ use yii\helpers\Url;
         <div class="col-12">
             <?php
             $form = ActiveForm::begin([
-                        'id' => 'referral_filter_form',
+                        'id' => 'payment_form',
                         'options' => ['autocomplete' => 'off'],
                         'class' => 'form-horizontal',
-                        'action' => Url::to(['report/lead-referral-load'], true)
+                        'action' => Url::to(['report/payment-load'], true)
             ]);
             ?>
 
@@ -65,7 +65,7 @@ use yii\helpers\Url;
             <hr/>
 
             <div class="table table-responsive pt-3 report-result-height" >
-                <table class="table table-striped table-bordered" id="tbl_lead_referral" >
+                <table class="table table-striped table-bordered" id="tbl_payment" >
 
                 </table>
             </div>
@@ -78,7 +78,7 @@ $file_name = 'lead_referral_' . date('Y-m-d') . '.xls';
 
 $script_new = <<<JS
     $("#btn-export").click(function() {
-        $("#tbl_lead_referral").table2excel({
+        $("#tbl_payment").table2excel({
             exclude: ".excludeThisClass",
             name: "Worksheet Name",
             filename: "$file_name", // do include extension
@@ -86,7 +86,7 @@ $script_new = <<<JS
         })
     })
 
-    $(document).off('submit').on('submit','form#referral_filter_form',function(e){
+    $(document).off('submit').on('submit','form#payment_form',function(e){
         e.preventDefault();
         e.returnValue = false;
         var form = $(this);
@@ -94,12 +94,12 @@ $script_new = <<<JS
             return false;
         } else {
             $.post(form.attr('action'), form.serialize(), function(data) {
-                $('#tbl_lead_referral').html(data);
+                $('#tbl_payment').html(data);
             }).always(function() {
             });
         }
     })
-    $('form#referral_filter_form').submit();
+    $('form#payment_form').submit();
 JS;
 $this->registerJS($script_new, 3);
 ?>

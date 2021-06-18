@@ -1,0 +1,9 @@
+/*FOR LOADER*/
+#loaderContainer {position: fixed;z-index: 9999;height: 2em;width: 2em;overflow: show;margin: auto;top: 0;left: 0;bottom: 0;right: 0;}
+#loaderContainer:before {content: '';display: block;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0.3);}
+#loaderContainer img{position: absolute;z-index: 99;transform: translate(-50%,-50%);}
+/*FOR LOADER END*/
+
+.report-result-height {max-height: 400px; }
+.report-result-height thead { background: white;position: sticky; top: -15px; }
+.report-result-height thead th {vertical-align: top }
