@@ -35,7 +35,7 @@ $frontendDir = yii\helpers\Url::base(true);
     #overlay:before {content: '';display: block;position: fixed;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(0,0,0,0.3);}
     #overlay img{position: absolute;z-index: 99;transform: translate(-50%,-50%);}
     .loading{height: 0;width: 0;padding: 15px;border: 6px solid #fff;border-right-color: #1c4599;border-radius: 22px;z-index: 99;-webkit-animation: rotate 1s infinite linear;}
-    .user-name{position: absolute;top: 15px;right: 17.5%;}
+    .user-name{padding-top: 8px !important;margin-left: -20px;}
     @-webkit-keyframes rotate {
         /* 100% keyframe for  clockwise. 
            use 0% instead for anticlockwise */
@@ -43,9 +43,7 @@ $frontendDir = yii\helpers\Url::base(true);
             -webkit-transform: rotate(360deg);
         }
     }
-    @media (max-width:767px){
-        .top-content{display: none}
-    }
+    
 </style>
 
 <div class="header">
@@ -109,6 +107,8 @@ $frontendDir = yii\helpers\Url::base(true);
                                         <li><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/logout"); ?>"><i class="fa fa-sign-out" aria-hidden="true"></i> Logout</a></li>
                                     </ul>
                                 </li>
+                                
+                                <li class="dropdown userbtn user-name new-dropdown-menu"><a href="javascript:void(0);"><?= Yii::$app->user->identity->fullName ?></a></li>
 
                             <?php } else { ?>
                                 <li class="<?= $controller == 'auth' && ($action == 'login' || $action == 'register' || $action == 'request-password-reset') ? $activeClass : '' ?>"><a href="<?= Yii::$app->urlManagerFrontend->createUrl("/auth/login"); ?>">Sign In / Sign Up</a></li>
@@ -123,10 +123,6 @@ $frontendDir = yii\helpers\Url::base(true);
         </div>
         <!-- row end --> 
     </div>
-    <?php if (!empty(Yii::$app->user->identity)) { ?>  
-    <div class="user-name">
-        <p><?= Yii::$app->user->identity->fullName ?></p>
-    </div>
-    <?php } ?>
+    
     <!-- Header container end --> 
 </div>
