@@ -12,7 +12,7 @@ a,a:hover{text-decoration: none;transition: all 0.3s ease-in;}
 .social-media a:hover path{fill: black;transition:  all 0.3s ease;}
 
 .navbar{padding: .657rem 1rem;}
-.navbar-dark .navbar-nav .nav-link {color: #232731;font-weight: 500;position: relative;padding: .5rem 0rem;margin: .5rem .7rem;}
+.navbar-dark .navbar-nav .nav-link {color: #232731;font-weight: 500;position: relative;padding: .5rem 0rem;margin: .5rem .7rem;font-size: 14px;}
 .navbar-dark .navbar-nav .nav-link:focus, .navbar-dark .navbar-nav .nav-link:hover{color: #1656A0;}
 .nav-item .nav-link::before {
     position: absolute;content: '';display: inline-block;width: 0%;height: 2px;border-radius: 50px;background-color: #1656A0;bottom: 0;left: 0;right: 0;transition: 0.3s ease;
@@ -32,7 +32,7 @@ nav .readmore{padding: 10px 26px !important}
     bottom: 0;left: 0;right:0;margin: 0 auto;transition: 0.3s ease;width: 30px;
 }
 .nav-item .btn-primary,.nav-item .btn-primary:focus,.btn-primary:not(:disabled):not(.disabled):active,.btn-primary:not(:disabled):not(.disabled):active:focus{
-    background-color: #1656A0;border-color: #1656A0;color: #ffffff;font-weight: 600;box-shadow: none;border-radius: 30px;
+    background-color: #1656A0;border-color: #1656A0;color: #ffffff;font-weight: 600;box-shadow: none;border-radius: 30px;font-size: 14px;
 }
 .nav-item .btn-primary:hover,.nav-item .btn-primary:focus,.nav-item .btn-primary:not(:disabled):not(.disabled):active{
     background-color: #ffffff;color: #232731;border-color: #232731;
@@ -69,9 +69,10 @@ section{padding: 80px 0;}
 .jobs-details p{font-size: 14px;color: #8C97AC;}
 .jobs-details h3{font-size: 18px;color: #1D293F;font-weight: 400;min-height: 42px;}
 .jobs-details small{margin-bottom: 10px;display: block;}
-.jobs-details .badge{font-weight: 400;padding: 6px 12px;}
-.jobs-details .badge-warning{background: rgba(243, 165, 35, 0.1);border-radius: 5px;color: #F5A623;}
-.jobs-details .badge-success{background: rgba(15, 188, 73, 0.1);border-radius: 5px;color: #0FBC49;}
+.jobs-details .badge:not(:last-child),.job-d .badge:not(:last-child){margin-right: 8px;}
+.jobs-details .badge,.job-d .badge{font-weight: 400;padding: 6px 12px;font-size: 12px;}
+.jobs-details .badge-warning,.job-d .badge-warning{background: rgba(243, 165, 35, 0.1);border-radius: 5px;color: #F5A623;}
+.jobs-details  .badge-success,.job-d .badge-success{background: rgba(15, 188, 73, 0.1);border-radius: 5px;color: #0FBC49;}
 .rating{padding: 12px 20px;background: #F6F9FE;}
 .rating p{font-size: 14px;color: #65686F;}
 
@@ -111,7 +112,9 @@ section{padding: 80px 0;}
 .contact-us-shape{background: url(../img/contact-us-shape.png);background-size: cover;height: 530px;}
 .contact-us-shape .main-title{padding-top: 30px;}
 .contact-us-shape .main-title p,.contact-us-shape .main-title a{color: #182637;font-size: 16px;font-weight: 400;}
-.contact-block{background:#1656A0;padding: 10px;;border-radius: 8px;max-width: 400px;}
+.contact-us-shape .media{padding: 10px}
+.contact-us-shape .media:hover{background:#1656A0;border-radius: 8px;max-width: 400px;transition: all 0.3s ease-in;}
+.contact-us-shape .media:hover a,.contact-us-shape .media:hover p,.contact-us-shape .media:hover path{color: #ffffff !important;fill: #ffffff;}
 .contact-block a{color: #ffffff !important;font-weight: 600;}
 .contact-form-block{background: #FFFFFF;border: 1px solid #B6CEEA;border-radius: 20px;padding: 44px 32px 20px;}
 .contact-form-block label{margin-bottom: 0;color: rgb(90 113 132 / 75%);}
@@ -122,13 +125,49 @@ section{padding: 80px 0;}
 .contact-form-block .read-more:hover{background: transparent;border: 1px solid #1656A0;color: #1656A0;;}
 iframe{border-radius: 20px;}
 
+.browse-search .filter-block{box-shadow: 0px 2px 23px rgba(176, 170, 170, 0.14);}
+.browse-search .form-group{margin-bottom: 0;}
+.job-details{background: #ffffff;margin-bottom: 15px;}
+.title-location{padding: 20px;border-bottom: 1px solid #CCCCCC;}
+.job-details .job-title{font-size: 18px;font-weight: 600;color: #1D293F;}
+.job-d{font-size: 14px;font-weight: 500;color: rgb(35 39 49 / 70%);}
+.job-d .small-text{font-weight: 400 ;}
+.job-details .rating{background: #EDEDED;border-radius: 0px 0px 10px 10px;padding: 10px 20px;}
+.job-details .rating .read-more{background: #1656A0;border: 1px solid #1656A0;border-radius: 38px;color: #ffffff;font-size: 14px;}
+.job-details .rating .read-more:hover {background: transparent;border: 1px solid #1656A0;color: #1656A0;}
+
+.filter-accordion .card-header {border-radius: 20px !important;border-bottom:0px solid #B6CEEA;padding: .75rem 2rem .75rem 1.25rem;position: relative;}
+.filter-accordion .card{margin-bottom: 30px;border: 1px solid #B6CEEA;border-radius: 20px!important;}
+.filter-accordion .card-header a{font-size: 18px;color: #232731;font-weight: 600;}
+.filter-accordion  a:before {
+   content: url(../img/up-arrow.png);position: absolute;right: 19px;top: 46%;transform: translate(-50%, -50%);
+}
+.filter-accordion  a.collapsed:before {
+    content: url(../img/down-arrow.png);
+}
+.filter-accordion .card-body{max-height: 420px;overflow: auto;}
+.filter-accordion .form-group {display: block;margin-bottom: 15px;}
+.filter-accordion .form-group:last-child{margin-bottom: 0px;}
+.filter-accordion .form-group input {padding: 0;height: initial;width: initial;margin-bottom: 0;display: none;cursor: pointer;}
+.filter-accordion .form-group label {position: relative;cursor: pointer;margin-bottom: 0;font-size: 14px;}
+.filter-accordion .form-group label:before {
+    content:'';-webkit-appearance: none;background-color: transparent;border: 1px solid #2E2842;border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+    padding: 10px;display: inline-block;position: relative;vertical-align: middle;cursor: pointer;margin-right: 12px;
+}
+  .filter-accordion .form-group input:checked + label:after {
+      content: '';display: block;position: absolute;top: 4px;left: 9px;width: 5px;height: 10px;border: solid #0FBC49;
+      border-width: 0 1px 1px 0;transform: rotate(45deg);
+}
+.filter-accordion .form-group input:checked + label:before{border: 1px solid #0FBC49;}
+.filter-accordion .view-more{color: #46AEE0;font-weight: 600;}
 
 footer{background: #1D293F;padding: 80px 0 20px;font-size:14px;}
 footer p{color: rgb(215 216 216 / 50%);line-height: 28px;}
 footer h3{font-size: 18px;color: #ffffff;font-weight: 600;}
 footer ul li{color: rgb(233 247 254 / 50%);margin-bottom: 16px;font-weight: 400;}
 footer ul li a{color: rgb(233 247 254 / 50%);}
-footer .media,.contact-us-shape .media{-ms-flex-align: center;align-items: center;}
+footer .media,.contact-us-shape .media,.title-location .media{-ms-flex-align: center;align-items: center;}
 footer .media a{color: rgb(233 247 254 / 50%)}
 footer hr{border-top: 1px solid #8C97AC;}
 
@@ -144,6 +183,7 @@ footer hr{border-top: 1px solid #8C97AC;}
     .the-rn-app p{font-size: 14px;}
     .the-rn-app img{width: 150px;}
     .inner-banner{padding: 150px 0px 80px;}
+    .filter-block .form-control{font-size: 14px;}
 }
 @media only screen and (max-width: 1199px) and (min-width: 991px)  {
     
@@ -156,15 +196,19 @@ footer hr{border-top: 1px solid #8C97AC;}
 }
 @media (max-width: 767px){
     body{font-size: 14px;}
+    .main-banner {height: auto}
     .filter-block .d-flex{display: block !important;}
-    .filter-block .form-control,.filter-block .full-width{width: 100%;height: calc(2em + .75rem + 2px);border-right:0}
+    .browse-search .filter-block .form-control,.browse-search .filter-block .form-control{border: 2px dashed #E2E4E8;border-right:2px dashed #E2E4E8 !important;}
+    .filter-block .form-control,.filter-block .full-width{width: 100%;margin-right: 0;border: 0;}
     section {padding: 50px 0;}
     .main-title h2 {font-size: 26px;}
     .popular-searches li{font-size: 14px;}
-    .cta .text-right {
-        text-align: left!important;
-        margin-top: 20px;
-    }
+    .cta .text-right {text-align: left!important;margin-top: 20px;}
+    .browse-search .form-group{margin-bottom: 10px;}
+}
+@media (max-width: 575px){
+    .job-d .text-right {text-align: left!important;}
+    .job-d .text-right .read-more{margin-top: 16px;}
 }
 @media (max-width: 350px){
     .the-rn-app img{margin-bottom: 16px;}
