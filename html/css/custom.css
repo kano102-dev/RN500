@@ -59,7 +59,7 @@ nav .readmore{padding: 10px 26px !important}
 .signin-form h1{font-size: 36px;color: #253858;font-weight: 600;}
 .signin-form p{color: #5D6A83;font-size: 14px;}
 .signin-form .form-control{background: #FFFFFF;border: 1px solid #C4C4C4;border-radius: 6px;width: 100%;height: 56px;padding: .375rem 2rem;box-shadow: none;}
-.signin-form a{color: #5D6A83;font-weight: 500;font-size: 14px;}
+.signin-form a{color: #1656A0;font-weight: 600;font-size: 14px;}
 .create-link p{color: #5D6A83;font-weight: 500;}
 .create-link a{color: #1656A0;font-weight: 600;}
 .otp-text a{font-weight: 600;}
@@ -67,8 +67,8 @@ nav .readmore{padding: 10px 26px !important}
 .otp .form-control{padding: .375rem .75rem;text-align: center;}
 
 .signup{margin: 0;margin-top: 90px;align-items: unset;justify-content: unset;max-width: unset;}
-.signup .nav-tabs .nav-item.show .nav-link,.signup  .nav-tabs .nav-link.active{border: 0;border-bottom: 2px solid #2775B7;}
-.signup .nav-tabs .nav-link{border-bottom: 2px solid transparent;border: 0px;}
+.signup .nav-tabs .nav-item.show .nav-link,.signup  .nav-tabs .nav-link.active{border: 0;border-bottom: 2px solid #2775B7;color: #2775B7;}
+.signup .nav-tabs .nav-link{border-bottom: 2px solid transparent;border: 0px;color: #253858;}
 .nav-tabs .nav-link:focus, .nav-tabs .nav-link:hover{border-top: 0;border-right: 0;border-left: 0}
 .signup .nav-tabs {border-bottom: 2px solid #B6CEEA;}
 .jobseeker{max-width: 510px;}
@@ -157,8 +157,8 @@ section{padding: 80px 0;}
 .contact-form-block .form-control {border: 0;border-bottom: 1px solid #B6CEEA;height: calc(0.5em + .75rem + 2px);border-radius: 0;box-shadow: none;padding: 0;}
 .contact-form-block textarea {height: auto !important;resize: none;}
 .contact-form-block .form-group {margin-bottom: 1.5rem;}
-.contact-form-block .read-more,.job-details .rating .read-more,.signin-form .read-more{background: #1656A0;border: 1px solid #1656A0;border-radius: 38px;color: #ffffff;font-size: 14px;}
-.contact-form-block .read-more:hover,.job-details .rating .read-more:hover,.signin-form .read-more:hover{background: transparent;border: 1px solid #1656A0;color: #1656A0;;}
+.contact-form-block .read-more,.job-details .rating .read-more,.signin-form .read-more,.view-details .read-more{background: #1656A0;border: 1px solid #1656A0;border-radius: 38px;color: #ffffff;font-size: 14px;}
+.contact-form-block .read-more:hover,.job-details .rating .read-more:hover,.signin-form .read-more:hover,.view-details .read-more:hover{background: transparent;border: 1px solid #1656A0;color: #1656A0;;}
 iframe{border-radius: 20px;}
 
 .browse-search .filter-block{box-shadow: 0px 2px 23px rgba(176, 170, 170, 0.14);}
@@ -197,6 +197,23 @@ iframe{border-radius: 20px;}
 }
 .filter-accordion .form-group input:checked + label:before{border: 1px solid #0FBC49;}
 .filter-accordion .view-more{color: #46AEE0;font-weight: 600;}
+
+.view-details{padding: 20px;background: #FFFFFF;border: 1px solid #D2D5D9;box-shadow: 0px 32px 54px rgba(29, 41, 63, 0.04);border-radius: 10px;}
+.salary-block{background: #DFF3FC;padding: 10px 20px;}
+.salary-block p{color: #1656A0 !important;font-weight: 600 !important;}
+.view-details h3{font-size: 18px;color: #1656A0;font-weight: 600;}
+.view-details p{font-size: 18px;color: rgb(0 0 0 / 50%);font-weight: 500;}
+.view-details .ul-t{font-weight: 600;color: #232731;}
+.job-black{color: #232731 !important;font-weight: 400 !important;}
+.view-details ul.list-unstyled{list-style-image: url('../img/ul-icon.png');margin-left: 20px;font-size: 14px;}
+.view-details ul li:not(:last-child){margin-bottom: 20px;}
+.view-details .ul-right{list-style-type: none;padding: 0;font-size: 14px;}
+.view-details .ul-last-child{font-weight: 500;}
+
+.showing{color: #556173;font-weight: 600;}
+.table-design input:focus{box-shadow: none;}
+.table-design .read-more{background: #36B37E;border-color: #36B37E;border-radius:4px;color: #ffffff;}
+.table-design .table-bordered td,.table-design .table-bordered th {vertical-align: middle;color: #5D6A83;font-weight: 400;}
 
 footer{background: #1D293F;padding: 80px 0 20px;font-size:14px;}
 footer p{color: rgb(215 216 216 / 50%);line-height: 28px;}
@@ -247,7 +264,7 @@ footer hr{border-top: 1px solid #8C97AC;}
     section {padding: 50px 0;}
     .main-title h2 {font-size: 26px;}
     .popular-searches li{font-size: 14px;}
-    .cta .text-right {text-align: left!important;margin-top: 20px;}
+    .cta .text-right,.view-details .text-right{text-align: left!important;margin-top: 20px;}
     .browse-search .form-group{margin-bottom: 10px;}
 }
 @media (max-width: 575px){
