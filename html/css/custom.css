@@ -61,7 +61,7 @@ nav .readmore{padding: 10px 26px !important}
 .signin-form{max-width: 510px;margin: 0 auto;display: flex;align-items: center;justify-content: center;flex-direction: column;height: 100vh;padding: 20px 30px;}
 .signin-form h1{font-size: 36px;color: #253858;font-weight: 600;}
 .signin-form p{color: #5D6A83;font-size: 14px;}
-.signin-form .form-control,.model-form .form-control{background: #FFFFFF;border: 1px solid #C4C4C4;border-radius: 6px;width: 100%;height: 56px;padding: .375rem 2rem;box-shadow: none;}
+.signin-form .form-control,.model-form .form-control,.post-job .form-control{background: #FFFFFF;border: 1px solid #C4C4C4;border-radius: 6px;width: 100%;height: 56px;padding: .375rem 2rem;box-shadow: none;}
 .signin-form a{color: #1656A0;font-weight: 600;font-size: 14px;}
 .create-link p{color: #5D6A83;font-weight: 500;}
 .create-link a{color: #1656A0;font-weight: 600;}
@@ -160,8 +160,8 @@ section{padding: 80px 0;}
 .contact-form-block .form-control {border: 0;border-bottom: 1px solid #B6CEEA;height: calc(0.5em + .75rem + 2px);border-radius: 0;box-shadow: none;padding: 0;}
 .contact-form-block textarea,.model-form textarea {height: auto !important;resize: none;}
 .contact-form-block .form-group {margin-bottom: 1.5rem;}
-.contact-form-block .read-more,.job-details .rating .read-more,.signin-form .read-more,.view-details .read-more,.model-form .read-more{background: #1656A0;border: 1px solid #1656A0;border-radius: 38px;color: #ffffff;font-size: 14px;}
-.contact-form-block .read-more:hover,.job-details .rating .read-more:hover,.signin-form .read-more:hover,.view-details .read-more:hover,.model-form .read-more:hover{background: transparent;border: 1px solid #1656A0;color: #1656A0;;}
+.contact-form-block .read-more,.job-details .rating .read-more,.signin-form .read-more,.view-details .read-more,.model-form .read-more,.post-job .read-more{background: #1656A0;border: 1px solid #1656A0;border-radius: 38px;color: #ffffff;font-size: 14px;}
+.contact-form-block .read-more:hover,.job-details .rating .read-more:hover,.signin-form .read-more:hover,.view-details .read-more:hover,.model-form .read-more:hover,.post-job .read-more:hover{background: transparent;border: 1px solid #1656A0;color: #1656A0;;}
 iframe{border-radius: 20px;}
 
 .browse-search .filter-block{box-shadow: 0px 2px 23px rgba(176, 170, 170, 0.14);}
@@ -214,8 +214,10 @@ iframe{border-radius: 20px;}
 .view-details .ul-last-child{font-weight: 500;}
 
 .showing{color: #556173;font-weight: 600;}
+.table-design input{min-width: 150px;}
 .table-design input:focus{box-shadow: none;}
-.table-design .read-more{background: #36B37E;border-color: #36B37E;border-radius:4px;color: #ffffff;}
+.table-design .read-more{background: #36B37E;border-color: #36B37E;border-radius:4px;color: #ffffff;font-weight: 400;padding: 10px 20px;}
+.table-design .read-more.reject{background: #E96969;border-color: #E96969}
 .table-design .table-bordered td,.table-design .table-bordered th {vertical-align: middle;color: #5D6A83;font-weight: 400;}
 
 .profile-form .progressbars p{font-size: 18px;color: #000000;}
@@ -245,7 +247,7 @@ iframe{border-radius: 20px;}
 .modal-header {background: #1656A0;color: #fff;}
 .modal-header h4{font-size: 18px;}
 .signin-form .form-control, .model-form .form-control{padding: .375rem 1.25rem}
-.model-form label{font-weight: 600;font-size: 14px;color: #253858;}
+.model-form label,.post-job label{font-weight: 600;font-size: 14px;color: #253858;}
 .radio-btn .form-group input {padding: 0;height: initial;width: initial;margin-bottom: 0;display: none;cursor: pointer;}
 .radio-btn .form-group label {position: relative;cursor: pointer;margin-bottom: 0;font-size: 14px;}
 .radio-btn .form-group label:before {
@@ -271,7 +273,7 @@ footer p{color: rgb(215 216 216 / 50%);line-height: 28px;}
 footer h3{font-size: 18px;color: #ffffff;font-weight: 600;}
 footer ul li{color: rgb(233 247 254 / 50%);margin-bottom: 16px;font-weight: 400;}
 footer ul li a{color: rgb(233 247 254 / 50%);}
-footer .media,.contact-us-shape .media,.title-location .media,.nav-link .media,.dropdown-item .media,.profile-menu .media{-ms-flex-align: center;align-items: center;}
+footer .media,.contact-us-shape .media,.title-location .media,.nav-link .media,.dropdown-item .media,.profile-menu .media,.profile-pic .media{-ms-flex-align: center;align-items: center;}
 footer .media a{color: rgb(233 247 254 / 50%)}
 footer hr{border-top: 1px solid #8C97AC;}
 
@@ -290,7 +292,7 @@ footer hr{border-top: 1px solid #8C97AC;}
     .filter-block .form-control{font-size: 14px;}
 }
 @media only screen and (max-width: 1199px) and (min-width: 991px)  {
-    
+    .navbar-dark .navbar-nav .nav-link{margin: .5rem 0.6rem;font-size: 13px;}
 }
 @media (max-width: 991px) {
     .navbar-brand img{width: 150px;}
@@ -327,6 +329,7 @@ footer hr{border-top: 1px solid #8C97AC;}
     .job-d .text-right {text-align: left!important;}
     .job-d .text-right .read-more{margin-top: 16px;}
     .otp-text a{display: block;}
+    .signup .nav-tabs .nav-item{width: 100%;}
 }
 @media (max-width: 350px){
     .the-rn-app img{margin-bottom: 16px;}
